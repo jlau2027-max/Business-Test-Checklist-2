@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { Analytics } from "@vercel/analytics/react";
 import {
   Container, Tabs, Badge, Text, Group, Paper, Progress,
-  Accordion, Checkbox, Button, SegmentedControl, Collapse,
+  Accordion, Checkbox, Button, Collapse,
   Alert, Box, Stack, Textarea, useMantineTheme,
 } from "@mantine/core";
 
@@ -177,7 +177,7 @@ const CAT_COLORS = {
   "Sources of Finance":"#FB923C"
 };
 
-const ALL_CATS = ["All", ...Array.from(new Set([...MCQ_QUESTIONS.map(q=>q.cat), ...WRITTEN_QUESTIONS.map(q=>q.cat)]))];
+const ALL_CATS = ["All", ...Array.from(new Set(MCQ_QUESTIONS.map(q=>q.cat)))];
 
 // ─────────────────────────────────────────────────────────────────────────────
 // SUB-COMPONENTS
@@ -510,50 +510,8 @@ function MCQItem({q, displayNum}) {
   );
 }
 
-function WrittenItem({q, displayNum}) {
-  const [revealed,setRevealed]=useState(false);
-  const color=CAT_COLORS[q.cat]||"#7C6FFF";
-  return (
-    <Paper bg="#1A1A24" radius="lg" mb="sm" style={{border:"1px solid #252533",overflow:"hidden"}}>
-      <div style={{borderLeft:`4px solid ${color}`,padding:"18px 20px"}}>
-        <Group gap={8} mb="sm" style={{flexWrap:"wrap"}}>
-          <Badge size="xs" ff="'JetBrains Mono', monospace" style={{backgroundColor:"#252533",color:"#8B8B9E"}}>WRITTEN</Badge>
-          <Badge size="xs" variant="light" ff="'JetBrains Mono', monospace" style={{backgroundColor:color+"22",color,border:"none"}}>{q.cat}</Badge>
-          <Badge size="xs" variant="light" ff="'JetBrains Mono', monospace" style={{backgroundColor:"#1E1E2A",color:"#8B8B9E",border:"none"}}>{q.difficulty}</Badge>
-          <Badge size="xs" ff="'JetBrains Mono', monospace" ml="auto" style={{backgroundColor:"#2A2800",color:"#FBBF24",border:"1px solid #5A4A00"}}>[ {q.marks} marks ]</Badge>
-        </Group>
-        <Text fz={15} c="#F0EEE8" lh={1.6} fw={600} style={{whiteSpace:"pre-line"}}>Q{displayNum}. {q.q}</Text>
-      </div>
-      <div style={{padding:"12px 20px 16px"}}>
-        <Button
-          size="sm"
-          radius="md"
-          variant={revealed ? "subtle" : "light"}
-          color={revealed ? "gray" : undefined}
-          ff="'JetBrains Mono', monospace"
-          onClick={()=>setRevealed(r=>!r)}
-          style={revealed ? {} : {
-            backgroundColor: color + "22",
-            color: color,
-            border: `1px solid ${color}44`,
-          }}
-        >
-          {revealed ? "Hide Model Answer" : "Show Model Answer"}
-        </Button>
-        <Collapse in={revealed}>
-          <Box mt="md" pt="md" style={{borderTop:"1px solid #252533"}}>
-            <Text fz={11} ff="'JetBrains Mono', monospace" c="#34D399" lts={1} mb="sm">MODEL ANSWER</Text>
-            <Text fz={13} c="#B0ADA6" lh={1.7} style={{whiteSpace:"pre-line"}}>{q.modelAnswer}</Text>
-          </Box>
-        </Collapse>
-      </div>
-    </Paper>
-  );
-}
-
 function PracticeView() {
   const [filterCat,setFilterCat]=useState("All");
-  const [filterType,setFilterType]=useState("All");
 
   const catMatchFn = (qCat, fCat) => {
     if (fCat === "All") return true;
@@ -561,36 +519,10 @@ function PracticeView() {
     return normalise(qCat) === normalise(fCat);
   };
 
-  const filteredMCQ = MCQ_QUESTIONS.filter(q => catMatchFn(q.cat, filterCat));
-  const filteredWritten = WRITTEN_QUESTIONS.filter(q => catMatchFn(q.cat, filterCat));
-  const showMCQ = filterType==="All" || filterType==="MCQ";
-  const showWritten = filterType==="All" || filterType==="Written";
-  let globalCounter = 0;
-  const mcqToShow = showMCQ ? filteredMCQ : [];
-  const writtenToShow = showWritten ? filteredWritten : [];
-  const totalShown = mcqToShow.length + writtenToShow.length;
+  const filtered = MCQ_QUESTIONS.filter(q => catMatchFn(q.cat, filterCat));
 
   return (
     <div style={{maxWidth:760,margin:"0 auto",padding:"0 0 40px"}}>
-      {/* Type filter */}
-      <SegmentedControl
-        value={filterType}
-        onChange={setFilterType}
-        data={[
-          { label: "All Types", value: "All" },
-          { label: "Multiple Choice", value: "MCQ" },
-          { label: "Written", value: "Written" },
-        ]}
-        size="sm"
-        radius="xl"
-        mb="md"
-        styles={{
-          root: { backgroundColor: "#12121A", border: "1px solid #252533" },
-          label: { fontFamily: "'JetBrains Mono', monospace", fontSize: 12 },
-          indicator: { background: "linear-gradient(135deg, #7C6FFF, #A78BFA)" },
-        }}
-      />
-
       {/* Category filter */}
       <Group gap={8} mb="lg" style={{flexWrap:"wrap"}}>
         {ALL_CATS.map(cat => {
@@ -618,26 +550,16 @@ function PracticeView() {
 
       {/* Summary */}
       <Text fz="xs" c="#55556A" ff="'JetBrains Mono', monospace" mb="lg">
-        Showing {totalShown} question{totalShown!==1?"s":""}{filterCat!=="All"?` · ${filterCat}`:""}{filterType!=="All"?` · ${filterType}`:""}
+        Showing {filtered.length} question{filtered.length!==1?"s":""}{filterCat!=="All"?` · ${filterCat}`:""}
       </Text>
 
-      {totalShown === 0 && (
-        <Text ta="center" py={40} c="#55556A" fz="sm">No questions match this filter combination.</Text>
+      {filtered.length === 0 && (
+        <Text ta="center" py={40} c="#55556A" fz="sm">No questions match this filter.</Text>
       )}
 
-      {mcqToShow.length > 0 && (
-        <>
-          <Text fz={11} ff="'JetBrains Mono', monospace" c="#55556A" lts={3} tt="uppercase" mb="sm">Multiple Choice ({mcqToShow.length})</Text>
-          {mcqToShow.map(q => { globalCounter++; return <MCQItem key={q.id} q={q} displayNum={globalCounter}/>; })}
-        </>
-      )}
-
-      {writtenToShow.length > 0 && (
-        <>
-          <Text fz={11} ff="'JetBrains Mono', monospace" c="#55556A" lts={3} tt="uppercase" mb="sm" mt={mcqToShow.length>0?"xl":0}>Written Questions ({writtenToShow.length})</Text>
-          {writtenToShow.map(q => { globalCounter++; return <WrittenItem key={q.id} q={q} displayNum={globalCounter}/>; })}
-        </>
-      )}
+      {filtered.map((q, i) => (
+        <MCQItem key={q.id} q={q} displayNum={i + 1} />
+      ))}
     </div>
   );
 }
@@ -684,6 +606,19 @@ function WrittenPracticeItem({q, displayNum}) {
         />
 
         <Group gap="sm">
+          <Button
+            size="sm"
+            radius="md"
+            ff="'JetBrains Mono', monospace"
+            onClick={()=>{}}
+            style={{
+              background: "linear-gradient(135deg, #7C6FFF, #A78BFA)",
+              border: "none",
+              boxShadow: "0 4px 16px #7C6FFF30",
+            }}
+          >
+            Solve
+          </Button>
           <Button
             size="sm"
             radius="md"
