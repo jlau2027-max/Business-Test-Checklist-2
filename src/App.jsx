@@ -1,5 +1,15 @@
 import { useState } from "react";
 import { Analytics } from "@vercel/analytics/react";
+import { useState, useEffect } from "react";
+
+// ─── localStorage helpers ──────────────────────────────────────────────────
+function loadLS(key, fallback) {
+  try { const v = localStorage.getItem(key); return v !== null ? JSON.parse(v) : fallback; }
+  catch { return fallback; }
+}
+function saveLS(key, value) {
+  try { localStorage.setItem(key, JSON.stringify(value)); } catch {}
+}
 
 // ─────────────────────────────────────────────────────────────────────────────
 // CHECKLIST DATA (from uploaded App.jsx)
@@ -144,10 +154,10 @@ const CAT_COLORS = { "Costs & Revenue":"#6366F1","Cash Flow":"#0EA5E9","Final Ac
 // ─────────────────────────────────────────────────────────────────────────────
 
 function ChecklistView() {
-  const [checked, setChecked] = useState({});
-  const [collapsed, setCollapsed] = useState({});
-  const toggle = id => setChecked(p => ({ ...p, [id]: !p[id] }));
-  const toggleSec = id => setCollapsed(p => ({ ...p, [id]: !p[id] }));
+  const [checked, setChecked] = useState(() => loadLS("checklist_checked", {}));
+  const [collapsed, setCollapsed] = useState(() => loadLS("checklist_collapsed", {}));
+  const toggle = id => setChecked(p => { const next = { ...p, [id]: !p[id] }; saveLS("checklist_checked", next); return next; });
+  const toggleSec = id => setCollapsed(p => { const next = { ...p, [id]: !p[id] }; saveLS("checklist_collapsed", next); return next; });
   const totalItems = CHECKLIST_SECTIONS.reduce((s,sec)=>s+sec.items.length,0);
   const checkedCount = Object.values(checked).filter(Boolean).length;
   const progress = Math.round((checkedCount/totalItems)*100);
@@ -163,7 +173,7 @@ function ChecklistView() {
         <div style={{background:"#2A2A32",borderRadius:99,height:10,overflow:"hidden"}}>
           <div style={{width:`${progress}%`,height:"100%",background:progColor,borderRadius:99,transition:"width 0.4s ease"}}/>
         </div>
-        <div style={{marginTop:10,fontSize:13,color:"#6B6560"}}>{checkedCount} of {totalItems} topics covered</div>
+        <div style={{marginTop:10,fontSize:13,color:"#6B6560",display:"flex",justifyContent:"space-between",alignItems:"center"}}><span>{checkedCount} of {totalItems} topics covered</span><span style={{fontSize:11,color:"#3A5A3A",background:"#1A2A1A",padding:"2px 10px",borderRadius:99,fontFamily:"monospace"}}>✦ auto-saved</span></div>
       </div>
 
       {CHECKLIST_SECTIONS.map(section=>{
@@ -201,7 +211,7 @@ function ChecklistView() {
       })}
       <div style={{textAlign:"center",marginTop:24,color:"#3A3A42",fontSize:13}}>
         Click any item to mark it as revised ·{" "}
-        <span style={{color:"#4F46E5",cursor:"pointer"}} onClick={()=>setChecked({})}>Reset all</span>
+        <span style={{color:"#4F46E5",cursor:"pointer"}} onClick={()=>{ setChecked({}); saveLS("checklist_checked", {}); }}>Reset all</span>
       </div>
     </div>
   );
@@ -231,7 +241,7 @@ function FlashCard({card}) {
 }
 
 function FlashcardsView() {
-  const [activeCat,setActiveCat]=useState(FLASHCARD_CATEGORIES[0].id);
+  const [activeCat,setActiveCat]=useState(()=>loadLS("fc_cat", FLASHCARD_CATEGORIES[0].id));
   const [cardIdx,setCardIdx]=useState(0);
   const currentCat=FLASHCARD_CATEGORIES.find(c=>c.id===activeCat);
   const currentCard=currentCat.cards[cardIdx];
@@ -239,7 +249,7 @@ function FlashcardsView() {
     <div style={{maxWidth:680,margin:"0 auto",padding:"0 0 40px"}}>
       <div style={{display:"flex",gap:8,flexWrap:"wrap",marginBottom:24}}>
         {FLASHCARD_CATEGORIES.map(cat=>(
-          <button key={cat.id} onClick={()=>{setActiveCat(cat.id);setCardIdx(0);}} style={{background:activeCat===cat.id?cat.color:"#16161E",border:`1px solid ${activeCat===cat.id?cat.color:"#2C2C38"}`,borderRadius:99,padding:"6px 14px",color:activeCat===cat.id?"#fff":"#888",fontSize:12,cursor:"pointer",fontFamily:"monospace",transition:"all 0.2s"}}>{cat.label}</button>
+          <button key={cat.id} onClick={()=>{ setActiveCat(cat.id); saveLS("fc_cat", cat.id); setCardIdx(0); }} style={{background:activeCat===cat.id?cat.color:"#16161E",border:`1px solid ${activeCat===cat.id?cat.color:"#2C2C38"}`,borderRadius:99,padding:"6px 14px",color:activeCat===cat.id?"#fff":"#888",fontSize:12,cursor:"pointer",fontFamily:"monospace",transition:"all 0.2s"}}>{cat.label}</button>
         ))}
       </div>
       <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:14}}>
@@ -385,12 +395,13 @@ function PracticeView() {
 // ROOT APP
 // ─────────────────────────────────────────────────────────────────────────────
 export default function App() {
-  const [tab, setTab] = useState("checklist");
+  const [tab, setTab] = useState(() => loadLS("revision_tab", "checklist"));
+  const switchTab = t => { setTab(t); saveLS("revision_tab", t); };
 
   const tabs = [
-    { id:"checklist", label:"Checklist", desc:"Track what you've revised" },
-    { id:"flashcards", label:"Flashcards", desc:"Definitions & formulas" },
-    { id:"practice",  label:"Practice",  desc:"MCQ + written questions" },
+    { id:"checklist", label:"✅ Checklist", desc:"Track what you've revised" },
+    { id:"flashcards", label:"🃏 Flashcards", desc:"Definitions & formulas" },
+    { id:"practice",  label:"📝 Practice",  desc:"MCQ + written questions" },
   ];
 
   return (
@@ -407,7 +418,7 @@ export default function App() {
           {/* Nav tabs */}
           <div style={{display:"flex",gap:4,paddingBottom:0}}>
             {tabs.map(t=>(
-              <button key={t.id} onClick={()=>setTab(t.id)} style={{flex:1,background:"transparent",border:"none",borderBottom:`3px solid ${tab===t.id?"#6366F1":"transparent"}`,padding:"10px 4px 12px",cursor:"pointer",transition:"all 0.2s",textAlign:"center"}}>
+              <button key={t.id} onClick={()=>switchTab(t.id)} style={{flex:1,background:"transparent",border:"none",borderBottom:`3px solid ${tab===t.id?"#6366F1":"transparent"}`,padding:"10px 4px 12px",cursor:"pointer",transition:"all 0.2s",textAlign:"center"}}>
                 <div style={{fontSize:13,fontWeight:600,color:tab===t.id?"#F0EDE8":"#555",transition:"color 0.2s"}}>{t.label}</div>
                 <div style={{fontSize:10,color:tab===t.id?"#6366F1":"#3A3A42",fontFamily:"monospace",marginTop:2,display:"none"}}>{t.desc}</div>
               </button>
