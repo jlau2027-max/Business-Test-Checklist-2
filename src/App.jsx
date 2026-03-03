@@ -765,36 +765,36 @@ function WrittenPracticeView() {
       {/* Mode selector — Short Answer vs 10 Marker */}
       <Group gap={10} mb="lg">
         <Button
-          size="md"
           radius="md"
           ff="'JetBrains Mono', monospace"
           fw={700}
           onClick={()=>{ setMode("short"); setFilterCat("All"); }}
           style={{
             flex: 1,
+            height: 48,
             backgroundColor: mode === "short" ? "#7C6FFF" : "#1A1A24",
             color: mode === "short" ? "#fff" : "#8B8B9E",
             border: `2px solid ${mode === "short" ? "#7C6FFF" : "#252533"}`,
             fontSize: 15,
-            padding: "14px 0",
+            lineHeight: 1,
             boxShadow: mode === "short" ? "0 0 16px #7C6FFF33" : "none",
           }}
         >
           Short Answer
         </Button>
         <Button
-          size="md"
           radius="md"
           ff="'JetBrains Mono', monospace"
           fw={700}
           onClick={()=>setMode("10mark")}
           style={{
             flex: 1,
+            height: 48,
             backgroundColor: mode === "10mark" ? "#F87171" : "#1A1A24",
             color: mode === "10mark" ? "#fff" : "#8B8B9E",
             border: `2px solid ${mode === "10mark" ? "#F87171" : "#252533"}`,
             fontSize: 15,
-            padding: "14px 0",
+            lineHeight: 1,
             boxShadow: mode === "10mark" ? "0 0 16px #F8717133" : "none",
           }}
         >
