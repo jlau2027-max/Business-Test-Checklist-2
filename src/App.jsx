@@ -578,11 +578,14 @@ function PracticeView() {
 // ─────────────────────────────────────────────────────────────────────────────
 
 function WrittenPracticeItem({q, displayNum}) {
-  const [answer, setAnswer] = useState("");
+  const [answer, setAnswer] = useState(() => loadLS(`written_ans_${q.id}`, ""));
   const [revealed, setRevealed] = useState(false);
   const [grading, setGrading] = useState(false);
-  const [gradeResult, setGradeResult] = useState(null);
+  const [gradeResult, setGradeResult] = useState(() => loadLS(`written_grade_${q.id}`, null));
   const color = CAT_COLORS[q.cat] || "#7C6FFF";
+
+  useEffect(() => { saveLS(`written_ans_${q.id}`, answer); }, [answer, q.id]);
+  useEffect(() => { saveLS(`written_grade_${q.id}`, gradeResult); }, [gradeResult, q.id]);
 
   const handleSolve = async () => {
     if (!answer.trim()) return;
@@ -688,7 +691,7 @@ function WrittenPracticeItem({q, displayNum}) {
               variant="subtle"
               color="gray"
               ff="'JetBrains Mono', monospace"
-              onClick={()=>{ setAnswer(""); setGradeResult(null); }}
+              onClick={()=>{ setAnswer(""); setGradeResult(null); saveLS(`written_ans_${q.id}`, ""); saveLS(`written_grade_${q.id}`, null); }}
             >
               Clear
             </Button>
