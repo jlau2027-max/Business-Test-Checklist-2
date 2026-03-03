@@ -432,6 +432,8 @@ export default function App() {
         {tab==="flashcards" && <FlashcardsView/>}
         {tab==="practice" && <PracticeView/>}
       </div>
+
+       <Analytics />
     </div>
   );
 }
