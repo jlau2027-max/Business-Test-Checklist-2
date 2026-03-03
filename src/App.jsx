@@ -192,7 +192,7 @@ export default function App() {  const [checked, setChecked] = useState({});
       padding: "32px 16px",
       color: "#E8E6E0",
     }}>
-      <div style={{ maxWidth: 760, margin: "0 auto" }}>
+      <div style={{ width: "100%", margin: 0 }}>
 
         {/* Header */}
         <div style={{ textAlign: "center", marginBottom: 40 }}>
