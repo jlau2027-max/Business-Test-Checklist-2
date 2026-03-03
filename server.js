@@ -3,7 +3,7 @@ import cors from 'cors';
 import dotenv from 'dotenv';
 import { Anthropic } from '@anthropic-ai/sdk';
 
-dotenv.config();
+dotenv.config({ path: './key.env' });
 
 const app = express();
 app.use(express.json());
