@@ -211,7 +211,7 @@ function ChecklistView() {
         mb="xl"
         style={{
           border: "1px solid #252533",
-          boxShadow: `0 4px 24px ${progColor}10, 0 2px 8px rgba(0,0,0,0.3)`,
+          boxShadow: "0 2px 8px rgba(0,0,0,0.2)",
         }}
       >
         <Group justify="space-between" mb="xs">
@@ -224,7 +224,7 @@ function ChecklistView() {
           radius="xl"
           color={progColor}
           animated
-          styles={{ root: { background: "#1E1E2A" }, section: { boxShadow: `0 0 12px ${progColor}40` } }}
+          styles={{ root: { background: "#1E1E2A" } }}
         />
         <Group justify="space-between" mt="sm">
           <Text fz="xs" c="#55556A">{checkedCount} of {totalItems} topics covered</Text>
@@ -315,7 +315,7 @@ function FlashCard({card, catColor}) {
           bg="#1A1A24"
           style={{
             border: "1px solid #252533",
-            boxShadow: `0 8px 32px ${catColor}12, 0 2px 8px rgba(0,0,0,0.4)`,
+            boxShadow: "0 2px 8px rgba(0,0,0,0.3)",
             alignItems: "center",
             padding: 24,
             textAlign: "center",
@@ -331,7 +331,7 @@ function FlashCard({card, catColor}) {
           bg="#1A1A24"
           style={{
             border: "1px solid #252533",
-            boxShadow: `0 8px 32px ${catColor}12, 0 2px 8px rgba(0,0,0,0.4)`,
+            boxShadow: "0 2px 8px rgba(0,0,0,0.3)",
             padding: 20,
             overflowY: "auto",
           }}
@@ -382,7 +382,7 @@ function FlashcardsView() {
       <Group justify="space-between" mb="md">
         <Text fz="xs" c="#55556A" ff="'JetBrains Mono', monospace">{cardIdx+1} / {currentCat.cards.length} — {currentCat.label}</Text>
         <Box style={{background:"#1A1A24",borderRadius:99,height:4,width:140,overflow:"hidden"}}>
-          <div style={{width:`${((cardIdx+1)/currentCat.cards.length)*100}%`,height:"100%",background:currentCat.color,borderRadius:99,transition:"width 0.3s",boxShadow:`0 0 8px ${currentCat.color}40`}}/>
+          <div style={{width:`${((cardIdx+1)/currentCat.cards.length)*100}%`,height:"100%",background:currentCat.color,borderRadius:99,transition:"width 0.3s"}}/>
         </Box>
       </Group>
 
@@ -408,9 +408,8 @@ function FlashcardsView() {
           disabled={cardIdx===currentCat.cards.length-1}
           onClick={()=>setCardIdx(i=>Math.min(currentCat.cards.length-1,i+1))}
           style={{
-            background: cardIdx===currentCat.cards.length-1 ? "#1E1E2A" : `linear-gradient(135deg, ${currentCat.color}, ${currentCat.color}bb)`,
+            background: cardIdx===currentCat.cards.length-1 ? "#1E1E2A" : currentCat.color,
             border: "none",
-            boxShadow: cardIdx===currentCat.cards.length-1 ? "none" : `0 4px 16px ${currentCat.color}30`,
           }}
         >
           Next
@@ -481,9 +480,8 @@ function MCQItem({q, displayNum}) {
             disabled={selected===null}
             onClick={()=>{if(selected!==null)setConfirmed(true);}}
             style={{
-              background: selected!==null ? `linear-gradient(135deg,${color},${color}bb)` : "#1E1E2A",
+              background: selected!==null ? color : "#1E1E2A",
               border: "none",
-              boxShadow: selected!==null ? `0 4px 16px ${color}30` : "none",
             }}
             styles={{ root: { "&:disabled": { backgroundColor: "#1E1E2A", color: "#55556A" } } }}
           >
@@ -539,7 +537,7 @@ function PracticeView() {
                 backgroundColor: active ? c : "#1A1A24",
                 color: active ? "#fff" : "#8B8B9E",
                 border: `1px solid ${active ? c : "#252533"}`,
-                boxShadow: active ? `0 2px 12px ${c}30` : "none",
+                boxShadow: "none",
               }}
             >
               {cat}
@@ -651,9 +649,8 @@ function WrittenPracticeItem({q, displayNum}) {
             disabled={!answer.trim() || grading}
             loaderProps={{ type: "dots" }}
             style={{
-              background: answer.trim() && !grading ? "linear-gradient(135deg, #7C6FFF, #A78BFA)" : "#1E1E2A",
+              background: answer.trim() && !grading ? "#7C6FFF" : "#1E1E2A",
               border: "none",
-              boxShadow: answer.trim() && !grading ? "0 4px 16px #7C6FFF30" : "none",
             }}
           >
             Solve
@@ -711,7 +708,7 @@ function WrittenPracticeItem({q, displayNum}) {
                 radius="xl"
                 mb="sm"
                 animated
-                styles={{ section: { boxShadow: `0 0 8px ${scoreColor}40` } }}
+                styles={{ root: { background: "#1E1E2A" } }}
               />
             )}
             <Text fz="sm" c="#8B8B9E" lh={1.6}>{gradeResult.feedback}</Text>
@@ -767,7 +764,7 @@ function WrittenPracticeView() {
                 backgroundColor: active ? c : "#1A1A24",
                 color: active ? "#fff" : "#8B8B9E",
                 border: `1px solid ${active ? c : "#252533"}`,
-                boxShadow: active ? `0 2px 12px ${c}30` : "none",
+                boxShadow: "none",
               }}
             >
               {cat}
@@ -813,13 +810,12 @@ export default function App() {
         <Container size="md" py="sm">
           <Group justify="center" mb={4}>
             <Badge
-              variant="gradient"
-              gradient={{ from: "#7C6FFF", to: "#A78BFA", deg: 135 }}
+              variant="light"
               size="sm"
               tt="uppercase"
               fw={700}
               ff="'JetBrains Mono', monospace"
-              style={{ letterSpacing: 2 }}
+              style={{ letterSpacing: 2, backgroundColor: "#7C6FFF18", color: "#A78BFA", border: "none" }}
             >
               IB HL Business Management
             </Badge>
