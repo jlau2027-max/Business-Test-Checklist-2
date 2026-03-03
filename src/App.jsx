@@ -184,16 +184,22 @@ export default function App() {  const [checked, setChecked] = useState({});
     return "#059669";
   };
 
-  return (
+return (
     <div style={{
-  width: "100%",
-  minHeight: "100vh",
-  background: "#0F0F13",
-  fontFamily: "'Georgia', serif",
-  padding: "32px 16px",
-  color: "#E8E6E0",
-}}>
-      <div style={{ width: "100%", height: "100%", minHeight: "100vh", margin: 0, padding: 32 }}>
+      width: "100%",
+      minHeight: "100vh",
+      background: "#0F0F13",
+      fontFamily: "'Georgia', serif",
+      color: "#E8E6E0",
+      boxSizing: "border-box", // Prevents padding from causing scrollbars
+    }}>
+      {/* Inner container centered for better laptop viewing */}
+      <div style={{ 
+        maxWidth: "900px", // Constrains width on large screens
+        margin: "0 auto",  // Centers the container horizontally
+        padding: "32px 16px",
+        boxSizing: "border-box" 
+      }}>
 
         {/* Header */}
         <div style={{ textAlign: "center", marginBottom: 40 }}>
@@ -220,6 +226,8 @@ export default function App() {  const [checked, setChecked] = useState({});
             Units 3.1–3.9 · Unit 5.5 Breakeven · BMT Tools
           </p>
         </div>
+
+        {/* --- The rest of your code remains exactly the same below here --- */}
 
         {/* Progress Bar */}
         <div style={{
