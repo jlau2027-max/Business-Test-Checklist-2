@@ -740,65 +740,8 @@ function WrittenPracticeItem({q, displayNum}) {
   );
 }
 
-function SpecimenView() {
-  const [specimenText, setSpecimenText] = useState(() => loadLS("specimen_text", ""));
-
-  useEffect(() => { saveLS("specimen_text", specimenText); }, [specimenText]);
-
-  return (
-    <div style={{maxWidth:1060, margin:"0 auto", padding:"0 0 40px"}}>
-      <Paper bg="#12121A" radius="lg" p="lg" mb="xl" style={{border:"1px solid #252533"}}>
-        <Text fz={22} c="#F0EEE8" fw={800} mb={4} ff="'Inter', sans-serif">Specimen Paper</Text>
-        <Text fz="xs" c="#8B8B9E" lh={1.5}>
-          Blank workspace — paste a specimen paper or write your own practice answers here.
-        </Text>
-      </Paper>
-
-      <Textarea
-        value={specimenText}
-        onChange={(e) => setSpecimenText(e.currentTarget.value)}
-        placeholder="Paste your specimen paper or start writing here..."
-        minRows={20}
-        autosize
-        radius="md"
-        mb="md"
-        styles={{
-          input: {
-            backgroundColor: "#12121A",
-            borderColor: "#252533",
-            color: "#F0EEE8",
-            fontSize: 14,
-            lineHeight: 1.7,
-            fontFamily: "'Inter', sans-serif",
-            "&:focus": { borderColor: "#2DD4BF" },
-            "&::placeholder": { color: "#55556A" },
-          },
-        }}
-      />
-
-      <Group gap="sm">
-        {specimenText.trim() && (
-          <Button
-            size="sm"
-            radius="md"
-            variant="subtle"
-            color="gray"
-            ff="'JetBrains Mono', monospace"
-            onClick={()=>{ setSpecimenText(""); saveLS("specimen_text", ""); }}
-          >
-            Clear
-          </Button>
-        )}
-        <Text fz="xs" c="#55556A" ff="'JetBrains Mono', monospace" ml="auto">
-          auto-saved
-        </Text>
-      </Group>
-    </div>
-  );
-}
-
 function WrittenPracticeView() {
-  const [mode, setMode] = useState("short"); // "short", "10mark", or "specimen"
+  const [mode, setMode] = useState("short"); // "short" or "10mark"
   const [filterCat, setFilterCat] = useState("All");
 
   const writtenCats = ["All", ...Array.from(new Set(WRITTEN_QUESTIONS.map(q => q.cat)))];
@@ -815,16 +758,14 @@ function WrittenPracticeView() {
 
   return (
     <div style={{maxWidth:1060, margin:"0 auto", padding:"0 0 40px"}}>
-      {mode !== "specimen" && (
-        <Paper bg="#12121A" radius="lg" p="lg" mb="xl" style={{border:"1px solid #252533"}}>
-          <Text fz="sm" c="#F0EEE8" fw={600} mb={4}>Written Practice</Text>
-          <Text fz="xs" c="#8B8B9E" lh={1.5}>
-            Answer each question in the text box, then reveal the markscheme to compare.
-          </Text>
-        </Paper>
-      )}
+      <Paper bg="#12121A" radius="lg" p="lg" mb="xl" style={{border:"1px solid #252533"}}>
+        <Text fz="sm" c="#F0EEE8" fw={600} mb={4}>Written Practice</Text>
+        <Text fz="xs" c="#8B8B9E" lh={1.5}>
+          Answer each question in the text box, then reveal the markscheme to compare.
+        </Text>
+      </Paper>
 
-      {/* Mode selector — Short Answer / 10 Marker / Specimen */}
+      {/* Mode selector — Short Answer / 10 Marker / Specimen (link) */}
       <Group gap={10} mb="lg">
         <Button
           radius="md"
@@ -863,27 +804,25 @@ function WrittenPracticeView() {
           10 Marker
         </Button>
         <Button
+          component="a"
+          href="/specimen"
           radius="md"
           ff="'JetBrains Mono', monospace"
           fw={700}
-          onClick={()=>setMode("specimen")}
           style={{
             flex: 1,
             height: 48,
-            backgroundColor: mode === "specimen" ? "#2DD4BF" : "#1A1A24",
-            color: mode === "specimen" ? "#fff" : "#8B8B9E",
-            border: `2px solid ${mode === "specimen" ? "#2DD4BF" : "#252533"}`,
+            backgroundColor: "#1A1A24",
+            color: "#2DD4BF",
+            border: "2px solid #2DD4BF",
             fontSize: 15,
             lineHeight: 1,
-            boxShadow: mode === "specimen" ? "0 0 16px #2DD4BF33" : "none",
+            textDecoration: "none",
           }}
         >
-          Specimen
+          Specimen →
         </Button>
       </Group>
-
-      {/* Specimen mode */}
-      {mode === "specimen" && <SpecimenView />}
 
       {/* Category filter — only for short answer mode */}
       {mode === "short" && (
@@ -912,22 +851,18 @@ function WrittenPracticeView() {
         </Group>
       )}
 
-      {mode !== "specimen" && (
-        <>
-          <Text fz="xs" c="#55556A" ff="'JetBrains Mono', monospace" mb="lg">
-            Showing {filtered.length} question{filtered.length!==1?"s":""}{mode === "short" && filterCat!=="All"?` · ${filterCat}`:""}
-            {mode === "10mark" ? " · 10 Markers" : ""}
-          </Text>
+      <Text fz="xs" c="#55556A" ff="'JetBrains Mono', monospace" mb="lg">
+        Showing {filtered.length} question{filtered.length!==1?"s":""}{mode === "short" && filterCat!=="All"?` · ${filterCat}`:""}
+        {mode === "10mark" ? " · 10 Markers" : ""}
+      </Text>
 
-          {filtered.length === 0 && (
-            <Text ta="center" py={40} c="#55556A" fz="sm">No questions match this filter.</Text>
-          )}
-
-          {filtered.map((q, i) => (
-            <WrittenPracticeItem key={q.id} q={q} displayNum={i + 1} />
-          ))}
-        </>
+      {filtered.length === 0 && (
+        <Text ta="center" py={40} c="#55556A" fz="sm">No questions match this filter.</Text>
       )}
+
+      {filtered.map((q, i) => (
+        <WrittenPracticeItem key={q.id} q={q} displayNum={i + 1} />
+      ))}
     </div>
   );
 }

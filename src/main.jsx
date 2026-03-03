@@ -4,12 +4,15 @@ import { MantineProvider } from '@mantine/core'
 import '@mantine/core/styles.css'
 import './index.css'
 import App from './App.jsx'
+import SpecimenPage from './SpecimenPage.jsx'
 import theme from './theme.js'
+
+const isSpecimen = window.location.pathname === '/specimen'
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
     <MantineProvider theme={theme} defaultColorScheme="dark">
-      <App />
+      {isSpecimen ? <SpecimenPage /> : <App />}
     </MantineProvider>
   </StrictMode>,
 )
