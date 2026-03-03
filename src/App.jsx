@@ -580,7 +580,7 @@ function WrittenPracticeItem({q, displayNum}) {
     setGrading(true);
     setGradeResult(null);
     try {
-      const res = await fetch("/api/grade", {
+      const res = await fetch("https://ib-grading-api.c9tggsfst9.workers.dev", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -596,7 +596,7 @@ function WrittenPracticeItem({q, displayNum}) {
         setGradeResult({ score: data.score, feedback: data.feedback });
       }
     } catch (err) {
-      setGradeResult({ score: null, feedback: "Could not connect to grading server. Make sure the server is running (node server.js)." });
+      setGradeResult({ score: null, feedback: "Could not connect to grading server. Please try again later." });
     } finally {
       setGrading(false);
     }
