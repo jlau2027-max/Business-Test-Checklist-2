@@ -1,5 +1,10 @@
 import { useState, useEffect } from "react";
 import { Analytics } from "@vercel/analytics/react";
+import {
+  Container, Tabs, Badge, Text, Group, Paper, Progress,
+  Accordion, Checkbox, Button, SegmentedControl, Collapse,
+  Alert, Box, Stack, Textarea, useMantineTheme,
+} from "@mantine/core";
 
 // ─── localStorage helpers ──────────────────────────────────────────────────
 function loadLS(key, fallback) {
@@ -14,25 +19,25 @@ function saveLS(key, value) {
 // CHECKLIST DATA
 // ─────────────────────────────────────────────────────────────────────────────
 const CHECKLIST_SECTIONS = [
-  { id: "sources", title: "3.1 – Sources of Finance", color: "#4F46E5", items: ["Difference between internal & external sources of finance","Short, medium & long-term finance — matched to purpose","Equity vs debt financing (pros & cons)","Why a business chooses one source over another","Retained profit, share capital, debentures, venture capital (HL)","Loan capital vs overdraft vs trade credit"] },
-  { id: "costs", title: "3.2 – Costs & Revenues", color: "#7C3AED", items: ["Fixed, variable, semi-variable, direct & indirect costs","Total Revenue and Average Revenue","Contribution per unit = Selling Price – Variable Cost","Total Contribution = Contribution per unit × Quantity","Total Costs = Fixed Costs + Total Variable Costs","Profit = Total Revenue – Total Costs","Difference between profit and cash flow"] },
-  { id: "cashflow", title: "3.3 – Cash Flow", color: "#0891B2", items: ["Construct and interpret a cash flow forecast","Net Cash Flow = Cash Inflows – Cash Outflows","Closing Balance = Opening Balance + Net Cash Flow","Causes of cash flow problems","Solutions: overdraft, debt factoring, sale of assets, better credit control","Difference between cash flow and profit (common exam trap!)"] },
-  { id: "accounts", title: "3.4 – Final Accounts", color: "#059669", items: ["Income Statement layout: Revenue → Gross Profit → Net Profit","Balance Sheet structure: Assets = Equity + Liabilities","Current vs non-current assets and liabilities","Straight-line depreciation = (Cost – Residual Value) ÷ Useful Life (HL)","Reducing balance depreciation = Net Book Value × Rate % (HL)","Intangible assets: goodwill, patents, brand value (HL)"] },
-  { id: "ratios", title: "3.5 – Profitability & Liquidity Ratios", color: "#D97706", items: ["Gross Profit Margin = (Gross Profit ÷ Revenue) × 100 ✦ IN BOOKLET","Net Profit Margin = (Net Profit ÷ Revenue) × 100 ✦ IN BOOKLET","ROCE = (Net Profit ÷ Capital Employed) × 100 ✦ IN BOOKLET","Current Ratio = Current Assets ÷ Current Liabilities (ideal ~2:1) ✦ IN BOOKLET","Acid Test = (CA – Inventory) ÷ CL (ideal ~1:1) ✦ IN BOOKLET","Interpret ratios in context — not just calculate them!"] },
-  { id: "efficiency", title: "3.6 – Efficiency Ratios (HL Only)", color: "#DC2626", items: ["Stock Turnover (times) = Cost of Sales ÷ Average Stock ✦ IN BOOKLET","Stock Turnover (days) = (Average Stock ÷ Cost of Sales) × 365 ✦ IN BOOKLET","Average Stock = (Opening Stock + Closing Stock) ÷ 2 ✦ IN BOOKLET","Debtor Days = (Debtors ÷ Revenue) × 365 ✦ IN BOOKLET","Creditor Days = (Creditors ÷ Cost of Sales) × 365 ✦ IN BOOKLET","Gearing = (Non-current Liabilities ÷ Capital Employed) × 100 ✦ IN BOOKLET","High vs low gearing — implications for risk and investment"] },
-  { id: "investment", title: "3.7 – Investment Appraisal", color: "#7C3AED", items: ["Payback Period — calculate and interpret","ARR = (Total Returns – Capital Cost) ÷ Years ÷ Capital Cost × 100 ✦ IN BOOKLET","NPV = Sum of discounted cash flows – Initial Investment ✦ IN BOOKLET (HL)","Discount factors/tables are provided in exam","Compare methods: qualitative vs quantitative factors","Limitations of each investment appraisal method"] },
-  { id: "budgets", title: "3.8 – Budgets & Variance Analysis", color: "#0891B2", items: ["Variance = Actual – Budgeted ✦ MEMORISE","Favourable variance: better than expected","Adverse variance: worse than expected","⚠️ For costs: Actual < Budgeted = Favourable","⚠️ For revenue: Actual > Budgeted = Favourable","Zero-based vs incremental budgeting (pros & cons)","Limitations of budgets"] },
-  { id: "breakeven", title: "5.5 – Breakeven Analysis", color: "#059669", items: ["Breakeven Output = Fixed Costs ÷ Contribution per unit ✦ MEMORISE","Margin of Safety = Actual Output – Breakeven Output ✦ MEMORISE","Target Profit Output = (FC + Target Profit) ÷ Contribution ✦ MEMORISE","Draw and interpret breakeven charts","Limitations of breakeven analysis","How changes in price/costs affect the breakeven point"] },
-  { id: "bmt", title: "BMT Tools", color: "#D97706", items: ["Business Plan — components, purpose, link to securing finance","Ansoff Matrix — 4 strategies, risk levels, finance implications","STEEPLE — apply each factor to a business scenario","Force Field Analysis — driving vs restraining forces (Lewin)","Apply BMT tools to justify business decisions in context"] },
-  { id: "formulas", title: "🧠 Formulas to MEMORISE (Not in Booklet)", color: "#DC2626", items: ["Contribution per unit = Selling Price – Variable Cost per unit","Total Contribution = Contribution per unit × Quantity","Total Costs = Fixed Costs + Total Variable Costs","Profit = Total Revenue – Total Costs","Breakeven Output = Fixed Costs ÷ Contribution per unit","Margin of Safety = Actual Output – Breakeven Output","Target Profit Output = (FC + Target Profit) ÷ Contribution per unit","Straight-line depreciation = (Cost – Residual Value) ÷ Useful Life","Reducing balance = Net Book Value × Depreciation Rate %","Net Cash Flow = Cash Inflows – Cash Outflows","Closing Balance = Opening Balance + Net Cash Flow","Variance = Actual – Budgeted"] },
-  { id: "examtips", title: "✍️ Exam Technique", color: "#4F46E5", items: ["Define key terms at the start of longer answers","Always use the business context given — never answer generically","For evaluate/justify: give both sides then make a justified conclusion","Show ALL working in calculations — method marks are available","Interpret ratios — don't just calculate, explain what it means","Link answers back to the specific business in the question"] },
+  { id: "sources", title: "3.1 – Sources of Finance", color: "#FB923C", items: ["Difference between internal & external sources of finance","Short, medium & long-term finance — matched to purpose","Equity vs debt financing (pros & cons)","Why a business chooses one source over another","Retained profit, share capital, debentures, venture capital (HL)","Loan capital vs overdraft vs trade credit"] },
+  { id: "costs", title: "3.2 – Costs & Revenues", color: "#7C6FFF", items: ["Fixed, variable, semi-variable, direct & indirect costs","Total Revenue and Average Revenue","Contribution per unit = Selling Price – Variable Cost","Total Contribution = Contribution per unit × Quantity","Total Costs = Fixed Costs + Total Variable Costs","Profit = Total Revenue – Total Costs","Difference between profit and cash flow"] },
+  { id: "cashflow", title: "3.3 – Cash Flow", color: "#38BDF8", items: ["Construct and interpret a cash flow forecast","Net Cash Flow = Cash Inflows – Cash Outflows","Closing Balance = Opening Balance + Net Cash Flow","Causes of cash flow problems","Solutions: overdraft, debt factoring, sale of assets, better credit control","Difference between cash flow and profit (common exam trap!)"] },
+  { id: "accounts", title: "3.4 – Final Accounts", color: "#34D399", items: ["Income Statement layout: Revenue → Gross Profit → Net Profit","Balance Sheet structure: Assets = Equity + Liabilities","Current vs non-current assets and liabilities","Straight-line depreciation = (Cost – Residual Value) ÷ Useful Life (HL)","Reducing balance depreciation = Net Book Value × Rate % (HL)","Intangible assets: goodwill, patents, brand value (HL)"] },
+  { id: "ratios", title: "3.5 – Profitability & Liquidity Ratios", color: "#FBBF24", items: ["Gross Profit Margin = (Gross Profit ÷ Revenue) × 100 ✦ IN BOOKLET","Net Profit Margin = (Net Profit ÷ Revenue) × 100 ✦ IN BOOKLET","ROCE = (Net Profit ÷ Capital Employed) × 100 ✦ IN BOOKLET","Current Ratio = Current Assets ÷ Current Liabilities (ideal ~2:1) ✦ IN BOOKLET","Acid Test = (CA – Inventory) ÷ CL (ideal ~1:1) ✦ IN BOOKLET","Interpret ratios in context — not just calculate them!"] },
+  { id: "efficiency", title: "3.6 – Efficiency Ratios (HL Only)", color: "#F87171", items: ["Stock Turnover (times) = Cost of Sales ÷ Average Stock ✦ IN BOOKLET","Stock Turnover (days) = (Average Stock ÷ Cost of Sales) × 365 ✦ IN BOOKLET","Average Stock = (Opening Stock + Closing Stock) ÷ 2 ✦ IN BOOKLET","Debtor Days = (Debtors ÷ Revenue) × 365 ✦ IN BOOKLET","Creditor Days = (Creditors ÷ Cost of Sales) × 365 ✦ IN BOOKLET","Gearing = (Non-current Liabilities ÷ Capital Employed) × 100 ✦ IN BOOKLET","High vs low gearing — implications for risk and investment"] },
+  { id: "investment", title: "3.7 – Investment Appraisal", color: "#A78BFA", items: ["Payback Period — calculate and interpret","ARR = (Total Returns – Capital Cost) ÷ Years ÷ Capital Cost × 100 ✦ IN BOOKLET","NPV = Sum of discounted cash flows – Initial Investment ✦ IN BOOKLET (HL)","Discount factors/tables are provided in exam","Compare methods: qualitative vs quantitative factors","Limitations of each investment appraisal method"] },
+  { id: "budgets", title: "3.8 – Budgets & Variance Analysis", color: "#38BDF8", items: ["Variance = Actual – Budgeted ✦ MEMORISE","Favourable variance: better than expected","Adverse variance: worse than expected","For costs: Actual < Budgeted = Favourable","For revenue: Actual > Budgeted = Favourable","Zero-based vs incremental budgeting (pros & cons)","Limitations of budgets"] },
+  { id: "breakeven", title: "5.5 – Breakeven Analysis", color: "#2DD4BF", items: ["Breakeven Output = Fixed Costs ÷ Contribution per unit ✦ MEMORISE","Margin of Safety = Actual Output – Breakeven Output ✦ MEMORISE","Target Profit Output = (FC + Target Profit) ÷ Contribution ✦ MEMORISE","Draw and interpret breakeven charts","Limitations of breakeven analysis","How changes in price/costs affect the breakeven point"] },
+  { id: "bmt", title: "BMT Tools", color: "#F472B6", items: ["Business Plan — components, purpose, link to securing finance","Ansoff Matrix — 4 strategies, risk levels, finance implications","STEEPLE — apply each factor to a business scenario","Force Field Analysis — driving vs restraining forces (Lewin)","Apply BMT tools to justify business decisions in context"] },
+  { id: "formulas", title: "Formulas to MEMORISE (Not in Booklet)", color: "#F87171", items: ["Contribution per unit = Selling Price – Variable Cost per unit","Total Contribution = Contribution per unit × Quantity","Total Costs = Fixed Costs + Total Variable Costs","Profit = Total Revenue – Total Costs","Breakeven Output = Fixed Costs ÷ Contribution per unit","Margin of Safety = Actual Output – Breakeven Output","Target Profit Output = (FC + Target Profit) ÷ Contribution per unit","Straight-line depreciation = (Cost – Residual Value) ÷ Useful Life","Reducing balance = Net Book Value × Depreciation Rate %","Net Cash Flow = Cash Inflows – Cash Outflows","Closing Balance = Opening Balance + Net Cash Flow","Variance = Actual – Budgeted"] },
+  { id: "examtips", title: "Exam Technique", color: "#7C6FFF", items: ["Define key terms at the start of longer answers","Always use the business context given — never answer generically","For evaluate/justify: give both sides then make a justified conclusion","Show ALL working in calculations — method marks are available","Interpret ratios — don't just calculate, explain what it means","Link answers back to the specific business in the question"] },
 ];
 
 // ─────────────────────────────────────────────────────────────────────────────
 // FLASHCARD DATA
 // ─────────────────────────────────────────────────────────────────────────────
 const FLASHCARD_CATEGORIES = [
-  { id: "costs-revenue", label: "Costs & Revenue", color: "#6366F1", cards: [
+  { id: "costs-revenue", label: "Costs & Revenue", color: "#7C6FFF", cards: [
     { term: "Fixed Costs", def: "Costs that do not change with the level of output, e.g., loan repayments and management salaries.", formula: null },
     { term: "Variable Costs", def: "Costs that change with the level of output — they rise when output or sales increase, e.g., raw materials and packaging costs.", formula: null },
     { term: "Total Costs (TC)", def: "The aggregate amount of money spent on the output of a business.", formula: "TC = TFC + TVC" },
@@ -44,7 +49,7 @@ const FLASHCARD_CATEGORIES = [
     { term: "Indirect Costs (Overheads)", def: "Costs not easily identifiable with the sale or output of a specific good, service, or business operation.", formula: null },
     { term: "Cost of Sales (COS)", def: "The direct costs of production.", formula: "COS = Opening stock + Purchases − Closing stock" },
   ]},
-  { id: "cashflow", label: "Cash Flow", color: "#0EA5E9", cards: [
+  { id: "cashflow", label: "Cash Flow", color: "#38BDF8", cards: [
     { term: "Net Cash Flow", def: "The numerical difference between an organisation's total cash inflows and its total cash outflows, per time period.", formula: "Net cash flow = Cash inflows − Cash outflows" },
     { term: "Opening Balance", def: "The value of cash held by a business at the start of a trading period.", formula: "Opening balance = Closing balance of previous period" },
     { term: "Closing Balance", def: "The value of cash held by a business at the end of a trading period.", formula: "Closing balance = Opening balance + Net cash flow" },
@@ -52,7 +57,7 @@ const FLASHCARD_CATEGORIES = [
     { term: "Debt Factoring", def: "Selling outstanding invoices to a third party at a discount in exchange for immediate cash — one of the fastest solutions to cash flow problems.", formula: null },
     { term: "Cumulative Net Cash Flow", def: "The sum of an investment project's net cash flows for a particular year plus all previous years.", formula: "Cumulative NCF = NCF in previous year(s) + NCF of current year" },
   ]},
-  { id: "final-accounts", label: "Final Accounts", color: "#10B981", cards: [
+  { id: "final-accounts", label: "Final Accounts", color: "#34D399", cards: [
     { term: "Gross Profit", def: "The profit from a firm's everyday trading activities.", formula: "Gross profit = Sales revenue − Cost of Sales" },
     { term: "Gross Profit Margin (GPM)", def: "A profitability ratio measuring gross profit as a percentage of sales revenue. ✦ IN BOOKLET", formula: "GPM = (Gross profit / Sales revenue) × 100" },
     { term: "Profit Margin", def: "A profitability ratio measuring a firm's overall profit as a percentage of sales revenue. ✦ IN BOOKLET", formula: "= (Profit before interest and tax / Sales revenue) × 100" },
@@ -64,7 +69,7 @@ const FLASHCARD_CATEGORIES = [
     { term: "Capital Employed", def: "The value of funds used to operate the business and generate a financial return. ✦ IN BOOKLET", formula: "= Non-current liabilities + Equity" },
     { term: "Equity", def: "The value of the owners' stake in the business.", formula: "= Share capital + Retained earnings" },
   ]},
-  { id: "ratios", label: "Ratio Analysis", color: "#F59E0B", cards: [
+  { id: "ratios", label: "Ratio Analysis", color: "#FBBF24", cards: [
     { term: "ROCE", def: "Measures a firm's efficiency and profitability in relation to its capital employed. ✦ IN BOOKLET", formula: "ROCE = (Profit before interest and tax / Capital employed) × 100" },
     { term: "Current Ratio", def: "Measures ability to meet short-term debts. Ideal ~2:1. ✦ IN BOOKLET", formula: "= Current assets / Current liabilities" },
     { term: "Acid Test Ratio", def: "Measures ability to pay short-term debts WITHOUT selling stock. Ideal ~1:1. ✦ IN BOOKLET", formula: "= (Current assets − Stock) / Current liabilities" },
@@ -75,27 +80,27 @@ const FLASHCARD_CATEGORIES = [
     { term: "Gearing Ratio — HL", def: "The proportion of capital employed funded by external debt. Above 50% = high gearing = higher financial risk. ✦ IN BOOKLET", formula: "= (Non-current liabilities / Capital employed) × 100" },
     { term: "Average Stock", def: "Used in efficiency ratio calculations. ✦ IN BOOKLET", formula: "= (Opening stock + Closing stock) / 2" },
   ]},
-  { id: "investment", label: "Investment Appraisal", color: "#8B5CF6", cards: [
+  { id: "investment", label: "Investment Appraisal", color: "#A78BFA", cards: [
     { term: "Payback Period (PBP)", def: "The time taken to recover the initial investment from the net cash flows generated.", formula: "= Investment cost / Contribution per month (if even flows)" },
     { term: "Average Rate of Return (ARR)", def: "Average annual profit as a percentage of the initial investment. ✦ IN BOOKLET", formula: "ARR = [(Total returns − Capital cost) ÷ Years] / Capital cost × 100" },
     { term: "Net Present Value (NPV) — HL", def: "Calculates the real value of an investment by discounting future cash flows. A positive NPV means the project adds value. ✦ IN BOOKLET", formula: "NPV = Sum of present values − Cost of investment" },
   ]},
-  { id: "budgets", label: "Budgets & Variance", color: "#EF4444", cards: [
+  { id: "budgets", label: "Budgets & Variance", color: "#F87171", cards: [
     { term: "Variance", def: "A discrepancy between the planned (budgeted) item and the actual amount.", formula: "Variance = Actual value − Budgeted value" },
     { term: "Favourable Variance", def: "Profits are higher than expected — due to lower costs and/or higher revenues than budgeted.", formula: null },
     { term: "Adverse Variance", def: "Profits are lower than expected — due to higher costs and/or lower revenues than budgeted.", formula: null },
     { term: "Zero-Based Budgeting", def: "All budget holders must justify each dollar of spending before funds are released — starts from zero each period.", formula: null },
-    { term: "⚠️ Variance Rule — Costs", def: "For COSTS: Actual < Budgeted = FAVOURABLE (spent less than planned).", formula: null },
-    { term: "⚠️ Variance Rule — Revenue", def: "For REVENUE: Actual > Budgeted = FAVOURABLE (earned more than planned).", formula: null },
+    { term: "Variance Rule — Costs", def: "For COSTS: Actual < Budgeted = FAVOURABLE (spent less than planned).", formula: null },
+    { term: "Variance Rule — Revenue", def: "For REVENUE: Actual > Budgeted = FAVOURABLE (earned more than planned).", formula: null },
   ]},
-  { id: "breakeven", label: "Breakeven", color: "#14B8A6", cards: [
+  { id: "breakeven", label: "Breakeven", color: "#2DD4BF", cards: [
     { term: "Break-Even Quantity (BEQ)", def: "The quantity of sales required for a firm to reach break-even (cover all costs).", formula: "BEQ = Total fixed costs / Contribution per unit" },
     { term: "Margin of Safety", def: "The amount by which actual output exceeds the break-even quantity.", formula: "= Actual output − Break-even quantity" },
     { term: "Target Profit Quantity", def: "The output needed to achieve a specific profit target.", formula: "= (Fixed costs + Target profit) / Contribution per unit" },
     { term: "Target Price", def: "The price needed to break-even given current costs.", formula: "= AFC + AVC" },
     { term: "Break-Even Analysis", def: "A tool to determine the level of sales needed to cover all costs. Limitations: assumes constant price/costs, ignores quality, and is static.", formula: null },
   ]},
-  { id: "sources", label: "Sources of Finance", color: "#F97316", cards: [
+  { id: "sources", label: "Sources of Finance", color: "#FB923C", cards: [
     { term: "Internal Sources of Finance", def: "Finance from within the organisation — retained profit, sale of assets, owner's savings.", formula: null },
     { term: "External Sources of Finance", def: "Finance from outside the organisation — banks, investors, government, crowdfunding.", formula: null },
     { term: "Share Capital", def: "Finance raised through issuing shares on a stock exchange. Also known as equity capital.", formula: null },
@@ -105,7 +110,7 @@ const FLASHCARD_CATEGORIES = [
     { term: "Crowdfunding", def: "Raising finance by getting small amounts from a large number of people, often via online platforms.", formula: null },
     { term: "Business Angels", def: "Wealthy private individuals who invest their own money in high-growth potential ventures.", formula: null },
   ]},
-  { id: "bmt", label: "BMT Tools", color: "#EC4899", cards: [
+  { id: "bmt", label: "BMT Tools", color: "#F472B6", cards: [
     { term: "Ansoff Matrix", def: "Four growth strategies: Market Penetration (existing/existing), Market Development (existing product/new market), Product Development (new product/existing market), Diversification (new/new — highest risk).", formula: null },
     { term: "STEEPLE", def: "Framework examining external macro factors: Social, Technological, Economic, Environmental, Political, Legal, Ethical.", formula: null },
     { term: "Force Field Analysis", def: "Lewin's tool mapping driving forces (for change) vs restraining forces (against change). Change succeeds when driving forces outweigh restraining forces.", formula: null },
@@ -114,7 +119,7 @@ const FLASHCARD_CATEGORIES = [
 ];
 
 // ─────────────────────────────────────────────────────────────────────────────
-// MCQ QUESTIONS — unique IDs, no overlap with written
+// MCQ QUESTIONS
 // ─────────────────────────────────────────────────────────────────────────────
 const MCQ_QUESTIONS = [
   { id:"mcq1", cat:"Costs & Revenue", difficulty:"SL", q:"A product sells for $80. Variable cost per unit is $30. What is the contribution per unit?", options:["$30","$80","$50","$110"], answer:2, explanation:"Contribution per unit = Selling Price − Variable Cost = $80 − $30 = $50." },
@@ -132,7 +137,6 @@ const MCQ_QUESTIONS = [
   { id:"mcq13", cat:"Sources of Finance", difficulty:"SL", q:"Which is an INTERNAL source of finance?", options:["Bank loan","Retained profit","Venture capital","Crowdfunding"], answer:1, explanation:"Retained profit is generated from within the business — it is an internal source of finance. All others require a third party." },
   { id:"mcq14", cat:"Costs & Revenue", difficulty:"SL", q:"Factory rent is $5,000 per month regardless of output. What type of cost is this?", options:["Variable cost","Direct cost","Fixed cost","Semi-variable cost"], answer:2, explanation:"Factory rent does not change with the level of output — it is a fixed cost." },
   { id:"mcq15", cat:"Ratio Analysis (HL)", difficulty:"HL", q:"A business has debtor days of 65 and the industry average is 30. What does this suggest?", options:["The business collects payments faster than rivals","The business has too much stock","The business is very slow at collecting debts — a cash flow risk","The business has high gearing"], answer:2, explanation:"High debtor days (65 vs industry 30) means customers are taking far longer than average to pay. This ties up cash and increases cash flow risk. The business should tighten credit control." },
-  // NEW WORKBOOK-BASED MCQs
   { id:"mcq16", cat:"Sources of Finance", difficulty:"SL", q:"Big Deal installed solar panels on a store roof. What type of expenditure is this?", options:["Revenue expenditure","Capital expenditure","Indirect cost","Trade credit"], answer:1, explanation:"Solar panels are a fixed asset lasting more than one year — this is capital expenditure. Revenue expenditure covers day-to-day running costs." },
   { id:"mcq17", cat:"Costs & Revenue", difficulty:"SL", q:"Dunn Auto Repair pays Keith a fixed salary of $5,000/month to handle accounting. This is best classified as:", options:["A variable cost","A direct cost","A fixed indirect cost","A revenue stream"], answer:2, explanation:"Keith's salary is fixed (doesn't change with output) and indirect (not directly tied to any single repair job) — making it a fixed indirect cost/overhead." },
   { id:"mcq18", cat:"Final Accounts", difficulty:"SL", q:"Crispy Collin's has trade creditors of $35,000 and a bank overdraft of $2,500. What are its total current liabilities?", options:["$35,000","$32,500","$37,500","$2,500"], answer:2, explanation:"Current liabilities = Bank overdraft + Trade creditors + Other short-term loans = $2,500 + $35,000 + $0 = $37,500." },
@@ -146,7 +150,7 @@ const MCQ_QUESTIONS = [
 ];
 
 // ─────────────────────────────────────────────────────────────────────────────
-// WRITTEN QUESTIONS — unique IDs, no overlap with MCQ
+// WRITTEN QUESTIONS
 // ─────────────────────────────────────────────────────────────────────────────
 const WRITTEN_QUESTIONS = [
   { id:"wr1", cat:"Costs & Revenue", difficulty:"SL", marks:3, q:"A business has total fixed costs of $18,000 and produces 600 units. Total variable costs are $12,000. Calculate the average cost per unit.", modelAnswer:"Total Costs = TFC + TVC = $18,000 + $12,000 = $30,000.\nAverage cost = TC / Q = $30,000 / 600 = $50 per unit.\n\n[1] for TC formula/calculation\n[1] for correct TC = $30,000\n[1] for correct AC = $50" },
@@ -157,7 +161,6 @@ const WRITTEN_QUESTIONS = [
   { id:"wr6", cat:"Budgets & Variance", difficulty:"HL", marks:5, q:"Budgeted sales revenue: $80,000. Actual: $72,000. Budgeted costs: $55,000. Actual costs: $51,000. Calculate both variances, state whether favourable or adverse, and evaluate the overall impact on profit.", modelAnswer:"Revenue variance = $72,000 − $80,000 = −$8,000 → ADVERSE\n(Earned $8,000 less than planned)\n\nCost variance = $51,000 − $55,000 = −$4,000 → FAVOURABLE\n(Spent $4,000 less than planned)\n\nNet impact: Revenue shortfall (−$8,000) partially offset by cost savings (+$4,000) = net adverse effect of $4,000 on profit.\n\n[1] correct revenue variance [1] adverse identified\n[1] correct cost variance [1] favourable identified\n[1] evaluation of net profit impact" },
   { id:"wr7", cat:"Breakeven", difficulty:"SL", marks:5, q:"Fixed costs = $24,000. Selling price = $60. Variable cost = $20. (a) Calculate breakeven output. (b) Calculate the margin of safety if actual output is 800 units. (c) Calculate the output needed for a target profit of $16,000.", modelAnswer:"(a) Contribution = $60 − $20 = $40.\nBEQ = $24,000 / $40 = 600 units.\n\n(b) Margin of safety = 800 − 600 = 200 units.\n\n(c) Target profit quantity = (FC + Target profit) / Contribution\n= ($24,000 + $16,000) / $40 = $40,000 / $40 = 1,000 units.\n\n[1] contribution calculation [1] BEQ\n[1] margin of safety [1] target profit formula [1] correct answer" },
   { id:"wr8", cat:"BMT Tools", difficulty:"SL/HL", marks:4, q:"Explain how a Force Field Analysis could support a business decision to relocate its production overseas.", modelAnswer:"A Force Field Analysis (Lewin) identifies and weights driving forces (for the change) vs restraining forces (against it).\n\nDriving forces: lower labour costs overseas, access to new markets, government incentives, economies of scale.\n\nRestraining forces: high relocation costs, employee resistance/redundancies, supply chain disruption, reputational risk.\n\nIf driving forces outweigh restraining forces numerically, the decision is more viable. The tool also helps managers identify which restraining forces to reduce before committing.\n\n[1] definition of FFA [1] driving forces example\n[1] restraining forces example [1] how it aids decision-making" },
-  // NEW WORKBOOK-BASED WRITTEN QUESTIONS
   { id:"wr9", cat:"Sources of Finance", difficulty:"SL", marks:4, q:"With reference to Hail Cheeser!, explain one advantage and one disadvantage of Manuel using internal sources of finance to open the new waterfront location.", modelAnswer:"Advantage: Manuel would retain full control over his business and all future profits — no interest payments are required, making it the cheapest form of finance. He avoids lengthy loan applications or investor meetings.\n\nDisadvantage: Manuel's retained profits are modest (he lost money in 3 of 12 months), so he may simply not have enough to fund the $20,000–$30,000 relocation. Using personal retirement savings also incurs a 10% early withdrawal penalty, increasing the actual cost.\n\n[1] advantage identified [1] applied to Hail Cheeser!\n[1] disadvantage identified [1] applied to Hail Cheeser!" },
   { id:"wr10", cat:"Costs & Revenue", difficulty:"SL", marks:4, q:"Using the Dunn Auto Repair case, explain the difference between fixed and indirect costs. Give one example of each from the case.", modelAnswer:"Fixed costs are costs that do not vary with the level of output — they remain constant regardless of how many services DAR performs. For example, Keith's salary of $5,000/month is paid whether DAR completes 10 repairs or 500.\n\nIndirect costs (overheads) are costs not directly attributable to a specific product or service. For example, utility expenses of $500/month and marketing costs of $150/month cannot be easily assigned to any individual oil change or repair job.\n\nNote: fixed costs often overlap with indirect costs, but indirect costs can occasionally vary (e.g., utilities rising in winter).\n\n[1] definition of fixed costs [1] example from DAR\n[1] definition of indirect costs [1] example from DAR" },
   { id:"wr11", cat:"Final Accounts", difficulty:"SL", marks:4, q:"Using Crispy Collin's accounts, construct the profit and loss account for the period ended 31 July. (Sales revenue: $85,000 | Rent: $14,000 | Marketing: $2,000 | Salaries/Admin/Insurance: $20,000 | Profit before interest and tax: $6,500 | Interest: $500 | Tax: $1,750)", modelAnswer:"Crispy Collin's — Statement of Profit or Loss\n\nSales revenue:              $85,000\nCost of sales:             ($42,500)  [85,000 − 42,500]\nGross profit:               $42,500\nExpenses (14+2+20):        ($36,000)\nProfit before interest/tax:  $6,500\nInterest:                     ($500)\nProfit before tax:           $6,000\nTax:                        ($1,750)\nProfit for the period:       $4,250\n\n[4] fully correct | [3] one error | [2] two errors | [1] shows some understanding of P&L layout" },
@@ -168,10 +171,10 @@ const WRITTEN_QUESTIONS = [
 ];
 
 const CAT_COLORS = {
-  "Costs & Revenue":"#6366F1","Cash Flow":"#0EA5E9","Final Accounts":"#10B981",
-  "Ratio Analysis":"#F59E0B","Ratio Analysis (HL)":"#F59E0B","Investment Appraisal":"#8B5CF6",
-  "Budgets & Variance":"#EF4444","Breakeven":"#14B8A6","BMT Tools":"#EC4899",
-  "Sources of Finance":"#F97316"
+  "Costs & Revenue":"#7C6FFF","Cash Flow":"#38BDF8","Final Accounts":"#34D399",
+  "Ratio Analysis":"#FBBF24","Ratio Analysis (HL)":"#FBBF24","Investment Appraisal":"#A78BFA",
+  "Budgets & Variance":"#F87171","Breakeven":"#2DD4BF","BMT Tools":"#F472B6",
+  "Sources of Finance":"#FB923C"
 };
 
 const ALL_CATS = ["All", ...Array.from(new Set([...MCQ_QUESTIONS.map(q=>q.cat), ...WRITTEN_QUESTIONS.map(q=>q.cat)]))];
@@ -182,86 +185,166 @@ const ALL_CATS = ["All", ...Array.from(new Set([...MCQ_QUESTIONS.map(q=>q.cat), 
 
 function ChecklistView() {
   const [checked, setChecked] = useState(() => loadLS("checklist_checked", {}));
-  const [collapsed, setCollapsed] = useState(() => loadLS("checklist_collapsed", {}));
+  const [openSections, setOpenSections] = useState(() => {
+    const collapsed = loadLS("checklist_collapsed", {});
+    return CHECKLIST_SECTIONS.filter(s => !collapsed[s.id]).map(s => s.id);
+  });
   const toggle = id => setChecked(p => { const next = { ...p, [id]: !p[id] }; saveLS("checklist_checked", next); return next; });
-  const toggleSec = id => setCollapsed(p => { const next = { ...p, [id]: !p[id] }; saveLS("checklist_collapsed", next); return next; });
+  const handleAccordion = (value) => {
+    setOpenSections(value);
+    const collapsed = {};
+    CHECKLIST_SECTIONS.forEach(s => { if (!value.includes(s.id)) collapsed[s.id] = true; });
+    saveLS("checklist_collapsed", collapsed);
+  };
   const totalItems = CHECKLIST_SECTIONS.reduce((s,sec)=>s+sec.items.length,0);
   const checkedCount = Object.values(checked).filter(Boolean).length;
   const progress = Math.round((checkedCount/totalItems)*100);
-  const progColor = progress<30?"#DC2626":progress<70?"#D97706":"#059669";
+  const progColor = progress<30?"#F87171":progress<70?"#FBBF24":"#34D399";
 
   return (
     <div style={{maxWidth:760,margin:"0 auto",padding:"0 0 40px"}}>
-      <div style={{background:"#1C1C22",borderRadius:16,padding:"20px 24px",marginBottom:28,border:"1px solid #2A2A32"}}>
-        <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:12}}>
-          <span style={{fontSize:14,color:"#A0998F"}}>Overall Progress</span>
-          <span style={{fontSize:22,fontWeight:700,color:progColor}}>{progress}%</span>
-        </div>
-        <div style={{background:"#2A2A32",borderRadius:99,height:10,overflow:"hidden"}}>
-          <div style={{width:`${progress}%`,height:"100%",background:progColor,borderRadius:99,transition:"width 0.4s ease"}}/>
-        </div>
-        <div style={{marginTop:10,fontSize:13,color:"#6B6560",display:"flex",justifyContent:"space-between",alignItems:"center"}}><span>{checkedCount} of {totalItems} topics covered</span><span style={{fontSize:11,color:"#3A5A3A",background:"#1A2A1A",padding:"2px 10px",borderRadius:99,fontFamily:"monospace"}}>✦ auto-saved</span></div>
-      </div>
+      {/* Progress card */}
+      <Paper
+        bg="#12121A"
+        radius="lg"
+        p="xl"
+        mb="xl"
+        style={{
+          border: "1px solid #252533",
+          boxShadow: `0 4px 24px ${progColor}10, 0 2px 8px rgba(0,0,0,0.3)`,
+        }}
+      >
+        <Group justify="space-between" mb="xs">
+          <Text fz="sm" c="#8B8B9E" ff="'JetBrains Mono', monospace">Overall Progress</Text>
+          <Text fz={24} fw={800} c={progColor}>{progress}%</Text>
+        </Group>
+        <Progress
+          value={progress}
+          size="md"
+          radius="xl"
+          color={progColor}
+          animated
+          styles={{ root: { background: "#1E1E2A" }, section: { boxShadow: `0 0 12px ${progColor}40` } }}
+        />
+        <Group justify="space-between" mt="sm">
+          <Text fz="xs" c="#55556A">{checkedCount} of {totalItems} topics covered</Text>
+          <Badge size="xs" variant="light" color="teal" ff="'JetBrains Mono', monospace">auto-saved</Badge>
+        </Group>
+      </Paper>
 
-      {CHECKLIST_SECTIONS.map(section=>{
-        const sectionChecked = section.items.filter((_,i)=>checked[`${section.id}-${i}`]).length;
-        const isCollapsed = collapsed[section.id];
-        const allDone = sectionChecked===section.items.length;
-        return (
-          <div key={section.id} style={{background:"#1C1C22",border:`1px solid ${allDone?section.color+"66":"#2A2A32"}`,borderRadius:14,marginBottom:12,overflow:"hidden",transition:"border-color 0.3s"}}>
-            <div onClick={()=>toggleSec(section.id)} style={{display:"flex",alignItems:"center",justifyContent:"space-between",padding:"16px 20px",cursor:"pointer",borderLeft:`4px solid ${section.color}`,userSelect:"none"}}>
-              <div style={{display:"flex",alignItems:"center",gap:12}}>
-                <div style={{width:32,height:32,borderRadius:8,background:section.color+"22",display:"flex",alignItems:"center",justifyContent:"center",fontSize:13,fontWeight:700,color:section.color,fontFamily:"monospace"}}>{sectionChecked}/{section.items.length}</div>
-                <span style={{fontWeight:600,fontSize:15,color:allDone?section.color:"#E8E6E0"}}>{allDone?"✓ ":""}{section.title}</span>
-              </div>
-              <span style={{color:"#4A4A52",fontSize:18,transform:isCollapsed?"rotate(-90deg)":"rotate(0deg)",display:"inline-block",transition:"transform 0.2s"}}>▾</span>
-            </div>
-            {!isCollapsed&&(
-              <div style={{padding:"4px 20px 16px",borderTop:"1px solid #2A2A32"}}>
-                {section.items.map((item,i)=>{
-                  const key=`${section.id}-${i}`;
-                  const isChecked=checked[key];
-                  const isImportant=item.includes("⚠️")||item.includes("✦ MEMORISE");
-                  return (
-                    <div key={key} onClick={()=>toggle(key)} style={{display:"flex",alignItems:"flex-start",gap:12,padding:"9px 4px",cursor:"pointer",borderRadius:8,transition:"background 0.15s"}} onMouseEnter={e=>e.currentTarget.style.background="#22222A"} onMouseLeave={e=>e.currentTarget.style.background="transparent"}>
-                      <div style={{width:20,height:20,borderRadius:5,flexShrink:0,marginTop:1,border:`2px solid ${isChecked?section.color:"#3A3A42"}`,background:isChecked?section.color:"transparent",display:"flex",alignItems:"center",justifyContent:"center",transition:"all 0.2s"}}>
-                        {isChecked&&<span style={{color:"#fff",fontSize:11,fontWeight:700}}>✓</span>}
-                      </div>
-                      <span style={{fontSize:14,color:isChecked?"#5A5A62":isImportant?"#F5D87A":"#C8C4BC",textDecoration:isChecked?"line-through":"none",lineHeight:1.5,transition:"color 0.2s"}}>{item}</span>
-                    </div>
-                  );
-                })}
-              </div>
-            )}
-          </div>
-        );
-      })}
-      <div style={{textAlign:"center",marginTop:24,color:"#3A3A42",fontSize:13}}>
+      {/* Sections */}
+      <Accordion
+        multiple
+        value={openSections}
+        onChange={handleAccordion}
+        variant="separated"
+        radius="md"
+        styles={{
+          item: { backgroundColor: "#12121A", border: "1px solid #252533", marginBottom: 12, "&[data-active]": { borderColor: "#35354A" } },
+          control: { padding: "14px 20px", "&:hover": { backgroundColor: "#1A1A24" } },
+          content: { padding: "4px 20px 16px", borderTop: "1px solid #252533" },
+          chevron: { color: "#55556A" },
+        }}
+      >
+        {CHECKLIST_SECTIONS.map(section => {
+          const sectionChecked = section.items.filter((_,i)=>checked[`${section.id}-${i}`]).length;
+          const allDone = sectionChecked===section.items.length;
+          return (
+            <Accordion.Item value={section.id} key={section.id} style={{ borderLeft: `4px solid ${section.color}` }}>
+              <Accordion.Control>
+                <Group gap="sm">
+                  <Badge
+                    variant="light"
+                    size="sm"
+                    fw={700}
+                    ff="'JetBrains Mono', monospace"
+                    style={{ backgroundColor: section.color + "22", color: section.color, border: "none" }}
+                  >
+                    {sectionChecked}/{section.items.length}
+                  </Badge>
+                  <Text fw={600} fz="sm" c={allDone ? section.color : "#F0EEE8"}>
+                    {allDone && "✓ "}{section.title}
+                  </Text>
+                </Group>
+              </Accordion.Control>
+              <Accordion.Panel>
+                <Stack gap={4}>
+                  {section.items.map((item,i) => {
+                    const key = `${section.id}-${i}`;
+                    const isChecked = checked[key];
+                    const isImportant = item.includes("MEMORISE");
+                    return (
+                      <Checkbox
+                        key={key}
+                        checked={!!isChecked}
+                        onChange={() => toggle(key)}
+                        label={item}
+                        color={section.color}
+                        radius="sm"
+                        styles={{
+                          root: { padding: "6px 4px", borderRadius: 8, cursor: "pointer", transition: "background 0.15s", "&:hover": { backgroundColor: "#1A1A24" } },
+                          label: { color: isChecked ? "#55556A" : isImportant ? "#FBBF24" : "#C8C4BC", textDecoration: isChecked ? "line-through" : "none", fontSize: 14, lineHeight: 1.5, cursor: "pointer" },
+                          input: { cursor: "pointer" },
+                        }}
+                      />
+                    );
+                  })}
+                </Stack>
+              </Accordion.Panel>
+            </Accordion.Item>
+          );
+        })}
+      </Accordion>
+
+      <Text ta="center" mt="lg" c="#55556A" fz="xs">
         Click any item to mark it as revised ·{" "}
-        <span style={{color:"#4F46E5",cursor:"pointer"}} onClick={()=>{ setChecked({}); saveLS("checklist_checked", {}); }}>Reset all</span>
-      </div>
+        <Text component="span" c="#7C6FFF" style={{cursor:"pointer"}} onClick={()=>{ setChecked({}); saveLS("checklist_checked", {}); }}>Reset all</Text>
+      </Text>
     </div>
   );
 }
 
-function FlashCard({card}) {
+function FlashCard({card, catColor}) {
   const [flipped,setFlipped]=useState(false);
   return (
-    <div onClick={()=>setFlipped(f=>!f)} style={{cursor:"pointer",perspective:"1000px",height:220,userSelect:"none"}}>
-      <div style={{position:"relative",width:"100%",height:"100%",transformStyle:"preserve-3d",transform:flipped?"rotateY(180deg)":"rotateY(0deg)",transition:"transform 0.45s cubic-bezier(.4,0,.2,1)"}}>
-        <div style={{position:"absolute",inset:0,backfaceVisibility:"hidden",background:"#16161E",border:"1px solid #2C2C38",borderRadius:16,display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",padding:24,textAlign:"center"}}>
-          <div style={{fontSize:11,letterSpacing:2,color:"#555",fontFamily:"monospace",marginBottom:14,textTransform:"uppercase"}}>TERM</div>
-          <div style={{fontSize:19,fontWeight:700,color:"#F0EDE8",lineHeight:1.3}}>{card.term}</div>
-          <div style={{marginTop:20,fontSize:11,color:"#404050"}}>tap to reveal →</div>
-        </div>
-        <div style={{position:"absolute",inset:0,backfaceVisibility:"hidden",transform:"rotateY(180deg)",background:"#16161E",border:"1px solid #2C2C38",borderRadius:16,display:"flex",flexDirection:"column",justifyContent:"center",padding:20,overflowY:"auto"}}>
-          <div style={{fontSize:11,letterSpacing:2,color:"#555",fontFamily:"monospace",marginBottom:10,textTransform:"uppercase"}}>DEFINITION</div>
-          <p style={{fontSize:13,color:"#C8C4BC",lineHeight:1.65,margin:0}}>{card.def}</p>
-          {card.formula&&<div style={{marginTop:12,background:"#0D0D13",borderRadius:8,padding:"10px 14px",borderLeft:"3px solid #6366F1"}}>
-            <div style={{fontSize:10,color:"#6366F1",fontFamily:"monospace",letterSpacing:1,marginBottom:4}}>FORMULA</div>
-            <div style={{fontSize:12,color:"#A9E6FF",fontFamily:"monospace"}}>{card.formula}</div>
-          </div>}
-        </div>
+    <div className="flashcard-container" onClick={()=>setFlipped(f=>!f)}>
+      <div className={`flashcard-inner${flipped ? " flipped" : ""}`}>
+        {/* Front */}
+        <Paper
+          className="flashcard-face"
+          bg="#1A1A24"
+          style={{
+            border: "1px solid #252533",
+            boxShadow: `0 8px 32px ${catColor}12, 0 2px 8px rgba(0,0,0,0.4)`,
+            alignItems: "center",
+            padding: 24,
+            textAlign: "center",
+          }}
+        >
+          <Text fz={11} ff="'JetBrains Mono', monospace" c="#55556A" tt="uppercase" lts={2} mb="md">TERM</Text>
+          <Text fz={20} fw={700} c="#F0EEE8" lh={1.3}>{card.term}</Text>
+          <Text fz={11} c="#55556A" mt="lg">tap to reveal</Text>
+        </Paper>
+        {/* Back */}
+        <Paper
+          className="flashcard-face flashcard-back"
+          bg="#1A1A24"
+          style={{
+            border: "1px solid #252533",
+            boxShadow: `0 8px 32px ${catColor}12, 0 2px 8px rgba(0,0,0,0.4)`,
+            padding: 20,
+            overflowY: "auto",
+          }}
+        >
+          <Text fz={11} ff="'JetBrains Mono', monospace" c="#55556A" tt="uppercase" lts={2} mb="sm">DEFINITION</Text>
+          <Text fz={13} c="#C8C4BC" lh={1.65}>{card.def}</Text>
+          {card.formula && (
+            <Box mt="sm" p="sm" style={{ background: "#0D0D14", borderRadius: 8, borderLeft: `3px solid ${catColor}` }}>
+              <Text fz={10} ff="'JetBrains Mono', monospace" c={catColor} lts={1} mb={4}>FORMULA</Text>
+              <Text fz={12} ff="'JetBrains Mono', monospace" c="#A9E6FF">{card.formula}</Text>
+            </Box>
+          )}
+        </Paper>
       </div>
     </div>
   );
@@ -274,23 +357,66 @@ function FlashcardsView() {
   const currentCard=currentCat.cards[cardIdx];
   return (
     <div style={{maxWidth:680,margin:"0 auto",padding:"0 0 40px"}}>
-      <div style={{display:"flex",gap:8,flexWrap:"wrap",marginBottom:24}}>
+      {/* Category filters */}
+      <Group gap={8} mb="lg" style={{flexWrap:"wrap"}}>
         {FLASHCARD_CATEGORIES.map(cat=>(
-          <button key={cat.id} onClick={()=>{ setActiveCat(cat.id); saveLS("fc_cat", cat.id); setCardIdx(0); }} style={{background:activeCat===cat.id?cat.color:"#16161E",border:`1px solid ${activeCat===cat.id?cat.color:"#2C2C38"}`,borderRadius:99,padding:"6px 14px",color:activeCat===cat.id?"#fff":"#888",fontSize:12,cursor:"pointer",fontFamily:"monospace",transition:"all 0.2s"}}>{cat.label}</button>
+          <Button
+            key={cat.id}
+            size="xs"
+            radius="xl"
+            variant={activeCat===cat.id ? "filled" : "subtle"}
+            ff="'JetBrains Mono', monospace"
+            onClick={()=>{ setActiveCat(cat.id); saveLS("fc_cat", cat.id); setCardIdx(0); }}
+            style={{
+              backgroundColor: activeCat===cat.id ? cat.color : "#1A1A24",
+              color: activeCat===cat.id ? "#fff" : "#8B8B9E",
+              border: `1px solid ${activeCat===cat.id ? cat.color : "#252533"}`,
+            }}
+          >
+            {cat.label}
+          </Button>
         ))}
-      </div>
-      <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:14}}>
-        <span style={{fontSize:13,color:"#444",fontFamily:"monospace"}}>{cardIdx+1} / {currentCat.cards.length} — {currentCat.label}</span>
-        <div style={{background:"#16161E",borderRadius:99,height:4,width:140,overflow:"hidden"}}>
-          <div style={{width:`${((cardIdx+1)/currentCat.cards.length)*100}%`,height:"100%",background:currentCat.color,transition:"width 0.3s"}}/>
-        </div>
-      </div>
-      <FlashCard key={`${activeCat}-${cardIdx}`} card={currentCard}/>
-      <div style={{display:"flex",gap:12,marginTop:16}}>
-        <button onClick={()=>setCardIdx(i=>Math.max(0,i-1))} disabled={cardIdx===0} style={{flex:1,background:"#16161E",border:"1px solid #2C2C38",borderRadius:12,padding:14,color:cardIdx===0?"#333":"#888",fontSize:14,cursor:cardIdx===0?"not-allowed":"pointer"}}>← Previous</button>
-        <button onClick={()=>setCardIdx(i=>Math.min(currentCat.cards.length-1,i+1))} disabled={cardIdx===currentCat.cards.length-1} style={{flex:1,background:currentCat.color,border:"none",borderRadius:12,padding:14,color:"#fff",fontSize:14,cursor:cardIdx===currentCat.cards.length-1?"not-allowed":"pointer",opacity:cardIdx===currentCat.cards.length-1?0.4:1}}>Next →</button>
-      </div>
-      <p style={{textAlign:"center",fontSize:12,color:"#333",marginTop:16}}>Tap any card to flip it</p>
+      </Group>
+
+      {/* Progress */}
+      <Group justify="space-between" mb="md">
+        <Text fz="xs" c="#55556A" ff="'JetBrains Mono', monospace">{cardIdx+1} / {currentCat.cards.length} — {currentCat.label}</Text>
+        <Box style={{background:"#1A1A24",borderRadius:99,height:4,width:140,overflow:"hidden"}}>
+          <div style={{width:`${((cardIdx+1)/currentCat.cards.length)*100}%`,height:"100%",background:currentCat.color,borderRadius:99,transition:"width 0.3s",boxShadow:`0 0 8px ${currentCat.color}40`}}/>
+        </Box>
+      </Group>
+
+      {/* Card */}
+      <FlashCard key={`${activeCat}-${cardIdx}`} card={currentCard} catColor={currentCat.color}/>
+
+      {/* Navigation */}
+      <Group grow gap="sm" mt="md">
+        <Button
+          variant="subtle"
+          color="gray"
+          size="md"
+          radius="md"
+          disabled={cardIdx===0}
+          onClick={()=>setCardIdx(i=>Math.max(0,i-1))}
+          styles={{ root: { backgroundColor: "#1A1A24", border: "1px solid #252533", "&:disabled": { backgroundColor: "#12121A", borderColor: "#1E1E2A" } } }}
+        >
+          Previous
+        </Button>
+        <Button
+          size="md"
+          radius="md"
+          disabled={cardIdx===currentCat.cards.length-1}
+          onClick={()=>setCardIdx(i=>Math.min(currentCat.cards.length-1,i+1))}
+          style={{
+            background: cardIdx===currentCat.cards.length-1 ? "#1E1E2A" : `linear-gradient(135deg, ${currentCat.color}, ${currentCat.color}bb)`,
+            border: "none",
+            boxShadow: cardIdx===currentCat.cards.length-1 ? "none" : `0 4px 16px ${currentCat.color}30`,
+          }}
+        >
+          Next
+        </Button>
+      </Group>
+      <Text ta="center" fz="xs" c="#55556A" mt="md">Tap any card to flip it</Text>
     </div>
   );
 }
@@ -298,75 +424,130 @@ function FlashcardsView() {
 function MCQItem({q, displayNum}) {
   const [selected,setSelected]=useState(null);
   const [confirmed,setConfirmed]=useState(false);
-  const color=CAT_COLORS[q.cat]||"#6366F1";
+  const color=CAT_COLORS[q.cat]||"#7C6FFF";
   return (
-    <div style={{background:"#16161E",border:"1px solid #2C2C38",borderRadius:16,overflow:"hidden",marginBottom:14}}>
+    <Paper bg="#1A1A24" radius="lg" mb="sm" style={{ border:"1px solid #252533", overflow:"hidden", transition:"all 0.2s" }}>
       <div style={{borderLeft:`4px solid ${color}`,padding:"18px 20px"}}>
-        <div style={{display:"flex",alignItems:"center",gap:10,marginBottom:10,flexWrap:"wrap"}}>
-          <span style={{fontSize:10,color:"#fff",background:color,padding:"2px 10px",borderRadius:99,fontFamily:"monospace"}}>MCQ</span>
-          <span style={{fontSize:10,color:color,background:color+"22",padding:"2px 10px",borderRadius:99,fontFamily:"monospace"}}>{q.cat}</span>
-          <span style={{fontSize:10,color:"#555",background:"#22222C",padding:"2px 10px",borderRadius:99,fontFamily:"monospace"}}>{q.difficulty}</span>
-        </div>
-        <p style={{fontSize:15,color:"#E8E6E0",margin:0,lineHeight:1.6,fontWeight:600}}>Q{displayNum}. {q.q}</p>
+        <Group gap={8} mb="sm" style={{flexWrap:"wrap"}}>
+          <Badge size="xs" ff="'JetBrains Mono', monospace" style={{backgroundColor:color,color:"#fff"}}>MCQ</Badge>
+          <Badge size="xs" variant="light" ff="'JetBrains Mono', monospace" style={{backgroundColor:color+"22",color:color,border:"none"}}>{q.cat}</Badge>
+          <Badge size="xs" variant="light" ff="'JetBrains Mono', monospace" style={{backgroundColor:"#1E1E2A",color:"#8B8B9E",border:"none"}}>{q.difficulty}</Badge>
+        </Group>
+        <Text fz={15} c="#F0EEE8" lh={1.6} fw={600}>Q{displayNum}. {q.q}</Text>
       </div>
-      <div style={{padding:"12px 20px 16px",display:"grid",gap:8}}>
-        {q.options.map((opt,i)=>{
+      <Stack gap={8} p="md" pt="sm">
+        {q.options.map((opt,i) => {
           const isSelected=selected===i;
           const isCorrect=i===q.answer;
-          let bg="#1C1C22",border="#2A2A32",tc="#C8C4BC";
+          let bg="#12121A",border="#252533",tc="#C8C4BC";
           if(confirmed){
-            if(isCorrect){bg="#059669"+"22";border="#059669";tc="#6EE7B7";}
-            else if(isSelected&&!isCorrect){bg="#DC2626"+"22";border="#DC2626";tc="#FCA5A5";}
-          } else if(isSelected){bg=color+"22";border=color;tc="#F5F3EE";}
+            if(isCorrect){bg="#34D399"+"22";border="#34D399";tc="#6EE7B7";}
+            else if(isSelected&&!isCorrect){bg="#F87171"+"22";border="#F87171";tc="#FCA5A5";}
+          } else if(isSelected){bg=color+"22";border=color;tc="#F0EEE8";}
           return (
-            <div key={i} onClick={()=>{if(!confirmed)setSelected(i);}} style={{background:bg,border:`1.5px solid ${border}`,borderRadius:10,padding:"11px 16px",cursor:confirmed?"default":"pointer",display:"flex",alignItems:"center",gap:12,transition:"all 0.2s"}} onMouseEnter={e=>{if(!confirmed&&!isSelected)e.currentTarget.style.borderColor=color+"66";}} onMouseLeave={e=>{if(!confirmed&&!isSelected)e.currentTarget.style.borderColor="#2A2A32";}}>
-              <div style={{width:26,height:26,borderRadius:6,flexShrink:0,background:confirmed&&isCorrect?"#059669":confirmed&&isSelected&&!isCorrect?"#DC2626":isSelected?color:"#2A2A32",display:"flex",alignItems:"center",justifyContent:"center",fontSize:11,fontFamily:"monospace",color:"#fff",fontWeight:700}}>
-                {confirmed&&isCorrect?"✓":confirmed&&isSelected&&!isCorrect?"✗":String.fromCharCode(65+i)}
-              </div>
-              <span style={{fontSize:14,color:tc,lineHeight:1.4}}>{opt}</span>
-            </div>
+            <Paper
+              key={i}
+              p="sm"
+              radius="md"
+              onClick={()=>{if(!confirmed)setSelected(i);}}
+              style={{
+                background:bg, border:`1.5px solid ${border}`,
+                cursor:confirmed?"default":"pointer", transition:"all 0.2s",
+                "&:hover": !confirmed && !isSelected ? {borderColor: color+"66"} : undefined,
+              }}
+              onMouseEnter={e=>{if(!confirmed&&!isSelected)e.currentTarget.style.borderColor=color+"66";}}
+              onMouseLeave={e=>{if(!confirmed&&!isSelected)e.currentTarget.style.borderColor="#252533";}}
+            >
+              <Group gap="sm" wrap="nowrap">
+                <Box style={{
+                  width:28,height:28,borderRadius:6,flexShrink:0,
+                  background:confirmed&&isCorrect?"#34D399":confirmed&&isSelected&&!isCorrect?"#F87171":isSelected?color:"#252533",
+                  display:"flex",alignItems:"center",justifyContent:"center",
+                }}>
+                  <Text fz={11} ff="'JetBrains Mono', monospace" c="#fff" fw={700}>
+                    {confirmed&&isCorrect?"✓":confirmed&&isSelected&&!isCorrect?"✗":String.fromCharCode(65+i)}
+                  </Text>
+                </Box>
+                <Text fz={14} c={tc} lh={1.4}>{opt}</Text>
+              </Group>
+            </Paper>
           );
         })}
-        {!confirmed?(
-          <button onClick={()=>{if(selected!==null)setConfirmed(true);}} disabled={selected===null} style={{marginTop:4,background:selected!==null?`linear-gradient(135deg,${color},${color}bb)`:"#22222A",border:"none",borderRadius:10,padding:"11px",color:selected!==null?"#fff":"#444",fontSize:14,fontWeight:600,cursor:selected!==null?"pointer":"not-allowed",transition:"all 0.2s"}}>Check Answer</button>
-        ):(
-          <div style={{background:selected===q.answer?"#059669"+"11":"#DC2626"+"11",border:`1px solid ${selected===q.answer?"#059669":"#DC2626"}44`,borderRadius:10,padding:"12px 16px",marginTop:4}}>
-            <div style={{fontSize:11,color:selected===q.answer?"#6EE7B7":"#FCA5A5",fontFamily:"monospace",marginBottom:6}}>{selected===q.answer?"✓ CORRECT":"✗ INCORRECT"}</div>
-            <p style={{fontSize:13,color:"#A09890",lineHeight:1.6,margin:0}}>{q.explanation}</p>
-            <button onClick={()=>{setSelected(null);setConfirmed(false);}} style={{marginTop:10,background:"transparent",border:"1px solid #2C2C38",borderRadius:8,color:"#555",fontSize:12,padding:"5px 14px",cursor:"pointer"}}>Try Again</button>
-          </div>
+        {!confirmed ? (
+          <Button
+            mt={4}
+            fullWidth
+            radius="md"
+            disabled={selected===null}
+            onClick={()=>{if(selected!==null)setConfirmed(true);}}
+            style={{
+              background: selected!==null ? `linear-gradient(135deg,${color},${color}bb)` : "#1E1E2A",
+              border: "none",
+              boxShadow: selected!==null ? `0 4px 16px ${color}30` : "none",
+            }}
+            styles={{ root: { "&:disabled": { backgroundColor: "#1E1E2A", color: "#55556A" } } }}
+          >
+            Check Answer
+          </Button>
+        ) : (
+          <Alert
+            mt={4}
+            radius="md"
+            variant="light"
+            color={selected===q.answer ? "green" : "red"}
+            title={selected===q.answer ? "Correct!" : "Incorrect"}
+            styles={{
+              root: { backgroundColor: selected===q.answer ? "#34D399"+"11" : "#F87171"+"11", border: `1px solid ${selected===q.answer ? "#34D399" : "#F87171"}44` },
+              title: { fontFamily: "'JetBrains Mono', monospace", fontSize: 12 },
+            }}
+          >
+            <Text fz="sm" c="#8B8B9E" lh={1.6}>{q.explanation}</Text>
+            <Button variant="subtle" size="xs" color="gray" mt="sm" onClick={()=>{setSelected(null);setConfirmed(false);}}>Try Again</Button>
+          </Alert>
         )}
-      </div>
-    </div>
+      </Stack>
+    </Paper>
   );
 }
 
 function WrittenItem({q, displayNum}) {
   const [revealed,setRevealed]=useState(false);
-  const color=CAT_COLORS[q.cat]||"#6366F1";
+  const color=CAT_COLORS[q.cat]||"#7C6FFF";
   return (
-    <div style={{background:"#16161E",border:"1px solid #2C2C38",borderRadius:16,overflow:"hidden",marginBottom:14}}>
+    <Paper bg="#1A1A24" radius="lg" mb="sm" style={{border:"1px solid #252533",overflow:"hidden"}}>
       <div style={{borderLeft:`4px solid ${color}`,padding:"18px 20px"}}>
-        <div style={{display:"flex",alignItems:"center",gap:10,marginBottom:10,flexWrap:"wrap"}}>
-          <span style={{fontSize:10,color:"#fff",background:"#334",padding:"2px 10px",borderRadius:99,fontFamily:"monospace"}}>WRITTEN</span>
-          <span style={{fontSize:10,color,background:color+"22",padding:"2px 10px",borderRadius:99,fontFamily:"monospace"}}>{q.cat}</span>
-          <span style={{fontSize:10,color:"#555",background:"#22222C",padding:"2px 10px",borderRadius:99,fontFamily:"monospace"}}>{q.difficulty}</span>
-          <span style={{fontSize:11,color:"#F5D87A",background:"#2A2800",padding:"2px 10px",borderRadius:99,fontFamily:"monospace",marginLeft:"auto",border:"1px solid #5A4A00"}}>[ {q.marks} marks ]</span>
-        </div>
-        <p style={{fontSize:15,color:"#E8E6E0",margin:0,lineHeight:1.6,fontWeight:600,whiteSpace:"pre-line"}}>Q{displayNum}. {q.q}</p>
+        <Group gap={8} mb="sm" style={{flexWrap:"wrap"}}>
+          <Badge size="xs" ff="'JetBrains Mono', monospace" style={{backgroundColor:"#252533",color:"#8B8B9E"}}>WRITTEN</Badge>
+          <Badge size="xs" variant="light" ff="'JetBrains Mono', monospace" style={{backgroundColor:color+"22",color,border:"none"}}>{q.cat}</Badge>
+          <Badge size="xs" variant="light" ff="'JetBrains Mono', monospace" style={{backgroundColor:"#1E1E2A",color:"#8B8B9E",border:"none"}}>{q.difficulty}</Badge>
+          <Badge size="xs" ff="'JetBrains Mono', monospace" ml="auto" style={{backgroundColor:"#2A2800",color:"#FBBF24",border:"1px solid #5A4A00"}}>[ {q.marks} marks ]</Badge>
+        </Group>
+        <Text fz={15} c="#F0EEE8" lh={1.6} fw={600} style={{whiteSpace:"pre-line"}}>Q{displayNum}. {q.q}</Text>
       </div>
-      {!revealed?(
-        <div style={{padding:"12px 20px 16px"}}>
-          <button onClick={()=>setRevealed(true)} style={{background:color+"22",border:`1px solid ${color}44`,borderRadius:8,color,fontSize:13,padding:"8px 20px",cursor:"pointer",fontFamily:"monospace"}}>Show Model Answer</button>
-        </div>
-      ):(
-        <div style={{padding:"0 20px 18px",borderTop:"1px solid #2C2C38"}}>
-          <div style={{fontSize:11,color:"#10B981",fontFamily:"monospace",letterSpacing:1,margin:"14px 0 8px"}}>✓ MODEL ANSWER</div>
-          <p style={{fontSize:13,color:"#B0ADA6",lineHeight:1.7,margin:0,whiteSpace:"pre-line"}}>{q.modelAnswer}</p>
-          <button onClick={()=>setRevealed(false)} style={{marginTop:12,background:"transparent",border:"1px solid #2C2C38",borderRadius:8,color:"#555",fontSize:12,padding:"6px 14px",cursor:"pointer"}}>Hide</button>
-        </div>
-      )}
-    </div>
+      <div style={{padding:"12px 20px 16px"}}>
+        <Button
+          size="sm"
+          radius="md"
+          variant={revealed ? "subtle" : "light"}
+          color={revealed ? "gray" : undefined}
+          ff="'JetBrains Mono', monospace"
+          onClick={()=>setRevealed(r=>!r)}
+          style={revealed ? {} : {
+            backgroundColor: color + "22",
+            color: color,
+            border: `1px solid ${color}44`,
+          }}
+        >
+          {revealed ? "Hide Model Answer" : "Show Model Answer"}
+        </Button>
+        <Collapse in={revealed}>
+          <Box mt="md" pt="md" style={{borderTop:"1px solid #252533"}}>
+            <Text fz={11} ff="'JetBrains Mono', monospace" c="#34D399" lts={1} mb="sm">MODEL ANSWER</Text>
+            <Text fz={13} c="#B0ADA6" lh={1.7} style={{whiteSpace:"pre-line"}}>{q.modelAnswer}</Text>
+          </Box>
+        </Collapse>
+      </div>
+    </Paper>
   );
 }
 
@@ -374,22 +555,17 @@ function PracticeView() {
   const [filterCat,setFilterCat]=useState("All");
   const [filterType,setFilterType]=useState("All");
 
-  const catMatchFn = (qCat, filterCat) => {
-    if (filterCat === "All") return true;
-    // Normalise HL suffix for matching
+  const catMatchFn = (qCat, fCat) => {
+    if (fCat === "All") return true;
     const normalise = s => s.replace(" (HL)","").toLowerCase();
-    return normalise(qCat) === normalise(filterCat);
+    return normalise(qCat) === normalise(fCat);
   };
 
   const filteredMCQ = MCQ_QUESTIONS.filter(q => catMatchFn(q.cat, filterCat));
   const filteredWritten = WRITTEN_QUESTIONS.filter(q => catMatchFn(q.cat, filterCat));
-
   const showMCQ = filterType==="All" || filterType==="MCQ";
   const showWritten = filterType==="All" || filterType==="Written";
-
-  // Running global counter across both sections for display numbers
   let globalCounter = 0;
-
   const mcqToShow = showMCQ ? filteredMCQ : [];
   const writtenToShow = showWritten ? filteredWritten : [];
   const totalShown = mcqToShow.length + writtenToShow.length;
@@ -397,52 +573,215 @@ function PracticeView() {
   return (
     <div style={{maxWidth:760,margin:"0 auto",padding:"0 0 40px"}}>
       {/* Type filter */}
-      <div style={{display:"flex",gap:8,marginBottom:16,flexWrap:"wrap"}}>
-        {["All","MCQ","Written"].map(t=>(
-          <button key={t} onClick={()=>setFilterType(t)} style={{background:filterType===t?"#F5F3EE":"#16161E",border:`1px solid ${filterType===t?"#F5F3EE":"#2C2C38"}`,borderRadius:99,padding:"6px 16px",color:filterType===t?"#0D0D13":"#888",fontSize:12,cursor:"pointer",fontFamily:"monospace",fontWeight:filterType===t?700:400,transition:"all 0.2s"}}>{t==="All"?"All Types":t==="MCQ"?"🔘 Multiple Choice":"✍️ Written"}</button>
-        ))}
-      </div>
+      <SegmentedControl
+        value={filterType}
+        onChange={setFilterType}
+        data={[
+          { label: "All Types", value: "All" },
+          { label: "Multiple Choice", value: "MCQ" },
+          { label: "Written", value: "Written" },
+        ]}
+        size="sm"
+        radius="xl"
+        mb="md"
+        styles={{
+          root: { backgroundColor: "#12121A", border: "1px solid #252533" },
+          label: { fontFamily: "'JetBrains Mono', monospace", fontSize: 12 },
+          indicator: { background: "linear-gradient(135deg, #7C6FFF, #A78BFA)" },
+        }}
+      />
 
       {/* Category filter */}
-      <div style={{display:"flex",gap:8,flexWrap:"wrap",marginBottom:20}}>
-        {ALL_CATS.map(cat=>{
-          const color=CAT_COLORS[cat]||"#6366F1";
-          const active=filterCat===cat;
-          return <button key={cat} onClick={()=>setFilterCat(cat)} style={{background:active?color:"#16161E",border:`1px solid ${active?color:"#2C2C38"}`,borderRadius:99,padding:"6px 14px",color:active?"#fff":"#888",fontSize:11,cursor:"pointer",fontFamily:"monospace",transition:"all 0.2s"}}>{cat}</button>;
+      <Group gap={8} mb="lg" style={{flexWrap:"wrap"}}>
+        {ALL_CATS.map(cat => {
+          const c = CAT_COLORS[cat] || "#7C6FFF";
+          const active = filterCat === cat;
+          return (
+            <Button
+              key={cat}
+              size="xs"
+              radius="xl"
+              ff="'JetBrains Mono', monospace"
+              onClick={()=>setFilterCat(cat)}
+              style={{
+                backgroundColor: active ? c : "#1A1A24",
+                color: active ? "#fff" : "#8B8B9E",
+                border: `1px solid ${active ? c : "#252533"}`,
+                boxShadow: active ? `0 2px 12px ${c}30` : "none",
+              }}
+            >
+              {cat}
+            </Button>
+          );
         })}
-      </div>
+      </Group>
 
-      {/* Summary count */}
-      <div style={{marginBottom:20,fontSize:12,color:"#444",fontFamily:"monospace"}}>
-        Showing {totalShown} question{totalShown!==1?"s":""}{filterCat!=="All"?` · ${filterCat}`:""}
-        {filterType!=="All"?` · ${filterType}`:""}
-      </div>
+      {/* Summary */}
+      <Text fz="xs" c="#55556A" ff="'JetBrains Mono', monospace" mb="lg">
+        Showing {totalShown} question{totalShown!==1?"s":""}{filterCat!=="All"?` · ${filterCat}`:""}{filterType!=="All"?` · ${filterType}`:""}
+      </Text>
 
       {totalShown === 0 && (
-        <div style={{textAlign:"center",padding:"40px 0",color:"#444",fontSize:14}}>
-          No questions match this filter combination.
-        </div>
+        <Text ta="center" py={40} c="#55556A" fz="sm">No questions match this filter combination.</Text>
       )}
 
       {mcqToShow.length > 0 && (
         <>
-          <div style={{fontSize:11,letterSpacing:3,color:"#555",fontFamily:"monospace",marginBottom:14,textTransform:"uppercase"}}>── Multiple Choice ({mcqToShow.length})</div>
-          {mcqToShow.map((q)=>{
-            globalCounter++;
-            return <MCQItem key={q.id} q={q} displayNum={globalCounter}/>;
-          })}
+          <Text fz={11} ff="'JetBrains Mono', monospace" c="#55556A" lts={3} tt="uppercase" mb="sm">Multiple Choice ({mcqToShow.length})</Text>
+          {mcqToShow.map(q => { globalCounter++; return <MCQItem key={q.id} q={q} displayNum={globalCounter}/>; })}
         </>
       )}
 
       {writtenToShow.length > 0 && (
         <>
-          <div style={{fontSize:11,letterSpacing:3,color:"#555",fontFamily:"monospace",marginBottom:14,marginTop:mcqToShow.length>0?24:0,textTransform:"uppercase"}}>── Written Questions ({writtenToShow.length})</div>
-          {writtenToShow.map((q)=>{
-            globalCounter++;
-            return <WrittenItem key={q.id} q={q} displayNum={globalCounter}/>;
-          })}
+          <Text fz={11} ff="'JetBrains Mono', monospace" c="#55556A" lts={3} tt="uppercase" mb="sm" mt={mcqToShow.length>0?"xl":0}>Written Questions ({writtenToShow.length})</Text>
+          {writtenToShow.map(q => { globalCounter++; return <WrittenItem key={q.id} q={q} displayNum={globalCounter}/>; })}
         </>
       )}
+    </div>
+  );
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// WRITTEN PRACTICE (with text boxes)
+// ─────────────────────────────────────────────────────────────────────────────
+
+function WrittenPracticeItem({q, displayNum}) {
+  const [answer, setAnswer] = useState("");
+  const [revealed, setRevealed] = useState(false);
+  const color = CAT_COLORS[q.cat] || "#7C6FFF";
+
+  return (
+    <Paper bg="#1A1A24" radius="lg" mb="md" style={{border:"1px solid #252533", overflow:"hidden"}}>
+      <div style={{borderLeft:`4px solid ${color}`, padding:"18px 20px"}}>
+        <Group gap={8} mb="sm" style={{flexWrap:"wrap"}}>
+          <Badge size="xs" ff="'JetBrains Mono', monospace" style={{backgroundColor:color+"22", color, border:"none"}}>{q.cat}</Badge>
+          <Badge size="xs" variant="light" ff="'JetBrains Mono', monospace" style={{backgroundColor:"#1E1E2A", color:"#8B8B9E", border:"none"}}>{q.difficulty}</Badge>
+          <Badge size="xs" ff="'JetBrains Mono', monospace" ml="auto" style={{backgroundColor:"#2A2800", color:"#FBBF24", border:"1px solid #5A4A00"}}>[ {q.marks} marks ]</Badge>
+        </Group>
+        <Text fz={15} c="#F0EEE8" lh={1.6} fw={600} style={{whiteSpace:"pre-line"}}>Q{displayNum}. {q.q}</Text>
+      </div>
+
+      <div style={{padding:"12px 20px 16px"}}>
+        <Textarea
+          value={answer}
+          onChange={(e) => setAnswer(e.currentTarget.value)}
+          placeholder="Type your answer here..."
+          minRows={5}
+          radius="md"
+          mb="sm"
+          styles={{
+            input: {
+              backgroundColor: "#12121A",
+              borderColor: "#252533",
+              color: "#F0EEE8",
+              fontSize: 14,
+              lineHeight: 1.6,
+              "&:focus": { borderColor: color },
+              "&::placeholder": { color: "#55556A" },
+            },
+          }}
+        />
+
+        <Group gap="sm">
+          <Button
+            size="sm"
+            radius="md"
+            variant={revealed ? "subtle" : "light"}
+            color={revealed ? "gray" : undefined}
+            ff="'JetBrains Mono', monospace"
+            onClick={()=>setRevealed(r=>!r)}
+            style={revealed ? {} : {
+              backgroundColor: color + "22",
+              color: color,
+              border: `1px solid ${color}44`,
+            }}
+          >
+            {revealed ? "Hide Model Answer" : "Show Model Answer"}
+          </Button>
+          {answer.trim() && (
+            <Button
+              size="sm"
+              radius="md"
+              variant="subtle"
+              color="gray"
+              ff="'JetBrains Mono', monospace"
+              onClick={()=>setAnswer("")}
+            >
+              Clear
+            </Button>
+          )}
+        </Group>
+
+        <Collapse in={revealed}>
+          <Box mt="md" pt="md" style={{borderTop:"1px solid #252533"}}>
+            <Text fz={11} ff="'JetBrains Mono', monospace" c="#34D399" lts={1} mb="sm">MODEL ANSWER</Text>
+            <Text fz={13} c="#B0ADA6" lh={1.7} style={{whiteSpace:"pre-line"}}>{q.modelAnswer}</Text>
+          </Box>
+        </Collapse>
+      </div>
+    </Paper>
+  );
+}
+
+function WrittenPracticeView() {
+  const [filterCat, setFilterCat] = useState("All");
+
+  const writtenCats = ["All", ...Array.from(new Set(WRITTEN_QUESTIONS.map(q => q.cat)))];
+
+  const catMatchFn = (qCat, fCat) => {
+    if (fCat === "All") return true;
+    const normalise = s => s.replace(" (HL)","").toLowerCase();
+    return normalise(qCat) === normalise(fCat);
+  };
+
+  const filtered = WRITTEN_QUESTIONS.filter(q => catMatchFn(q.cat, filterCat));
+
+  return (
+    <div style={{maxWidth:760, margin:"0 auto", padding:"0 0 40px"}}>
+      <Paper bg="#12121A" radius="lg" p="lg" mb="xl" style={{border:"1px solid #252533"}}>
+        <Text fz="sm" c="#F0EEE8" fw={600} mb={4}>Written Practice</Text>
+        <Text fz="xs" c="#8B8B9E" lh={1.5}>
+          Answer each question in the text box, then reveal the model answer to compare. {WRITTEN_QUESTIONS.length} questions across all topics.
+        </Text>
+      </Paper>
+
+      {/* Category filter */}
+      <Group gap={8} mb="lg" style={{flexWrap:"wrap"}}>
+        {writtenCats.map(cat => {
+          const c = CAT_COLORS[cat] || "#7C6FFF";
+          const active = filterCat === cat;
+          return (
+            <Button
+              key={cat}
+              size="xs"
+              radius="xl"
+              ff="'JetBrains Mono', monospace"
+              onClick={()=>setFilterCat(cat)}
+              style={{
+                backgroundColor: active ? c : "#1A1A24",
+                color: active ? "#fff" : "#8B8B9E",
+                border: `1px solid ${active ? c : "#252533"}`,
+                boxShadow: active ? `0 2px 12px ${c}30` : "none",
+              }}
+            >
+              {cat}
+            </Button>
+          );
+        })}
+      </Group>
+
+      <Text fz="xs" c="#55556A" ff="'JetBrains Mono', monospace" mb="lg">
+        Showing {filtered.length} question{filtered.length!==1?"s":""}{filterCat!=="All"?` · ${filterCat}`:""}
+      </Text>
+
+      {filtered.length === 0 && (
+        <Text ta="center" py={40} c="#55556A" fz="sm">No questions match this filter.</Text>
+      )}
+
+      {filtered.map((q, i) => (
+        <WrittenPracticeItem key={q.id} q={q} displayNum={i + 1} />
+      ))}
     </div>
   );
 }
@@ -454,38 +793,87 @@ export default function App() {
   const [tab, setTab] = useState(() => loadLS("revision_tab", "checklist"));
   const switchTab = t => { setTab(t); saveLS("revision_tab", t); };
 
-  const tabs = [
-    { id:"checklist", label:"✅ Checklist", desc:"Track what you've revised" },
-    { id:"flashcards", label:"🃏 Flashcards", desc:"Definitions & formulas" },
-    { id:"practice",  label:"📝 Practice",  desc:"MCQ + written questions" },
-  ];
-
   return (
-    <div style={{minHeight:"100vh",background:"#0F0F13",fontFamily:"'Georgia', serif",color:"#E8E6E0"}}>
-      <div style={{background:"#0F0F13",borderBottom:"1px solid #1E1E26",position:"sticky",top:0,zIndex:50}}>
-        <div style={{maxWidth:900,margin:"0 auto",padding:"0 16px"}}>
-          <div style={{paddingTop:20,paddingBottom:12,textAlign:"center"}}>
-            <div style={{display:"inline-block",background:"linear-gradient(135deg,#4F46E5,#7C3AED)",borderRadius:10,padding:"4px 16px",fontSize:10,letterSpacing:3,fontFamily:"monospace",color:"#fff",textTransform:"uppercase",marginBottom:8}}>IB HL Business Management</div>
-            <h1 style={{fontSize:"clamp(20px,4vw,30px)",fontWeight:700,margin:"0 0 2px",color:"#F5F3EE",letterSpacing:-0.5}}>Finance Unit — Revision Hub</h1>
-            <p style={{color:"#5A5A62",fontSize:12,margin:0}}>Units 3.1–3.9 · 5.5 Breakeven · BMT Tools · {MCQ_QUESTIONS.length} MCQs · {WRITTEN_QUESTIONS.length} Written</p>
-          </div>
-          <div style={{display:"flex",gap:4,paddingBottom:0}}>
-            {tabs.map(t=>(
-              <button key={t.id} onClick={()=>switchTab(t.id)} style={{flex:1,background:"transparent",border:"none",borderBottom:`3px solid ${tab===t.id?"#6366F1":"transparent"}`,padding:"10px 4px 12px",cursor:"pointer",transition:"all 0.2s",textAlign:"center"}}>
-                <div style={{fontSize:13,fontWeight:600,color:tab===t.id?"#F0EDE8":"#555",transition:"color 0.2s"}}>{t.label}</div>
-              </button>
-            ))}
-          </div>
-        </div>
-      </div>
+    <Box mih="100vh" bg="#09090F" style={{fontFamily:"'Inter', sans-serif",color:"#F0EEE8"}}>
+      {/* Sticky header with glassmorphism */}
+      <Box
+        style={{
+          position: "sticky", top: 0, zIndex: 100,
+          background: "rgba(9, 9, 15, 0.85)",
+          backdropFilter: "blur(12px)",
+          WebkitBackdropFilter: "blur(12px)",
+          borderBottom: "1px solid rgba(255,255,255,0.04)",
+        }}
+      >
+        <Container size="md" py="sm">
+          <Group justify="center" mb={4}>
+            <Badge
+              variant="gradient"
+              gradient={{ from: "#7C6FFF", to: "#A78BFA", deg: 135 }}
+              size="sm"
+              tt="uppercase"
+              fw={700}
+              ff="'JetBrains Mono', monospace"
+              style={{ letterSpacing: 2 }}
+            >
+              IB HL Business Management
+            </Badge>
+          </Group>
+          <Text
+            ta="center" fw={800}
+            fz={{ base: 22, sm: 30 }}
+            c="#F0EEE8"
+            style={{ letterSpacing: -0.5 }}
+          >
+            Finance Unit — Revision Hub
+          </Text>
+          <Text ta="center" fz="xs" c="#55556A" mb="sm">
+            Units 3.1–3.9 · 5.5 Breakeven · BMT Tools · {MCQ_QUESTIONS.length} MCQs · {WRITTEN_QUESTIONS.length} Written
+          </Text>
 
-      <div style={{maxWidth:900,margin:"0 auto",padding:"28px 16px"}}>
+          <Tabs
+            value={tab}
+            onChange={switchTab}
+            variant="default"
+            styles={{
+              root: { borderBottom: "none" },
+              list: { borderBottom: "none", gap: 4 },
+              tab: {
+                flex: 1,
+                fontWeight: 600,
+                fontSize: 13,
+                color: "#55556A",
+                borderBottom: "3px solid transparent",
+                padding: "10px 4px 12px",
+                transition: "all 0.2s",
+                "&[data-active]": {
+                  color: "#F0EEE8",
+                  borderBottomColor: "#7C6FFF",
+                  backgroundColor: "transparent",
+                },
+                "&:hover": { backgroundColor: "transparent" },
+              },
+            }}
+          >
+            <Tabs.List grow>
+              <Tabs.Tab value="checklist">Checklist</Tabs.Tab>
+              <Tabs.Tab value="flashcards">Flashcards</Tabs.Tab>
+              <Tabs.Tab value="practice">Practice</Tabs.Tab>
+              <Tabs.Tab value="written">Written</Tabs.Tab>
+            </Tabs.List>
+          </Tabs>
+        </Container>
+      </Box>
+
+      {/* Content */}
+      <Container size="md" py="xl" px="md">
         {tab==="checklist" && <ChecklistView/>}
         {tab==="flashcards" && <FlashcardsView/>}
         {tab==="practice" && <PracticeView/>}
-      </div>
+        {tab==="written" && <WrittenPracticeView/>}
+      </Container>
 
-       <Analytics />
-    </div>
+      <Analytics />
+    </Box>
   );
 }
