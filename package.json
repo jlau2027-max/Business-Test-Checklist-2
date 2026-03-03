@@ -1,1 +1,33 @@
-{\n  "name": "your-project-name",\n  "version": "1.0.0",\n  "description": "Your project description",\n  "main": "index.js",\n  "scripts": {\n    "server": "node server.js"\n  },\n  "dependencies": {\n    "express": "latest",\n    "cors": "latest",\n    "dotenv": "latest",\n    "@anthropic-ai/sdk": "latest"\n  },\n  "devDependencies": {},\n  "keywords": [],\n  "author": "Your Name",\n  "license": "ISC"\n}
+{
+  "name": "Business Management IB HL Revision Hub",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "lint": "eslint .",
+    "preview": "vite preview",
+    "server": "node server.js"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.31.0",
+    "@vercel/analytics": "^1.6.1",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.39.1",
+    "@types/react": "^19.2.7",
+    "@types/react-dom": "^19.2.3",
+    "@vitejs/plugin-react": "^5.1.1",
+    "eslint": "^9.39.1",
+    "eslint-plugin-react-hooks": "^7.0.1",
+    "eslint-plugin-react-refresh": "^0.4.24",
+    "globals": "^16.5.0",
+    "vite": "^7.3.1"
+  }
+}
