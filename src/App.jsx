@@ -571,7 +571,40 @@ function PracticeView() {
 function WrittenPracticeItem({q, displayNum}) {
   const [answer, setAnswer] = useState("");
   const [revealed, setRevealed] = useState(false);
+  const [grading, setGrading] = useState(false);
+  const [gradeResult, setGradeResult] = useState(null);
   const color = CAT_COLORS[q.cat] || "#7C6FFF";
+
+  const handleSolve = async () => {
+    if (!answer.trim()) return;
+    setGrading(true);
+    setGradeResult(null);
+    try {
+      const res = await fetch("/api/grade", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          question: q.q,
+          studentAnswer: answer,
+          expectedAnswer: q.modelAnswer,
+        }),
+      });
+      const data = await res.json();
+      if (data.error) {
+        setGradeResult({ score: null, feedback: data.details || data.error });
+      } else {
+        setGradeResult({ score: data.score, feedback: data.feedback });
+      }
+    } catch (err) {
+      setGradeResult({ score: null, feedback: "Could not connect to grading server. Make sure the server is running (node server.js)." });
+    } finally {
+      setGrading(false);
+    }
+  };
+
+  const scoreColor = gradeResult?.score != null
+    ? gradeResult.score >= 4 ? "#34D399" : gradeResult.score >= 2 ? "#FBBF24" : "#F87171"
+    : "#8B8B9E";
 
   return (
     <Paper bg="#1A1A24" radius="lg" mb="md" style={{border:"1px solid #252533", overflow:"hidden"}}>
@@ -592,6 +625,7 @@ function WrittenPracticeItem({q, displayNum}) {
           minRows={5}
           radius="md"
           mb="sm"
+          disabled={grading}
           styles={{
             input: {
               backgroundColor: "#12121A",
@@ -610,11 +644,14 @@ function WrittenPracticeItem({q, displayNum}) {
             size="sm"
             radius="md"
             ff="'JetBrains Mono', monospace"
-            onClick={()=>{}}
+            onClick={handleSolve}
+            loading={grading}
+            disabled={!answer.trim() || grading}
+            loaderProps={{ type: "dots" }}
             style={{
-              background: "linear-gradient(135deg, #7C6FFF, #A78BFA)",
+              background: answer.trim() && !grading ? "linear-gradient(135deg, #7C6FFF, #A78BFA)" : "#1E1E2A",
               border: "none",
-              boxShadow: "0 4px 16px #7C6FFF30",
+              boxShadow: answer.trim() && !grading ? "0 4px 16px #7C6FFF30" : "none",
             }}
           >
             Solve
@@ -634,19 +671,50 @@ function WrittenPracticeItem({q, displayNum}) {
           >
             {revealed ? "Hide Model Answer" : "Show Model Answer"}
           </Button>
-          {answer.trim() && (
+          {answer.trim() && !grading && (
             <Button
               size="sm"
               radius="md"
               variant="subtle"
               color="gray"
               ff="'JetBrains Mono', monospace"
-              onClick={()=>setAnswer("")}
+              onClick={()=>{ setAnswer(""); setGradeResult(null); }}
             >
               Clear
             </Button>
           )}
         </Group>
+
+        {/* AI Grade Result */}
+        {gradeResult && (
+          <Alert
+            mt="md"
+            radius="md"
+            variant="light"
+            color={gradeResult.score == null ? "gray" : gradeResult.score >= 4 ? "green" : gradeResult.score >= 2 ? "yellow" : "red"}
+            title={gradeResult.score != null ? `AI Score: ${gradeResult.score}/5` : "Grading Error"}
+            styles={{
+              root: {
+                backgroundColor: (gradeResult.score == null ? "#8B8B9E" : scoreColor) + "11",
+                border: `1px solid ${gradeResult.score == null ? "#8B8B9E" : scoreColor}44`,
+              },
+              title: { fontFamily: "'JetBrains Mono', monospace", fontSize: 12 },
+            }}
+          >
+            {gradeResult.score != null && (
+              <Progress
+                value={(gradeResult.score / 5) * 100}
+                color={scoreColor}
+                size="sm"
+                radius="xl"
+                mb="sm"
+                animated
+                styles={{ section: { boxShadow: `0 0 8px ${scoreColor}40` } }}
+              />
+            )}
+            <Text fz="sm" c="#8B8B9E" lh={1.6}>{gradeResult.feedback}</Text>
+          </Alert>
+        )}
 
         <Collapse in={revealed}>
           <Box mt="md" pt="md" style={{borderTop:"1px solid #252533"}}>
