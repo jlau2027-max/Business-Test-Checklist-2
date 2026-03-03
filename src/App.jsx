@@ -186,13 +186,14 @@ export default function App() {  const [checked, setChecked] = useState({});
 
   return (
     <div style={{
-      minHeight: "100vh",
-      background: "#0F0F13",
-      fontFamily: "'Georgia', serif",
-      padding: "32px 16px",
-      color: "#E8E6E0",
-    }}>
-      <div style={{ width: "100%", margin: 0 }}>
+  width: "100%",
+  minHeight: "100vh",
+  background: "#0F0F13",
+  fontFamily: "'Georgia', serif",
+  padding: "32px 16px",
+  color: "#E8E6E0",
+}}>
+      <div style={{ width: "100%", height: "100%", minHeight: "100vh", margin: 0, padding: 32 }}>
 
         {/* Header */}
         <div style={{ textAlign: "center", marginBottom: 40 }}>
