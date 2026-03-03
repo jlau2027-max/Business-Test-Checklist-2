@@ -736,7 +736,7 @@ function WrittenPracticeItem({q, displayNum}) {
 function WrittenPracticeView() {
   const [filterCat, setFilterCat] = useState("All");
 
-  const writtenCats = ["All", ...Array.from(new Set(WRITTEN_QUESTIONS.map(q => q.cat)))];
+  const writtenCats = ["All", ...Array.from(new Set(WRITTEN_QUESTIONS.map(q => q.cat))), "10 Markers"];
 
   const catMatchFn = (qCat, fCat) => {
     if (fCat === "All") return true;
@@ -744,21 +744,26 @@ function WrittenPracticeView() {
     return normalise(qCat) === normalise(fCat);
   };
 
-  const filtered = WRITTEN_QUESTIONS.filter(q => catMatchFn(q.cat, filterCat));
+  const is10Markers = filterCat === "10 Markers";
+  const filtered = is10Markers
+    ? WRITTEN_10_MARK_QUESTIONS
+    : WRITTEN_QUESTIONS.filter(q => catMatchFn(q.cat, filterCat));
+
+  const totalCount = WRITTEN_QUESTIONS.length + WRITTEN_10_MARK_QUESTIONS.length;
 
   return (
     <div style={{maxWidth:760, margin:"0 auto", padding:"0 0 40px"}}>
       <Paper bg="#12121A" radius="lg" p="lg" mb="xl" style={{border:"1px solid #252533"}}>
         <Text fz="sm" c="#F0EEE8" fw={600} mb={4}>Written Practice</Text>
         <Text fz="xs" c="#8B8B9E" lh={1.5}>
-          Answer each question in the text box, then reveal the model answer to compare. {WRITTEN_QUESTIONS.length} short questions + {WRITTEN_10_MARK_QUESTIONS.length} extended-response (10 mark) questions.
+          Answer each question in the text box, then reveal the model answer to compare. {totalCount} questions across all topics.
         </Text>
       </Paper>
 
       {/* Category filter */}
       <Group gap={8} mb="lg" style={{flexWrap:"wrap"}}>
         {writtenCats.map(cat => {
-          const c = CAT_COLORS[cat] || "#7C6FFF";
+          const c = cat === "10 Markers" ? "#F87171" : (CAT_COLORS[cat] || "#7C6FFF");
           const active = filterCat === cat;
           return (
             <Button
@@ -789,25 +794,6 @@ function WrittenPracticeView() {
       )}
 
       {filtered.map((q, i) => (
-        <WrittenPracticeItem key={q.id} q={q} displayNum={i + 1} />
-      ))}
-
-      {/* 10-Mark Extended Response Questions */}
-      <Paper bg="#12121A" radius="lg" p="lg" mt={40} mb="xl" style={{border:"1px solid #252533"}}>
-        <Group gap={10} align="center" mb={4}>
-          <Text fz="sm" c="#F0EEE8" fw={600}>10 Markers</Text>
-          <Badge size="xs" ff="'JetBrains Mono', monospace" style={{backgroundColor:"#F8717122", color:"#F87171", border:"1px solid #F8717144"}}>Extended Response</Badge>
-        </Group>
-        <Text fz="xs" c="#8B8B9E" lh={1.5}>
-          Evaluate-style questions worth 10 marks each. These require balanced analysis, use of data, application to context, and a substantiated conclusion. {WRITTEN_10_MARK_QUESTIONS.length} question{WRITTEN_10_MARK_QUESTIONS.length!==1?"s":""} available.
-        </Text>
-      </Paper>
-
-      {WRITTEN_10_MARK_QUESTIONS.length === 0 && (
-        <Text ta="center" py={40} c="#55556A" fz="sm">No 10-mark questions yet.</Text>
-      )}
-
-      {WRITTEN_10_MARK_QUESTIONS.map((q, i) => (
         <WrittenPracticeItem key={q.id} q={q} displayNum={i + 1} />
       ))}
     </div>
