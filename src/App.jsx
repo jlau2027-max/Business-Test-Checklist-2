@@ -682,7 +682,7 @@ function WrittenPracticeItem({q, displayNum}) {
               border: `1px solid ${color}44`,
             }}
           >
-            {revealed ? "Hide Model Answer" : "Show Model Answer"}
+            {revealed ? "Hide Markscheme" : "Show Markscheme"}
           </Button>
           {answer.trim() && !grading && (
             <Button
@@ -731,7 +731,7 @@ function WrittenPracticeItem({q, displayNum}) {
 
         <Collapse in={revealed}>
           <Box mt="md" pt="md" style={{borderTop:"1px solid #252533"}}>
-            <Text fz={11} ff="'JetBrains Mono', monospace" c="#34D399" lts={1} mb="sm">MODEL ANSWER</Text>
+            <Text fz={11} ff="'JetBrains Mono', monospace" c="#34D399" lts={1} mb="sm">MARKSCHEME</Text>
             <Text fz={13} c="#B0ADA6" lh={1.7} style={{whiteSpace:"pre-line"}}>{q.modelAnswer}</Text>
           </Box>
         </Collapse>
@@ -761,7 +761,7 @@ function WrittenPracticeView() {
       <Paper bg="#12121A" radius="lg" p="lg" mb="xl" style={{border:"1px solid #252533"}}>
         <Text fz="sm" c="#F0EEE8" fw={600} mb={4}>Written Practice</Text>
         <Text fz="xs" c="#8B8B9E" lh={1.5}>
-          Answer each question in the text box, then reveal the model answer to compare.
+          Answer each question in the text box, then reveal the markscheme to compare.
         </Text>
       </Paper>
 
