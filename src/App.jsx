@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { Analytics } from "@vercel/analytics/react";
 import {
-  Container, Tabs, Badge, Text, Group, Paper, Progress,
+  Container, Badge, Text, Group, Paper, Progress,
   Accordion, Checkbox, Button, Collapse,
   Alert, Box, Stack, Textarea, useMantineTheme,
 } from "@mantine/core";
@@ -911,37 +911,36 @@ export default function App() {
             Units 3.1–3.9 · 5.5 Breakeven · BMT Tools · {MCQ_QUESTIONS.length} MCQs · {WRITTEN_QUESTIONS.length} Written · {WRITTEN_10_MARK_QUESTIONS.length} Extended
           </Text>
 
-          <Tabs
-            value={tab}
-            onChange={switchTab}
-            variant="default"
-            styles={{
-              root: { borderBottom: "none" },
-              list: { borderBottom: "none", gap: 4 },
-              tab: {
-                flex: 1,
-                fontWeight: 600,
-                fontSize: 13,
-                color: "#55556A",
-                borderBottom: "3px solid transparent",
-                padding: "10px 4px 12px",
-                transition: "all 0.2s",
-                "&[data-active]": {
-                  color: "#F0EEE8",
-                  borderBottomColor: "#7C6FFF",
+          <Group gap={4} grow>
+            {[
+              { value: "checklist", label: "Checklist" },
+              { value: "flashcards", label: "Flashcards" },
+              { value: "practice", label: "Multi-Choice" },
+              { value: "written", label: "Written" },
+            ].map(t => (
+              <Button
+                key={t.value}
+                onClick={() => switchTab(t.value)}
+                radius={0}
+                fw={600}
+                ff="'Inter', sans-serif"
+                style={{
+                  fontSize: 13,
+                  padding: "10px 4px 12px",
                   backgroundColor: "transparent",
-                },
-                "&:hover": { backgroundColor: "transparent" },
-              },
-            }}
-          >
-            <Tabs.List grow>
-              <Tabs.Tab value="checklist">Checklist</Tabs.Tab>
-              <Tabs.Tab value="flashcards">Flashcards</Tabs.Tab>
-              <Tabs.Tab value="practice">Multi-Choice</Tabs.Tab>
-              <Tabs.Tab value="written">Written</Tabs.Tab>
-            </Tabs.List>
-          </Tabs>
+                  color: tab === t.value ? "#F0EEE8" : "#55556A",
+                  borderBottom: tab === t.value ? "3px solid #7C6FFF" : "3px solid transparent",
+                  borderTop: "none",
+                  borderLeft: "none",
+                  borderRight: "none",
+                  borderRadius: 0,
+                  transition: "all 0.2s",
+                }}
+              >
+                {t.label}
+              </Button>
+            ))}
+          </Group>
         </Container>
       </Box>
 
