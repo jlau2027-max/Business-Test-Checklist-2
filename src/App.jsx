@@ -738,9 +738,10 @@ function WrittenPracticeItem({q, displayNum}) {
 }
 
 function WrittenPracticeView() {
+  const [mode, setMode] = useState("short"); // "short" or "10mark"
   const [filterCat, setFilterCat] = useState("All");
 
-  const writtenCats = ["All", ...Array.from(new Set(WRITTEN_QUESTIONS.map(q => q.cat))), "10 Markers"];
+  const writtenCats = ["All", ...Array.from(new Set(WRITTEN_QUESTIONS.map(q => q.cat)))];
 
   const catMatchFn = (qCat, fCat) => {
     if (fCat === "All") return true;
@@ -748,50 +749,89 @@ function WrittenPracticeView() {
     return normalise(qCat) === normalise(fCat);
   };
 
-  const is10Markers = filterCat === "10 Markers";
-  const filtered = is10Markers
+  const filtered = mode === "10mark"
     ? WRITTEN_10_MARK_QUESTIONS
     : WRITTEN_QUESTIONS.filter(q => catMatchFn(q.cat, filterCat));
-
-  const totalCount = WRITTEN_QUESTIONS.length + WRITTEN_10_MARK_QUESTIONS.length;
 
   return (
     <div style={{maxWidth:1060, margin:"0 auto", padding:"0 0 40px"}}>
       <Paper bg="#12121A" radius="lg" p="lg" mb="xl" style={{border:"1px solid #252533"}}>
         <Text fz="sm" c="#F0EEE8" fw={600} mb={4}>Written Practice</Text>
         <Text fz="xs" c="#8B8B9E" lh={1.5}>
-          Answer each question in the text box, then reveal the model answer to compare. {totalCount} questions across all topics.
+          Answer each question in the text box, then reveal the model answer to compare.
         </Text>
       </Paper>
 
-      {/* Category filter */}
-      <Group gap={8} mb="lg" style={{flexWrap:"wrap"}}>
-        {writtenCats.map(cat => {
-          const c = cat === "10 Markers" ? "#F87171" : (CAT_COLORS[cat] || "#7C6FFF");
-          const active = filterCat === cat;
-          const is10m = cat === "10 Markers";
-          return (
-            <Button
-              key={cat}
-              size="xs"
-              radius="xl"
-              ff="'JetBrains Mono', monospace"
-              onClick={()=>setFilterCat(cat)}
-              style={{
-                backgroundColor: is10m ? "#F87171" : (active ? c : "#1A1A24"),
-                color: is10m ? "#fff" : (active ? "#fff" : "#8B8B9E"),
-                border: `1px solid ${is10m ? "#F87171" : (active ? c : "#252533")}`,
-                boxShadow: is10m && active ? "0 0 12px #F8717155" : "none",
-              }}
-            >
-              {cat}
-            </Button>
-          );
-        })}
+      {/* Mode selector — Short Answer vs 10 Marker */}
+      <Group gap={10} mb="lg">
+        <Button
+          size="md"
+          radius="md"
+          ff="'JetBrains Mono', monospace"
+          fw={700}
+          onClick={()=>{ setMode("short"); setFilterCat("All"); }}
+          style={{
+            flex: 1,
+            backgroundColor: mode === "short" ? "#7C6FFF" : "#1A1A24",
+            color: mode === "short" ? "#fff" : "#8B8B9E",
+            border: `2px solid ${mode === "short" ? "#7C6FFF" : "#252533"}`,
+            fontSize: 15,
+            padding: "14px 0",
+            boxShadow: mode === "short" ? "0 0 16px #7C6FFF33" : "none",
+          }}
+        >
+          Short Answer
+        </Button>
+        <Button
+          size="md"
+          radius="md"
+          ff="'JetBrains Mono', monospace"
+          fw={700}
+          onClick={()=>setMode("10mark")}
+          style={{
+            flex: 1,
+            backgroundColor: mode === "10mark" ? "#F87171" : "#1A1A24",
+            color: mode === "10mark" ? "#fff" : "#8B8B9E",
+            border: `2px solid ${mode === "10mark" ? "#F87171" : "#252533"}`,
+            fontSize: 15,
+            padding: "14px 0",
+            boxShadow: mode === "10mark" ? "0 0 16px #F8717133" : "none",
+          }}
+        >
+          10 Marker
+        </Button>
       </Group>
 
+      {/* Category filter — only for short answer mode */}
+      {mode === "short" && (
+        <Group gap={8} mb="lg" style={{flexWrap:"wrap"}}>
+          {writtenCats.map(cat => {
+            const c = CAT_COLORS[cat] || "#7C6FFF";
+            const active = filterCat === cat;
+            return (
+              <Button
+                key={cat}
+                size="xs"
+                radius="xl"
+                ff="'JetBrains Mono', monospace"
+                onClick={()=>setFilterCat(cat)}
+                style={{
+                  backgroundColor: active ? c : "#1A1A24",
+                  color: active ? "#fff" : "#8B8B9E",
+                  border: `1px solid ${active ? c : "#252533"}`,
+                  boxShadow: "none",
+                }}
+              >
+                {cat}
+              </Button>
+            );
+          })}
+        </Group>
+      )}
+
       <Text fz="xs" c="#55556A" ff="'JetBrains Mono', monospace" mb="lg">
-        Showing {filtered.length} question{filtered.length!==1?"s":""}{filterCat!=="All"?` · ${filterCat}`:""}
+        Showing {filtered.length} question{filtered.length!==1?"s":""}{mode === "short" && filterCat!=="All"?` · ${filterCat}`:""}
+        {mode === "10mark" ? " · 10 Markers" : ""}
       </Text>
 
       {filtered.length === 0 && (
