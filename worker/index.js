@@ -15,7 +15,8 @@ export default {
       return Response.json({ error: "Method not allowed" }, { status: 405 });
     }
 
-    const { question, studentAnswer, expectedAnswer } = await request.json();
+    const { question, studentAnswer, expectedAnswer, marks } = await request.json();
+    const maxMarks = marks || 5;
 
     if (!env.ANTHROPIC_API_KEY) {
       return Response.json(
@@ -28,22 +29,19 @@ export default {
 
 Question: ${question}
 
-Model Answer: ${expectedAnswer}
+Mark Scheme / Model Answer: ${expectedAnswer}
 
 Student's Answer: ${studentAnswer}
 
-Please evaluate the student's answer based on:
-1. Accuracy and correctness of key concepts
-2. Completeness of the response
-3. Clarity and organization
-4. Use of business terminology
+This question is worth ${maxMarks} marks. Use the mark scheme above to award marks. Each mark point in the mark scheme (often shown as [1]) corresponds to one mark.
 
-Provide a score from 0-5 and specific constructive feedback.
+Provide a score from 0 to ${maxMarks} and specific constructive feedback explaining which mark points were awarded and which were missed.
 
 Format your response ONLY as valid JSON (no markdown, no code blocks):
 {
-  "score": <number 0-5>,
-  "feedback": "<constructive feedback about what they got right and what could be improved>"
+  "score": <number 0-${maxMarks}>,
+  "maxMarks": ${maxMarks},
+  "feedback": "<constructive feedback referencing the mark scheme points>"
 }`;
 
     try {
@@ -75,7 +73,8 @@ Format your response ONLY as valid JSON (no markdown, no code blocks):
 
       return Response.json(
         {
-          score: Math.min(Math.max(result.score, 0), 5),
+          score: Math.min(Math.max(result.score, 0), maxMarks),
+          maxMarks: maxMarks,
           feedback: result.feedback,
         },
         { headers: { "Access-Control-Allow-Origin": "*" } }

@@ -587,13 +587,14 @@ function WrittenPracticeItem({q, displayNum}) {
           question: q.q,
           studentAnswer: answer,
           expectedAnswer: q.modelAnswer,
+          marks: q.marks,
         }),
       });
       const data = await res.json();
       if (data.error) {
         setGradeResult({ score: null, feedback: data.details || data.error });
       } else {
-        setGradeResult({ score: data.score, feedback: data.feedback });
+        setGradeResult({ score: data.score, maxMarks: data.maxMarks || q.marks, feedback: data.feedback });
       }
     } catch (err) {
       setGradeResult({ score: null, feedback: "Could not connect to grading server. Please try again later." });
@@ -602,8 +603,9 @@ function WrittenPracticeItem({q, displayNum}) {
     }
   };
 
+  const scorePct = gradeResult?.score != null ? gradeResult.score / (gradeResult.maxMarks || q.marks) : 0;
   const scoreColor = gradeResult?.score != null
-    ? gradeResult.score >= 4 ? "#34D399" : gradeResult.score >= 2 ? "#FBBF24" : "#F87171"
+    ? scorePct >= 0.75 ? "#34D399" : scorePct >= 0.4 ? "#FBBF24" : "#F87171"
     : "#8B8B9E";
 
   return (
@@ -691,8 +693,8 @@ function WrittenPracticeItem({q, displayNum}) {
             mt="md"
             radius="md"
             variant="light"
-            color={gradeResult.score == null ? "gray" : gradeResult.score >= 4 ? "green" : gradeResult.score >= 2 ? "yellow" : "red"}
-            title={gradeResult.score != null ? `AI Score: ${gradeResult.score}/5` : "Grading Error"}
+            color={gradeResult.score == null ? "gray" : scorePct >= 0.75 ? "green" : scorePct >= 0.4 ? "yellow" : "red"}
+            title={gradeResult.score != null ? `AI Score: ${gradeResult.score}/${gradeResult.maxMarks || q.marks}` : "Grading Error"}
             styles={{
               root: {
                 backgroundColor: (gradeResult.score == null ? "#8B8B9E" : scoreColor) + "11",
@@ -703,7 +705,7 @@ function WrittenPracticeItem({q, displayNum}) {
           >
             {gradeResult.score != null && (
               <Progress
-                value={(gradeResult.score / 5) * 100}
+                value={scorePct * 100}
                 color={scoreColor}
                 size="sm"
                 radius="xl"
