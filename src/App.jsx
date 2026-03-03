@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Analytics } from "@vercel/analytics/react";
 
 const sections = [
   {
@@ -367,6 +368,7 @@ return (
           >Reset all</span>
         </div>
       </div>
+      <Analytics />
     </div>
   );
 }
