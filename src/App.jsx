@@ -170,6 +170,13 @@ const WRITTEN_QUESTIONS = [
   { id:"wr15", cat:"Budgets & Variance", difficulty:"HL", marks:4, q:"Kicks Soccer Club budgeted membership revenue of $35,000 but received $38,000. Rent was budgeted at $20,000 but cost $21,000. (a) Calculate each variance and state F or A. (b) Explain one benefit of variance analysis to KSC's decision-making.", modelAnswer:"(a) Membership revenue variance = $38,000 − $35,000 = $3,000 FAVOURABLE\n(Actual > budgeted revenue = good)\n\nRent variance = $21,000 − $20,000 = $1,000 ADVERSE\n(Actual > budgeted cost = bad)\n\n(b) Variance analysis helps KSC identify areas of overspending or unexpected income. For example, knowing rent exceeded budget by $1,000 allows management to renegotiate facility terms or allocate more funds to rent in the 2025 budget, improving financial control and planning accuracy.\n\n[1] correct revenue variance [1] F/A correctly identified\n[1] correct cost variance [1] F/A correctly identified\n(Benefit = up to 2 marks if writing extended answer)" },
 ];
 
+// ─────────────────────────────────────────────────────────────────────────────
+// 10-MARK WRITTEN QUESTIONS
+// ─────────────────────────────────────────────────────────────────────────────
+const WRITTEN_10_MARK_QUESTIONS = [
+  { id:"wr10m-1", cat:"Ratio Analysis", difficulty:"HL", marks:10, q:"ZephyrTech Solutions (ZTS) is a software development company founded in 2019 by Priya Sharma in Dublin, Ireland. ZTS specialises in building custom enterprise software for mid-sized companies across Europe, charging premium prices based on its reputation for high-quality, bespoke solutions. The company currently employs 34 full-time developers, project managers, and support staff.\n\nZTS has experienced strong revenue growth over the past three years, but Priya has become increasingly concerned about the company's profitability ratios, which have declined despite rising revenues. A key issue is ZTS's cost structure: developer salaries account for approximately 58% of total revenue, and the company recently moved into a larger office space in central Dublin, significantly increasing its monthly rent. ZTS also invested €180,000 in new server infrastructure last year, financed through a long-term bank loan.\n\nPriya is now evaluating two strategic options to address the declining profit margins:\n\nOption 1: Transition from bespoke project work to a Software-as-a-Service (SaaS) model, offering a standardised product to a much larger customer base at a lower price point per customer. This would require an upfront investment of €250,000 in product development and would not generate significant revenue for at least 18 months.\n\nOption 2: Reduce the workforce by 20% (approximately 7 staff members) through redundancies, focusing cuts on support roles rather than core development. Priya estimates this would reduce annual salary costs by approximately €420,000 but acknowledges it would likely reduce ZTS's capacity to take on new projects in the short term.\n\nSelected financial data for ZTS for the year ended 31 December 2025:\n\nSales revenue: $3,200k | Cost of sales: $1,856k | Gross profit: $1,344k | Expenses: $1,108k | Profit before interest and tax: $236k | Interest: $42k | Tax: $38k | Profit for the period: $156k | Capital employed: $1,850k | Industry average profit margin: 12% | Industry average ROCE: 18%\n\nEvaluate the two strategic options available to Priya to improve ZTS's profitability ratios.", modelAnswer:"Candidates should demonstrate understanding of profitability ratios and apply them to the ZTS context before evaluating the two options.\n\nRelevant calculations (not required but rewarded if used):\n• Profit margin = (236 / 3,200) × 100 = 7.375% — significantly below the industry average of 12%.\n• ROCE = (236 / 1,850) × 100 = 12.76% — below the industry average of 18%.\n• GPM = (1,344 / 3,200) × 100 = 42%.\n\nThe data confirms that ZTS's profitability is below industry benchmarks, primarily driven by high expenses (€1,108,000) relative to gross profit (€1,344,000), leaving a thin margin between gross and net profit.\n\nOption 1 — Transition to SaaS model:\n\nAdvantages:\n• A SaaS model generates recurring subscription revenue, which is more predictable and scalable than one-off bespoke projects. If ZTS acquires a large enough customer base, revenue per developer could rise significantly, improving both profit margin and ROCE over time.\n• The standardised nature of SaaS reduces the labour intensity per unit of revenue — developers build once and sell repeatedly, which directly addresses the core problem of salary costs at 58% of revenue.\n• ZTS could retain its premium brand positioning by targeting enterprise clients with a high-quality SaaS product, differentiating itself from lower-cost competitors.\n\nDisadvantages:\n• The €250,000 upfront investment with no meaningful revenue for 18 months poses a serious cash flow risk. Given ZTS already carries a long-term bank loan for the server infrastructure, adding further financial strain could threaten liquidity — particularly if existing project revenue slows.\n• The SaaS market is highly competitive, dominated by large established players. ZTS has no track record in this model, and there is no guarantee the product will attract sufficient customers to justify the investment.\n• Staff skilled in bespoke development may not have the product mindset required for SaaS, potentially requiring costly retraining or new hires — further pressuring expenses in the short term.\n• The transition away from bespoke work may alienate ZTS's existing loyal client base, reducing revenue before SaaS income materialises.\n\nOption 2 — Workforce reduction of 20%:\n\nAdvantages:\n• Reducing annual salary costs by €420,000 would dramatically improve the profit margin. If all else remains equal, profit before interest and tax would rise from €236,000 to approximately €656,000, bringing the profit margin to approximately 20.5% — well above the 12% industry average.\n• ROCE would also improve significantly: (€656,000 / €1,850,000) × 100 = approximately 35.5%.\n• The savings are immediate and certain, unlike the speculative 18-month revenue gap in Option 1.\n• Focusing cuts on support roles rather than developers minimises the impact on ZTS's core value-creating activity and client-facing quality.\n\nDisadvantages:\n• Priya acknowledges reduced capacity for new projects — this could lead to revenue decline, partially offsetting the cost savings. If revenue falls, the improvement in profit margin may be less dramatic than the raw calculation suggests.\n• Redundancies carry one-off costs (severance pay, legal fees) that will reduce profit in the year the cuts are made, potentially worsening short-term profitability before improving it.\n• Staff morale and company culture may suffer significantly. In a knowledge-intensive business like software development, demotivated staff are less productive, and key developers may leave voluntarily — turning a planned 20% reduction into an uncontrolled talent exodus.\n• ZTS's reputation as a premium employer could be damaged, making future recruitment of skilled developers harder and more expensive.\n\nEvaluation/Judgement:\nBoth options present credible paths to improved profitability but carry very different risk profiles. Option 2 offers faster, more certain financial improvement — the numbers clearly show profit margin could exceed industry benchmarks immediately. However, it carries significant people and capacity risk in a talent-dependent business. Option 1 is a longer-term structural solution that could fundamentally transform ZTS's cost model, but the 18-month revenue gap and competitive uncertainty make it high-risk given ZTS's already-below-average profitability.\n\nA strong answer might argue that Option 2 is the more prudent immediate choice to stabilise the business financially, while Option 1 could be pursued as a medium-term strategy once profitability is restored. Alternatively, one may argue that Option 2 is a short-term tactic that does not address ZTS's structural cost problem and that the SaaS transition, though risky, is the only path to sustainable margin improvement. Accept any substantiated judgement.\n\nLevel descriptors:\n9–10: Balanced, accurate analysis of both options with integrated use of financial data, well-developed application to ZTS, and a substantiated conclusion that acknowledges limitations.\n7–8: Mostly addresses both options with relevant theory and data use; some balance; conclusion present but may lack depth.\n5–6: Partial analysis, mostly one-sided or lacking data integration; some application to ZTS.\n3–4: Some understanding of the options but limited analysis; superficial application.\n1–2: Little understanding; no real application or argument." },
+];
+
 const CAT_COLORS = {
   "Costs & Revenue":"#7C6FFF","Cash Flow":"#38BDF8","Final Accounts":"#34D399",
   "Ratio Analysis":"#FBBF24","Ratio Analysis (HL)":"#FBBF24","Investment Appraisal":"#A78BFA",
@@ -744,7 +751,7 @@ function WrittenPracticeView() {
       <Paper bg="#12121A" radius="lg" p="lg" mb="xl" style={{border:"1px solid #252533"}}>
         <Text fz="sm" c="#F0EEE8" fw={600} mb={4}>Written Practice</Text>
         <Text fz="xs" c="#8B8B9E" lh={1.5}>
-          Answer each question in the text box, then reveal the model answer to compare. {WRITTEN_QUESTIONS.length} questions across all topics.
+          Answer each question in the text box, then reveal the model answer to compare. {WRITTEN_QUESTIONS.length} short questions + {WRITTEN_10_MARK_QUESTIONS.length} extended-response (10 mark) questions.
         </Text>
       </Paper>
 
@@ -782,6 +789,25 @@ function WrittenPracticeView() {
       )}
 
       {filtered.map((q, i) => (
+        <WrittenPracticeItem key={q.id} q={q} displayNum={i + 1} />
+      ))}
+
+      {/* 10-Mark Extended Response Questions */}
+      <Paper bg="#12121A" radius="lg" p="lg" mt={40} mb="xl" style={{border:"1px solid #252533"}}>
+        <Group gap={10} align="center" mb={4}>
+          <Text fz="sm" c="#F0EEE8" fw={600}>10 Markers</Text>
+          <Badge size="xs" ff="'JetBrains Mono', monospace" style={{backgroundColor:"#F8717122", color:"#F87171", border:"1px solid #F8717144"}}>Extended Response</Badge>
+        </Group>
+        <Text fz="xs" c="#8B8B9E" lh={1.5}>
+          Evaluate-style questions worth 10 marks each. These require balanced analysis, use of data, application to context, and a substantiated conclusion. {WRITTEN_10_MARK_QUESTIONS.length} question{WRITTEN_10_MARK_QUESTIONS.length!==1?"s":""} available.
+        </Text>
+      </Paper>
+
+      {WRITTEN_10_MARK_QUESTIONS.length === 0 && (
+        <Text ta="center" py={40} c="#55556A" fz="sm">No 10-mark questions yet.</Text>
+      )}
+
+      {WRITTEN_10_MARK_QUESTIONS.map((q, i) => (
         <WrittenPracticeItem key={q.id} q={q} displayNum={i + 1} />
       ))}
     </div>
@@ -829,7 +855,7 @@ export default function App() {
             Finance Unit — Revision Hub
           </Text>
           <Text ta="center" fz="xs" c="#55556A" mb="sm">
-            Units 3.1–3.9 · 5.5 Breakeven · BMT Tools · {MCQ_QUESTIONS.length} MCQs · {WRITTEN_QUESTIONS.length} Written
+            Units 3.1–3.9 · 5.5 Breakeven · BMT Tools · {MCQ_QUESTIONS.length} MCQs · {WRITTEN_QUESTIONS.length} Written · {WRITTEN_10_MARK_QUESTIONS.length} Extended
           </Text>
 
           <Tabs
