@@ -592,7 +592,7 @@ function WrittenPracticeItem({q, displayNum}) {
     setGrading(true);
     setGradeResult(null);
     try {
-      const res = await fetch("https://ib-grading-api.c9tggsfst9.workers.dev", {
+      const res = await fetch("https://ib-grading-hollen.c9tggsfst9.workers.dev", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
