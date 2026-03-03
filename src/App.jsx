@@ -213,7 +213,7 @@ function ChecklistView() {
   const progColor = progress<30?"#F87171":progress<70?"#FBBF24":"#34D399";
 
   return (
-    <div style={{maxWidth:760,margin:"0 auto",padding:"0 0 40px"}}>
+    <div style={{maxWidth:1060,margin:"0 auto",padding:"0 0 40px"}}>
       {/* Progress card */}
       <Paper
         bg="#12121A"
@@ -531,7 +531,7 @@ function PracticeView() {
   const filtered = MCQ_QUESTIONS.filter(q => catMatchFn(q.cat, filterCat));
 
   return (
-    <div style={{maxWidth:760,margin:"0 auto",padding:"0 0 40px"}}>
+    <div style={{maxWidth:1060,margin:"0 auto",padding:"0 0 40px"}}>
       {/* Category filter */}
       <Group gap={8} mb="lg" style={{flexWrap:"wrap"}}>
         {ALL_CATS.map(cat => {
@@ -756,7 +756,7 @@ function WrittenPracticeView() {
   const totalCount = WRITTEN_QUESTIONS.length + WRITTEN_10_MARK_QUESTIONS.length;
 
   return (
-    <div style={{maxWidth:760, margin:"0 auto", padding:"0 0 40px"}}>
+    <div style={{maxWidth:1060, margin:"0 auto", padding:"0 0 40px"}}>
       <Paper bg="#12121A" radius="lg" p="lg" mb="xl" style={{border:"1px solid #252533"}}>
         <Text fz="sm" c="#F0EEE8" fw={600} mb={4}>Written Practice</Text>
         <Text fz="xs" c="#8B8B9E" lh={1.5}>
@@ -769,6 +769,7 @@ function WrittenPracticeView() {
         {writtenCats.map(cat => {
           const c = cat === "10 Markers" ? "#F87171" : (CAT_COLORS[cat] || "#7C6FFF");
           const active = filterCat === cat;
+          const is10m = cat === "10 Markers";
           return (
             <Button
               key={cat}
@@ -777,10 +778,10 @@ function WrittenPracticeView() {
               ff="'JetBrains Mono', monospace"
               onClick={()=>setFilterCat(cat)}
               style={{
-                backgroundColor: active ? c : "#1A1A24",
-                color: active ? "#fff" : "#8B8B9E",
-                border: `1px solid ${active ? c : "#252533"}`,
-                boxShadow: "none",
+                backgroundColor: is10m ? "#F87171" : (active ? c : "#1A1A24"),
+                color: is10m ? "#fff" : (active ? "#fff" : "#8B8B9E"),
+                border: `1px solid ${is10m ? "#F87171" : (active ? c : "#252533")}`,
+                boxShadow: is10m && active ? "0 0 12px #F8717155" : "none",
               }}
             >
               {cat}
@@ -823,7 +824,7 @@ export default function App() {
           borderBottom: "1px solid rgba(255,255,255,0.04)",
         }}
       >
-        <Container size="md" py="sm">
+        <Container size="lg" py="sm">
           <Group justify="center" mb={4}>
             <Badge
               variant="light"
@@ -875,7 +876,7 @@ export default function App() {
             <Tabs.List grow>
               <Tabs.Tab value="checklist">Checklist</Tabs.Tab>
               <Tabs.Tab value="flashcards">Flashcards</Tabs.Tab>
-              <Tabs.Tab value="practice">Practice</Tabs.Tab>
+              <Tabs.Tab value="practice">Multi-Choice</Tabs.Tab>
               <Tabs.Tab value="written">Written</Tabs.Tab>
             </Tabs.List>
           </Tabs>
@@ -883,7 +884,7 @@ export default function App() {
       </Box>
 
       {/* Content */}
-      <Container size="md" py="xl" px="md">
+      <Container size="lg" py="xl" px="md">
         {tab==="checklist" && <ChecklistView/>}
         {tab==="flashcards" && <FlashcardsView/>}
         {tab==="practice" && <PracticeView/>}
