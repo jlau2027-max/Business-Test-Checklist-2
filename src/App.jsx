@@ -959,15 +959,17 @@ export default function App() {
           SUBJECTS
         </Text>
         {[
-          { label: "Business", icon: "📊", active: true, href: null },
-          { label: "History", icon: "📜", active: false, href: null },
+          { label: "Business", icon: "📊", active: true, href: "/" },
+          { label: "History", icon: "📜", active: false, href: "/history" },
         ].map(s => (
           <Button
             key={s.label}
+            component={s.active ? "button" : "a"}
+            href={s.active ? undefined : s.href}
             radius="md"
             ff="'JetBrains Mono', monospace"
             fw={600}
-            onClick={() => { if (!s.active) { /* future: navigate */ } setSidebarOpen(false); }}
+            onClick={() => setSidebarOpen(false)}
             style={{
               height: 44,
               justifyContent: "flex-start",
@@ -977,6 +979,7 @@ export default function App() {
               color: s.active ? "#fff" : "#8B8B9E",
               border: s.active ? "none" : "1px solid transparent",
               boxShadow: s.active ? "0 0 12px #7C6FFF33" : "none",
+              textDecoration: "none",
             }}
           >
             <span style={{ marginRight: 10 }}>{s.icon}</span>
