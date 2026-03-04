@@ -9,6 +9,7 @@ import {
 import { doc, setDoc, serverTimestamp } from "firebase/firestore";
 import { auth, db, googleProvider } from "./firebase.js";
 import { migrateLocalStorageToFirestore } from "./firestoreService.js";
+import { initStateSync, stopStateSync } from "./stateSync.js";
 
 const AuthContext = createContext(null);
 
@@ -24,12 +25,14 @@ export function AuthProvider({ children }) {
 
   useEffect(() => {
     const unsub = onAuthStateChanged(auth, async (fbUser) => {
-      setUser(fbUser);
-      setLoading(false);
       if (fbUser) {
-        // Create/update user doc on login
+        // Sync state from Firestore → localStorage before rendering
+        await initStateSync(fbUser.uid);
+        setUser(fbUser);
+        setLoading(false);
+        // Create/update user doc and migrate (background, non-blocking)
         const userRef = doc(db, "users", fbUser.uid);
-        await setDoc(
+        setDoc(
           userRef,
           {
             displayName: fbUser.displayName || fbUser.email?.split("@")[0] || "Student",
@@ -38,8 +41,11 @@ export function AuthProvider({ children }) {
           },
           { merge: true }
         ).catch(() => {});
-        // Migrate existing localStorage data on first login
         migrateLocalStorageToFirestore(fbUser.uid).catch(() => {});
+      } else {
+        stopStateSync();
+        setUser(null);
+        setLoading(false);
       }
     });
     return unsub;
