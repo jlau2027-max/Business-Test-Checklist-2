@@ -1,13 +1,5 @@
-import { createContext, useContext, useState, useEffect } from "react";
-import {
-  onAuthStateChanged,
-  signInWithPopup,
-  signInWithEmailAndPassword,
-  createUserWithEmailAndPassword,
-  signOut,
-} from "firebase/auth";
-import { auth, googleProvider } from "./firebase.js";
-import { initStateSync, stopStateSync } from "./stateSync.js";
+import { createContext, useContext } from "react";
+import { useUser, useClerk } from "@clerk/react";
 
 const AuthContext = createContext(null);
 
@@ -18,37 +10,21 @@ export function useAuth() {
 }
 
 export function AuthProvider({ children }) {
-  const [user, setUser] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const { isLoaded, isSignedIn, user: clerkUser } = useUser();
+  const { signOut } = useClerk();
 
-  useEffect(() => {
-    const unsub = onAuthStateChanged(auth, async (fbUser) => {
-      if (fbUser) {
-        await initStateSync(fbUser.uid);
-        setUser(fbUser);
-      } else {
-        stopStateSync();
-        setUser(null);
-      }
-      setLoading(false);
-    });
-    return unsub;
-  }, []);
+  // Map Clerk user to the shape the rest of the app expects
+  const user = isSignedIn && clerkUser ? {
+    uid: clerkUser.id,
+    email: clerkUser.primaryEmailAddress?.emailAddress || "",
+    displayName: clerkUser.fullName || clerkUser.firstName || clerkUser.primaryEmailAddress?.emailAddress?.split("@")[0] || "Student",
+  } : null;
 
-  const signInWithGoogle = () => signInWithPopup(auth, googleProvider);
-
-  const signInWithEmail = (email, password) =>
-    signInWithEmailAndPassword(auth, email, password);
-
-  const signUpWithEmail = (email, password) =>
-    createUserWithEmailAndPassword(auth, email, password);
-
-  const logOut = () => signOut(auth);
+  const loading = !isLoaded;
+  const logOut = () => signOut();
 
   return (
-    <AuthContext.Provider
-      value={{ user, loading, signInWithGoogle, signInWithEmail, signUpWithEmail, logOut }}
-    >
+    <AuthContext.Provider value={{ user, loading, logOut }}>
       {children}
     </AuthContext.Provider>
   );

@@ -1,6 +1,7 @@
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import { MantineProvider } from '@mantine/core'
+import { ClerkProvider } from '@clerk/react'
 import '@mantine/core/styles.css'
 import './index.css'
 import App from './App.jsx'
@@ -24,12 +25,14 @@ function AuthGate({ children }) {
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-    <AuthProvider>
+    <ClerkProvider>
       <MantineProvider theme={theme} defaultColorScheme="dark">
-        <AuthGate>
-          <Page />
-        </AuthGate>
+        <AuthProvider>
+          <AuthGate>
+            <Page />
+          </AuthGate>
+        </AuthProvider>
       </MantineProvider>
-    </AuthProvider>
+    </ClerkProvider>
   </StrictMode>,
 )
