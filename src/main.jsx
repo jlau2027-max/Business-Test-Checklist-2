@@ -11,7 +11,7 @@ import DashboardPage from './DashboardPage.jsx'
 import { AuthProvider, useAuth } from './AuthContext.jsx'
 import theme from './theme.js'
 
-const PUBLISHABLE_KEY = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY
+const PUBLISHABLE_KEY = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY || 'pk_live_Y2xlcmsuamFzcGVybGF1bHZsN3N0dWRlbnQuY29tJA'
 
 const path = window.location.pathname
 const Page = path === '/specimen' ? SpecimenPage
@@ -21,7 +21,8 @@ const Page = path === '/specimen' ? SpecimenPage
 
 function AuthGate({ children }) {
   const { loading } = useAuth()
-  if (loading) return null
+  // Don't block rendering — show the app while Clerk loads
+  // Auth-dependent features will handle their own loading states
   return children
 }
 
