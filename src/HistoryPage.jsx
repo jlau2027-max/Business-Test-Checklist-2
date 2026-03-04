@@ -2,6 +2,9 @@ import { useState, useEffect } from "react";
 import {
   Container, Badge, Text, Group, Paper, Button, Box, Textarea, Collapse, Stack,
 } from "@mantine/core";
+import LoginButton from "./LoginButton.jsx";
+import { useAuth } from "./AuthContext.jsx";
+import { useAttemptTracker } from "./useAttemptTracker.js";
 
 // ─── localStorage helpers ──────────────────────────────────────────────────
 function loadLS(key, fallback) {
@@ -723,6 +726,7 @@ function HistoryQuestion({ q, levelDescriptors, prefix }) {
   const [levelsRevealed, setLevelsRevealed] = useState(false);
   const [grading, setGrading] = useState(false);
   const [gradeResult, setGradeResult] = useState(() => loadLS(`${lsPrefix}_grade_${q.id}`, null));
+  const { recordAttempt } = useAttemptTracker(q.id, "history", q.topic || "History", "history");
 
   useEffect(() => { saveLS(`${lsPrefix}_ans_${q.id}`, answer); }, [answer, q.id, lsPrefix]);
   useEffect(() => { saveLS(`${lsPrefix}_grade_${q.id}`, gradeResult); }, [gradeResult, q.id, lsPrefix]);
@@ -747,6 +751,7 @@ function HistoryQuestion({ q, levelDescriptors, prefix }) {
         setGradeResult({ score: null, feedback: data.details || data.error });
       } else {
         setGradeResult({ score: data.score, maxMarks: data.maxMarks || q.marks, feedback: data.feedback });
+        recordAttempt({ userAnswer: answer, score: data.score, maxMarks: data.maxMarks || q.marks });
       }
     } catch {
       setGradeResult({ score: null, feedback: "Could not connect to grading server. Please try again later." });
@@ -943,6 +948,7 @@ function HistoryQuestion({ q, levelDescriptors, prefix }) {
 
 // ─── Main History Page ────────────────────────────────────────────────────
 export default function HistoryPage() {
+  const { user } = useAuth();
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [paper, setPaper] = useState(() => loadLS("hist_paper_tab", "paper2"));
 
@@ -992,6 +998,7 @@ export default function HistoryPage() {
         {[
           { label: "Business", active: false, href: "/" },
           { label: "History", active: true, href: "/history" },
+          ...(user ? [{ label: "Dashboard", active: false, href: "/dashboard" }] : []),
         ].map(s => (
           <Button
             key={s.label}
@@ -1070,6 +1077,7 @@ export default function HistoryPage() {
             >
               IB HL History
             </Badge>
+            <LoginButton />
           </Group>
           <Text
             ta="center"

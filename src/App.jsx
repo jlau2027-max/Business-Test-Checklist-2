@@ -5,6 +5,9 @@ import {
   Accordion, Checkbox, Button, Collapse,
   Alert, Box, Stack, Textarea, useMantineTheme,
 } from "@mantine/core";
+import LoginButton from "./LoginButton.jsx";
+import { useAuth } from "./AuthContext.jsx";
+import { useAttemptTracker } from "./useAttemptTracker.js";
 
 // ─── localStorage helpers ──────────────────────────────────────────────────
 function loadLS(key, fallback) {
@@ -482,6 +485,7 @@ function MCQItem({q, displayNum}) {
   const [selected,setSelected]=useState(null);
   const [confirmed,setConfirmed]=useState(false);
   const color=CAT_COLORS[q.cat]||"#7C6FFF";
+  const { recordAttempt, resetTimer } = useAttemptTracker(q.id, "mcq", q.cat, "business", q.difficulty);
   return (
     <Paper bg="#1A1A24" radius="lg" mb="sm" style={{ border:"1px solid #252533", overflow:"hidden", transition:"all 0.2s" }}>
       <div style={{borderLeft:`4px solid ${color}`,padding:"18px 20px"}}>
@@ -536,7 +540,7 @@ function MCQItem({q, displayNum}) {
             fullWidth
             radius="md"
             disabled={selected===null}
-            onClick={()=>{if(selected!==null)setConfirmed(true);}}
+            onClick={()=>{if(selected!==null){setConfirmed(true);recordAttempt({userAnswer:selected,isCorrect:selected===q.answer});}}}
             style={{
               background: selected!==null ? color : "#1E1E2A",
               border: "none",
@@ -558,7 +562,7 @@ function MCQItem({q, displayNum}) {
             }}
           >
             <Text fz="sm" c="#8B8B9E" lh={1.6}>{q.explanation}</Text>
-            <Button variant="subtle" size="xs" color="gray" mt="sm" onClick={()=>{setSelected(null);setConfirmed(false);}}>Try Again</Button>
+            <Button variant="subtle" size="xs" color="gray" mt="sm" onClick={()=>{setSelected(null);setConfirmed(false);resetTimer();}}>Try Again</Button>
           </Alert>
         )}
       </Stack>
@@ -630,6 +634,7 @@ function WrittenPracticeItem({q, displayNum}) {
   const [grading, setGrading] = useState(false);
   const [gradeResult, setGradeResult] = useState(() => loadLS(`written_grade_${q.id}`, null));
   const color = CAT_COLORS[q.cat] || "#7C6FFF";
+  const { recordAttempt } = useAttemptTracker(q.id, "written", q.cat, "business", q.difficulty);
 
   useEffect(() => { saveLS(`written_ans_${q.id}`, answer); }, [answer, q.id]);
   useEffect(() => { saveLS(`written_grade_${q.id}`, gradeResult); }, [gradeResult, q.id]);
@@ -654,6 +659,7 @@ function WrittenPracticeItem({q, displayNum}) {
         setGradeResult({ score: null, feedback: data.details || data.error });
       } else {
         setGradeResult({ score: data.score, maxMarks: data.maxMarks || q.marks, feedback: data.feedback });
+        recordAttempt({ userAnswer: answer, score: data.score, maxMarks: data.maxMarks || q.marks });
       }
     } catch (err) {
       setGradeResult({ score: null, feedback: "Could not connect to grading server. Please try again later." });
@@ -918,6 +924,7 @@ function WrittenPracticeView() {
 // ROOT APP
 // ─────────────────────────────────────────────────────────────────────────────
 export default function App() {
+  const { user } = useAuth();
   const [tab, setTab] = useState(() => loadLS("revision_tab", "checklist"));
   const switchTab = t => { setTab(t); saveLS("revision_tab", t); };
 
@@ -961,6 +968,7 @@ export default function App() {
         {[
           { label: "Business", active: true, href: "/" },
           { label: "History", active: false, href: "/history" },
+          ...(user ? [{ label: "Dashboard", active: false, href: "/dashboard" }] : []),
         ].map(s => (
           <Button
             key={s.label}
@@ -1037,6 +1045,7 @@ export default function App() {
             >
               IB HL Business Management
             </Badge>
+            <LoginButton />
           </Group>
           <Text
             ta="center" fw={800}

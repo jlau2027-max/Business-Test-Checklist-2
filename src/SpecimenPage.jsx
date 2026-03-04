@@ -2,6 +2,8 @@ import { useState, useEffect } from "react";
 import {
   Container, Badge, Text, Group, Paper, Button, Box, Textarea, Collapse, Stack,
 } from "@mantine/core";
+import LoginButton from "./LoginButton.jsx";
+import { useAttemptTracker } from "./useAttemptTracker.js";
 
 // ─── localStorage helpers ──────────────────────────────────────────────────
 function loadLS(key, fallback) {
@@ -173,6 +175,7 @@ function SpecimenQuestion({ q }) {
   const [revealed, setRevealed] = useState(false);
   const [grading, setGrading] = useState(false);
   const [gradeResult, setGradeResult] = useState(() => loadLS(`spec_grade_${q.id}`, null));
+  const { recordAttempt } = useAttemptTracker(q.id, "specimen", "Specimen Exam", "business");
 
   useEffect(() => { saveLS(`spec_ans_${q.id}`, answer); }, [answer, q.id]);
   useEffect(() => { saveLS(`spec_grade_${q.id}`, gradeResult); }, [gradeResult, q.id]);
@@ -197,6 +200,7 @@ function SpecimenQuestion({ q }) {
         setGradeResult({ score: null, feedback: data.details || data.error });
       } else {
         setGradeResult({ score: data.score, maxMarks: data.maxMarks || q.marks, feedback: data.feedback });
+        recordAttempt({ userAnswer: answer, score: data.score, maxMarks: data.maxMarks || q.marks });
       }
     } catch {
       setGradeResult({ score: null, feedback: "Could not connect to grading server. Please try again later." });
@@ -380,7 +384,7 @@ export default function SpecimenPage() {
         }}
       >
         <Container size="lg" py="sm">
-          <Group justify="center" mb={4}>
+          <Group justify="center" mb={4} style={{ position: "relative" }}>
             <Badge
               variant="light"
               size="sm"
@@ -391,6 +395,7 @@ export default function SpecimenPage() {
             >
               IB HL Business Management
             </Badge>
+            <LoginButton />
           </Group>
           <Text
             ta="center"
