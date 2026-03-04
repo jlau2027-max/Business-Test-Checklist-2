@@ -25,7 +25,7 @@ function AuthGate({ children }) {
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-    <ClerkProvider>
+    <ClerkProvider publishableKey={import.meta.env.VITE_CLERK_PUBLISHABLE_KEY}>
       <MantineProvider theme={theme} defaultColorScheme="dark">
         <AuthProvider>
           <AuthGate>
