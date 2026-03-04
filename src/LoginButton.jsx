@@ -1,19 +1,16 @@
-import { useState } from "react";
 import { Button, Menu, Text } from "@mantine/core";
+import { SignInButton, UserButton } from "@clerk/react";
 import { useAuth } from "./AuthContext.jsx";
-import LoginModal from "./LoginModal.jsx";
 
 export default function LoginButton() {
   const { user, loading, logOut } = useAuth();
-  const [modalOpen, setModalOpen] = useState(false);
 
   if (loading) return null;
 
   if (!user) {
     return (
-      <>
+      <SignInButton mode="modal">
         <Button
-          onClick={() => setModalOpen(true)}
           radius="md"
           style={{
             position: "absolute",
@@ -33,8 +30,7 @@ export default function LoginButton() {
         >
           Sign In
         </Button>
-        <LoginModal opened={modalOpen} onClose={() => setModalOpen(false)} />
-      </>
+      </SignInButton>
     );
   }
 

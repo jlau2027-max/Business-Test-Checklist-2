@@ -3,8 +3,8 @@ import {
   Container, Badge, Text, Group, Paper, Progress,
   Button, Box, Stack, Alert,
 } from "@mantine/core";
+import { SignInButton } from "@clerk/react";
 import { useAuth } from "./AuthContext.jsx";
-import LoginModal from "./LoginModal.jsx";
 import {
   getUserAttempts,
   computeCategoryStats,
@@ -58,7 +58,6 @@ function StatCard({ label, value, sub, color = "#7C6FFF" }) {
 
 export default function DashboardPage() {
   const { user, loading: authLoading } = useAuth();
-  const [loginOpen, setLoginOpen] = useState(false);
   const [attempts, setAttempts] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -152,15 +151,15 @@ export default function DashboardPage() {
             <Text fz="sm" c="#8B8B9E" mb="lg" maw={400} mx="auto">
               Track your accuracy per topic, review wrong answers, and see time spent on each question.
             </Text>
-            <Button
-              onClick={() => setLoginOpen(true)}
-              radius="md"
-              size="md"
-              style={{ backgroundColor: "#7C6FFF" }}
-            >
-              Sign In
-            </Button>
-            <LoginModal opened={loginOpen} onClose={() => setLoginOpen(false)} />
+            <SignInButton mode="modal">
+              <Button
+                radius="md"
+                size="md"
+                style={{ backgroundColor: "#7C6FFF" }}
+              >
+                Sign In
+              </Button>
+            </SignInButton>
           </Paper>
         ) : loading ? (
           <Text ta="center" c="#55556A" py="xl">Loading your analytics...</Text>
