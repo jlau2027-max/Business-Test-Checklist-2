@@ -21,7 +21,8 @@ const Page = path === '/specimen' ? SpecimenPage
 
 function AuthGate({ children }) {
   const { loading } = useAuth()
-  if (loading) return null
+  // Don't block rendering — show the app while Clerk loads
+  // Auth-dependent features will handle their own loading states
   return children
 }
 
