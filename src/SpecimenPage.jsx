@@ -4,6 +4,7 @@ import {
 } from "@mantine/core";
 import LoginButton from "./LoginButton.jsx";
 import { useAttemptTracker } from "./useAttemptTracker.js";
+import { syncToCloud } from "./stateSync.js";
 
 // ─── localStorage helpers ──────────────────────────────────────────────────
 function loadLS(key, fallback) {
@@ -12,6 +13,7 @@ function loadLS(key, fallback) {
 }
 function saveLS(key, value) {
   try { localStorage.setItem(key, JSON.stringify(value)); } catch {}
+  syncToCloud(key, value);
 }
 
 // ─── Specimen Questions Data ───────────────────────────────────────────────

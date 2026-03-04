@@ -6,9 +6,8 @@ import {
   createUserWithEmailAndPassword,
   signOut,
 } from "firebase/auth";
-import { doc, setDoc, serverTimestamp } from "firebase/firestore";
-import { auth, db, googleProvider } from "./firebase.js";
-import { migrateLocalStorageToFirestore } from "./firestoreService.js";
+import { auth, googleProvider } from "./firebase.js";
+import { initStateSync, stopStateSync } from "./stateSync.js";
 
 const AuthContext = createContext(null);
 
@@ -24,23 +23,14 @@ export function AuthProvider({ children }) {
 
   useEffect(() => {
     const unsub = onAuthStateChanged(auth, async (fbUser) => {
-      setUser(fbUser);
-      setLoading(false);
       if (fbUser) {
-        // Create/update user doc on login
-        const userRef = doc(db, "users", fbUser.uid);
-        await setDoc(
-          userRef,
-          {
-            displayName: fbUser.displayName || fbUser.email?.split("@")[0] || "Student",
-            email: fbUser.email || "",
-            lastLogin: serverTimestamp(),
-          },
-          { merge: true }
-        ).catch(() => {});
-        // Migrate existing localStorage data on first login
-        migrateLocalStorageToFirestore(fbUser.uid).catch(() => {});
+        await initStateSync(fbUser.uid);
+        setUser(fbUser);
+      } else {
+        stopStateSync();
+        setUser(null);
       }
+      setLoading(false);
     });
     return unsub;
   }, []);
