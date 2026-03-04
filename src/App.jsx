@@ -921,8 +921,75 @@ export default function App() {
   const [tab, setTab] = useState(() => loadLS("revision_tab", "checklist"));
   const switchTab = t => { setTab(t); saveLS("revision_tab", t); };
 
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+
   return (
     <Box mih="100vh" bg="#09090F" style={{fontFamily:"'Inter', sans-serif",color:"#F0EEE8"}}>
+
+      {/* Sidebar overlay (mobile) */}
+      {sidebarOpen && (
+        <Box
+          onClick={() => setSidebarOpen(false)}
+          style={{
+            position: "fixed", inset: 0, zIndex: 199,
+            backgroundColor: "rgba(0,0,0,0.5)",
+          }}
+        />
+      )}
+
+      {/* Sidebar */}
+      <Box
+        style={{
+          position: "fixed",
+          top: 0,
+          left: sidebarOpen ? 0 : -220,
+          width: 220,
+          height: "100vh",
+          zIndex: 200,
+          backgroundColor: "#0D0D14",
+          borderRight: "1px solid #1A1A24",
+          display: "flex",
+          flexDirection: "column",
+          padding: "20px 12px",
+          gap: 8,
+          transition: "left 0.25s ease",
+        }}
+      >
+        <Text fz={11} ff="'JetBrains Mono', monospace" c="#55556A" lts={1} mb={4} px={8}>
+          SUBJECTS
+        </Text>
+        {[
+          { label: "Business", icon: "📊", active: true, href: null },
+          { label: "History", icon: "📜", active: false, href: null },
+        ].map(s => (
+          <Button
+            key={s.label}
+            radius="md"
+            ff="'JetBrains Mono', monospace"
+            fw={600}
+            onClick={() => { if (!s.active) { /* future: navigate */ } setSidebarOpen(false); }}
+            style={{
+              height: 44,
+              justifyContent: "flex-start",
+              paddingLeft: 14,
+              fontSize: 14,
+              backgroundColor: s.active ? "#7C6FFF" : "transparent",
+              color: s.active ? "#fff" : "#8B8B9E",
+              border: s.active ? "none" : "1px solid transparent",
+              boxShadow: s.active ? "0 0 12px #7C6FFF33" : "none",
+            }}
+          >
+            <span style={{ marginRight: 10 }}>{s.icon}</span>
+            {s.label}
+          </Button>
+        ))}
+
+        <Box style={{ flex: 1 }} />
+        <Text fz={10} c="#33334A" ff="'JetBrains Mono', monospace" ta="center">
+          More subjects coming soon
+        </Text>
+      </Box>
+
       {/* Sticky header with glassmorphism */}
       <Box
         style={{
@@ -934,7 +1001,30 @@ export default function App() {
         }}
       >
         <Container size="lg" py="sm">
-          <Group justify="center" mb={4}>
+          <Group justify="center" mb={4} style={{ position: "relative" }}>
+            {/* Sidebar toggle */}
+            <Button
+              onClick={() => setSidebarOpen(o => !o)}
+              radius="md"
+              style={{
+                position: "absolute",
+                left: 0,
+                top: "50%",
+                transform: "translateY(-50%)",
+                backgroundColor: "transparent",
+                color: "#8B8B9E",
+                border: "1px solid #252533",
+                padding: "4px 10px",
+                minWidth: "auto",
+                height: 32,
+              }}
+            >
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
+                <line x1="3" y1="6" x2="21" y2="6"/>
+                <line x1="3" y1="12" x2="21" y2="12"/>
+                <line x1="3" y1="18" x2="21" y2="18"/>
+              </svg>
+            </Button>
             <Badge
               variant="light"
               size="sm"
