@@ -1,6 +1,12 @@
 import { useState, useEffect } from "react";
 import { Analytics } from "@vercel/analytics/react";
 import {
+  Show,
+  SignInButton,
+  SignUpButton,
+  UserButton,
+} from "@clerk/react";
+import {
   Container, Tabs, Badge, Text, Group, Paper, Progress,
   Accordion, Checkbox, Button, Collapse,
   Alert, Box, Stack, Textarea, useMantineTheme,
@@ -808,7 +814,7 @@ export default function App() {
         }}
       >
         <Container size="md" py="sm">
-          <Group justify="center" mb={4}>
+          <Group justify="space-between" mb={4}>
             <Badge
               variant="light"
               size="sm"
@@ -819,6 +825,19 @@ export default function App() {
             >
               IB HL Business Management
             </Badge>
+            <Group gap="sm">
+              <Show when="signed-out">
+                <SignInButton>
+                  <Button size="xs" variant="light" color="violet">Sign in</Button>
+                </SignInButton>
+                <SignUpButton>
+                  <Button size="xs" variant="filled" color="violet">Sign up</Button>
+                </SignUpButton>
+              </Show>
+              <Show when="signed-in">
+                <UserButton />
+              </Show>
+            </Group>
           </Group>
           <Text
             ta="center" fw={800}
