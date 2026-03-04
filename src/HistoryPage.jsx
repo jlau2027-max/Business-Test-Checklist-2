@@ -42,8 +42,8 @@ export default function HistoryPage() {
           SUBJECTS
         </Text>
         {[
-          { label: "Business", icon: "\u{1F4CA}", active: false, href: "/" },
-          { label: "History", icon: "\u{1F4DC}", active: true, href: "/history" },
+          { label: "Business", active: false, href: "/" },
+          { label: "History", active: true, href: "/history" },
         ].map(s => (
           <Button
             key={s.label}
@@ -65,7 +65,6 @@ export default function HistoryPage() {
               textDecoration: "none",
             }}
           >
-            <span style={{ marginRight: 10 }}>{s.icon}</span>
             {s.label}
           </Button>
         ))}
@@ -143,7 +142,6 @@ export default function HistoryPage() {
       <Container size="lg" py="xl" px="md">
         <div style={{ maxWidth: 1060, margin: "0 auto", padding: "0 0 40px" }}>
           <Paper bg="#12121A" radius="lg" p="xl" style={{ border: "1px solid #252533", textAlign: "center" }}>
-            <Text fz={40} mb="md">📜</Text>
             <Text fz="lg" c="#F0EEE8" fw={700} mb={8}>
               History Revision Hub
             </Text>

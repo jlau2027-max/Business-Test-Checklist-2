@@ -959,8 +959,8 @@ export default function App() {
           SUBJECTS
         </Text>
         {[
-          { label: "Business", icon: "📊", active: true, href: "/" },
-          { label: "History", icon: "📜", active: false, href: "/history" },
+          { label: "Business", active: true, href: "/" },
+          { label: "History", active: false, href: "/history" },
         ].map(s => (
           <Button
             key={s.label}
@@ -982,7 +982,6 @@ export default function App() {
               textDecoration: "none",
             }}
           >
-            <span style={{ marginRight: 10 }}>{s.icon}</span>
             {s.label}
           </Button>
         ))}
