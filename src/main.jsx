@@ -17,15 +17,24 @@ const Page = path === '/specimen' ? SpecimenPage
            : path === '/dashboard' ? DashboardPage
            : App
 
+const clerkKey = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY
+
 function AuthGate({ children }) {
   const { loading } = useAuth()
   if (loading) return null
   return children
 }
 
+function Shell({ children }) {
+  if (clerkKey) {
+    return <ClerkProvider publishableKey={clerkKey}>{children}</ClerkProvider>
+  }
+  return children
+}
+
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-    <ClerkProvider publishableKey={import.meta.env.VITE_CLERK_PUBLISHABLE_KEY}>
+    <Shell>
       <MantineProvider theme={theme} defaultColorScheme="dark">
         <AuthProvider>
           <AuthGate>
@@ -33,6 +42,6 @@ createRoot(document.getElementById('root')).render(
           </AuthGate>
         </AuthProvider>
       </MantineProvider>
-    </ClerkProvider>
+    </Shell>
   </StrictMode>,
 )
