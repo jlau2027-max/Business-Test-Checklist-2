@@ -1,5 +1,4 @@
-import { doc, setDoc, getDoc } from "firebase/firestore";
-import { db } from "./firebase.js";
+const WORKER_URL = "https://ib-grading-hollen.c9tggsfst9.workers.dev";
 
 let currentUid = null;
 let pendingWrites = {};
@@ -25,13 +24,14 @@ function flush() {
   const uid = currentUid;
   const data = { ...pendingWrites };
   pendingWrites = {};
-  const stateRef = doc(db, "users", uid, "state", "app");
-  setDoc(stateRef, data, { merge: true }).catch((err) =>
-    console.error("State sync write failed:", err)
-  );
+  fetch(`${WORKER_URL}/api/state/${uid}`, {
+    method: "PUT",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(data),
+  }).catch((err) => console.error("State sync write failed:", err));
 }
 
-// Queue a Firestore write (called from each page's saveLS function)
+// Queue a cloud write (called from each page's saveLS function)
 export function syncToCloud(key, value) {
   if (!currentUid || !isSyncableKey(key)) return;
   pendingWrites[key] = value;
@@ -39,23 +39,22 @@ export function syncToCloud(key, value) {
   debounceTimer = setTimeout(flush, DEBOUNCE_MS);
 }
 
-// Load Firestore state → localStorage on login, upload local-only state
+// Load cloud state → localStorage on login, upload local-only state
 export async function initStateSync(uid) {
   currentUid = uid;
-  const stateRef = doc(db, "users", uid, "state", "app");
 
   try {
-    const snap = await getDoc(stateRef);
-    const cloudData = snap.exists() ? snap.data() : {};
+    const res = await fetch(`${WORKER_URL}/api/state/${uid}`);
+    const cloudData = await res.json();
 
-    // Cloud wins: overwrite localStorage with Firestore values
+    // Cloud wins: overwrite localStorage with cloud values
     for (const [key, value] of Object.entries(cloudData)) {
       try {
         localStorage.setItem(key, JSON.stringify(value));
       } catch {}
     }
 
-    // Upload any local-only syncable keys to Firestore (preserves pre-login work)
+    // Upload any local-only syncable keys to cloud (preserves pre-login work)
     const toUpload = {};
     for (let i = 0; i < localStorage.length; i++) {
       const key = localStorage.key(i);
@@ -68,7 +67,11 @@ export async function initStateSync(uid) {
     }
 
     if (Object.keys(toUpload).length > 0) {
-      await setDoc(stateRef, toUpload, { merge: true });
+      await fetch(`${WORKER_URL}/api/state/${uid}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(toUpload),
+      });
     }
   } catch (err) {
     console.error("State sync init failed:", err);
