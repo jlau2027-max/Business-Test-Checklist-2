@@ -1,11 +1,5 @@
 import { createContext, useContext } from "react";
-
-let useUser, useClerk;
-try {
-  const clerk = await import("@clerk/react");
-  useUser = clerk.useUser;
-  useClerk = clerk.useClerk;
-} catch {}
+import { useUser, useClerk } from "@clerk/react";
 
 const AuthContext = createContext(null);
 
@@ -16,27 +10,17 @@ export function useAuth() {
 }
 
 export function AuthProvider({ children }) {
-  let user = null;
-  let loading = false;
-  let logOut = () => {};
+  const { isLoaded, isSignedIn, user: clerkUser } = useUser();
+  const { signOut } = useClerk();
 
-  if (useUser && useClerk) {
-    try {
-      const { isLoaded, isSignedIn, user: clerkUser } = useUser();
-      const { signOut } = useClerk();
+  const user = isSignedIn && clerkUser ? {
+    uid: clerkUser.id,
+    email: clerkUser.primaryEmailAddress?.emailAddress || "",
+    displayName: clerkUser.fullName || clerkUser.firstName || clerkUser.primaryEmailAddress?.emailAddress?.split("@")[0] || "Student",
+  } : null;
 
-      user = isSignedIn && clerkUser ? {
-        uid: clerkUser.id,
-        email: clerkUser.primaryEmailAddress?.emailAddress || "",
-        displayName: clerkUser.fullName || clerkUser.firstName || clerkUser.primaryEmailAddress?.emailAddress?.split("@")[0] || "Student",
-      } : null;
-
-      loading = !isLoaded;
-      logOut = () => signOut();
-    } catch {
-      // Clerk not initialized (no key), app runs without auth
-    }
-  }
+  const loading = !isLoaded;
+  const logOut = () => signOut();
 
   return (
     <AuthContext.Provider value={{ user, loading, logOut }}>
