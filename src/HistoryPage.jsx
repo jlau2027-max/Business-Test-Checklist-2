@@ -770,13 +770,13 @@ function HistoryQuestion({ q, levelDescriptors, prefix }) {
   };
 
   return (
-    <Paper bg="#12121A" radius="lg" p="lg" mb="md" style={{ border: "1px solid #252533" }}>
+    <Paper bg="#0A0A0A" radius="lg" p="lg" mb="md" style={{ border: "1px solid #1F1F1F" }}>
       {/* Question header */}
       <Group mb="sm" align="flex-start" wrap="nowrap">
         <Badge
           size="lg"
           radius="md"
-          ff="'JetBrains Mono', monospace"
+          ff="'Geist Mono', monospace"
           fw={700}
           style={{ backgroundColor: "#F8717118", color: "#F87171", border: "none", flexShrink: 0 }}
         >
@@ -785,7 +785,7 @@ function HistoryQuestion({ q, levelDescriptors, prefix }) {
         <Badge
           size="sm"
           radius="md"
-          ff="'JetBrains Mono', monospace"
+          ff="'Geist Mono', monospace"
           fw={600}
           style={{ backgroundColor: "#8B5CF618", color: "#8B5CF6", border: "none", flexShrink: 0 }}
         >
@@ -794,7 +794,7 @@ function HistoryQuestion({ q, levelDescriptors, prefix }) {
       </Group>
 
       {/* Question text */}
-      <Text fz={14} c="#F0EEE8" lh={1.7} mb="md" style={{ whiteSpace: "pre-line" }}>
+      <Text fz={14} c="#EDEDED" lh={1.7} mb="md" style={{ whiteSpace: "pre-line" }}>
         {q.question}
       </Text>
 
@@ -809,12 +809,12 @@ function HistoryQuestion({ q, levelDescriptors, prefix }) {
         mb="sm"
         styles={{
           input: {
-            backgroundColor: "#09090F",
-            borderColor: "#252533",
-            color: "#F0EEE8",
+            backgroundColor: "#000000",
+            borderColor: "#1F1F1F",
+            color: "#EDEDED",
             fontSize: 14,
             lineHeight: 1.7,
-            fontFamily: "'Inter', sans-serif",
+            fontFamily: "'Geist', sans-serif",
           },
         }}
       />
@@ -824,7 +824,7 @@ function HistoryQuestion({ q, levelDescriptors, prefix }) {
         <Button
           size="sm"
           radius="md"
-          ff="'JetBrains Mono', monospace"
+          ff="'Geist Mono', monospace"
           loading={grading}
           onClick={handleSolve}
           disabled={!answer.trim()}
@@ -842,7 +842,7 @@ function HistoryQuestion({ q, levelDescriptors, prefix }) {
           radius="md"
           variant={revealed ? "subtle" : "light"}
           color={revealed ? "gray" : undefined}
-          ff="'JetBrains Mono', monospace"
+          ff="'Geist Mono', monospace"
           onClick={() => setRevealed((r) => !r)}
           style={
             revealed
@@ -862,7 +862,7 @@ function HistoryQuestion({ q, levelDescriptors, prefix }) {
           radius="md"
           variant={levelsRevealed ? "subtle" : "light"}
           color={levelsRevealed ? "gray" : undefined}
-          ff="'JetBrains Mono', monospace"
+          ff="'Geist Mono', monospace"
           onClick={() => setLevelsRevealed((r) => !r)}
           style={
             levelsRevealed
@@ -883,27 +883,27 @@ function HistoryQuestion({ q, levelDescriptors, prefix }) {
             radius="md"
             variant="subtle"
             color="gray"
-            ff="'JetBrains Mono', monospace"
+            ff="'Geist Mono', monospace"
             onClick={handleClear}
           >
             Clear
           </Button>
         )}
 
-        <Badge size="xs" variant="light" color="red" ff="'JetBrains Mono', monospace" ml="auto">
+        <Badge size="xs" variant="light" color="red" ff="'Geist Mono', monospace" ml="auto">
           auto-saved
         </Badge>
       </Group>
 
       {/* AI Grade Result */}
       {gradeResult && (
-        <Paper bg="#1A1A24" radius="md" p="md" mt="md" style={{ border: "1px solid #252533" }}>
+        <Paper bg="#111111" radius="md" p="md" mt="md" style={{ border: "1px solid #1F1F1F" }}>
           {gradeResult.score !== null && (
             <Group mb="xs">
               <Badge
                 size="lg"
                 radius="md"
-                ff="'JetBrains Mono', monospace"
+                ff="'Geist Mono', monospace"
                 fw={700}
                 style={{
                   backgroundColor: gradeResult.score >= gradeResult.maxMarks * 0.7 ? "#34D39922" : gradeResult.score >= gradeResult.maxMarks * 0.4 ? "#FBBF2422" : "#EF444422",
@@ -915,7 +915,7 @@ function HistoryQuestion({ q, levelDescriptors, prefix }) {
               </Badge>
             </Group>
           )}
-          <Text fz={13} c="#B0ADA6" lh={1.7} style={{ whiteSpace: "pre-line" }}>
+          <Text fz={13} c="#A3A3A3" lh={1.7} style={{ whiteSpace: "pre-line" }}>
             {gradeResult.feedback}
           </Text>
         </Paper>
@@ -923,11 +923,11 @@ function HistoryQuestion({ q, levelDescriptors, prefix }) {
 
       {/* Markscheme reveal */}
       <Collapse in={revealed}>
-        <Box mt="md" pt="md" style={{ borderTop: "1px solid #252533" }}>
-          <Text fz={11} ff="'JetBrains Mono', monospace" c="#34D399" lts={1} mb="sm">
+        <Box mt="md" pt="md" style={{ borderTop: "1px solid #1F1F1F" }}>
+          <Text fz={11} ff="'Geist Mono', monospace" c="#34D399" lts={1} mb="sm">
             MARKSCHEME
           </Text>
-          <Text fz={13} c="#B0ADA6" lh={1.7} style={{ whiteSpace: "pre-line" }}>
+          <Text fz={13} c="#A3A3A3" lh={1.7} style={{ whiteSpace: "pre-line" }}>
             {q.markscheme}
           </Text>
         </Box>
@@ -935,11 +935,11 @@ function HistoryQuestion({ q, levelDescriptors, prefix }) {
 
       {/* Level descriptors reveal */}
       <Collapse in={levelsRevealed}>
-        <Box mt="md" pt="md" style={{ borderTop: "1px solid #252533" }}>
-          <Text fz={11} ff="'JetBrains Mono', monospace" c="#FBBF24" lts={1} mb="sm">
+        <Box mt="md" pt="md" style={{ borderTop: "1px solid #1F1F1F" }}>
+          <Text fz={11} ff="'Geist Mono', monospace" c="#FBBF24" lts={1} mb="sm">
             LEVEL DESCRIPTORS
           </Text>
-          <Text fz={13} c="#B0ADA6" lh={1.7} style={{ whiteSpace: "pre-line" }}>
+          <Text fz={13} c="#A3A3A3" lh={1.7} style={{ whiteSpace: "pre-line" }}>
             {levelDescriptors}
           </Text>
         </Box>
@@ -963,7 +963,7 @@ export default function HistoryPage() {
   const lsPrefix = paper === "paper2" ? "hist" : "p3";
 
   return (
-    <Box mih="100vh" bg="#09090F" style={{ fontFamily: "'Inter', sans-serif", color: "#F0EEE8" }}>
+    <Box mih="100vh" bg="#000000" style={{ fontFamily: "'Geist', sans-serif", color: "#EDEDED" }}>
 
       {/* Sidebar overlay */}
       {sidebarOpen && (
@@ -985,8 +985,8 @@ export default function HistoryPage() {
           width: 220,
           height: "100vh",
           zIndex: 200,
-          backgroundColor: "#0D0D14",
-          borderRight: "1px solid #1A1A24",
+          backgroundColor: "#050505",
+          borderRight: "1px solid #111111",
           display: "flex",
           flexDirection: "column",
           padding: "20px 12px",
@@ -994,7 +994,7 @@ export default function HistoryPage() {
           transition: "left 0.25s ease",
         }}
       >
-        <Text fz={11} ff="'JetBrains Mono', monospace" c="#55556A" lts={1} mb={4} px={8}>
+        <Text fz={11} ff="'Geist Mono', monospace" c="#666666" lts={1} mb={4} px={8}>
           SUBJECTS
         </Text>
         {[
@@ -1007,7 +1007,7 @@ export default function HistoryPage() {
             component={s.active ? "button" : "a"}
             href={s.active ? undefined : s.href}
             radius="md"
-            ff="'JetBrains Mono', monospace"
+            ff="'Geist Mono', monospace"
             fw={600}
             onClick={() => setSidebarOpen(false)}
             style={{
@@ -1016,7 +1016,7 @@ export default function HistoryPage() {
               paddingLeft: 14,
               fontSize: 14,
               backgroundColor: s.active ? "#F87171" : "transparent",
-              color: s.active ? "#fff" : "#8B8B9E",
+              color: s.active ? "#fff" : "#A1A1A1",
               border: s.active ? "none" : "1px solid transparent",
               boxShadow: s.active ? "0 0 12px #F8717133" : "none",
               textDecoration: "none",
@@ -1027,7 +1027,7 @@ export default function HistoryPage() {
         ))}
 
         <Box style={{ flex: 1 }} />
-        <Text fz={10} c="#33334A" ff="'JetBrains Mono', monospace" ta="center">
+        <Text fz={10} c="#404040" ff="'Geist Mono', monospace" ta="center">
           More subjects coming soon
         </Text>
       </Box>
@@ -1038,7 +1038,7 @@ export default function HistoryPage() {
           position: "sticky",
           top: 0,
           zIndex: 100,
-          background: "rgba(9, 9, 15, 0.85)",
+          background: "rgba(0, 0, 0, 0.85)",
           backdropFilter: "blur(12px)",
           WebkitBackdropFilter: "blur(12px)",
           borderBottom: "1px solid rgba(255,255,255,0.04)",
@@ -1056,8 +1056,8 @@ export default function HistoryPage() {
                 top: "50%",
                 transform: "translateY(-50%)",
                 backgroundColor: "transparent",
-                color: "#8B8B9E",
-                border: "1px solid #252533",
+                color: "#A1A1A1",
+                border: "1px solid #1F1F1F",
                 padding: "4px 10px",
                 minWidth: "auto",
                 height: 32,
@@ -1074,7 +1074,7 @@ export default function HistoryPage() {
               size="sm"
               tt="uppercase"
               fw={700}
-              ff="'JetBrains Mono', monospace"
+              ff="'Geist Mono', monospace"
               style={{ letterSpacing: 2, backgroundColor: "#F8717118", color: "#F87171", border: "none" }}
             >
               IB HL History
@@ -1085,12 +1085,12 @@ export default function HistoryPage() {
             ta="center"
             fw={800}
             fz={{ base: 22, sm: 30 }}
-            c="#F0EEE8"
+            c="#EDEDED"
             style={{ letterSpacing: -0.5 }}
           >
             {paper === "paper2" ? "Paper 2 \u2014 Specimen" : "Paper 3 \u2014 Specimen"}
           </Text>
-          <Text ta="center" fz="xs" c="#55556A" mb="sm">
+          <Text ta="center" fz="xs" c="#666666" mb="sm">
             {paper === "paper2"
               ? `12 topics \u00B7 ${questions.length} questions \u00B7 ${totalMarks} marks total`
               : `18 topics \u00B7 ${questions.length} questions \u00B7 ${totalMarks} marks total`}
@@ -1106,13 +1106,13 @@ export default function HistoryPage() {
                 key={t.key}
                 size="sm"
                 radius="md"
-                ff="'JetBrains Mono', monospace"
+                ff="'Geist Mono', monospace"
                 fw={600}
                 onClick={() => setPaper(t.key)}
                 style={{
-                  backgroundColor: paper === t.key ? "#F0EEE8" : "transparent",
-                  color: paper === t.key ? "#09090F" : "#55556A",
-                  border: paper === t.key ? "none" : "1px solid #252533",
+                  backgroundColor: paper === t.key ? "#EDEDED" : "transparent",
+                  color: paper === t.key ? "#000000" : "#666666",
+                  border: paper === t.key ? "none" : "1px solid #1F1F1F",
                   fontSize: 13,
                   height: 34,
                   paddingLeft: 16,
@@ -1130,29 +1130,29 @@ export default function HistoryPage() {
       <Container size="lg" py="xl" px="md">
         <div style={{ maxWidth: 1060, margin: "0 auto", padding: "0 0 40px" }}>
           {/* Exam info banner */}
-          <Paper bg="#12121A" radius="lg" p="lg" mb="xl" style={{ border: "1px solid #252533" }}>
-            <Text fz="sm" c="#F0EEE8" fw={600} mb={4}>
+          <Paper bg="#0A0A0A" radius="lg" p="lg" mb="xl" style={{ border: "1px solid #1F1F1F" }}>
+            <Text fz="sm" c="#EDEDED" fw={600} mb={4}>
               {paper === "paper2"
                 ? "IB History HL/SL \u2014 Paper 2 Specimen"
                 : "IB History HL \u2014 Paper 3 Specimen (Africa and the Middle East)"}
             </Text>
-            <Text fz="xs" c="#8B8B9E" lh={1.6}>
+            <Text fz="xs" c="#A1A1A1" lh={1.6}>
               {paper === "paper2"
                 ? "Answer two questions, each chosen from a different topic. Each question is worth 15 marks. The maximum mark for this paper is 30. Type your essay answers below \u2014 everything auto-saves. Use \"Solve\" for AI grading, \"Show Markscheme\" for the rubric, and \"Level Descriptors\" for the marking bands."
                 : "Answer three questions. Each question is worth 15 marks. The maximum mark for this paper is 45. 2 hours 30 minutes. HL only. Type your essay answers below \u2014 everything auto-saves. Use \"Solve\" for AI grading, \"Show Markscheme\" for the rubric, and \"Level Descriptors\" for the marking bands."}
             </Text>
             <Group mt="sm" gap="xs">
-              <Badge size="xs" variant="light" color="red" ff="'JetBrains Mono', monospace">
+              <Badge size="xs" variant="light" color="red" ff="'Geist Mono', monospace">
                 {questions.length} questions
               </Badge>
-              <Badge size="xs" variant="light" color="violet" ff="'JetBrains Mono', monospace">
+              <Badge size="xs" variant="light" color="violet" ff="'Geist Mono', monospace">
                 {topics.length} topics
               </Badge>
-              <Badge size="xs" variant="light" color="yellow" ff="'JetBrains Mono', monospace">
+              <Badge size="xs" variant="light" color="yellow" ff="'Geist Mono', monospace">
                 15 marks each
               </Badge>
               {paper === "paper3" && (
-                <Badge size="xs" variant="light" color="cyan" ff="'JetBrains Mono', monospace">
+                <Badge size="xs" variant="light" color="cyan" ff="'Geist Mono', monospace">
                   HL only
                 </Badge>
               )}
@@ -1164,7 +1164,7 @@ export default function HistoryPage() {
             <Box key={topic} mb="xl">
               <Text
                 fz={11}
-                ff="'JetBrains Mono', monospace"
+                ff="'Geist Mono', monospace"
                 c="#F87171"
                 lts={1}
                 mb="md"
@@ -1196,7 +1196,7 @@ export default function HistoryPage() {
           width: 48,
           height: 48,
           borderRadius: "50%",
-          backgroundColor: "#7C6FFF",
+          backgroundColor: "#0070F3",
           display: "flex",
           alignItems: "center",
           justifyContent: "center",

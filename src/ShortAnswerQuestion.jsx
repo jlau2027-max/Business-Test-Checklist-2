@@ -50,8 +50,8 @@ export default function ShortAnswerQuestion({
   const scoreColor = grade >= 4 ? '#34D399' : grade >= 2 ? '#FBBF24' : '#F87171';
 
   return (
-    <Paper bg="#12121A" radius="lg" p="lg" style={{ border: '1px solid #252533' }}>
-      <Text fw={600} fz="md" c="#F0EEE8" mb="md">{question}</Text>
+    <Paper bg="#0A0A0A" radius="lg" p="lg" style={{ border: '1px solid #1F1F1F' }}>
+      <Text fw={600} fz="md" c="#EDEDED" mb="md">{question}</Text>
 
       <Textarea
         value={studentAnswer}
@@ -62,11 +62,11 @@ export default function ShortAnswerQuestion({
         radius="md"
         styles={{
           input: {
-            backgroundColor: '#1A1A24',
-            borderColor: '#252533',
-            color: '#F0EEE8',
-            '&:focus': { borderColor: '#7C6FFF' },
-            '&::placeholder': { color: '#55556A' },
+            backgroundColor: '#111111',
+            borderColor: '#1F1F1F',
+            color: '#EDEDED',
+            '&:focus': { borderColor: '#0070F3' },
+            '&::placeholder': { color: '#666666' },
           },
         }}
       />
@@ -81,11 +81,11 @@ export default function ShortAnswerQuestion({
           loading={loading}
           loaderProps={{ type: 'dots' }}
           style={{
-            background: studentAnswer.trim() ? 'linear-gradient(135deg, #7C6FFF, #A78BFA)' : '#1E1E2A',
+            background: studentAnswer.trim() ? '#0070F3' : '#171717',
             border: 'none',
-            boxShadow: studentAnswer.trim() ? '0 4px 16px #7C6FFF30' : 'none',
+            boxShadow: studentAnswer.trim() ? '0 4px 16px #0070F330' : 'none',
           }}
-          styles={{ root: { '&:disabled': { backgroundColor: '#1E1E2A', color: '#55556A' } } }}
+          styles={{ root: { '&:disabled': { backgroundColor: '#171717', color: '#666666' } } }}
         >
           Submit Answer
         </Button>
@@ -104,7 +104,7 @@ export default function ShortAnswerQuestion({
           title={`Score: ${grade}/5`}
           styles={{
             root: { backgroundColor: scoreColor + '11', border: `1px solid ${scoreColor}44` },
-            title: { fontFamily: "'JetBrains Mono', monospace" },
+            title: { fontFamily: "'Geist Mono', monospace" },
           }}
         >
           <Progress
@@ -116,7 +116,7 @@ export default function ShortAnswerQuestion({
             animated
             styles={{ section: { boxShadow: `0 0 8px ${scoreColor}40` } }}
           />
-          <Text fz="sm" c="#8B8B9E" lh={1.6}>{feedback}</Text>
+          <Text fz="sm" c="#A1A1A1" lh={1.6}>{feedback}</Text>
         </Alert>
       )}
     </Paper>

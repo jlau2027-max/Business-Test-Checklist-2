@@ -221,31 +221,31 @@ function SpecimenQuestion({ q }) {
   const minRows = q.marks >= 10 ? 16 : q.marks >= 4 ? 10 : 6;
 
   return (
-    <Paper bg="#12121A" radius="lg" p="lg" mb="md" style={{ border: "1px solid #252533" }}>
+    <Paper bg="#0A0A0A" radius="lg" p="lg" mb="md" style={{ border: "1px solid #1F1F1F" }}>
       {/* Question header */}
       <Group mb="sm" align="flex-start" wrap="nowrap">
         <Badge
           size="lg"
           radius="md"
-          ff="'JetBrains Mono', monospace"
+          ff="'Geist Mono', monospace"
           fw={700}
-          style={{ backgroundColor: "#2DD4BF18", color: "#2DD4BF", border: "none", flexShrink: 0 }}
+          style={{ backgroundColor: "#00CC8818", color: "#00CC88", border: "none", flexShrink: 0 }}
         >
           {q.label}
         </Badge>
         <Badge
           size="sm"
           radius="md"
-          ff="'JetBrains Mono', monospace"
+          ff="'Geist Mono', monospace"
           fw={600}
-          style={{ backgroundColor: "#8B5CF618", color: "#8B5CF6", border: "none", flexShrink: 0 }}
+          style={{ backgroundColor: "#7928CA18", color: "#7928CA", border: "none", flexShrink: 0 }}
         >
           {q.marks} mark{q.marks !== 1 ? "s" : ""}
         </Badge>
       </Group>
 
       {/* Question text */}
-      <Text fz={14} c="#F0EEE8" lh={1.7} mb="md" style={{ whiteSpace: "pre-line" }}>
+      <Text fz={14} c="#EDEDED" lh={1.7} mb="md" style={{ whiteSpace: "pre-line" }}>
         {q.question}
       </Text>
 
@@ -260,12 +260,12 @@ function SpecimenQuestion({ q }) {
         mb="sm"
         styles={{
           input: {
-            backgroundColor: "#09090F",
-            borderColor: "#252533",
-            color: "#F0EEE8",
+            backgroundColor: "#000000",
+            borderColor: "#1F1F1F",
+            color: "#EDEDED",
             fontSize: 14,
             lineHeight: 1.7,
-            fontFamily: "'Inter', sans-serif",
+            fontFamily: "'Geist', sans-serif",
           },
         }}
       />
@@ -275,14 +275,14 @@ function SpecimenQuestion({ q }) {
         <Button
           size="sm"
           radius="md"
-          ff="'JetBrains Mono', monospace"
+          ff="'Geist Mono', monospace"
           loading={grading}
           onClick={handleSolve}
           disabled={!answer.trim()}
           style={{
-            backgroundColor: "#2DD4BF22",
-            color: "#2DD4BF",
-            border: "1px solid #2DD4BF44",
+            backgroundColor: "#00CC8822",
+            color: "#00CC88",
+            border: "1px solid #00CC8844",
           }}
         >
           {grading ? "Grading..." : "Solve"}
@@ -293,15 +293,15 @@ function SpecimenQuestion({ q }) {
           radius="md"
           variant={revealed ? "subtle" : "light"}
           color={revealed ? "gray" : undefined}
-          ff="'JetBrains Mono', monospace"
+          ff="'Geist Mono', monospace"
           onClick={() => setRevealed((r) => !r)}
           style={
             revealed
               ? {}
               : {
-                  backgroundColor: "#8B5CF622",
-                  color: "#8B5CF6",
-                  border: "1px solid #8B5CF644",
+                  backgroundColor: "#7928CA22",
+                  color: "#7928CA",
+                  border: "1px solid #7928CA44",
                 }
           }
         >
@@ -314,27 +314,27 @@ function SpecimenQuestion({ q }) {
             radius="md"
             variant="subtle"
             color="gray"
-            ff="'JetBrains Mono', monospace"
+            ff="'Geist Mono', monospace"
             onClick={handleClear}
           >
             Clear
           </Button>
         )}
 
-        <Badge size="xs" variant="light" color="teal" ff="'JetBrains Mono', monospace" ml="auto">
+        <Badge size="xs" variant="light" color="teal" ff="'Geist Mono', monospace" ml="auto">
           auto-saved
         </Badge>
       </Group>
 
       {/* AI Grade Result */}
       {gradeResult && (
-        <Paper bg="#1A1A24" radius="md" p="md" mt="md" style={{ border: "1px solid #252533" }}>
+        <Paper bg="#111111" radius="md" p="md" mt="md" style={{ border: "1px solid #1F1F1F" }}>
           {gradeResult.score !== null && (
             <Group mb="xs">
               <Badge
                 size="lg"
                 radius="md"
-                ff="'JetBrains Mono', monospace"
+                ff="'Geist Mono', monospace"
                 fw={700}
                 style={{
                   backgroundColor: gradeResult.score >= gradeResult.maxMarks * 0.7 ? "#34D39922" : gradeResult.score >= gradeResult.maxMarks * 0.4 ? "#FBBF2422" : "#EF444422",
@@ -346,7 +346,7 @@ function SpecimenQuestion({ q }) {
               </Badge>
             </Group>
           )}
-          <Text fz={13} c="#B0ADA6" lh={1.7} style={{ whiteSpace: "pre-line" }}>
+          <Text fz={13} c="#A3A3A3" lh={1.7} style={{ whiteSpace: "pre-line" }}>
             {gradeResult.feedback}
           </Text>
         </Paper>
@@ -354,11 +354,11 @@ function SpecimenQuestion({ q }) {
 
       {/* Markscheme reveal */}
       <Collapse in={revealed}>
-        <Box mt="md" pt="md" style={{ borderTop: "1px solid #252533" }}>
-          <Text fz={11} ff="'JetBrains Mono', monospace" c="#34D399" lts={1} mb="sm">
+        <Box mt="md" pt="md" style={{ borderTop: "1px solid #1F1F1F" }}>
+          <Text fz={11} ff="'Geist Mono', monospace" c="#34D399" lts={1} mb="sm">
             MARKSCHEME
           </Text>
-          <Text fz={13} c="#B0ADA6" lh={1.7} style={{ whiteSpace: "pre-line" }}>
+          <Text fz={13} c="#A3A3A3" lh={1.7} style={{ whiteSpace: "pre-line" }}>
             {q.markscheme}
           </Text>
         </Box>
@@ -372,14 +372,14 @@ export default function SpecimenPage() {
   const totalMarks = SPECIMEN_QUESTIONS.reduce((sum, q) => sum + q.marks, 0);
 
   return (
-    <Box mih="100vh" bg="#09090F" style={{ fontFamily: "'Inter', sans-serif", color: "#F0EEE8" }}>
+    <Box mih="100vh" bg="#000000" style={{ fontFamily: "'Geist', sans-serif", color: "#EDEDED" }}>
       {/* Header */}
       <Box
         style={{
           position: "sticky",
           top: 0,
           zIndex: 100,
-          background: "rgba(9, 9, 15, 0.85)",
+          background: "rgba(0, 0, 0, 0.85)",
           backdropFilter: "blur(12px)",
           WebkitBackdropFilter: "blur(12px)",
           borderBottom: "1px solid rgba(255,255,255,0.04)",
@@ -392,8 +392,8 @@ export default function SpecimenPage() {
               size="sm"
               tt="uppercase"
               fw={700}
-              ff="'JetBrains Mono', monospace"
-              style={{ letterSpacing: 2, backgroundColor: "#2DD4BF18", color: "#2DD4BF", border: "none" }}
+              ff="'Geist Mono', monospace"
+              style={{ letterSpacing: 2, backgroundColor: "#00CC8818", color: "#00CC88", border: "none" }}
             >
               IB HL Business Management
             </Badge>
@@ -403,12 +403,12 @@ export default function SpecimenPage() {
             ta="center"
             fw={800}
             fz={{ base: 22, sm: 30 }}
-            c="#F0EEE8"
+            c="#EDEDED"
             style={{ letterSpacing: -0.5 }}
           >
             Specimen Paper
           </Text>
-          <Text ta="center" fz="xs" c="#55556A" mb="sm">
+          <Text ta="center" fz="xs" c="#666666" mb="sm">
             Unit 3 — Finance · {totalMarks} marks total
           </Text>
           <Group justify="center">
@@ -417,11 +417,11 @@ export default function SpecimenPage() {
               href="/"
               size="xs"
               radius="xl"
-              ff="'JetBrains Mono', monospace"
+              ff="'Geist Mono', monospace"
               style={{
-                backgroundColor: "#1A1A24",
-                color: "#8B8B9E",
-                border: "1px solid #252533",
+                backgroundColor: "#111111",
+                color: "#A1A1A1",
+                border: "1px solid #1F1F1F",
               }}
             >
               ← Back to Revision Hub
@@ -434,33 +434,33 @@ export default function SpecimenPage() {
       <Container size="lg" py="xl" px="md">
         <div style={{ maxWidth: 1060, margin: "0 auto", padding: "0 0 40px" }}>
           {/* Exam info banner */}
-          <Paper bg="#12121A" radius="lg" p="lg" mb="xl" style={{ border: "1px solid #252533" }}>
-            <Text fz="sm" c="#F0EEE8" fw={600} mb={4}>
+          <Paper bg="#0A0A0A" radius="lg" p="lg" mb="xl" style={{ border: "1px solid #1F1F1F" }}>
+            <Text fz="sm" c="#EDEDED" fw={600} mb={4}>
               Unit 3 Finance Test — February 2026
             </Text>
-            <Text fz="xs" c="#8B8B9E" lh={1.6}>
+            <Text fz="xs" c="#A1A1A1" lh={1.6}>
               Answer all questions. The maximum mark for this test is {totalMarks}. Type your answers in the boxes
               below — everything auto-saves. Use "Solve" for AI grading and "Show Markscheme" to reveal the rubric.
             </Text>
             <Group mt="sm" gap="xs">
-              <Badge size="xs" variant="light" color="teal" ff="'JetBrains Mono', monospace">
+              <Badge size="xs" variant="light" color="teal" ff="'Geist Mono', monospace">
                 {SPECIMEN_QUESTIONS.length} questions
               </Badge>
-              <Badge size="xs" variant="light" color="violet" ff="'JetBrains Mono', monospace">
+              <Badge size="xs" variant="light" color="violet" ff="'Geist Mono', monospace">
                 {totalMarks} marks
               </Badge>
             </Group>
           </Paper>
 
           {/* Case study context */}
-          <Paper bg="#12121A" radius="lg" p="lg" mb="xl" style={{ border: "1px solid #1E3A5F" }}>
-            <Text fz={11} ff="'JetBrains Mono', monospace" c="#60A5FA" lts={1} mb="sm">
+          <Paper bg="#0A0A0A" radius="lg" p="lg" mb="xl" style={{ border: "1px solid #1E3A5F" }}>
+            <Text fz={11} ff="'Geist Mono', monospace" c="#60A5FA" lts={1} mb="sm">
               CASE STUDY
             </Text>
-            <Text fz={14} c="#F0EEE8" fw={600} mb="xs">
+            <Text fz={14} c="#EDEDED" fw={600} mb="xs">
               NorthHaven Dairy (NHD)
             </Text>
-            <Text fz={13} c="#B0ADA6" lh={1.7} style={{ whiteSpace: "pre-line" }}>
+            <Text fz={13} c="#A3A3A3" lh={1.7} style={{ whiteSpace: "pre-line" }}>
 {`NorthHaven Dairy (NHD) is a medium-sized private limited company based in rural New Zealand. The company specialises in producing and selling a range of dairy products, including fresh milk, cream, butter, and artisan cheese. NHD sources its milk from a network of local farms and has built a strong reputation for quality and sustainability.
 
 Recently, NHD has been considering investing in new automated bottling machines to increase efficiency and reduce labour costs. The company is evaluating whether to lease or purchase these machines outright.`}
@@ -489,7 +489,7 @@ Recently, NHD has been considering investing in new automated bottling machines 
           width: 48,
           height: 48,
           borderRadius: "50%",
-          backgroundColor: "#7C6FFF",
+          backgroundColor: "#0070F3",
           display: "flex",
           alignItems: "center",
           justifyContent: "center",

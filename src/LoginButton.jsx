@@ -17,13 +17,13 @@ export default function LoginButton() {
               top: "50%",
               transform: "translateY(-50%)",
               backgroundColor: "transparent",
-              color: "#8B8B9E",
-              border: "1px solid #252533",
+              color: "#A1A1A1",
+              border: "1px solid #1F1F1F",
               padding: "4px 12px",
               minWidth: "auto",
               height: 32,
               fontSize: 13,
-              fontFamily: "'Inter', sans-serif",
+              fontFamily: "'Geist', sans-serif",
               fontWeight: 600,
             }}
           >
@@ -36,13 +36,13 @@ export default function LoginButton() {
         <Menu shadow="md" width={180} position="bottom-end" radius="md"
           styles={{
             dropdown: {
-              backgroundColor: "#12121A",
-              border: "1px solid #252533",
+              backgroundColor: "#0A0A0A",
+              border: "1px solid #1F1F1F",
             },
             item: {
-              color: "#F0EEE8",
+              color: "#EDEDED",
               fontSize: 13,
-              "&:hover": { backgroundColor: "#1A1A24" },
+              "&:hover": { backgroundColor: "#111111" },
             },
           }}
         >
@@ -54,7 +54,7 @@ export default function LoginButton() {
                 right: 0,
                 top: "50%",
                 transform: "translateY(-50%)",
-                backgroundColor: "#7C6FFF",
+                backgroundColor: "#0070F3",
                 color: "#fff",
                 width: 32,
                 height: 32,
@@ -69,7 +69,7 @@ export default function LoginButton() {
           </Menu.Target>
           <Menu.Dropdown>
             <Menu.Label>
-              <Text fz={11} c="#55556A" truncate>
+              <Text fz={11} c="#666666" truncate>
                 {user?.email || user?.displayName}
               </Text>
             </Menu.Label>
@@ -87,7 +87,7 @@ export default function LoginButton() {
             >
               Dashboard
             </Menu.Item>
-            <Menu.Divider style={{ borderColor: "#252533" }} />
+            <Menu.Divider style={{ borderColor: "#1F1F1F" }} />
             <Menu.Item
               onClick={() => logOut()}
               color="red"

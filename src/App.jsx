@@ -24,25 +24,25 @@ function saveLS(key, value) {
 // CHECKLIST DATA
 // ─────────────────────────────────────────────────────────────────────────────
 const CHECKLIST_SECTIONS = [
-  { id: "sources", title: "3.1 – Sources of Finance", color: "#FB923C", items: ["Difference between internal & external sources of finance","Short, medium & long-term finance — matched to purpose","Equity vs debt financing (pros & cons)","Why a business chooses one source over another","Retained profit, share capital, debentures, venture capital (HL)","Loan capital vs overdraft vs trade credit"] },
-  { id: "costs", title: "3.2 – Costs & Revenues", color: "#7C6FFF", items: ["Fixed, variable, semi-variable, direct & indirect costs","Total Revenue and Average Revenue","Contribution per unit = Selling Price – Variable Cost","Total Contribution = Contribution per unit × Quantity","Total Costs = Fixed Costs + Total Variable Costs","Profit = Total Revenue – Total Costs","Difference between profit and cash flow"] },
-  { id: "cashflow", title: "3.3 – Cash Flow", color: "#38BDF8", items: ["Construct and interpret a cash flow forecast","Net Cash Flow = Cash Inflows – Cash Outflows","Closing Balance = Opening Balance + Net Cash Flow","Causes of cash flow problems","Solutions: overdraft, debt factoring, sale of assets, better credit control","Difference between cash flow and profit (common exam trap!)"] },
+  { id: "sources", title: "3.1 – Sources of Finance", color: "#F5A623", items: ["Difference between internal & external sources of finance","Short, medium & long-term finance — matched to purpose","Equity vs debt financing (pros & cons)","Why a business chooses one source over another","Retained profit, share capital, debentures, venture capital (HL)","Loan capital vs overdraft vs trade credit"] },
+  { id: "costs", title: "3.2 – Costs & Revenues", color: "#0070F3", items: ["Fixed, variable, semi-variable, direct & indirect costs","Total Revenue and Average Revenue","Contribution per unit = Selling Price – Variable Cost","Total Contribution = Contribution per unit × Quantity","Total Costs = Fixed Costs + Total Variable Costs","Profit = Total Revenue – Total Costs","Difference between profit and cash flow"] },
+  { id: "cashflow", title: "3.3 – Cash Flow", color: "#00B4D8", items: ["Construct and interpret a cash flow forecast","Net Cash Flow = Cash Inflows – Cash Outflows","Closing Balance = Opening Balance + Net Cash Flow","Causes of cash flow problems","Solutions: overdraft, debt factoring, sale of assets, better credit control","Difference between cash flow and profit (common exam trap!)"] },
   { id: "accounts", title: "3.4 – Final Accounts", color: "#34D399", items: ["Income Statement layout: Revenue → Gross Profit → Net Profit","Balance Sheet structure: Assets = Equity + Liabilities","Current vs non-current assets and liabilities","Straight-line depreciation = (Cost – Residual Value) ÷ Useful Life (HL)","Reducing balance depreciation = Net Book Value × Rate % (HL)","Intangible assets: goodwill, patents, brand value (HL)"] },
   { id: "ratios", title: "3.5 – Profitability & Liquidity Ratios", color: "#FBBF24", items: ["Gross Profit Margin = (Gross Profit ÷ Revenue) × 100 ✦ IN BOOKLET","Net Profit Margin = (Net Profit ÷ Revenue) × 100 ✦ IN BOOKLET","ROCE = (Net Profit ÷ Capital Employed) × 100 ✦ IN BOOKLET","Current Ratio = Current Assets ÷ Current Liabilities (ideal ~2:1) ✦ IN BOOKLET","Acid Test = (CA – Inventory) ÷ CL (ideal ~1:1) ✦ IN BOOKLET","Interpret ratios in context — not just calculate them!"] },
   { id: "efficiency", title: "3.6 – Efficiency Ratios (HL Only)", color: "#F87171", items: ["Stock Turnover (times) = Cost of Sales ÷ Average Stock ✦ IN BOOKLET","Stock Turnover (days) = (Average Stock ÷ Cost of Sales) × 365 ✦ IN BOOKLET","Average Stock = (Opening Stock + Closing Stock) ÷ 2 ✦ IN BOOKLET","Debtor Days = (Debtors ÷ Revenue) × 365 ✦ IN BOOKLET","Creditor Days = (Creditors ÷ Cost of Sales) × 365 ✦ IN BOOKLET","Gearing = (Non-current Liabilities ÷ Capital Employed) × 100 ✦ IN BOOKLET","High vs low gearing — implications for risk and investment"] },
-  { id: "investment", title: "3.7 – Investment Appraisal", color: "#A78BFA", items: ["Payback Period — calculate and interpret","ARR = (Total Returns – Capital Cost) ÷ Years ÷ Capital Cost × 100 ✦ IN BOOKLET","NPV = Sum of discounted cash flows – Initial Investment ✦ IN BOOKLET (HL)","Discount factors/tables are provided in exam","Compare methods: qualitative vs quantitative factors","Limitations of each investment appraisal method"] },
-  { id: "budgets", title: "3.8 – Budgets & Variance Analysis", color: "#38BDF8", items: ["Variance = Actual – Budgeted ✦ MEMORISE","Favourable variance: better than expected","Adverse variance: worse than expected","For costs: Actual < Budgeted = Favourable","For revenue: Actual > Budgeted = Favourable","Zero-based vs incremental budgeting (pros & cons)","Limitations of budgets"] },
-  { id: "breakeven", title: "5.5 – Breakeven Analysis", color: "#2DD4BF", items: ["Breakeven Output = Fixed Costs ÷ Contribution per unit ✦ MEMORISE","Margin of Safety = Actual Output – Breakeven Output ✦ MEMORISE","Target Profit Output = (FC + Target Profit) ÷ Contribution ✦ MEMORISE","Draw and interpret breakeven charts","Limitations of breakeven analysis","How changes in price/costs affect the breakeven point"] },
-  { id: "bmt", title: "BMT Tools", color: "#F472B6", items: ["Business Plan — components, purpose, link to securing finance","Ansoff Matrix — 4 strategies, risk levels, finance implications","STEEPLE — apply each factor to a business scenario","Force Field Analysis — driving vs restraining forces (Lewin)","Apply BMT tools to justify business decisions in context"] },
+  { id: "investment", title: "3.7 – Investment Appraisal", color: "#3291FF", items: ["Payback Period — calculate and interpret","ARR = (Total Returns – Capital Cost) ÷ Years ÷ Capital Cost × 100 ✦ IN BOOKLET","NPV = Sum of discounted cash flows – Initial Investment ✦ IN BOOKLET (HL)","Discount factors/tables are provided in exam","Compare methods: qualitative vs quantitative factors","Limitations of each investment appraisal method"] },
+  { id: "budgets", title: "3.8 – Budgets & Variance Analysis", color: "#00B4D8", items: ["Variance = Actual – Budgeted ✦ MEMORISE","Favourable variance: better than expected","Adverse variance: worse than expected","For costs: Actual < Budgeted = Favourable","For revenue: Actual > Budgeted = Favourable","Zero-based vs incremental budgeting (pros & cons)","Limitations of budgets"] },
+  { id: "breakeven", title: "5.5 – Breakeven Analysis", color: "#00CC88", items: ["Breakeven Output = Fixed Costs ÷ Contribution per unit ✦ MEMORISE","Margin of Safety = Actual Output – Breakeven Output ✦ MEMORISE","Target Profit Output = (FC + Target Profit) ÷ Contribution ✦ MEMORISE","Draw and interpret breakeven charts","Limitations of breakeven analysis","How changes in price/costs affect the breakeven point"] },
+  { id: "bmt", title: "BMT Tools", color: "#FF0080", items: ["Business Plan — components, purpose, link to securing finance","Ansoff Matrix — 4 strategies, risk levels, finance implications","STEEPLE — apply each factor to a business scenario","Force Field Analysis — driving vs restraining forces (Lewin)","Apply BMT tools to justify business decisions in context"] },
   { id: "formulas", title: "Formulas to MEMORISE (Not in Booklet)", color: "#F87171", items: ["Contribution per unit = Selling Price – Variable Cost per unit","Total Contribution = Contribution per unit × Quantity","Total Costs = Fixed Costs + Total Variable Costs","Profit = Total Revenue – Total Costs","Breakeven Output = Fixed Costs ÷ Contribution per unit","Margin of Safety = Actual Output – Breakeven Output","Target Profit Output = (FC + Target Profit) ÷ Contribution per unit","Straight-line depreciation = (Cost – Residual Value) ÷ Useful Life","Reducing balance = Net Book Value × Depreciation Rate %","Net Cash Flow = Cash Inflows – Cash Outflows","Closing Balance = Opening Balance + Net Cash Flow","Variance = Actual – Budgeted"] },
-  { id: "examtips", title: "Exam Technique", color: "#7C6FFF", items: ["Define key terms at the start of longer answers","Always use the business context given — never answer generically","For evaluate/justify: give both sides then make a justified conclusion","Show ALL working in calculations — method marks are available","Interpret ratios — don't just calculate, explain what it means","Link answers back to the specific business in the question"] },
+  { id: "examtips", title: "Exam Technique", color: "#0070F3", items: ["Define key terms at the start of longer answers","Always use the business context given — never answer generically","For evaluate/justify: give both sides then make a justified conclusion","Show ALL working in calculations — method marks are available","Interpret ratios — don't just calculate, explain what it means","Link answers back to the specific business in the question"] },
 ];
 
 // ─────────────────────────────────────────────────────────────────────────────
 // FLASHCARD DATA
 // ─────────────────────────────────────────────────────────────────────────────
 const FLASHCARD_CATEGORIES = [
-  { id: "costs-revenue", label: "Costs & Revenue", color: "#7C6FFF", cards: [
+  { id: "costs-revenue", label: "Costs & Revenue", color: "#0070F3", cards: [
     { term: "Fixed Costs", def: "Costs that do not change with the level of output, e.g., loan repayments and management salaries.", formula: null },
     { term: "Variable Costs", def: "Costs that change with the level of output — they rise when output or sales increase, e.g., raw materials and packaging costs.", formula: null },
     { term: "Total Costs (TC)", def: "The aggregate amount of money spent on the output of a business.", formula: "TC = TFC + TVC" },
@@ -54,7 +54,7 @@ const FLASHCARD_CATEGORIES = [
     { term: "Indirect Costs (Overheads)", def: "Costs not easily identifiable with the sale or output of a specific good, service, or business operation.", formula: null },
     { term: "Cost of Sales (COS)", def: "The direct costs of production.", formula: "COS = Opening stock + Purchases − Closing stock" },
   ]},
-  { id: "cashflow", label: "Cash Flow", color: "#38BDF8", cards: [
+  { id: "cashflow", label: "Cash Flow", color: "#00B4D8", cards: [
     { term: "Net Cash Flow", def: "The numerical difference between an organisation's total cash inflows and its total cash outflows, per time period.", formula: "Net cash flow = Cash inflows − Cash outflows" },
     { term: "Opening Balance", def: "The value of cash held by a business at the start of a trading period.", formula: "Opening balance = Closing balance of previous period" },
     { term: "Closing Balance", def: "The value of cash held by a business at the end of a trading period.", formula: "Closing balance = Opening balance + Net cash flow" },
@@ -85,7 +85,7 @@ const FLASHCARD_CATEGORIES = [
     { term: "Gearing Ratio — HL", def: "The proportion of capital employed funded by external debt. Above 50% = high gearing = higher financial risk. ✦ IN BOOKLET", formula: "= (Non-current liabilities / Capital employed) × 100" },
     { term: "Average Stock", def: "Used in efficiency ratio calculations. ✦ IN BOOKLET", formula: "= (Opening stock + Closing stock) / 2" },
   ]},
-  { id: "investment", label: "Investment Appraisal", color: "#A78BFA", cards: [
+  { id: "investment", label: "Investment Appraisal", color: "#3291FF", cards: [
     { term: "Payback Period (PBP)", def: "The time taken to recover the initial investment from the net cash flows generated.", formula: "= Investment cost / Contribution per month (if even flows)" },
     { term: "Average Rate of Return (ARR)", def: "Average annual profit as a percentage of the initial investment. ✦ IN BOOKLET", formula: "ARR = [(Total returns − Capital cost) ÷ Years] / Capital cost × 100" },
     { term: "Net Present Value (NPV) — HL", def: "Calculates the real value of an investment by discounting future cash flows. A positive NPV means the project adds value. ✦ IN BOOKLET", formula: "NPV = Sum of present values − Cost of investment" },
@@ -98,14 +98,14 @@ const FLASHCARD_CATEGORIES = [
     { term: "Variance Rule — Costs", def: "For COSTS: Actual < Budgeted = FAVOURABLE (spent less than planned).", formula: null },
     { term: "Variance Rule — Revenue", def: "For REVENUE: Actual > Budgeted = FAVOURABLE (earned more than planned).", formula: null },
   ]},
-  { id: "breakeven", label: "Breakeven", color: "#2DD4BF", cards: [
+  { id: "breakeven", label: "Breakeven", color: "#00CC88", cards: [
     { term: "Break-Even Quantity (BEQ)", def: "The quantity of sales required for a firm to reach break-even (cover all costs).", formula: "BEQ = Total fixed costs / Contribution per unit" },
     { term: "Margin of Safety", def: "The amount by which actual output exceeds the break-even quantity.", formula: "= Actual output − Break-even quantity" },
     { term: "Target Profit Quantity", def: "The output needed to achieve a specific profit target.", formula: "= (Fixed costs + Target profit) / Contribution per unit" },
     { term: "Target Price", def: "The price needed to break-even given current costs.", formula: "= AFC + AVC" },
     { term: "Break-Even Analysis", def: "A tool to determine the level of sales needed to cover all costs. Limitations: assumes constant price/costs, ignores quality, and is static.", formula: null },
   ]},
-  { id: "sources", label: "Sources of Finance", color: "#FB923C", cards: [
+  { id: "sources", label: "Sources of Finance", color: "#F5A623", cards: [
     { term: "Internal Sources of Finance", def: "Finance from within the organisation — retained profit, sale of assets, owner's savings.", formula: null },
     { term: "External Sources of Finance", def: "Finance from outside the organisation — banks, investors, government, crowdfunding.", formula: null },
     { term: "Share Capital", def: "Finance raised through issuing shares on a stock exchange. Also known as equity capital.", formula: null },
@@ -115,7 +115,7 @@ const FLASHCARD_CATEGORIES = [
     { term: "Crowdfunding", def: "Raising finance by getting small amounts from a large number of people, often via online platforms.", formula: null },
     { term: "Business Angels", def: "Wealthy private individuals who invest their own money in high-growth potential ventures.", formula: null },
   ]},
-  { id: "bmt", label: "BMT Tools", color: "#F472B6", cards: [
+  { id: "bmt", label: "BMT Tools", color: "#FF0080", cards: [
     { term: "Ansoff Matrix", def: "Four growth strategies: Market Penetration (existing/existing), Market Development (existing product/new market), Product Development (new product/existing market), Diversification (new/new — highest risk).", formula: null },
     { term: "STEEPLE", def: "Framework examining external macro factors: Social, Technological, Economic, Environmental, Political, Legal, Ethical.", formula: null },
     { term: "Force Field Analysis", def: "Lewin's tool mapping driving forces (for change) vs restraining forces (against change). Change succeeds when driving forces outweigh restraining forces.", formula: null },
@@ -224,7 +224,7 @@ const WRITTEN_QUESTIONS = [
 
 // ─────────────────────────────────────────────────────────────────────────────
 // 10-MARK WRITTEN QUESTIONS
-// ─────────────────────────────────────────────────────────────────────────────
+// ───────────────────────���─────────────────────────────────────────────────────
 const WRITTEN_10_MARK_QUESTIONS = [
   { id:"wr10m-1", cat:"Ratio Analysis", difficulty:"HL", marks:10, q:"ZephyrTech Solutions (ZTS) is a software development company founded in 2019 by Priya Sharma in Dublin, Ireland. ZTS specialises in building custom enterprise software for mid-sized companies across Europe, charging premium prices based on its reputation for high-quality, bespoke solutions. The company currently employs 34 full-time developers, project managers, and support staff.\n\nZTS has experienced strong revenue growth over the past three years, but Priya has become increasingly concerned about the company's profitability ratios, which have declined despite rising revenues. A key issue is ZTS's cost structure: developer salaries account for approximately 58% of total revenue, and the company recently moved into a larger office space in central Dublin, significantly increasing its monthly rent. ZTS also invested €180,000 in new server infrastructure last year, financed through a long-term bank loan.\n\nPriya is now evaluating two strategic options to address the declining profit margins:\n\nOption 1: Transition from bespoke project work to a Software-as-a-Service (SaaS) model, offering a standardised product to a much larger customer base at a lower price point per customer. This would require an upfront investment of €250,000 in product development and would not generate significant revenue for at least 18 months.\n\nOption 2: Reduce the workforce by 20% (approximately 7 staff members) through redundancies, focusing cuts on support roles rather than core development. Priya estimates this would reduce annual salary costs by approximately €420,000 but acknowledges it would likely reduce ZTS's capacity to take on new projects in the short term.\n\nSelected financial data for ZTS for the year ended 31 December 2025:\n\nSales revenue: $3,200k | Cost of sales: $1,856k | Gross profit: $1,344k | Expenses: $1,108k | Profit before interest and tax: $236k | Interest: $42k | Tax: $38k | Profit for the period: $156k | Capital employed: $1,850k | Industry average profit margin: 12% | Industry average ROCE: 18%\n\nEvaluate the two strategic options available to Priya to improve ZTS's profitability ratios.", modelAnswer:"Candidates should demonstrate understanding of profitability ratios and apply them to the ZTS context before evaluating the two options.\n\nRelevant calculations (not required but rewarded if used):\n• Profit margin = (236 / 3,200) × 100 = 7.375% — significantly below the industry average of 12%.\n• ROCE = (236 / 1,850) × 100 = 12.76% — below the industry average of 18%.\n• GPM = (1,344 / 3,200) × 100 = 42%.\n\nThe data confirms that ZTS's profitability is below industry benchmarks, primarily driven by high expenses (€1,108,000) relative to gross profit (€1,344,000), leaving a thin margin between gross and net profit.\n\nOption 1 — Transition to SaaS model:\n\nAdvantages:\n• A SaaS model generates recurring subscription revenue, which is more predictable and scalable than one-off bespoke projects. If ZTS acquires a large enough customer base, revenue per developer could rise significantly, improving both profit margin and ROCE over time.\n• The standardised nature of SaaS reduces the labour intensity per unit of revenue — developers build once and sell repeatedly, which directly addresses the core problem of salary costs at 58% of revenue.\n• ZTS could retain its premium brand positioning by targeting enterprise clients with a high-quality SaaS product, differentiating itself from lower-cost competitors.\n\nDisadvantages:\n• The €250,000 upfront investment with no meaningful revenue for 18 months poses a serious cash flow risk. Given ZTS already carries a long-term bank loan for the server infrastructure, adding further financial strain could threaten liquidity — particularly if existing project revenue slows.\n• The SaaS market is highly competitive, dominated by large established players. ZTS has no track record in this model, and there is no guarantee the product will attract sufficient customers to justify the investment.\n• Staff skilled in bespoke development may not have the product mindset required for SaaS, potentially requiring costly retraining or new hires — further pressuring expenses in the short term.\n• The transition away from bespoke work may alienate ZTS's existing loyal client base, reducing revenue before SaaS income materialises.\n\nOption 2 — Workforce reduction of 20%:\n\nAdvantages:\n• Reducing annual salary costs by €420,000 would dramatically improve the profit margin. If all else remains equal, profit before interest and tax would rise from €236,000 to approximately €656,000, bringing the profit margin to approximately 20.5% — well above the 12% industry average.\n• ROCE would also improve significantly: (€656,000 / €1,850,000) × 100 = approximately 35.5%.\n• The savings are immediate and certain, unlike the speculative 18-month revenue gap in Option 1.\n• Focusing cuts on support roles rather than developers minimises the impact on ZTS's core value-creating activity and client-facing quality.\n\nDisadvantages:\n• Priya acknowledges reduced capacity for new projects — this could lead to revenue decline, partially offsetting the cost savings. If revenue falls, the improvement in profit margin may be less dramatic than the raw calculation suggests.\n• Redundancies carry one-off costs (severance pay, legal fees) that will reduce profit in the year the cuts are made, potentially worsening short-term profitability before improving it.\n• Staff morale and company culture may suffer significantly. In a knowledge-intensive business like software development, demotivated staff are less productive, and key developers may leave voluntarily — turning a planned 20% reduction into an uncontrolled talent exodus.\n• ZTS's reputation as a premium employer could be damaged, making future recruitment of skilled developers harder and more expensive.\n\nEvaluation/Judgement:\nBoth options present credible paths to improved profitability but carry very different risk profiles. Option 2 offers faster, more certain financial improvement — the numbers clearly show profit margin could exceed industry benchmarks immediately. However, it carries significant people and capacity risk in a talent-dependent business. Option 1 is a longer-term structural solution that could fundamentally transform ZTS's cost model, but the 18-month revenue gap and competitive uncertainty make it high-risk given ZTS's already-below-average profitability.\n\nA strong answer might argue that Option 2 is the more prudent immediate choice to stabilise the business financially, while Option 1 could be pursued as a medium-term strategy once profitability is restored. Alternatively, one may argue that Option 2 is a short-term tactic that does not address ZTS's structural cost problem and that the SaaS transition, though risky, is the only path to sustainable margin improvement. Accept any substantiated judgement.\n\nLevel descriptors:\n9–10: Balanced, accurate analysis of both options with integrated use of financial data, well-developed application to ZTS, and a substantiated conclusion that acknowledges limitations.\n7–8: Mostly addresses both options with relevant theory and data use; some balance; conclusion present but may lack depth.\n5–6: Partial analysis, mostly one-sided or lacking data integration; some application to ZTS.\n3–4: Some understanding of the options but limited analysis; superficial application.\n1–2: Little understanding; no real application or argument." },
   { id:"wr10m-2", cat:"Ratio Analysis", difficulty:"HL", marks:10, q:"NorthHaven Dairy (NHD) is a family-owned dairy producer based in rural Canada, established in 1987. NHD produces a premium range of organic cheeses, yoghurts, and flavoured milks, which it sells through independent health food stores and a small number of regional supermarket chains. NHD's products command a significant price premium over conventional dairy brands, justified by the company's commitment to 100% grass-fed, certified organic farming practices.\n\nOver the past two years, NHD has faced a difficult trading environment. A national cost-of-living crisis has made consumers more price sensitive, and several supermarket partners have reduced their orders or switched shelf space to cheaper own-label alternatives. As a result, NHD's factory is currently operating at approximately 65% of full capacity. Fixed costs, including the lease on the production facility and permanent staff salaries, remain unchanged despite the lower output — significantly increasing NHD's cost per unit and squeezing profit margins.\n\nNHD's head of finance, Daniel Park, has presented two options to the board:\n\nOption 1: Launch a lower-priced, non-organic \"NorthHaven Everyday\" sub-brand using conventional (non-certified) milk sourced from a cheaper supplier, targeting price-sensitive consumers through mainstream supermarkets. Daniel estimates this could increase total revenue by 30% within 12 months.\n\nOption 2: Invest $180,000 in a direct-to-consumer (DTC) e-commerce platform, allowing NHD to sell directly to customers online and bypass supermarket intermediaries entirely. This would improve NHD's margin per unit sold but would require significant upfront marketing spend and would take at least 18 months to generate meaningful revenue.\n\nSelected financial data for NHD for the year ended 31 January 2025:\n\nSales revenue: $1,500k | Cost of sales: $900k | Gross profit: $600k | Expenses: $400k | Profit before interest and tax: $200k | Interest: $50k | Tax: $40k | Profit for the period: $110k | Dividends: $40k | Retained profit: $70k | Non-current liabilities: $75k | Equity: $800k | Industry average profit margin: 9%\n\nEvaluate the two options available to NHD's board to improve its financial performance.", modelAnswer:"Candidates should demonstrate understanding of relevant financial concepts — profitability ratios, costs, revenue — and apply them to the NHD context before evaluating the two options.\n\nRelevant calculations (not required but rewarded if used):\n• Profit margin = (200 / 1,500) × 100 = 13.33% — above the 9% industry average, suggesting NHD is currently profitable relative to peers despite the difficult environment.\n• ROCE = (200 / 875) × 100 = 22.86%.\n• GPM = (600 / 1,500) × 100 = 40%.\nCandidates with strong financial understanding may note that NHD's margins are currently above industry average, meaning the real problem is not margin quality but volume — the factory running at 65% capacity means fixed costs are spread over fewer units, inflating cost per unit and threatening future profitability if volume continues to decline.\n\nOption 1 — NorthHaven Everyday sub-brand:\n\nAdvantages:\n• A 30% revenue increase would be transformative — adding approximately $450,000 in revenue, which at even a modest margin would significantly improve profit and ROCE. It also addresses the capacity utilisation problem directly by using the factory's idle 35%.\n• Price-sensitive consumers who currently buy competing products could be captured without cannibalising NHD's premium customer base, if brand separation is managed well.\n• Lower input costs (non-certified conventional milk) would improve the cost of sales position for the new sub-brand, potentially delivering acceptable margins even at a lower price point.\n\nDisadvantages:\n• This directly contradicts NHD's core brand identity of 100% certified organic farming. The premium brand relies on this ethical positioning to justify its price premium — if existing loyal customers perceive that NHD has \"sold out,\" revenue from the premium range could fall, offsetting the gains from the sub-brand.\n• Supermarkets that already have own-label alternatives may not see sufficient reason to stock NorthHaven Everyday alongside their existing cheaper options, limiting distribution reach.\n• Managing two brands with different supply chains, certifications, and marketing messages significantly increases operational complexity and overhead costs — which are already high at 65% capacity.\n• There is reputational and regulatory risk: organic certification bodies may scrutinise NHD's operations more closely, and any cross-contamination or labelling confusion between the organic and non-organic ranges could result in the loss of NHD's organic certification entirely.\n\nOption 2 — Direct-to-consumer e-commerce platform:\n\nAdvantages:\n• By eliminating supermarket intermediaries, NHD captures the full retail margin rather than sharing it — this directly improves profit per unit sold without needing to raise prices or cut costs elsewhere.\n• A DTC model builds a direct relationship with NHD's most loyal, health-conscious consumers, providing valuable data on purchasing behaviour that can inform future product development.\n• The DTC model is fully consistent with NHD's premium, ethical brand — it arguably strengthens the brand narrative by emphasising the farm-to-doorstep story.\n\nDisadvantages:\n• The $180,000 investment comes at a time when NHD is already under revenue pressure. With retained profit of only $70,000, NHD would likely need to use loan capital or deplete reserves to fund this, increasing financial risk.\n• The 18-month revenue lag means NHD must sustain its current financial position for over a year before DTC revenues become meaningful — if the capacity utilisation problem continues to worsen in the meantime, NHD may not survive long enough to benefit.\n• Building DTC brand awareness requires significant ongoing marketing investment beyond the $180,000 platform cost. NHD has limited experience in digital marketing, and competing for consumer attention online against well-funded competitors is costly.\n• DTC volumes are unlikely to fully replace supermarket channel volumes in the near term, meaning the capacity utilisation problem may persist.\n\nEvaluation/Judgement:\nBoth options carry significant risk for NHD's well-established brand. Option 1 offers faster, larger-scale revenue recovery but at potential cost to the organic brand equity that is NHD's most valuable and irreplaceable asset — once lost, organic certification and consumer trust are extremely difficult to rebuild. Option 2 preserves brand integrity and improves unit economics but is a slow solution to what is currently an urgent capacity and fixed cost problem.\n\nA strong answer might argue that Option 1 is too risky given NHD's brand dependence — a decline in premium range sales could more than offset the sub-brand gains, leaving NHD worse off. Option 2 is the strategically safer choice and should be combined with aggressive short-term cost management (e.g., reducing temporary staff or renegotiating the facility lease) to bridge the 18-month gap. Alternatively, a candidate may argue that without addressing the volume problem urgently, NHD's above-average margins are unsustainable and Option 1's revenue boost is essential for survival. Accept any substantiated judgement. A conclusion must be present and linked to specific NHD context data to access Level 3+.\n\nLevel descriptors: Same as Q1." },
@@ -234,15 +234,15 @@ const WRITTEN_10_MARK_QUESTIONS = [
 ];
 
 const CAT_COLORS = {
-  "Costs & Revenue":"#7C6FFF","Cash Flow":"#38BDF8","Final Accounts":"#34D399",
-  "Ratio Analysis":"#FBBF24","Ratio Analysis (HL)":"#FBBF24","Investment Appraisal":"#A78BFA",
-  "Budgets & Variance":"#F87171","Breakeven":"#2DD4BF","BMT Tools":"#F472B6",
-  "Sources of Finance":"#FB923C"
+  "Costs & Revenue":"#0070F3","Cash Flow":"#00B4D8","Final Accounts":"#00CC88",
+  "Ratio Analysis":"#F5A623","Ratio Analysis (HL)":"#F5A623","Investment Appraisal":"#7928CA",
+  "Budgets & Variance":"#EE0000","Breakeven":"#00CC88","BMT Tools":"#FF0080",
+  "Sources of Finance":"#F5A623"
 };
 
 const ALL_CATS = ["All", ...Array.from(new Set(MCQ_QUESTIONS.map(q=>q.cat)))];
 
-// ─────────────────────────────────────────────────────────────────────────────
+// ─────────────────────────────────────��───────────────────────────────────────
 // SUB-COMPONENTS
 // ─────────────────────────────────────────────────────────────────────────────
 
@@ -268,17 +268,17 @@ function ChecklistView() {
     <div style={{maxWidth:1060,margin:"0 auto",padding:"0 0 40px"}}>
       {/* Progress card */}
       <Paper
-        bg="#12121A"
+        bg="#0A0A0A"
         radius="lg"
         p="xl"
         mb="xl"
         style={{
-          border: "1px solid #252533",
+          border: "1px solid #1F1F1F",
           boxShadow: "0 2px 8px rgba(0,0,0,0.2)",
         }}
       >
         <Group justify="space-between" mb="xs">
-          <Text fz="sm" c="#8B8B9E" ff="'JetBrains Mono', monospace">Overall Progress</Text>
+          <Text fz="sm" c="#A1A1A1" ff="'Geist Mono', monospace">Overall Progress</Text>
           <Text fz={24} fw={800} c={progColor}>{progress}%</Text>
         </Group>
         <Progress
@@ -287,11 +287,11 @@ function ChecklistView() {
           radius="xl"
           color={progColor}
           animated
-          styles={{ root: { background: "#1E1E2A" } }}
+          styles={{ root: { background: "#171717" } }}
         />
         <Group justify="space-between" mt="sm">
-          <Text fz="xs" c="#55556A">{checkedCount} of {totalItems} topics covered</Text>
-          <Badge size="xs" variant="light" color="teal" ff="'JetBrains Mono', monospace">auto-saved</Badge>
+          <Text fz="xs" c="#666666">{checkedCount} of {totalItems} topics covered</Text>
+          <Badge size="xs" variant="light" color="teal" ff="'Geist Mono', monospace">auto-saved</Badge>
         </Group>
       </Paper>
 
@@ -303,10 +303,10 @@ function ChecklistView() {
         variant="separated"
         radius="md"
         styles={{
-          item: { backgroundColor: "#12121A", border: "1px solid #252533", marginBottom: 12, "&[data-active]": { borderColor: "#35354A" } },
-          control: { padding: "14px 20px", "&:hover": { backgroundColor: "#1A1A24" } },
-          content: { padding: "4px 20px 16px", borderTop: "1px solid #252533" },
-          chevron: { color: "#55556A" },
+          item: { backgroundColor: "#0A0A0A", border: "1px solid #1F1F1F", marginBottom: 12, "&[data-active]": { borderColor: "#333333" } },
+          control: { padding: "14px 20px", "&:hover": { backgroundColor: "#111111" } },
+          content: { padding: "4px 20px 16px", borderTop: "1px solid #1F1F1F" },
+          chevron: { color: "#666666" },
         }}
       >
         {CHECKLIST_SECTIONS.map(section => {
@@ -320,12 +320,12 @@ function ChecklistView() {
                     variant="light"
                     size="sm"
                     fw={700}
-                    ff="'JetBrains Mono', monospace"
+                    ff="'Geist Mono', monospace"
                     style={{ backgroundColor: section.color + "22", color: section.color, border: "none" }}
                   >
                     {sectionChecked}/{section.items.length}
                   </Badge>
-                  <Text fw={600} fz="sm" c={allDone ? section.color : "#F0EEE8"}>
+                  <Text fw={600} fz="sm" c={allDone ? section.color : "#EDEDED"}>
                     {allDone && "✓ "}{section.title}
                   </Text>
                 </Group>
@@ -345,8 +345,8 @@ function ChecklistView() {
                         color={section.color}
                         radius="sm"
                         styles={{
-                          root: { padding: "6px 4px", borderRadius: 8, cursor: "pointer", transition: "background 0.15s", "&:hover": { backgroundColor: "#1A1A24" } },
-                          label: { color: isChecked ? "#55556A" : isImportant ? "#FBBF24" : "#C8C4BC", textDecoration: isChecked ? "line-through" : "none", fontSize: 14, lineHeight: 1.5, cursor: "pointer" },
+                          root: { padding: "6px 4px", borderRadius: 8, cursor: "pointer", transition: "background 0.15s", "&:hover": { backgroundColor: "#111111" } },
+                          label: { color: isChecked ? "#666666" : isImportant ? "#FBBF24" : "#D4D4D4", textDecoration: isChecked ? "line-through" : "none", fontSize: 14, lineHeight: 1.5, cursor: "pointer" },
                           input: { cursor: "pointer" },
                         }}
                       />
@@ -359,9 +359,9 @@ function ChecklistView() {
         })}
       </Accordion>
 
-      <Text ta="center" mt="lg" c="#55556A" fz="xs">
+      <Text ta="center" mt="lg" c="#666666" fz="xs">
         Click any item to mark it as revised ·{" "}
-        <Text component="span" c="#7C6FFF" style={{cursor:"pointer"}} onClick={()=>{ setChecked({}); saveLS("checklist_checked", {}); }}>Reset all</Text>
+        <Text component="span" c="#0070F3" style={{cursor:"pointer"}} onClick={()=>{ setChecked({}); saveLS("checklist_checked", {}); }}>Reset all</Text>
       </Text>
     </div>
   );
@@ -375,36 +375,36 @@ function FlashCard({card, catColor}) {
         {/* Front */}
         <Paper
           className="flashcard-face"
-          bg="#1A1A24"
+          bg="#111111"
           style={{
-            border: "1px solid #252533",
+            border: "1px solid #1F1F1F",
             boxShadow: "0 2px 8px rgba(0,0,0,0.3)",
             alignItems: "center",
             padding: 24,
             textAlign: "center",
           }}
         >
-          <Text fz={11} ff="'JetBrains Mono', monospace" c="#55556A" tt="uppercase" lts={2} mb="md">TERM</Text>
-          <Text fz={20} fw={700} c="#F0EEE8" lh={1.3}>{card.term}</Text>
-          <Text fz={11} c="#55556A" mt="lg">tap to reveal</Text>
+          <Text fz={11} ff="'Geist Mono', monospace" c="#666666" tt="uppercase" lts={2} mb="md">TERM</Text>
+          <Text fz={20} fw={700} c="#EDEDED" lh={1.3}>{card.term}</Text>
+          <Text fz={11} c="#666666" mt="lg">tap to reveal</Text>
         </Paper>
         {/* Back */}
         <Paper
           className="flashcard-face flashcard-back"
-          bg="#1A1A24"
+          bg="#111111"
           style={{
-            border: "1px solid #252533",
+            border: "1px solid #1F1F1F",
             boxShadow: "0 2px 8px rgba(0,0,0,0.3)",
             padding: 20,
             overflowY: "auto",
           }}
         >
-          <Text fz={11} ff="'JetBrains Mono', monospace" c="#55556A" tt="uppercase" lts={2} mb="sm">DEFINITION</Text>
-          <Text fz={13} c="#C8C4BC" lh={1.65}>{card.def}</Text>
+          <Text fz={11} ff="'Geist Mono', monospace" c="#666666" tt="uppercase" lts={2} mb="sm">DEFINITION</Text>
+          <Text fz={13} c="#D4D4D4" lh={1.65}>{card.def}</Text>
           {card.formula && (
-            <Box mt="sm" p="sm" style={{ background: "#0D0D14", borderRadius: 8, borderLeft: `3px solid ${catColor}` }}>
-              <Text fz={10} ff="'JetBrains Mono', monospace" c={catColor} lts={1} mb={4}>FORMULA</Text>
-              <Text fz={12} ff="'JetBrains Mono', monospace" c="#A9E6FF">{card.formula}</Text>
+            <Box mt="sm" p="sm" style={{ background: "#050505", borderRadius: 8, borderLeft: `3px solid ${catColor}` }}>
+              <Text fz={10} ff="'Geist Mono', monospace" c={catColor} lts={1} mb={4}>FORMULA</Text>
+              <Text fz={12} ff="'Geist Mono', monospace" c="#A9E6FF">{card.formula}</Text>
             </Box>
           )}
         </Paper>
@@ -428,12 +428,12 @@ function FlashcardsView() {
             size="xs"
             radius="xl"
             variant={activeCat===cat.id ? "filled" : "subtle"}
-            ff="'JetBrains Mono', monospace"
+            ff="'Geist Mono', monospace"
             onClick={()=>{ setActiveCat(cat.id); saveLS("fc_cat", cat.id); setCardIdx(0); }}
             style={{
-              backgroundColor: activeCat===cat.id ? cat.color : "#1A1A24",
-              color: activeCat===cat.id ? "#fff" : "#8B8B9E",
-              border: `1px solid ${activeCat===cat.id ? cat.color : "#252533"}`,
+              backgroundColor: activeCat===cat.id ? cat.color : "#111111",
+              color: activeCat===cat.id ? "#fff" : "#A1A1A1",
+              border: `1px solid ${activeCat===cat.id ? cat.color : "#1F1F1F"}`,
             }}
           >
             {cat.label}
@@ -443,8 +443,8 @@ function FlashcardsView() {
 
       {/* Progress */}
       <Group justify="space-between" mb="md">
-        <Text fz="xs" c="#55556A" ff="'JetBrains Mono', monospace">{cardIdx+1} / {currentCat.cards.length} — {currentCat.label}</Text>
-        <Box style={{background:"#1A1A24",borderRadius:99,height:4,width:140,overflow:"hidden"}}>
+        <Text fz="xs" c="#666666" ff="'Geist Mono', monospace">{cardIdx+1} / {currentCat.cards.length} — {currentCat.label}</Text>
+        <Box style={{background:"#111111",borderRadius:99,height:4,width:140,overflow:"hidden"}}>
           <div style={{width:`${((cardIdx+1)/currentCat.cards.length)*100}%`,height:"100%",background:currentCat.color,borderRadius:99,transition:"width 0.3s"}}/>
         </Box>
       </Group>
@@ -461,7 +461,7 @@ function FlashcardsView() {
           radius="md"
           disabled={cardIdx===0}
           onClick={()=>setCardIdx(i=>Math.max(0,i-1))}
-          styles={{ root: { backgroundColor: "#1A1A24", border: "1px solid #252533", "&:disabled": { backgroundColor: "#12121A", borderColor: "#1E1E2A" } } }}
+          styles={{ root: { backgroundColor: "#111111", border: "1px solid #1F1F1F", "&:disabled": { backgroundColor: "#0A0A0A", borderColor: "#171717" } } }}
         >
           Previous
         </Button>
@@ -471,14 +471,14 @@ function FlashcardsView() {
           disabled={cardIdx===currentCat.cards.length-1}
           onClick={()=>setCardIdx(i=>Math.min(currentCat.cards.length-1,i+1))}
           style={{
-            background: cardIdx===currentCat.cards.length-1 ? "#1E1E2A" : currentCat.color,
+            background: cardIdx===currentCat.cards.length-1 ? "#171717" : currentCat.color,
             border: "none",
           }}
         >
           Next
         </Button>
       </Group>
-      <Text ta="center" fz="xs" c="#55556A" mt="md">Tap any card to flip it</Text>
+      <Text ta="center" fz="xs" c="#666666" mt="md">Tap any card to flip it</Text>
     </div>
   );
 }
@@ -486,27 +486,27 @@ function FlashcardsView() {
 function MCQItem({q, displayNum}) {
   const [selected,setSelected]=useState(null);
   const [confirmed,setConfirmed]=useState(false);
-  const color=CAT_COLORS[q.cat]||"#7C6FFF";
+  const color=CAT_COLORS[q.cat]||"#0070F3";
   const { recordAttempt, resetTimer } = useAttemptTracker(q.id, "mcq", q.cat, "business", q.difficulty);
   return (
-    <Paper bg="#1A1A24" radius="lg" mb="sm" style={{ border:"1px solid #252533", overflow:"hidden", transition:"all 0.2s" }}>
+    <Paper bg="#111111" radius="lg" mb="sm" style={{ border:"1px solid #1F1F1F", overflow:"hidden", transition:"all 0.2s" }}>
       <div style={{borderLeft:`4px solid ${color}`,padding:"18px 20px"}}>
         <Group gap={8} mb="sm" style={{flexWrap:"wrap"}}>
-          <Badge size="xs" ff="'JetBrains Mono', monospace" style={{backgroundColor:color,color:"#fff"}}>MCQ</Badge>
-          <Badge size="xs" variant="light" ff="'JetBrains Mono', monospace" style={{backgroundColor:color+"22",color:color,border:"none"}}>{q.cat}</Badge>
-          <Badge size="xs" variant="light" ff="'JetBrains Mono', monospace" style={{backgroundColor:"#1E1E2A",color:"#8B8B9E",border:"none"}}>{q.difficulty}</Badge>
+          <Badge size="xs" ff="'Geist Mono', monospace" style={{backgroundColor:color,color:"#fff"}}>MCQ</Badge>
+          <Badge size="xs" variant="light" ff="'Geist Mono', monospace" style={{backgroundColor:color+"22",color:color,border:"none"}}>{q.cat}</Badge>
+          <Badge size="xs" variant="light" ff="'Geist Mono', monospace" style={{backgroundColor:"#171717",color:"#A1A1A1",border:"none"}}>{q.difficulty}</Badge>
         </Group>
-        <Text fz={15} c="#F0EEE8" lh={1.6} fw={600}>Q{displayNum}. {q.q}</Text>
+        <Text fz={15} c="#EDEDED" lh={1.6} fw={600}>Q{displayNum}. {q.q}</Text>
       </div>
       <Stack gap={8} p="md" pt="sm">
         {q.options.map((opt,i) => {
           const isSelected=selected===i;
           const isCorrect=i===q.answer;
-          let bg="#12121A",border="#252533",tc="#C8C4BC";
+          let bg="#0A0A0A",border="#1F1F1F",tc="#D4D4D4";
           if(confirmed){
             if(isCorrect){bg="#34D399"+"22";border="#34D399";tc="#6EE7B7";}
             else if(isSelected&&!isCorrect){bg="#F87171"+"22";border="#F87171";tc="#FCA5A5";}
-          } else if(isSelected){bg=color+"22";border=color;tc="#F0EEE8";}
+          } else if(isSelected){bg=color+"22";border=color;tc="#EDEDED";}
           return (
             <Paper
               key={i}
@@ -519,15 +519,15 @@ function MCQItem({q, displayNum}) {
                 "&:hover": !confirmed && !isSelected ? {borderColor: color+"66"} : undefined,
               }}
               onMouseEnter={e=>{if(!confirmed&&!isSelected)e.currentTarget.style.borderColor=color+"66";}}
-              onMouseLeave={e=>{if(!confirmed&&!isSelected)e.currentTarget.style.borderColor="#252533";}}
+              onMouseLeave={e=>{if(!confirmed&&!isSelected)e.currentTarget.style.borderColor="#1F1F1F";}}
             >
               <Group gap="sm" wrap="nowrap">
                 <Box style={{
                   width:28,height:28,borderRadius:6,flexShrink:0,
-                  background:confirmed&&isCorrect?"#34D399":confirmed&&isSelected&&!isCorrect?"#F87171":isSelected?color:"#252533",
+                  background:confirmed&&isCorrect?"#34D399":confirmed&&isSelected&&!isCorrect?"#F87171":isSelected?color:"#1F1F1F",
                   display:"flex",alignItems:"center",justifyContent:"center",
                 }}>
-                  <Text fz={11} ff="'JetBrains Mono', monospace" c="#fff" fw={700}>
+                  <Text fz={11} ff="'Geist Mono', monospace" c="#fff" fw={700}>
                     {confirmed&&isCorrect?"✓":confirmed&&isSelected&&!isCorrect?"✗":String.fromCharCode(65+i)}
                   </Text>
                 </Box>
@@ -544,10 +544,10 @@ function MCQItem({q, displayNum}) {
             disabled={selected===null}
             onClick={()=>{if(selected!==null){setConfirmed(true);recordAttempt({userAnswer:selected,isCorrect:selected===q.answer});}}}
             style={{
-              background: selected!==null ? color : "#1E1E2A",
+              background: selected!==null ? color : "#171717",
               border: "none",
             }}
-            styles={{ root: { "&:disabled": { backgroundColor: "#1E1E2A", color: "#55556A" } } }}
+            styles={{ root: { "&:disabled": { backgroundColor: "#171717", color: "#666666" } } }}
           >
             Check Answer
           </Button>
@@ -560,10 +560,10 @@ function MCQItem({q, displayNum}) {
             title={selected===q.answer ? "Correct!" : "Incorrect"}
             styles={{
               root: { backgroundColor: selected===q.answer ? "#34D399"+"11" : "#F87171"+"11", border: `1px solid ${selected===q.answer ? "#34D399" : "#F87171"}44` },
-              title: { fontFamily: "'JetBrains Mono', monospace", fontSize: 12 },
+              title: { fontFamily: "'Geist Mono', monospace", fontSize: 12 },
             }}
           >
-            <Text fz="sm" c="#8B8B9E" lh={1.6}>{q.explanation}</Text>
+            <Text fz="sm" c="#A1A1A1" lh={1.6}>{q.explanation}</Text>
             <Button variant="subtle" size="xs" color="gray" mt="sm" onClick={()=>{setSelected(null);setConfirmed(false);resetTimer();}}>Try Again</Button>
           </Alert>
         )}
@@ -588,19 +588,19 @@ function PracticeView() {
       {/* Category filter */}
       <Group gap={8} mb="lg" style={{flexWrap:"wrap"}}>
         {ALL_CATS.map(cat => {
-          const c = CAT_COLORS[cat] || "#7C6FFF";
+          const c = CAT_COLORS[cat] || "#0070F3";
           const active = filterCat === cat;
           return (
             <Button
               key={cat}
               size="xs"
               radius="xl"
-              ff="'JetBrains Mono', monospace"
+              ff="'Geist Mono', monospace"
               onClick={()=>setFilterCat(cat)}
               style={{
-                backgroundColor: active ? c : "#1A1A24",
-                color: active ? "#fff" : "#8B8B9E",
-                border: `1px solid ${active ? c : "#252533"}`,
+                backgroundColor: active ? c : "#111111",
+                color: active ? "#fff" : "#A1A1A1",
+                border: `1px solid ${active ? c : "#1F1F1F"}`,
                 boxShadow: "none",
               }}
             >
@@ -611,12 +611,12 @@ function PracticeView() {
       </Group>
 
       {/* Summary */}
-      <Text fz="xs" c="#55556A" ff="'JetBrains Mono', monospace" mb="lg">
+      <Text fz="xs" c="#666666" ff="'Geist Mono', monospace" mb="lg">
         Showing {filtered.length} question{filtered.length!==1?"s":""}{filterCat!=="All"?` · ${filterCat}`:""}
       </Text>
 
       {filtered.length === 0 && (
-        <Text ta="center" py={40} c="#55556A" fz="sm">No questions match this filter.</Text>
+        <Text ta="center" py={40} c="#666666" fz="sm">No questions match this filter.</Text>
       )}
 
       {filtered.map((q, i) => (
@@ -635,7 +635,7 @@ function WrittenPracticeItem({q, displayNum}) {
   const [revealed, setRevealed] = useState(false);
   const [grading, setGrading] = useState(false);
   const [gradeResult, setGradeResult] = useState(() => loadLS(`written_grade_${q.id}`, null));
-  const color = CAT_COLORS[q.cat] || "#7C6FFF";
+  const color = CAT_COLORS[q.cat] || "#0070F3";
   const { recordAttempt } = useAttemptTracker(q.id, "written", q.cat, "business", q.difficulty);
 
   useEffect(() => { saveLS(`written_ans_${q.id}`, answer); }, [answer, q.id]);
@@ -673,17 +673,17 @@ function WrittenPracticeItem({q, displayNum}) {
   const scorePct = gradeResult?.score != null ? gradeResult.score / (gradeResult.maxMarks || q.marks) : 0;
   const scoreColor = gradeResult?.score != null
     ? scorePct >= 0.75 ? "#34D399" : scorePct >= 0.4 ? "#FBBF24" : "#F87171"
-    : "#8B8B9E";
+    : "#A1A1A1";
 
   return (
-    <Paper bg="#1A1A24" radius="lg" mb="md" style={{border:"1px solid #252533", overflow:"hidden"}}>
+    <Paper bg="#111111" radius="lg" mb="md" style={{border:"1px solid #1F1F1F", overflow:"hidden"}}>
       <div style={{borderLeft:`4px solid ${color}`, padding:"18px 20px"}}>
         <Group gap={8} mb="sm" style={{flexWrap:"wrap"}}>
-          <Badge size="xs" ff="'JetBrains Mono', monospace" style={{backgroundColor:color+"22", color, border:"none"}}>{q.cat}</Badge>
-          <Badge size="xs" variant="light" ff="'JetBrains Mono', monospace" style={{backgroundColor:"#1E1E2A", color:"#8B8B9E", border:"none"}}>{q.difficulty}</Badge>
-          <Badge size="xs" ff="'JetBrains Mono', monospace" ml="auto" style={{backgroundColor:"#2A2800", color:"#FBBF24", border:"1px solid #5A4A00"}}>[ {q.marks} marks ]</Badge>
+          <Badge size="xs" ff="'Geist Mono', monospace" style={{backgroundColor:color+"22", color, border:"none"}}>{q.cat}</Badge>
+          <Badge size="xs" variant="light" ff="'Geist Mono', monospace" style={{backgroundColor:"#171717", color:"#A1A1A1", border:"none"}}>{q.difficulty}</Badge>
+          <Badge size="xs" ff="'Geist Mono', monospace" ml="auto" style={{backgroundColor:"#2A2800", color:"#FBBF24", border:"1px solid #5A4A00"}}>[ {q.marks} marks ]</Badge>
         </Group>
-        <Text fz={15} c="#F0EEE8" lh={1.6} fw={600} style={{whiteSpace:"pre-line"}}>Q{displayNum}. {q.q}</Text>
+        <Text fz={15} c="#EDEDED" lh={1.6} fw={600} style={{whiteSpace:"pre-line"}}>Q{displayNum}. {q.q}</Text>
       </div>
 
       <div style={{padding:"12px 20px 16px"}}>
@@ -697,13 +697,13 @@ function WrittenPracticeItem({q, displayNum}) {
           disabled={grading}
           styles={{
             input: {
-              backgroundColor: "#12121A",
-              borderColor: "#252533",
-              color: "#F0EEE8",
+              backgroundColor: "#0A0A0A",
+              borderColor: "#1F1F1F",
+              color: "#EDEDED",
               fontSize: 14,
               lineHeight: 1.6,
               "&:focus": { borderColor: color },
-              "&::placeholder": { color: "#55556A" },
+              "&::placeholder": { color: "#666666" },
             },
           }}
         />
@@ -712,13 +712,13 @@ function WrittenPracticeItem({q, displayNum}) {
           <Button
             size="sm"
             radius="md"
-            ff="'JetBrains Mono', monospace"
+            ff="'Geist Mono', monospace"
             onClick={handleSolve}
             loading={grading}
             disabled={!answer.trim() || grading}
             loaderProps={{ type: "dots" }}
             style={{
-              background: answer.trim() && !grading ? "#7C6FFF" : "#1E1E2A",
+              background: answer.trim() && !grading ? "#0070F3" : "#171717",
               border: "none",
             }}
           >
@@ -729,7 +729,7 @@ function WrittenPracticeItem({q, displayNum}) {
             radius="md"
             variant={revealed ? "subtle" : "light"}
             color={revealed ? "gray" : undefined}
-            ff="'JetBrains Mono', monospace"
+            ff="'Geist Mono', monospace"
             onClick={()=>setRevealed(r=>!r)}
             style={revealed ? {} : {
               backgroundColor: color + "22",
@@ -745,7 +745,7 @@ function WrittenPracticeItem({q, displayNum}) {
               radius="md"
               variant="subtle"
               color="gray"
-              ff="'JetBrains Mono', monospace"
+              ff="'Geist Mono', monospace"
               onClick={()=>{ setAnswer(""); setGradeResult(null); saveLS(`written_ans_${q.id}`, ""); saveLS(`written_grade_${q.id}`, null); }}
             >
               Clear
@@ -763,10 +763,10 @@ function WrittenPracticeItem({q, displayNum}) {
             title={gradeResult.score != null ? `AI Score: ${gradeResult.score}/${gradeResult.maxMarks || q.marks}` : "Grading Error"}
             styles={{
               root: {
-                backgroundColor: (gradeResult.score == null ? "#8B8B9E" : scoreColor) + "11",
-                border: `1px solid ${gradeResult.score == null ? "#8B8B9E" : scoreColor}44`,
+                backgroundColor: (gradeResult.score == null ? "#A1A1A1" : scoreColor) + "11",
+                border: `1px solid ${gradeResult.score == null ? "#A1A1A1" : scoreColor}44`,
               },
-              title: { fontFamily: "'JetBrains Mono', monospace", fontSize: 12 },
+              title: { fontFamily: "'Geist Mono', monospace", fontSize: 12 },
             }}
           >
             {gradeResult.score != null && (
@@ -777,17 +777,17 @@ function WrittenPracticeItem({q, displayNum}) {
                 radius="xl"
                 mb="sm"
                 animated
-                styles={{ root: { background: "#1E1E2A" } }}
+                styles={{ root: { background: "#171717" } }}
               />
             )}
-            <Text fz="sm" c="#8B8B9E" lh={1.6}>{gradeResult.feedback}</Text>
+            <Text fz="sm" c="#A1A1A1" lh={1.6}>{gradeResult.feedback}</Text>
           </Alert>
         )}
 
         <Collapse in={revealed}>
-          <Box mt="md" pt="md" style={{borderTop:"1px solid #252533"}}>
-            <Text fz={11} ff="'JetBrains Mono', monospace" c="#34D399" lts={1} mb="sm">MARKSCHEME</Text>
-            <Text fz={13} c="#B0ADA6" lh={1.7} style={{whiteSpace:"pre-line"}}>{q.modelAnswer}</Text>
+          <Box mt="md" pt="md" style={{borderTop:"1px solid #1F1F1F"}}>
+            <Text fz={11} ff="'Geist Mono', monospace" c="#34D399" lts={1} mb="sm">MARKSCHEME</Text>
+            <Text fz={13} c="#A3A3A3" lh={1.7} style={{whiteSpace:"pre-line"}}>{q.modelAnswer}</Text>
           </Box>
         </Collapse>
       </div>
@@ -813,9 +813,9 @@ function WrittenPracticeView() {
 
   return (
     <div style={{maxWidth:1060, margin:"0 auto", padding:"0 0 40px"}}>
-      <Paper bg="#12121A" radius="lg" p="lg" mb="xl" style={{border:"1px solid #252533"}}>
-        <Text fz="sm" c="#F0EEE8" fw={600} mb={4}>Written Practice</Text>
-        <Text fz="xs" c="#8B8B9E" lh={1.5}>
+      <Paper bg="#0A0A0A" radius="lg" p="lg" mb="xl" style={{border:"1px solid #1F1F1F"}}>
+        <Text fz="sm" c="#EDEDED" fw={600} mb={4}>Written Practice</Text>
+        <Text fz="xs" c="#A1A1A1" lh={1.5}>
           Answer each question in the text box, then reveal the markscheme to compare.
         </Text>
       </Paper>
@@ -824,33 +824,33 @@ function WrittenPracticeView() {
       <Group gap={10} mb="lg">
         <Button
           radius="md"
-          ff="'JetBrains Mono', monospace"
+          ff="'Geist Mono', monospace"
           fw={700}
           onClick={()=>{ setMode("short"); setFilterCat("All"); }}
           style={{
             flex: 1,
             height: 48,
-            backgroundColor: mode === "short" ? "#7C6FFF" : "#1A1A24",
-            color: mode === "short" ? "#fff" : "#8B8B9E",
-            border: `2px solid ${mode === "short" ? "#7C6FFF" : "#252533"}`,
+            backgroundColor: mode === "short" ? "#0070F3" : "#111111",
+            color: mode === "short" ? "#fff" : "#A1A1A1",
+            border: `2px solid ${mode === "short" ? "#0070F3" : "#1F1F1F"}`,
             fontSize: 15,
             lineHeight: 1,
-            boxShadow: mode === "short" ? "0 0 16px #7C6FFF33" : "none",
+            boxShadow: mode === "short" ? "0 0 16px #0070F333" : "none",
           }}
         >
           Short Answer
         </Button>
         <Button
           radius="md"
-          ff="'JetBrains Mono', monospace"
+          ff="'Geist Mono', monospace"
           fw={700}
           onClick={()=>setMode("10mark")}
           style={{
             flex: 1,
             height: 48,
-            backgroundColor: mode === "10mark" ? "#F87171" : "#1A1A24",
-            color: mode === "10mark" ? "#fff" : "#8B8B9E",
-            border: `2px solid ${mode === "10mark" ? "#F87171" : "#252533"}`,
+            backgroundColor: mode === "10mark" ? "#F87171" : "#111111",
+            color: mode === "10mark" ? "#fff" : "#A1A1A1",
+            border: `2px solid ${mode === "10mark" ? "#F87171" : "#1F1F1F"}`,
             fontSize: 15,
             lineHeight: 1,
             boxShadow: mode === "10mark" ? "0 0 16px #F8717133" : "none",
@@ -862,14 +862,14 @@ function WrittenPracticeView() {
           component="a"
           href="/specimen"
           radius="md"
-          ff="'JetBrains Mono', monospace"
+          ff="'Geist Mono', monospace"
           fw={700}
           style={{
             flex: 1,
             height: 48,
-            backgroundColor: "#1A1A24",
-            color: "#2DD4BF",
-            border: "2px solid #2DD4BF",
+            backgroundColor: "#111111",
+            color: "#00CC88",
+            border: "2px solid #00CC88",
             fontSize: 15,
             lineHeight: 1,
             textDecoration: "none",
@@ -883,19 +883,19 @@ function WrittenPracticeView() {
       {mode === "short" && (
         <Group gap={8} mb="lg" style={{flexWrap:"wrap"}}>
           {writtenCats.map(cat => {
-            const c = CAT_COLORS[cat] || "#7C6FFF";
+            const c = CAT_COLORS[cat] || "#0070F3";
             const active = filterCat === cat;
             return (
               <Button
                 key={cat}
                 size="xs"
                 radius="xl"
-                ff="'JetBrains Mono', monospace"
+                ff="'Geist Mono', monospace"
                 onClick={()=>setFilterCat(cat)}
                 style={{
-                  backgroundColor: active ? c : "#1A1A24",
-                  color: active ? "#fff" : "#8B8B9E",
-                  border: `1px solid ${active ? c : "#252533"}`,
+                  backgroundColor: active ? c : "#111111",
+                  color: active ? "#fff" : "#A1A1A1",
+                  border: `1px solid ${active ? c : "#1F1F1F"}`,
                   boxShadow: "none",
                 }}
               >
@@ -906,13 +906,13 @@ function WrittenPracticeView() {
         </Group>
       )}
 
-      <Text fz="xs" c="#55556A" ff="'JetBrains Mono', monospace" mb="lg">
+      <Text fz="xs" c="#666666" ff="'Geist Mono', monospace" mb="lg">
         Showing {filtered.length} question{filtered.length!==1?"s":""}{mode === "short" && filterCat!=="All"?` · ${filterCat}`:""}
         {mode === "10mark" ? " · 10 Markers" : ""}
       </Text>
 
       {filtered.length === 0 && (
-        <Text ta="center" py={40} c="#55556A" fz="sm">No questions match this filter.</Text>
+        <Text ta="center" py={40} c="#666666" fz="sm">No questions match this filter.</Text>
       )}
 
       {filtered.map((q, i) => (
@@ -933,7 +933,7 @@ export default function App() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   return (
-    <Box mih="100vh" bg="#09090F" style={{fontFamily:"'Inter', sans-serif",color:"#F0EEE8"}}>
+    <Box mih="100vh" bg="#000000" style={{fontFamily:"'Geist', sans-serif",color:"#EDEDED"}}>
 
       {/* Sidebar overlay (mobile) */}
       {sidebarOpen && (
@@ -955,8 +955,8 @@ export default function App() {
           width: 220,
           height: "100vh",
           zIndex: 200,
-          backgroundColor: "#0D0D14",
-          borderRight: "1px solid #1A1A24",
+          backgroundColor: "#050505",
+          borderRight: "1px solid #111111",
           display: "flex",
           flexDirection: "column",
           padding: "20px 12px",
@@ -964,7 +964,7 @@ export default function App() {
           transition: "left 0.25s ease",
         }}
       >
-        <Text fz={11} ff="'JetBrains Mono', monospace" c="#55556A" lts={1} mb={4} px={8}>
+        <Text fz={11} ff="'Geist Mono', monospace" c="#666666" lts={1} mb={4} px={8}>
           SUBJECTS
         </Text>
         {[
@@ -977,7 +977,7 @@ export default function App() {
             component={s.active ? "button" : "a"}
             href={s.active ? undefined : s.href}
             radius="md"
-            ff="'JetBrains Mono', monospace"
+            ff="'Geist Mono', monospace"
             fw={600}
             onClick={() => setSidebarOpen(false)}
             style={{
@@ -985,10 +985,10 @@ export default function App() {
               justifyContent: "flex-start",
               paddingLeft: 14,
               fontSize: 14,
-              backgroundColor: s.active ? "#7C6FFF" : "transparent",
-              color: s.active ? "#fff" : "#8B8B9E",
+              backgroundColor: s.active ? "#0070F3" : "transparent",
+              color: s.active ? "#fff" : "#A1A1A1",
               border: s.active ? "none" : "1px solid transparent",
-              boxShadow: s.active ? "0 0 12px #7C6FFF33" : "none",
+              boxShadow: s.active ? "0 0 12px #0070F333" : "none",
               textDecoration: "none",
             }}
           >
@@ -997,7 +997,7 @@ export default function App() {
         ))}
 
         <Box style={{ flex: 1 }} />
-        <Text fz={10} c="#33334A" ff="'JetBrains Mono', monospace" ta="center">
+        <Text fz={10} c="#404040" ff="'Geist Mono', monospace" ta="center">
           More subjects coming soon
         </Text>
       </Box>
@@ -1006,7 +1006,7 @@ export default function App() {
       <Box
         style={{
           position: "sticky", top: 0, zIndex: 100,
-          background: "rgba(9, 9, 15, 0.85)",
+          background: "rgba(0, 0, 0, 0.85)",
           backdropFilter: "blur(12px)",
           WebkitBackdropFilter: "blur(12px)",
           borderBottom: "1px solid rgba(255,255,255,0.04)",
@@ -1024,8 +1024,8 @@ export default function App() {
                 top: "50%",
                 transform: "translateY(-50%)",
                 backgroundColor: "transparent",
-                color: "#8B8B9E",
-                border: "1px solid #252533",
+                color: "#A1A1A1",
+                border: "1px solid #1F1F1F",
                 padding: "4px 10px",
                 minWidth: "auto",
                 height: 32,
@@ -1042,8 +1042,8 @@ export default function App() {
               size="sm"
               tt="uppercase"
               fw={700}
-              ff="'JetBrains Mono', monospace"
-              style={{ letterSpacing: 2, backgroundColor: "#7C6FFF18", color: "#A78BFA", border: "none" }}
+              ff="'Geist Mono', monospace"
+              style={{ letterSpacing: 2, backgroundColor: "#0070F318", color: "#3291FF", border: "none" }}
             >
               IB HL Business Management
             </Badge>
@@ -1052,12 +1052,12 @@ export default function App() {
           <Text
             ta="center" fw={800}
             fz={{ base: 22, sm: 30 }}
-            c="#F0EEE8"
+            c="#EDEDED"
             style={{ letterSpacing: -0.5 }}
           >
             Finance Unit — Revision Hub
           </Text>
-          <Text ta="center" fz="xs" c="#55556A" mb="sm">
+          <Text ta="center" fz="xs" c="#666666" mb="sm">
             Units 3.1–3.9 · 5.5 Breakeven · BMT Tools · {MCQ_QUESTIONS.length} MCQs · {WRITTEN_QUESTIONS.length} Written · {WRITTEN_10_MARK_QUESTIONS.length} Extended
           </Text>
 
@@ -1073,13 +1073,13 @@ export default function App() {
                 onClick={() => switchTab(t.value)}
                 radius={0}
                 fw={600}
-                ff="'Inter', sans-serif"
+                ff="'Geist', sans-serif"
                 style={{
                   fontSize: 13,
                   padding: "10px 4px 12px",
                   backgroundColor: "transparent",
-                  color: tab === t.value ? "#F0EEE8" : "#55556A",
-                  borderBottom: tab === t.value ? "3px solid #7C6FFF" : "3px solid transparent",
+                  color: tab === t.value ? "#EDEDED" : "#666666",
+                  borderBottom: tab === t.value ? "3px solid #0070F3" : "3px solid transparent",
                   borderTop: "none",
                   borderLeft: "none",
                   borderRight: "none",
@@ -1115,7 +1115,7 @@ export default function App() {
           width: 48,
           height: 48,
           borderRadius: "50%",
-          backgroundColor: "#7C6FFF",
+          backgroundColor: "#0070F3",
           display: "flex",
           alignItems: "center",
           justifyContent: "center",

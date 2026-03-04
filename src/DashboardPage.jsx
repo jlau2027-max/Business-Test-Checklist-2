@@ -13,18 +13,18 @@ import {
 } from "./firestoreService.js";
 
 const CAT_COLORS = {
-  "Costs & Revenue": "#7C6FFF",
-  "Cash Flow": "#38BDF8",
-  "Final Accounts": "#34D399",
-  "Ratio Analysis": "#FBBF24",
-  "Ratio Analysis (HL)": "#FBBF24",
-  "Investment Appraisal": "#A78BFA",
-  "Budgets & Variance": "#F87171",
-  "Breakeven": "#2DD4BF",
-  "BMT Tools": "#F472B6",
-  "Sources of Finance": "#FB923C",
-  "Specimen Exam": "#2DD4BF",
-  "Migrated": "#8B8B9E",
+  "Costs & Revenue": "#0070F3",
+  "Cash Flow": "#00B4D8",
+  "Final Accounts": "#00CC88",
+  "Ratio Analysis": "#F5A623",
+  "Ratio Analysis (HL)": "#F5A623",
+  "Investment Appraisal": "#7928CA",
+  "Budgets & Variance": "#EE0000",
+  "Breakeven": "#00CC88",
+  "BMT Tools": "#FF0080",
+  "Sources of Finance": "#F5A623",
+  "Specimen Exam": "#00CC88",
+  "Migrated": "#A1A1A1",
 };
 
 function formatTime(ms) {
@@ -38,17 +38,17 @@ function formatTime(ms) {
   return `${hours}h ${minutes % 60}m`;
 }
 
-function StatCard({ label, value, sub, color = "#7C6FFF" }) {
+function StatCard({ label, value, sub, color = "#0070F3" }) {
   return (
-    <Paper bg="#12121A" radius="lg" p="lg" style={{ border: "1px solid #252533", flex: 1, minWidth: 160 }}>
-      <Text fz={11} ff="'JetBrains Mono', monospace" c="#55556A" lts={1} mb={4}>
+    <Paper bg="#0A0A0A" radius="lg" p="lg" style={{ border: "1px solid #1F1F1F", flex: 1, minWidth: 160 }}>
+      <Text fz={11} ff="'Geist Mono', monospace" c="#666666" lts={1} mb={4}>
         {label}
       </Text>
-      <Text fz={28} fw={800} c={color} ff="'JetBrains Mono', monospace">
+      <Text fz={28} fw={800} c={color} ff="'Geist Mono', monospace">
         {value}
       </Text>
       {sub && (
-        <Text fz={12} c="#8B8B9E" mt={2}>
+        <Text fz={12} c="#A1A1A1" mt={2}>
           {sub}
         </Text>
       )}
@@ -81,14 +81,14 @@ export default function DashboardPage() {
   if (authLoading) return null;
 
   return (
-    <Box mih="100vh" bg="#09090F" style={{ fontFamily: "'Inter', sans-serif", color: "#F0EEE8" }}>
+    <Box mih="100vh" bg="#000000" style={{ fontFamily: "'Geist', sans-serif", color: "#EDEDED" }}>
       {/* Header */}
       <Box
         style={{
           position: "sticky",
           top: 0,
           zIndex: 100,
-          background: "rgba(9, 9, 15, 0.85)",
+          background: "rgba(0, 0, 0, 0.85)",
           backdropFilter: "blur(12px)",
           WebkitBackdropFilter: "blur(12px)",
           borderBottom: "1px solid rgba(255,255,255,0.04)",
@@ -106,13 +106,13 @@ export default function DashboardPage() {
                 top: "50%",
                 transform: "translateY(-50%)",
                 backgroundColor: "transparent",
-                color: "#8B8B9E",
-                border: "1px solid #252533",
+                color: "#A1A1A1",
+                border: "1px solid #1F1F1F",
                 padding: "4px 12px",
                 minWidth: "auto",
                 height: 32,
                 fontSize: 12,
-                fontFamily: "'JetBrains Mono', monospace",
+                fontFamily: "'Geist Mono', monospace",
               }}
             >
               ← Hub
@@ -122,16 +122,16 @@ export default function DashboardPage() {
               size="sm"
               tt="uppercase"
               fw={700}
-              ff="'JetBrains Mono', monospace"
-              style={{ letterSpacing: 2, backgroundColor: "#7C6FFF18", color: "#A78BFA", border: "none" }}
+              ff="'Geist Mono', monospace"
+              style={{ letterSpacing: 2, backgroundColor: "#0070F318", color: "#3291FF", border: "none" }}
             >
               Analytics
             </Badge>
           </Group>
-          <Text ta="center" fw={800} fz={{ base: 22, sm: 30 }} c="#F0EEE8" style={{ letterSpacing: -0.5 }}>
+          <Text ta="center" fw={800} fz={{ base: 22, sm: 30 }} c="#EDEDED" style={{ letterSpacing: -0.5 }}>
             Your Dashboard
           </Text>
-          <Text ta="center" fz="xs" c="#55556A" mb="sm">
+          <Text ta="center" fz="xs" c="#666666" mb="sm">
             Track your revision progress and performance
           </Text>
         </Container>
@@ -140,38 +140,38 @@ export default function DashboardPage() {
       <Container size="lg" py="xl" px="md">
         {!user ? (
           /* Guest prompt */
-          <Paper bg="#12121A" radius="lg" p="xl" style={{ border: "1px solid #252533", textAlign: "center" }}>
-            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#55556A" strokeWidth="1.5" strokeLinecap="round" style={{ marginBottom: 16 }}>
+          <Paper bg="#0A0A0A" radius="lg" p="xl" style={{ border: "1px solid #1F1F1F", textAlign: "center" }}>
+            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#666666" strokeWidth="1.5" strokeLinecap="round" style={{ marginBottom: 16 }}>
               <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
               <circle cx="12" cy="7" r="4"/>
             </svg>
-            <Text fz="lg" fw={700} c="#F0EEE8" mb="xs">
+            <Text fz="lg" fw={700} c="#EDEDED" mb="xs">
               Sign in to view your analytics
             </Text>
-            <Text fz="sm" c="#8B8B9E" mb="lg" maw={400} mx="auto">
+            <Text fz="sm" c="#A1A1A1" mb="lg" maw={400} mx="auto">
               Track your accuracy per topic, review wrong answers, and see time spent on each question.
             </Text>
             <SignInButton mode="modal">
               <Button
                 radius="md"
                 size="md"
-                style={{ backgroundColor: "#7C6FFF" }}
+                style={{ backgroundColor: "#0070F3" }}
               >
                 Sign In
               </Button>
             </SignInButton>
           </Paper>
         ) : loading ? (
-          <Text ta="center" c="#55556A" py="xl">Loading your analytics...</Text>
+          <Text ta="center" c="#666666" py="xl">Loading your analytics...</Text>
         ) : attempts.length === 0 ? (
-          <Paper bg="#12121A" radius="lg" p="xl" style={{ border: "1px solid #252533", textAlign: "center" }}>
-            <Text fz="lg" fw={700} c="#F0EEE8" mb="xs">
+          <Paper bg="#0A0A0A" radius="lg" p="xl" style={{ border: "1px solid #1F1F1F", textAlign: "center" }}>
+            <Text fz="lg" fw={700} c="#EDEDED" mb="xs">
               No data yet
             </Text>
-            <Text fz="sm" c="#8B8B9E" mb="lg">
+            <Text fz="sm" c="#A1A1A1" mb="lg">
               Start answering questions on the Revision Hub to see your analytics here.
             </Text>
-            <Button component="a" href="/" radius="md" style={{ backgroundColor: "#7C6FFF" }}>
+            <Button component="a" href="/" radius="md" style={{ backgroundColor: "#0070F3" }}>
               Go to Revision Hub
             </Button>
           </Paper>
@@ -183,7 +183,7 @@ export default function DashboardPage() {
                 label="TOTAL ATTEMPTS"
                 value={overall.totalAttempts}
                 sub={`${overall.mcqTotal} MCQ + ${overall.totalAttempts - overall.mcqTotal} written`}
-                color="#F0EEE8"
+                color="#EDEDED"
               />
               <StatCard
                 label="MCQ ACCURACY"
@@ -201,40 +201,40 @@ export default function DashboardPage() {
                 label="TOTAL TIME"
                 value={formatTime(overall.totalTimeMs)}
                 sub="across all questions"
-                color="#A78BFA"
+                color="#3291FF"
               />
             </Group>
 
             {/* Category Breakdown */}
-            <Paper bg="#12121A" radius="lg" p="lg" style={{ border: "1px solid #252533" }}>
-              <Text fz={11} ff="'JetBrains Mono', monospace" c="#55556A" lts={1} mb="md">
+            <Paper bg="#0A0A0A" radius="lg" p="lg" style={{ border: "1px solid #1F1F1F" }}>
+              <Text fz={11} ff="'Geist Mono', monospace" c="#666666" lts={1} mb="md">
                 PERFORMANCE BY TOPIC
               </Text>
               <Stack gap="md">
                 {categoryStats
                   .sort((a, b) => b.totalAttempts - a.totalAttempts)
                   .map((cat) => {
-                    const color = CAT_COLORS[cat.category] || "#7C6FFF";
+                    const color = CAT_COLORS[cat.category] || "#0070F3";
                     const pct = cat.mcqAccuracy ?? cat.writtenAvg ?? 0;
                     return (
                       <Box key={cat.category}>
                         <Group justify="space-between" mb={4}>
                           <Group gap={8}>
                             <Box style={{ width: 10, height: 10, borderRadius: 3, backgroundColor: color }} />
-                            <Text fz={13} c="#F0EEE8" fw={600}>{cat.category}</Text>
+                            <Text fz={13} c="#EDEDED" fw={600}>{cat.category}</Text>
                           </Group>
                           <Group gap="xs">
                             {cat.mcqAccuracy != null && (
-                              <Badge size="xs" ff="'JetBrains Mono', monospace" style={{ backgroundColor: color + "22", color, border: "none" }}>
+                              <Badge size="xs" ff="'Geist Mono', monospace" style={{ backgroundColor: color + "22", color, border: "none" }}>
                                 MCQ: {cat.mcqAccuracy}%
                               </Badge>
                             )}
                             {cat.writtenAvg != null && (
-                              <Badge size="xs" ff="'JetBrains Mono', monospace" style={{ backgroundColor: color + "22", color, border: "none" }}>
+                              <Badge size="xs" ff="'Geist Mono', monospace" style={{ backgroundColor: color + "22", color, border: "none" }}>
                                 Written: {cat.writtenAvg}%
                               </Badge>
                             )}
-                            <Text fz={11} c="#55556A" ff="'JetBrains Mono', monospace">
+                            <Text fz={11} c="#666666" ff="'Geist Mono', monospace">
                               {cat.totalAttempts} attempt{cat.totalAttempts !== 1 ? "s" : ""} · avg {formatTime(cat.avgTimeMs)}
                             </Text>
                           </Group>
@@ -244,7 +244,7 @@ export default function DashboardPage() {
                           color={pct >= 75 ? "green" : pct >= 40 ? "yellow" : "red"}
                           size="sm"
                           radius="xl"
-                          styles={{ root: { background: "#1E1E2A" } }}
+                          styles={{ root: { background: "#171717" } }}
                         />
                       </Box>
                     );
@@ -254,17 +254,17 @@ export default function DashboardPage() {
 
             {/* Wrong Answers */}
             {wrongAnswers.length > 0 && (
-              <Paper bg="#12121A" radius="lg" p="lg" style={{ border: "1px solid #252533" }}>
-                <Text fz={11} ff="'JetBrains Mono', monospace" c="#55556A" lts={1} mb="md">
+              <Paper bg="#0A0A0A" radius="lg" p="lg" style={{ border: "1px solid #1F1F1F" }}>
+                <Text fz={11} ff="'Geist Mono', monospace" c="#666666" lts={1} mb="md">
                   QUESTIONS TO REVIEW ({wrongAnswers.length})
                 </Text>
                 <Stack gap="sm">
                   {wrongAnswers.slice(0, 20).map((a, i) => (
-                    <Paper key={a.id || i} bg="#1A1A24" radius="md" p="sm" style={{ border: "1px solid #252533" }}>
+                    <Paper key={a.id || i} bg="#111111" radius="md" p="sm" style={{ border: "1px solid #1F1F1F" }}>
                       <Group gap={8} mb={4} style={{ flexWrap: "wrap" }}>
                         <Badge
                           size="xs"
-                          ff="'JetBrains Mono', monospace"
+                          ff="'Geist Mono', monospace"
                           style={{
                             backgroundColor: a.isCorrect === false ? "#F8717122" : "#FBBF2422",
                             color: a.isCorrect === false ? "#F87171" : "#FBBF24",
@@ -275,22 +275,22 @@ export default function DashboardPage() {
                         </Badge>
                         <Badge
                           size="xs"
-                          ff="'JetBrains Mono', monospace"
+                          ff="'Geist Mono', monospace"
                           style={{
-                            backgroundColor: (CAT_COLORS[a.category] || "#7C6FFF") + "22",
-                            color: CAT_COLORS[a.category] || "#7C6FFF",
+                            backgroundColor: (CAT_COLORS[a.category] || "#0070F3") + "22",
+                            color: CAT_COLORS[a.category] || "#0070F3",
                             border: "none",
                           }}
                         >
                           {a.category}
                         </Badge>
                         {a.timeSpentMs > 0 && (
-                          <Text fz={10} c="#55556A" ff="'JetBrains Mono', monospace" ml="auto">
+                          <Text fz={10} c="#666666" ff="'Geist Mono', monospace" ml="auto">
                             {formatTime(a.timeSpentMs)}
                           </Text>
                         )}
                       </Group>
-                      <Text fz={13} c="#B0ADA6" lh={1.5}>
+                      <Text fz={13} c="#A3A3A3" lh={1.5}>
                         {a.questionId}
                       </Text>
                     </Paper>
@@ -300,37 +300,37 @@ export default function DashboardPage() {
             )}
 
             {/* Recent Activity */}
-            <Paper bg="#12121A" radius="lg" p="lg" style={{ border: "1px solid #252533" }}>
-              <Text fz={11} ff="'JetBrains Mono', monospace" c="#55556A" lts={1} mb="md">
+            <Paper bg="#0A0A0A" radius="lg" p="lg" style={{ border: "1px solid #1F1F1F" }}>
+              <Text fz={11} ff="'Geist Mono', monospace" c="#666666" lts={1} mb="md">
                 RECENT ACTIVITY
               </Text>
               <Stack gap="xs">
                 {attempts.slice(0, 20).map((a, i) => {
-                  const color = CAT_COLORS[a.category] || "#7C6FFF";
+                  const color = CAT_COLORS[a.category] || "#0070F3";
                   const isGood = a.questionType === "mcq"
                     ? a.isCorrect
                     : a.score != null && a.maxMarks != null && a.score / a.maxMarks >= 0.5;
 
                   return (
-                    <Group key={a.id || i} gap="sm" py={4} style={{ borderBottom: "1px solid #1A1A24" }}>
+                    <Group key={a.id || i} gap="sm" py={4} style={{ borderBottom: "1px solid #111111" }}>
                       <Box style={{
                         width: 8, height: 8, borderRadius: "50%",
                         backgroundColor: isGood ? "#34D399" : "#F87171",
                         flexShrink: 0,
                       }} />
-                      <Badge size="xs" ff="'JetBrains Mono', monospace" style={{ backgroundColor: color + "22", color, border: "none", flexShrink: 0 }}>
+                      <Badge size="xs" ff="'Geist Mono', monospace" style={{ backgroundColor: color + "22", color, border: "none", flexShrink: 0 }}>
                         {a.questionType.toUpperCase()}
                       </Badge>
-                      <Text fz={12} c="#8B8B9E" style={{ flex: 1 }} truncate>
+                      <Text fz={12} c="#A1A1A1" style={{ flex: 1 }} truncate>
                         {a.category} — {a.questionId}
                       </Text>
-                      <Text fz={11} c="#55556A" ff="'JetBrains Mono', monospace" style={{ flexShrink: 0 }}>
+                      <Text fz={11} c="#666666" ff="'Geist Mono', monospace" style={{ flexShrink: 0 }}>
                         {a.questionType === "mcq"
                           ? (a.isCorrect ? "Correct" : "Wrong")
                           : (a.score != null ? `${a.score}/${a.maxMarks}` : "—")}
                       </Text>
                       {a.timeSpentMs > 0 && (
-                        <Text fz={10} c="#55556A" ff="'JetBrains Mono', monospace" style={{ flexShrink: 0 }}>
+                        <Text fz={10} c="#666666" ff="'Geist Mono', monospace" style={{ flexShrink: 0 }}>
                           {formatTime(a.timeSpentMs)}
                         </Text>
                       )}
@@ -356,7 +356,7 @@ export default function DashboardPage() {
           width: 48,
           height: 48,
           borderRadius: "50%",
-          backgroundColor: "#7C6FFF",
+          backgroundColor: "#0070F3",
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
