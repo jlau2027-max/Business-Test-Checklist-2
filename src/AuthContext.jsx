@@ -1,5 +1,11 @@
 import { createContext, useContext } from "react";
-import { useUser, useClerk } from "@clerk/react";
+
+let useUser, useClerk;
+try {
+  const clerk = await import("@clerk/react");
+  useUser = clerk.useUser;
+  useClerk = clerk.useClerk;
+} catch {}
 
 const AuthContext = createContext(null);
 
@@ -10,18 +16,27 @@ export function useAuth() {
 }
 
 export function AuthProvider({ children }) {
-  const { isLoaded, isSignedIn, user: clerkUser } = useUser();
-  const { signOut } = useClerk();
+  let user = null;
+  let loading = false;
+  let logOut = () => {};
 
-  // Map Clerk user to the shape the rest of the app expects
-  const user = isSignedIn && clerkUser ? {
-    uid: clerkUser.id,
-    email: clerkUser.primaryEmailAddress?.emailAddress || "",
-    displayName: clerkUser.fullName || clerkUser.firstName || clerkUser.primaryEmailAddress?.emailAddress?.split("@")[0] || "Student",
-  } : null;
+  if (useUser && useClerk) {
+    try {
+      const { isLoaded, isSignedIn, user: clerkUser } = useUser();
+      const { signOut } = useClerk();
 
-  const loading = !isLoaded;
-  const logOut = () => signOut();
+      user = isSignedIn && clerkUser ? {
+        uid: clerkUser.id,
+        email: clerkUser.primaryEmailAddress?.emailAddress || "",
+        displayName: clerkUser.fullName || clerkUser.firstName || clerkUser.primaryEmailAddress?.emailAddress?.split("@")[0] || "Student",
+      } : null;
+
+      loading = !isLoaded;
+      logOut = () => signOut();
+    } catch {
+      // Clerk not initialized (no key), app runs without auth
+    }
+  }
 
   return (
     <AuthContext.Provider value={{ user, loading, logOut }}>
