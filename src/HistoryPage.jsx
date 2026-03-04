@@ -12,7 +12,7 @@ function saveLS(key, value) {
   try { localStorage.setItem(key, JSON.stringify(value)); } catch {}
 }
 
-// ─── Level Descriptors (shared across all questions) ────────────────────────
+// ─── Level Descriptors (Paper 2 — shared across all Paper 2 questions) ────
 const LEVEL_DESCRIPTORS = `Level Descriptors (15 marks):
 
 13-15: Responses are clearly focused, showing a high degree of awareness of the demands and implications of the question. Answers are well structured and effectively organized. Knowledge of the world history topic is accurate and relevant. Events are placed in their historical context, and there is a clear understanding of historical concepts. The examples chosen are appropriate and relevant, and are used effectively to support the analysis/evaluation. The response makes effective links and/or comparisons. The response contains clear and coherent critical analysis. There is evaluation of different perspectives, and this evaluation is integrated effectively into the answer. All, or nearly all, of the main points are substantiated, and the response argues to a consistent conclusion.
@@ -26,6 +26,22 @@ const LEVEL_DESCRIPTORS = `Level Descriptors (15 marks):
 1-3: There is little understanding of the demands of the question. The answer is poorly structured or, where there is a recognizable essay structure, there is minimal focus on the task. Little knowledge of the world history topic is present. The student identifies examples to discuss, but these examples are factually incorrect, irrelevant or vague. The response contains little or no critical analysis. The response may consist mostly of generalizations and poorly substantiated assertions.
 
 0: Answers do not reach a standard described by the descriptors above.`;
+
+// ─── Level Descriptors (Paper 3 — History of Africa and the Middle East) ──
+const LEVEL_DESCRIPTORS_P3 = `Level Descriptors (15 marks):
+
+Marks   Level descriptor
+13-15   Responses are clearly focused, showing a high degree of awareness of the demands and implications of the question. Answers are well structured and effectively organized. Knowledge is accurate, relevant and detailed. Events are placed in their historical context, and there is a clear understanding of historical concepts. Arguments are clearly substantiated and coherent. There is evaluation of different perspectives, and this evaluation is integrated effectively into the answer. The answer argues to a reasoned conclusion.
+
+10-12   The demands of the question are understood and addressed. Answers are generally well structured and organized, although not always focused. Knowledge is mostly accurate and relevant. Events are generally placed in their historical context. Arguments are mainly substantiated and mostly coherent. There is some awareness and evaluation of different perspectives.
+
+7-9     The response indicates an understanding of the demands of the question, but these demands are only partially addressed. There is an attempt to follow a structured approach. Knowledge is mostly accurate and relevant. Events are generally placed in their historical context. The response moves beyond description to include some analysis or critical commentary, but this is not sustained.
+
+4-6     The response indicates some understanding of the demands of the question. While there may be an attempt to follow a structured approach, the response lacks clarity and coherence. Knowledge is demonstrated, but lacks accuracy and relevance. There is a superficial understanding of historical context. There is some limited analysis, but the response is primarily narrative/descriptive in nature rather than analytical.
+
+1-3     There is little understanding of the demands of the question. The response is poorly structured or, where there is a recognizable essay structure, there is minimal focus on the task. Little knowledge is present. The response may consist mostly of generalizations and poorly substantiated assertions.
+
+0       Answers do not reach a standard described by the descriptors above.`;
 
 // ─── History Paper 2 Questions Data ─────────────────────────────────────────
 const HISTORY_QUESTIONS = [
@@ -470,19 +486,246 @@ Responses achieving marks in the top bands will include a clear judgment on the 
   },
 ];
 
+// ─── History Paper 3 Questions Data (Africa and the Middle East) ──────────
+const PAPER3_QUESTIONS = [
+  // ── The 'Abbasid dynasty (750–1258) ──
+  { id: "p3q1", number: 1, topic: "The \u2018Abbasid dynasty (750\u20131258)", question: "Discuss the extent to which military power was responsible for the defeat of the Umayyads by the \u2018Abbasids.", marks: 15, markscheme: `The focus of this question is on reasons for the defeat of the Umayyads, not the rise of the Abbasids. Candidates should discuss the extent to which military power was responsible, and consider other factors.
+
+Points discussed may include: the Abbasid revolution was in part a military campaign, but success depended on broad-based support including Shia groups, non-Arab Muslims (mawali), and discontented groups in Khurasan; the role of Abu Muslim in organizing the revolution; Umayyad weaknesses including internal rivalries, over-extension, alienation of non-Arab Muslims, and fiscal problems; the Battle of the Zab (750) as a decisive military encounter; the extent to which political and religious propaganda was as important as military force.
+
+Responses achieving marks in the top bands will provide a clear judgment on the extent to which military power was responsible for the defeat of the Umayyads.` },
+  { id: "p3q2", number: 2, topic: "The \u2018Abbasid dynasty (750\u20131258)", question: "Evaluate the political and cultural achievements of the first century of \u2018Abbasid rule.", marks: 15, markscheme: `The focus is on the political and cultural achievements in the first century of Abbasid rule (roughly 750-850).
+
+Points discussed may include: the move of the capital to Baghdad and its significance; the development of a more inclusive, cosmopolitan empire; the establishment of an effective administrative system drawing on Persian traditions; the golden age of Islamic culture including the House of Wisdom (Bayt al-Hikma), translation movement, advances in science, mathematics, medicine and philosophy; patronage of arts and learning under caliphs such as Harun al-Rashid and al-Ma'mun; the development of Islamic law and theology; trade networks and economic prosperity. Candidates may also discuss limitations such as political instability, the growing power of Turkish military elites, and regional fragmentation.
+
+Responses achieving marks in the top bands will provide a clear judgment on the political and cultural achievements of the first century of Abbasid rule.` },
+
+  // ── The Fatimids (909–1171) ──
+  { id: "p3q3", number: 3, topic: "The Fatimids (909\u20131171)", question: "Examine the ideological and cultural impact of the Fatimid dynasty.", marks: 15, markscheme: `Candidates must demonstrate a clear understanding of the requirements of the question and effectively deploy knowledge of the key issue(s) raised by the question; in this case the ideological and cultural impact of the Fatimid dynasty.
+
+Points discussed may include: the Fatimids as an Ismaili Shia dynasty and their challenge to Sunni Abbasid authority; the establishment of Cairo as a center of learning (Al-Azhar mosque/university); the promotion of Ismaili ideology through da'wa (missionary) networks; religious tolerance towards Sunnis, Christians and Jews under most Fatimid rulers; cultural achievements in architecture, art, and scholarship; the role of trade in spreading Fatimid cultural influence; the impact on the wider Islamic world.
+
+Responses achieving marks in the top bands will provide a clear judgment on the ideological and cultural impact of the Fatimid dynasty.` },
+  { id: "p3q4", number: 4, topic: "The Fatimids (909\u20131171)", question: "To what extent were internal factors, rather than external threats, responsible for the collapse of the Fatimid dynasty?", marks: 15, markscheme: `Candidates must demonstrate a clear understanding of the requirements of the question and effectively deploy knowledge of the key issue(s) raised by the question; in this case the relative importance of internal versus external factors in the collapse of the Fatimid dynasty.
+
+Points discussed may include: internal factors such as succession disputes, the growing power of military commanders (especially Turkish and Armenian), administrative corruption, economic decline, and the erratic rule of al-Hakim; external factors such as the Crusades and the loss of territory, Seljuk Turkish expansion, and the rise of Saladin and the Ayyubids; the role of Saladin in finally ending Fatimid rule in 1171; the interaction between internal weaknesses and external pressures.
+
+Responses achieving marks in the top bands will provide a clear judgment on the extent to which internal factors were responsible for the collapse of the Fatimid dynasty.` },
+
+  // ── The Crusades (1095–1291) ──
+  { id: "p3q5", number: 5, topic: "The Crusades (1095\u20131291)", question: "Examine the extent to which religious ideology was the main motive for the Crusades.", marks: 15, markscheme: `Candidates must demonstrate a clear understanding of the requirements of the question and effectively deploy knowledge of the key issue(s) raised by the question; in this case the extent to which religious ideology was the main motive for the Crusades.
+
+Points discussed may include: the role of Pope Urban II and the idea of holy war/pilgrimage; the promise of spiritual rewards (indulgences, remission of sins); genuine religious fervor and the desire to recover Jerusalem; other motives such as economic opportunities (trade, land, wealth), political motives (papal authority, Byzantine requests for help), social factors (younger sons seeking fortunes, escape from feudal obligations), and the spirit of adventure; the extent to which motives varied between different Crusades and different participants.
+
+Responses achieving marks in the top bands will provide a clear judgment on the extent to which religious ideology was the main motive for the Crusades.` },
+  { id: "p3q6", number: 6, topic: "The Crusades (1095\u20131291)", question: "Evaluate the impact of the Crusades on the Islamic world.", marks: 15, markscheme: `Candidates must demonstrate a clear understanding of the requirements of the question and effectively deploy knowledge of the key issue(s) raised by the question; in this case an evaluation of the impact of the Crusades on the Islamic world.
+
+Points discussed may include: military impact including the loss and recovery of territory; political impact such as the unification of Muslim forces under leaders like Nur al-Din and Saladin; economic impact including disruption and stimulation of trade; cultural exchange including transfer of knowledge, technology and ideas; the relatively limited long-term impact on the Islamic world compared to the impact on Europe; the psychological impact and the concept of jihad; demographic changes in the region.
+
+Responses achieving marks in the top bands will provide a clear judgment on the impact of the Crusades on the Islamic world.` },
+
+  // ── The Ottomans (1281–1566) ──
+  { id: "p3q7", number: 7, topic: "The Ottomans (1281\u20131566)", question: "Discuss the significance of the fall of Constantinople (1453) for the Ottoman Empire.", marks: 15, markscheme: `Candidates must demonstrate a clear understanding of the requirements of the question and effectively deploy knowledge of the key issue(s) raised by the question; in this case the significance of the fall of Constantinople for the Ottoman Empire.
+
+Points discussed may include: the strategic and symbolic importance of Constantinople; the transformation of the city into the Ottoman capital Istanbul; the impact on trade routes and Ottoman control of east-west commerce; the psychological impact on both the Muslim and Christian worlds; the consolidation of Ottoman power in southeastern Europe; the development of Istanbul as a cultural and administrative center; the impact on the balance of power in the eastern Mediterranean; the flight of Greek scholars to the West and its contribution to the Renaissance.
+
+Responses achieving marks in the top bands will provide a clear judgment on the significance of the fall of Constantinople for the Ottoman Empire.` },
+  { id: "p3q8", number: 8, topic: "The Ottomans (1281\u20131566)", question: "Evaluate the contribution of either Selim I or Suleiman I to the Ottoman Empire.", marks: 15, markscheme: `Candidates must demonstrate a clear understanding of the requirements of the question and effectively deploy knowledge of the key issue(s) raised by the question; in this case the contribution of either Selim I or Suleiman I.
+
+For Selim I: the conquest of Egypt and the Hejaz; defeat of the Safavids at Chaldiran (1514); expansion of the empire into the Arab world; assumption of the title of Caliph; control of holy cities of Mecca, Medina and Jerusalem.
+
+For Suleiman I: military conquests in Europe (Belgrade, Rhodes, Hungary, siege of Vienna); legal reforms (Kanuni - the Lawgiver); administrative developments; patronage of arts, architecture and literature; the golden age of Ottoman culture; naval power in the Mediterranean; limitations and challenges during his reign.
+
+Responses achieving marks in the top bands will provide a clear judgment on the contribution of the chosen ruler to the Ottoman Empire.` },
+
+  // ── Trade and the rise and decline of African states and empires (800–1600) ──
+  { id: "p3q9", number: 9, topic: "Trade and the rise and decline of African states and empires (800\u20131600)", question: "Examine the reasons for the decline of the Ghana Empire.", marks: 15, markscheme: `Candidates must demonstrate a clear understanding of the requirements of the question and effectively deploy knowledge of the key issue(s) raised by the question; in this case the reasons for the decline of the Ghana Empire.
+
+Points discussed may include: the Almoravid attacks and their impact on trade; the loss of control over gold and salt trade routes; internal political instability and succession disputes; environmental factors such as drought and desertification; the rise of competing states such as Mali; the breakaway of subject peoples; the role of Islam in undermining traditional political structures; economic decline as trade routes shifted.
+
+Responses achieving marks in the top bands will provide a clear judgment on the reasons for the decline of the Ghana Empire.` },
+  { id: "p3q10", number: 10, topic: "Trade and the rise and decline of African states and empires (800\u20131600)", question: "Compare and contrast the role of trade in the development of the Mali Empire and the Kingdom of Kongo.", marks: 15, markscheme: `Candidates must demonstrate a clear understanding of the requirements of the question and effectively deploy knowledge of the key issue(s) raised by the question; in this case a comparison and contrast of the role of trade in the development of Mali and Kongo.
+
+Points discussed may include: Mali's control of trans-Saharan trade routes (gold, salt, copper); Mansa Musa's pilgrimage and its demonstration of Mali's wealth; Kongo's trade networks including regional trade and later Portuguese contact; the different types of goods traded; the impact of trade on political structures, urbanization, and cultural development in each state; the role of Islam in facilitating Mali's trade versus Christianity's later role in Kongo; the vulnerability of each state's economy to external disruption.
+
+Candidates must give an account of both similarities and differences. A thematic approach is therefore likely to be more successful.
+
+Responses achieving marks in the top bands will provide a clear judgment on the similarities and differences in the role of trade in the development of Mali and Kongo.` },
+
+  // ── Pre-colonial African states (1800–1900) ──
+  { id: "p3q11", number: 11, topic: "Pre-colonial African states (1800\u20131900)", question: "Examine the achievements of Tewodros II and Yohannes IV in the modernization of Ethiopia.", marks: 15, markscheme: `Candidates must demonstrate a clear understanding of the requirements of the question and effectively deploy knowledge of the key issue(s) raised by the question; in this case the achievements of Tewodros II and Yohannes IV in modernizing Ethiopia.
+
+Points discussed may include: Tewodros II's attempts to unify Ethiopia, reduce the power of regional lords, modernize the army, reform taxation, and his efforts to establish diplomatic relations with European powers; his road-building program and attempts to create a centralized state; Yohannes IV's continuation of centralization efforts, his military achievements against Egyptian and Mahdist threats, his diplomatic skills, and his attempts to maintain Ethiopian independence; the limitations and challenges faced by both rulers; the extent to which their modernization efforts were successful.
+
+Responses achieving marks in the top bands will provide a clear judgment on the achievements of Tewodros II and Yohannes IV in the modernization of Ethiopia.` },
+  { id: "p3q12", number: 12, topic: "Pre-colonial African states (1800\u20131900)", question: "Compare and contrast the leadership and achievements of Moshoeshoe I and Shaka Zulu.", marks: 15, markscheme: `Candidates must demonstrate a clear understanding of the requirements of the question and effectively deploy knowledge of the key issue(s) raised by the question; in this case a comparison and contrast of Moshoeshoe I and Shaka Zulu.
+
+Points discussed may include: Shaka's military innovations (the short stabbing spear, the bull-horn formation), his creation of a powerful centralized Zulu state, the Mfecane/Difaqane and its widespread impact; Moshoeshoe's diplomatic skills, his ability to unite diverse groups, his use of natural defenses (Thaba Bosiu), his diplomatic engagement with Europeans and missionaries; comparison of their leadership styles (military vs diplomatic), their state-building achievements, and their legacies; the impact of each leader on southern African history.
+
+Candidates must give an account of both similarities and differences.
+
+Responses achieving marks in the top bands will provide a clear judgment on the similarities and differences between Moshoeshoe I and Shaka Zulu.` },
+
+  // ── The slave trade in Africa and the Middle East (1500–1900) ──
+  { id: "p3q13", number: 13, topic: "The slave trade in Africa and the Middle East (1500\u20131900)", question: "Examine the social and economic impact of the slave trade on any two African societies.", marks: 15, markscheme: `Candidates must demonstrate a clear understanding of the requirements of the question and effectively deploy knowledge of the key issue(s) raised by the question; in this case the social and economic impact of the slave trade on two African societies.
+
+Points discussed may include: demographic impact (loss of young, productive population); social disruption including increased warfare, kidnapping, and insecurity; the transformation of political structures as some states became heavily involved in slave trading; economic effects including the development of a trade-dependent economy, the introduction of European goods, the disruption of local industries; the impact on gender relations as more men were taken than women; the psychological and cultural impact; regional variations in the impact of the slave trade.
+
+Responses achieving marks in the top bands will provide a clear judgment on the social and economic impact of the slave trade on the two chosen African societies.` },
+  { id: "p3q14", number: 14, topic: "The slave trade in Africa and the Middle East (1500\u20131900)", question: "To what extent were economic factors responsible for the decline of the slave trade?", marks: 15, markscheme: `Candidates must demonstrate a clear understanding of the requirements of the question and effectively deploy knowledge of the key issue(s) raised by the question; in this case the extent to which economic factors were responsible for the decline of the slave trade.
+
+Points discussed may include: economic factors such as the Industrial Revolution reducing the need for slave labor, the development of "legitimate" commerce (palm oil, groundnuts), the economic arguments against slavery; other factors such as the humanitarian/abolitionist movement (Wilberforce, Clarkson), the role of religion (Quakers, Evangelical Christians), slave resistance and revolts (Haiti), political factors including British naval enforcement, international treaties and agreements; the role of former slaves in the abolition movement; the gradual nature of abolition and the persistence of slavery in various forms.
+
+Responses achieving marks in the top bands will provide a clear judgment on the extent to which economic factors were responsible for the decline of the slave trade.` },
+
+  // ── European imperialism and the partition of Africa (1850–1900) ──
+  { id: "p3q15", number: 15, topic: "European imperialism and the partition of Africa (1850\u20131900)", question: "Examine the reasons for the increased European interest in Africa in the second half of the 19th century.", marks: 15, markscheme: `Candidates must demonstrate a clear understanding of the requirements of the question and effectively deploy knowledge of the key issue(s) raised by the question; in this case the reasons for increased European interest in Africa.
+
+Points discussed may include: economic motives (new markets, raw materials, investment opportunities); strategic/political motives (national prestige, rivalry between European powers, the "scramble for Africa"); the role of explorers and missionaries in opening up the interior; technological advantages (quinine, steamships, weapons); the Berlin Conference (1884-1885) and the formalization of partition; ideological justifications such as the "civilizing mission" and Social Darwinism; the role of individuals such as Cecil Rhodes, Leopold II, and Bismarck.
+
+Responses achieving marks in the top bands will provide a clear judgment on the reasons for increased European interest in Africa.` },
+  { id: "p3q16", number: 16, topic: "European imperialism and the partition of Africa (1850\u20131900)", question: "To what extent were weaknesses within Africa responsible for European colonization?", marks: 15, markscheme: `Candidates must demonstrate a clear understanding of the requirements of the question and effectively deploy knowledge of the key issue(s) raised by the question; in this case the extent to which weaknesses within Africa were responsible for European colonization.
+
+Points discussed may include: internal factors such as political fragmentation, inter-state rivalries, lack of military technology comparable to Europeans, the impact of the slave trade in weakening African societies, the role of African intermediaries and collaborators; external factors such as European technological superiority (weapons, medicine, transport), the organized nature of European imperialism, the Berlin Conference, economic motivations; the balance between internal and external factors varied across the continent.
+
+Responses achieving marks in the top bands will provide a clear judgment on the extent to which weaknesses within Africa were responsible for European colonization.` },
+
+  // ── Response to European imperialism (1870–1920) ──
+  { id: "p3q17", number: 17, topic: "Response to European imperialism (1870\u20131920)", question: "Evaluate the reasons for the success of Menelik II in maintaining Ethiopian independence.", marks: 15, markscheme: `Candidates must demonstrate a clear understanding of the requirements of the question and effectively deploy knowledge of the key issue(s) raised by the question; in this case the reasons for Menelik II's success in maintaining Ethiopian independence.
+
+Points discussed may include: Menelik's diplomatic skills in playing European powers against each other; the Treaty of Wuchale (1889) and the dispute over its interpretation; military modernization including the acquisition of European weapons; the decisive victory at the Battle of Adwa (1896); the unification of Ethiopian territories under central authority; Ethiopia's geographical advantages (mountainous terrain); the role of Ethiopian nationalism and a long tradition of independence; the international context and European rivalries that limited Italian ambitions.
+
+Responses achieving marks in the top bands will provide a clear judgment on the reasons for Menelik II's success.` },
+  { id: "p3q18", number: 18, topic: "Response to European imperialism (1870\u20131920)", question: "Examine the nature and effectiveness of Kabaka Mwanga's resistance to European imperialism in Uganda.", marks: 15, markscheme: `Candidates must demonstrate a clear understanding of the requirements of the question and effectively deploy knowledge of the key issue(s) raised by the question; in this case the nature and effectiveness of Kabaka Mwanga's resistance to European imperialism.
+
+Points discussed may include: the context of European (particularly British) interest in Uganda; Mwanga's initial resistance to foreign influence including the persecution of Christian converts (the Uganda Martyrs); the complex political situation involving religious factions (Catholic, Protestant, Muslim) within Buganda; Mwanga's shifting alliances and attempts to play different groups against each other; the 1897 rebellion against British control; the ultimate failure of his resistance and his exile; the reasons for the failure including internal divisions, military weakness relative to British forces, and the lack of external support.
+
+Responses achieving marks in the top bands will provide a clear judgment on the nature and effectiveness of Mwanga's resistance.` },
+
+  // ── Africa under colonialism (1890–1980) ──
+  { id: "p3q19", number: 19, topic: "Africa under colonialism (1890\u20131980)", question: "Examine the impact of Portuguese colonial rule on either Angola or Mozambique.", marks: 15, markscheme: `Candidates must demonstrate a clear understanding of the requirements of the question and effectively deploy knowledge of the key issue(s) raised by the question; in this case the impact of Portuguese colonial rule on either Angola or Mozambique.
+
+Points discussed may include: the exploitative nature of Portuguese colonialism including forced labor (chibalo/contract labor), racial discrimination, lack of educational opportunities for Africans, economic exploitation of resources, the assimilado system and its limited social mobility; the role of the Catholic Church; the impact on traditional social structures; the economic underdevelopment of the colony for the benefit of Portugal; the comparison with other colonial systems; the long duration of Portuguese colonialism and its late end (1975); the legacy of Portuguese colonialism for post-independence challenges.
+
+Responses achieving marks in the top bands will provide a clear judgment on the impact of Portuguese colonial rule.` },
+  { id: "p3q20", number: 20, topic: "Africa under colonialism (1890\u20131980)", question: "Evaluate the effectiveness of indirect rule in Nigeria.", marks: 15, markscheme: `Candidates must demonstrate a clear understanding of the requirements of the question and effectively deploy knowledge of the key issue(s) raised by the question; in this case the effectiveness of indirect rule in Nigeria.
+
+Points discussed may include: the theory and practice of indirect rule as developed by Lord Lugard; its implementation in Northern Nigeria through existing emirate structures; its relative success in areas with existing centralized political structures; its failure or difficulties in areas without existing hierarchies (such as southeastern Nigeria and the Igbo); the Aba Women's Riots (1929) as an example of resistance to imposed indirect rule structures; the creation of artificial chiefs (warrant chiefs); the impact on traditional political systems; the economic aspects of indirect rule; its role in creating or reinforcing ethnic divisions; the extent to which indirect rule served British interests while claiming to preserve African institutions.
+
+Responses achieving marks in the top bands will provide a clear judgment on the effectiveness of indirect rule in Nigeria.` },
+
+  // ── 20th-century nationalist and independence movements in Africa ──
+  { id: "p3q21", number: 21, topic: "20th-century nationalist and independence movements in Africa", question: "Discuss the causes and consequences of the Mau Mau uprising in Kenya.", marks: 15, markscheme: `Candidates must demonstrate a clear understanding of the requirements of the question and effectively deploy knowledge of the key issue(s) raised by the question; in this case the causes and consequences of the Mau Mau uprising.
+
+Points discussed may include: causes such as land alienation (the White Highlands), racial discrimination, limited political representation for Africans, squatter labor system, urbanization and unemployment, the failure of constitutional methods (KAU), and the influence of WWII veterans; the nature of the uprising including the declaration of a state of emergency (1952), detention camps, forest fighters, the role of the Kikuyu community; consequences including the military defeat of Mau Mau but the acceleration of political reform, the Lyttelton Constitution, Lancaster House conferences, and ultimately independence in 1963; the debate over whether Mau Mau accelerated or delayed independence; the role of Jomo Kenyatta.
+
+Responses achieving marks in the top bands will provide a clear judgment on the causes and consequences of the Mau Mau uprising.` },
+  { id: "p3q22", number: 22, topic: "20th-century nationalist and independence movements in Africa", question: "Evaluate the role played by individual leaders in the achievement of independence in any two African countries.", marks: 15, markscheme: `Candidates must demonstrate a clear understanding of the requirements of the question and effectively deploy knowledge of the key issue(s) raised by the question; in this case the role of individual leaders in achieving independence in two African countries.
+
+Points discussed may include: the choice of leaders and countries (e.g., Nkrumah/Ghana, Kenyatta/Kenya, Nyerere/Tanzania, Mandela/South Africa, Lumumba/Congo, Senghor/Senegal, etc.); the specific contributions of each leader in terms of political organization, mobilization of popular support, ideology, diplomacy; the balance between the role of individuals and broader structural factors (economic changes, international context, colonial policies, pan-Africanism); the methods used (constitutional, militant, diplomatic); the challenges faced by each leader.
+
+Responses achieving marks in the top bands will provide a clear judgment on the role played by individual leaders in the achievement of independence.` },
+
+  // ── The Ottoman Empire (c1800–1923) ──
+  { id: "p3q23", number: 23, topic: "The Ottoman Empire (c1800\u20131923)", question: "Examine the aims and impact of the Tanzimat reforms on the Ottoman Empire.", marks: 15, markscheme: `Candidates must demonstrate a clear understanding of the requirements of the question and effectively deploy knowledge of the key issue(s) raised by the question; in this case the aims and impact of the Tanzimat reforms.
+
+Points discussed may include: the context of Ottoman decline and the need for reform; the Hatt-i Sharif of Gulhane (1839) and the Hatt-i Humayun (1856); aims including modernization of the military, legal and educational systems, equality for all Ottoman subjects regardless of religion, centralization of administration; the impact on different groups within the empire; resistance to reform from conservative elements; the limited success of reforms in preventing the empire's decline; the influence of European models; the relationship between the Tanzimat and later reform movements including the Young Ottomans and Young Turks.
+
+Responses achieving marks in the top bands will provide a clear judgment on the aims and impact of the Tanzimat reforms.` },
+  { id: "p3q24", number: 24, topic: "The Ottoman Empire (c1800\u20131923)", question: "Examine the reasons for the decline of the Ottoman Empire in the first half of the 19th century.", marks: 15, markscheme: `Candidates must demonstrate a clear understanding of the requirements of the question and effectively deploy knowledge of the key issue(s) raised by the question; in this case the reasons for the decline of the Ottoman Empire in the first half of the 19th century.
+
+Points discussed may include: internal problems such as nationalist agitation within the empire, which led to Greek independence in 1831, loss of territory such as Egypt and constant unrest in areas such as Bulgaria; difficulty in implementing reforms because of the resistance of traditional elements; financial weakness; weak sultans; internationally the frequent intervention of the other major powers highlighted the weakness of the empire (Crimea, Russo/Turkish War, Congress of Berlin, etc) and contributed to continuing decline.
+
+Responses achieving marks in the top bands will provide a clear judgment on the reasons for the decline of the Ottoman Empire in the first half of the 19th century.` },
+
+  // ── War and change in the Middle East and North Africa 1914–1945 ──
+  { id: "p3q25", number: 25, topic: "War and change in the Middle East and North Africa 1914\u20131945", question: "To what extent did ineffective Allied diplomacy in the Middle East during the First World War lead to instability in the region?", marks: 15, markscheme: `Candidates must demonstrate a clear understanding of the requirements of the question and effectively deploy knowledge of the key issue(s) raised by the question; in this case the extent to which ineffective Allied diplomacy in the Middle East during the First World War lead to instability in the region.
+
+Points discussed may include: key diplomatic events such as Hussein-McMahon, Sykes-Picot, Balfour Declaration; areas to consider could include the contradictory promises to Jews and Arabs over Palestine which made the British mandate difficult to govern; reasonable relations between the British and the rulers in Iraq and Transjordan could be cited as a counter-argument, especially as Iraq gained independence in 1932; diplomacy could include the final establishments of mandates at San Remo (1920) and comments could then be made regarding levels of Jewish immigration to Palestine, which contributed to tensions; candidates may discuss other factors which caused instability in the region at the time, such as underlying economic and religious issues.
+
+Responses achieving marks in the top bands will provide a clear judgment on the extent to which ineffective Allied diplomacy in the Middle East during the First World War led to instability in the region.` },
+  { id: "p3q26", number: 26, topic: "War and change in the Middle East and North Africa 1914\u20131945", question: "Evaluate Ataturk's impact on Turkish society.", marks: 15, markscheme: `Candidates must demonstrate a clear understanding of the requirements of the question and effectively deploy knowledge of the key issue(s) raised by the question; in this case, an evaluation of Ataturk's impact on Turkish society.
+
+Points discussed may include: Mustapha Kemal Ataturk (1881-1938) assumed the patronymic Ataturk, meaning "Father of the Turks" in 1934, when he wished all Turkish families to adopt Western-style surnames; as president, Ataturk sought to modernize and secularize Turkey, and to modernize and develop the Turkish economy; Ataturk introduced a new constitution establishing equal rights and eventually (in 1934) universal suffrage, and encouraged Western dress. The introduction of civil law and the abolition of the Caliphate were all designed to reduce the influence of religion, as was banning the fez and the chador; other developments such as the development of industry such as textiles, improvements in education, and the introduction of the Roman alphabet could also be commented on. Candidates may also discuss how he fostered national pride in Turkey rather than Islam; possible limits on his impact: the Sultanate was replaced by a dictatorial regime with one party (RPP) dominating. Islam continued to have a major influence, particularly in rural areas. Economic developments tended to be limited to urban areas and educational improvements were also slower in rural areas. There was a clear divide between the urban modern society and traditional rural society.
+
+Responses achieving marks in the top bands will provide a clear judgment on the impact Ataturk had on Turkish society.` },
+
+  // ── Africa, international organizations and the international community (20th century) ──
+  { id: "p3q27", number: 27, topic: "Africa, international organizations and the international community (20th century)", question: "Discuss the role played by the Abyssinian Crisis in the failure of the League of Nations.", marks: 15, markscheme: `Candidates must demonstrate a clear understanding of the requirements of the question and effectively deploy knowledge of the key issue(s) raised by the question; in this case a discussion of the role played by the Abyssinian Crisis in the failure of the League of Nations.
+
+Points discussed may include: the League gave an opportunity to Haile Silassie to put his case before them; Italy was condemned by the League of Nations and asked to withdraw their troops from Abyssinia. Despite imposing economic sanctions on Italy, oil was not one of the items included in the sanctions; one reason why the League of Nations sanctions failed was because non League members such as the US continued trading with Italy; the foreign ministers of both Britain and France drew up a plan which gave out two thirds of Abyssinia to Italy. This plan led to an outcry against the League of Nations; in the end, Italy was able to occupy Abyssinia, proving that the League of Nations had failed; this crisis led to many countries losing faith in the League of Nations in being able to assist them against aggressors and from here on the League was not taken seriously; Abyssinia played an important role in the ultimate failure of the League of Nations, but candidates may also consider other factors that also contributed to its failure.
+
+Responses achieving marks in the top bands will provide a clear judgment on the role played by the Abyssinian Crisis in the failure of the League of Nations.` },
+  { id: "p3q28", number: 28, topic: "Africa, international organizations and the international community (20th century)", question: '\u201cThe East African Community (EAC) was more of a success than a failure in the 20th century.\u201d To what extent do you agree with this statement?', marks: 15, markscheme: `Candidates must demonstrate a clear understanding of the requirements of the question and effectively deploy knowledge of the key issue(s) raised by the question. In this case, the extent to which the candidate agreed with the claim that the East African Community was more of a success than a failure in the 20th century. Candidates should discuss clear and specific examples of successes and failures, and success may be interpreted in a variety of ways such as cultural, social, economic and political.
+
+Points discussed may include: Success: the role the East African Community played in encouraging trade among member states; improved means of transport and communication among the member countries; increased cultural exchange between member states; education benefits with members being able to receive education in any of the three countries involved. Failure: the disparity in development between the member states which eventually led to the collapse of the organization; the lack of economic unity among the East African countries; the differences between the leaders of the East African countries.
+
+Responses achieving marks in the top bands will provide a clear judgment on the extent to which the candidate agrees with the claim that the East African Community was more of a success than a failure in the 20th century.` },
+
+  // ── Developments in South Africa 1880–1994 ──
+  { id: "p3q29", number: 29, topic: "Developments in South Africa 1880\u20131994", question: '\u201cThe Boers lost the war but won the peace.\u201d To what extent do you agree with this statement about the South African War (1899\u20131902)?', marks: 15, markscheme: `Candidates must demonstrate a clear understanding of the requirements of the question and effectively deploy knowledge of the key issue(s) raised by the question; in this case the extent to which the candidate agrees with the claim that "the Boers lost the war but won the peace" in the South African War of 1899 to 1902.
+
+Points discussed may include: despite their resistance, the Boers found themselves in dire circumstances at the end of the war. Following two years of guerrilla warfare, the Boers surrendered following the scorched earth policies of the British which destroyed their land and forced hundreds of thousands of women and children into concentration camps; the Treaty of Vereeniging of 1902 was a very generous peace. Although the two republics were annexed, they were promised self-government in the near future. Following Milner's abortive policies of Anglicization, further reconciliation was promoted as the English and Dutch languages were given equal legal status. Measures were taken to rebuild the shattered South African economy and Boer political parties like Het Volk and Orangie Unie were legalized. The Transvaal and Orange Free State became self-governing in 1907; however, the country was already moving towards greater economic and political integration. Ultimately, it was recognition of the common interest of wealthy Boer farmers and Anglophone capitalists of need for a plentiful supply of cheap and pliable African labour that accelerated moves to unify the country; the Union of South Africa came into existence in 1910 with whites-only elections resulting in victory for Botha and Smuts's South African Party (SAP); candidates may also argue that the preferred policies of the Afrikaners - segregation and white domination - were pursued by the SAP government.
+
+Responses achieving marks in the top bands will provide a clear judgment on the extent to which the candidate agrees with the claim.` },
+  { id: "p3q30", number: 30, topic: "Developments in South Africa 1880\u20131994", question: "Examine the reasons for, and the effects of, the radicalization of resistance to the apartheid system in South Africa.", marks: 15, markscheme: `Candidates must demonstrate a clear understanding of the requirements of the question and effectively deploy knowledge of the key issue(s) raised by the question; in this case both the reasons for, and the effects of, the radicalization of resistance to the apartheid system in South Africa.
+
+Points discussed may include: the raft of apartheid laws passed by the new National Party government after 1948 had the effect of intensifying discrimination of the majority black population at the hands of the white minority, and played an important role in the radicalization of resistance to the apartheid system. For example: the Immorality Act of 1950; the Reservation of Separate Amenities Act of 1953; the Population Registration Act of 1950; the Group Areas Act of 1950 and the Bantu Authorities Act of 1951 together made residential separation compulsory; the Promotion of Bantu Self-Government Act of 1959; the Bantu Education Act of 1953; the brutal suppression by the authorities including the arrests and treason trials of ANC leaders, banning and banishing orders, the Sharpeville Massacre and the decision to ban the ANC; the frustration felt by a new generation of leaders in the ANC resulted in a radicalization through its youth wing, the Defiance Campaign, the Congress of the People, bus boycotts, and eventually through armed struggle; the emergence of other resistance movements such as the Pan Africanist Congress (PAC), Black Consciousness and the United Democratic Front (UDF), and the international boycott of the apartheid economy; the ultimate effect was the dismantling of the apartheid system in the 1980s and the ending of white minority rule in 1994.
+
+Responses achieving marks in the top bands will provide a clear judgment on the reasons for, and effects of, the radicalization of resistance to the apartheid system in South Africa.` },
+
+  // ── Social and cultural developments in Africa in the 19th and 20th centuries ──
+  { id: "p3q31", number: 31, topic: "Social and cultural developments in Africa in the 19th and 20th centuries", question: "Examine the factors that promoted and those that inhibited the spread of Christianity in Africa in the 19th and 20th centuries.", marks: 15, markscheme: `Candidates must demonstrate a clear understanding of the requirements of the question and effectively deploy knowledge of the key issue(s) raised by the question; in this case the factors that both promoted and inhibited the spread of Christianity in Africa in the 19th and 20th centuries.
+
+Points discussed may include: the role played by various Christian societies in promoting the spread of Christianity; the role played by the establishment of missionary centres many of which included a church, school, hospital etc in promoting the spread of Christianity; the role played by African leaders who embraced the Christian faith due to the benefits they gained from the missionaries in promoting the spread of Christianity; factors such as the existence of Islam and/or the role of tradition, culture and religion in inhibiting the spread of Christianity; the role played by poor means of transportation in inhibiting the spread of Christianity; the fear of hostile communities in inhibiting the spread of Christianity; the fear of diseases such as malaria, which hindered missionary movement into the interior of Africa.
+
+Responses achieving marks in the top bands will provide a clear judgment on the factors that promoted and inhibited the spread of Christianity in Africa in the period.` },
+  { id: "p3q32", number: 32, topic: "Social and cultural developments in Africa in the 19th and 20th centuries", question: "Discuss the impact of immigration and emigration on any two African countries in the 19th and 20th centuries.", marks: 15, markscheme: `Candidates must demonstrate a clear understanding of the requirements of the question and effectively deploy knowledge of the key issue(s) raised by the question; in this case a discussion of the impact of both immigration and emigration in any two African countries in the 19th and 20th centuries.
+
+Points discussed may include: candidates must clearly identify the two countries they have selected to discuss. The specific impact of immigration and emigration on each country will depend upon the examples chosen for discussion; discussion of the impact of immigration could include the development of tensions/animosity between the newcomers and the original inhabitants of the country; candidates may discuss how immigration has led to cultural exchange and mixing, including cross-cultural marriages; candidates may discuss the economic impact of immigration; for example, in some cases immigration may increase the availability of cheap labour, or immigration may add to the talent pool and contribute economic benefits to the country; in some cases immigrants may have played a role in contributing to political upheaval in a country; discussion of emigration may focus on the economic effects, for example, "brain drain", or loss of human resources which may adversely affect the economy; candidates may discuss the social impact of emigration such as separation of families, or the death of many emigrants in the process of moving to a new country.
+
+Responses achieving marks in the top bands will provide a clear judgment on the impact of immigration and emigration on the two countries chosen for discussion.` },
+
+  // ── Post-war developments in the Middle East (1945–2000) ──
+  { id: "p3q33", number: 33, topic: "Post-war developments in the Middle East (1945\u20132000)", question: "Compare and contrast the economic and social policies of Nasser and Sadat in Egypt.", marks: 15, markscheme: `Candidates must demonstrate a clear understanding of the requirements of the question and effectively deploy knowledge of the key issue(s) raised by the question; in this case discussion of the similarities and differences in both the economic and social policies of Nasser and Sadat in Egypt.
+
+Points discussed may include: Comparison: both Nasser (1918-1970) and Sadat (1918-1981) realized that the Egyptian economy was weak, and tried to improve it; in both cases Egypt remained poor in spite of their efforts; both of their economic policies were affected by political considerations. As their economic policies differed considerably, candidates will probably find more to contrast, than compare; Contrast: Nasser's policies were socialist. He nationalized the Suez Canal, guaranteed employment in the public sector, nationalized industries, sought to redistribute land, and aimed at self-sufficiency. He introduced free education, and to a certain extent did champion the middle class, but his most important economic policy was probably the Aswan Dam; Contrast: Sadat tried to distance himself from Nasser's policies with his "open door" policy. He did consolidate the public sector, but allowed private sector growth, some capitalist measures related to a "free market economy". The continued closure of the Suez Canal caused revenue losses. Sadat encouraged foreign trade, but this caused a trade deficit, and exports fell. A new upper class of merchants developed and inflation increased; candidates must give an account of the similarities and differences in economic and social policies of the two leaders, not simply give a description of the two sets of policies. Thematic approaches are therefore likely to be more successful than end-on comparisons.
+
+Responses achieving marks in the top bands will include a clear judgment on the similarities and differences between the economic and social policies of Nasser and Sadat in Egypt.` },
+  { id: "p3q34", number: 34, topic: "Post-war developments in the Middle East (1945\u20132000)", question: "Evaluate the importance of religious factors in causing the outbreak of the Lebanese Civil War in 1975.", marks: 15, markscheme: `Candidates must demonstrate a clear understanding of the requirements of the question and effectively deploy knowledge of the key issue(s) raised by the question; in this case the importance of religious factors in causing the outbreak of the Lebanese Civil War in 1975.
+
+Points discussed may include: complex religious situation in Lebanon with Sunni Muslims, Shia Muslims and Maronite Christians; escalating sectarian violence in 1975; the Bus Massacre; it could be argued that it is impossible to separate religious and political factors because of the confessional nature of the state, with the president always a Maronite and the prime minister a Sunni and the allocation of cabinet posts being proportional on a confessional basis. The emergence of the militias on confessional lines was also a key factor; candidates may also consider the relative importance of other factors in causing the outbreak of the war, for example: the influx of Palestinian refugees after Black September, which upset the delicate balance of Lebanese society; militarization of the Palestinian refugee population; arrival of PLO forces; candidates may also discuss economic factors that contributed to the instability, such as economic disparity, and the fact that movement into the cities, especially Beirut, because of increasing tensions with Israel, led to an increasingly poor urban group who became attracted to the militias.
+
+Responses achieving marks in the top bands will include a clear judgment on the importance of religious factors in causing the outbreak of the Lebanese Civil War in 1975.` },
+
+  // ── Post-independence politics in Africa to 2005 ──
+  { id: "p3q35", number: 35, topic: "Post-independence politics in Africa to 2005", question: '\u201cEconomic problems after independence were the main cause of civil war.\u201d With reference to one civil war you have studied, to what extent do you agree with this statement?', marks: 15, markscheme: `Candidates must demonstrate a clear understanding of the requirements of the question and effectively deploy knowledge of the key issue(s) raised by the question. In this case, candidates must clearly identify one civil war from the region to discuss as an example, and must reach a clear judgment on the extent to which they agree that economic problems after independence, rather than other factors, were the main cause of the civil war.
+
+Points discussed may include: the specific causes of the civil war will depend on the example chosen for discussion. Popular countries chosen for discussion are likely to be Angola, Burundi, Chad, Congo, Rwanda, Liberia, Nigeria, Sierra Leone, Somalia, Sudan, Uganda and Mozambique; economic causes such as economic marginalization of some communities may be discussed as a cause of civil wars; the need to control trade and economic activities by specific communities may also have contributed to civil war; candidates may discuss the importance of land issues as a cause of civil wars, or may discuss conflicts caused by fights over resources such as diamonds, oil etc; candidates may also discuss a range of other factors which could be regarded as the main cause of civil war, such as ethnic/tribal and religious differences, the role of political coups, bad governance and political inequalities, lack of political freedom for some groups in the chosen communities.
+
+Responses achieving marks in the top bands will include a clear judgment on extent to which they agree that economic problems after independence, rather than other factors, were the main cause of the civil war.` },
+  { id: "p3q36", number: 36, topic: "Post-independence politics in Africa to 2005", question: "Compare and contrast the factors that led to the return to multi-party democracy in two countries.", marks: 15, markscheme: `Candidates must demonstrate a clear understanding of the requirements of the question and effectively deploy knowledge of the key issue(s) raised by the question. In this case, candidates must clearly identify the two countries they are going to consider, and to examine both similarities and differences in the factors that meant these countries that had embraced one party politics eventually turned back to multi-party democracy.
+
+Points discussed may include: the weaknesses and failures of the one party systems which made many countries turn back to multi-party democracy; political factors such as the fact that many of the single party states were seen to be dictatorial/totalitarian in nature; there was lack of political freedom with other political parties either being forbidden or having their operations restricted. Political opposition was forbidden and political opponents were ruthlessly dealt with; general lack of freedom eg lack of freedom of expression and association; the economy was usually controlled by and therefore not everyone was seen to benefit; with a return to multi-party democracy, there was hope that healthy democracy would be promoted, human rights would be respected and national development would be encouraged; with a return to multi-party democracy there was also hope that a lot of the failures of the single party states would be resolved; candidates must give an account of the similarities and differences in the factors that led to the return to multi-party democracy, not simply give a description of factors and events. Thematic approaches are therefore likely to be more successful than end-on comparisons.
+
+Responses achieving marks in the top bands will include a clear judgment on the similarities and differences between the factors that led to the return to multi-party democracy in two countries.` },
+];
+
 // ─── Group questions by topic ───────────────────────────────────────────────
-const TOPICS = [...new Set(HISTORY_QUESTIONS.map(q => q.topic))];
+const P2_TOPICS = [...new Set(HISTORY_QUESTIONS.map(q => q.topic))];
+const P3_TOPICS = [...new Set(PAPER3_QUESTIONS.map(q => q.topic))];
 
 // ─── Single Question Component ─────────────────────────────────────────────
-function HistoryQuestion({ q }) {
-  const [answer, setAnswer] = useState(() => loadLS(`hist_ans_${q.id}`, ""));
+function HistoryQuestion({ q, levelDescriptors, prefix }) {
+  const lsPrefix = prefix || "hist";
+  const [answer, setAnswer] = useState(() => loadLS(`${lsPrefix}_ans_${q.id}`, ""));
   const [revealed, setRevealed] = useState(false);
   const [levelsRevealed, setLevelsRevealed] = useState(false);
   const [grading, setGrading] = useState(false);
-  const [gradeResult, setGradeResult] = useState(() => loadLS(`hist_grade_${q.id}`, null));
+  const [gradeResult, setGradeResult] = useState(() => loadLS(`${lsPrefix}_grade_${q.id}`, null));
 
-  useEffect(() => { saveLS(`hist_ans_${q.id}`, answer); }, [answer, q.id]);
-  useEffect(() => { saveLS(`hist_grade_${q.id}`, gradeResult); }, [gradeResult, q.id]);
+  useEffect(() => { saveLS(`${lsPrefix}_ans_${q.id}`, answer); }, [answer, q.id, lsPrefix]);
+  useEffect(() => { saveLS(`${lsPrefix}_grade_${q.id}`, gradeResult); }, [gradeResult, q.id, lsPrefix]);
 
   const handleSolve = async () => {
     if (!answer.trim()) return;
@@ -495,7 +738,7 @@ function HistoryQuestion({ q }) {
         body: JSON.stringify({
           question: q.question,
           studentAnswer: answer,
-          expectedAnswer: q.markscheme + "\n\n" + LEVEL_DESCRIPTORS,
+          expectedAnswer: q.markscheme + "\n\n" + levelDescriptors,
           marks: q.marks,
         }),
       });
@@ -515,8 +758,8 @@ function HistoryQuestion({ q }) {
   const handleClear = () => {
     setAnswer("");
     setGradeResult(null);
-    saveLS(`hist_ans_${q.id}`, "");
-    saveLS(`hist_grade_${q.id}`, null);
+    saveLS(`${lsPrefix}_ans_${q.id}`, "");
+    saveLS(`${lsPrefix}_grade_${q.id}`, null);
   };
 
   return (
@@ -690,7 +933,7 @@ function HistoryQuestion({ q }) {
             LEVEL DESCRIPTORS
           </Text>
           <Text fz={13} c="#B0ADA6" lh={1.7} style={{ whiteSpace: "pre-line" }}>
-            {LEVEL_DESCRIPTORS}
+            {levelDescriptors}
           </Text>
         </Box>
       </Collapse>
@@ -701,7 +944,15 @@ function HistoryQuestion({ q }) {
 // ─── Main History Page ────────────────────────────────────────────────────
 export default function HistoryPage() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const totalMarks = HISTORY_QUESTIONS.reduce((sum, q) => sum + q.marks, 0);
+  const [paper, setPaper] = useState(() => loadLS("hist_paper_tab", "paper2"));
+
+  useEffect(() => { saveLS("hist_paper_tab", paper); }, [paper]);
+
+  const questions = paper === "paper2" ? HISTORY_QUESTIONS : PAPER3_QUESTIONS;
+  const topics = paper === "paper2" ? P2_TOPICS : P3_TOPICS;
+  const totalMarks = questions.reduce((sum, q) => sum + q.marks, 0);
+  const levelDesc = paper === "paper2" ? LEVEL_DESCRIPTORS : LEVEL_DESCRIPTORS_P3;
+  const lsPrefix = paper === "paper2" ? "hist" : "p3";
 
   return (
     <Box mih="100vh" bg="#09090F" style={{ fontFamily: "'Inter', sans-serif", color: "#F0EEE8" }}>
@@ -827,11 +1078,41 @@ export default function HistoryPage() {
             c="#F0EEE8"
             style={{ letterSpacing: -0.5 }}
           >
-            Paper 2 — Specimen
+            {paper === "paper2" ? "Paper 2 \u2014 Specimen" : "Paper 3 \u2014 Specimen"}
           </Text>
           <Text ta="center" fz="xs" c="#55556A" mb="sm">
-            12 topics · {HISTORY_QUESTIONS.length} questions · {totalMarks} marks total
+            {paper === "paper2"
+              ? `12 topics \u00B7 ${questions.length} questions \u00B7 ${totalMarks} marks total`
+              : `18 topics \u00B7 ${questions.length} questions \u00B7 ${totalMarks} marks total`}
           </Text>
+
+          {/* Paper 2 / Paper 3 tabs */}
+          <Group justify="center" gap="xs" pb={4}>
+            {[
+              { key: "paper2", label: "Paper 2" },
+              { key: "paper3", label: "Paper 3" },
+            ].map(t => (
+              <Button
+                key={t.key}
+                size="sm"
+                radius="md"
+                ff="'JetBrains Mono', monospace"
+                fw={600}
+                onClick={() => setPaper(t.key)}
+                style={{
+                  backgroundColor: paper === t.key ? "#F0EEE8" : "transparent",
+                  color: paper === t.key ? "#09090F" : "#55556A",
+                  border: paper === t.key ? "none" : "1px solid #252533",
+                  fontSize: 13,
+                  height: 34,
+                  paddingLeft: 16,
+                  paddingRight: 16,
+                }}
+              >
+                {t.label}
+              </Button>
+            ))}
+          </Group>
         </Container>
       </Box>
 
@@ -841,28 +1122,35 @@ export default function HistoryPage() {
           {/* Exam info banner */}
           <Paper bg="#12121A" radius="lg" p="lg" mb="xl" style={{ border: "1px solid #252533" }}>
             <Text fz="sm" c="#F0EEE8" fw={600} mb={4}>
-              IB History HL/SL — Paper 2 Specimen
+              {paper === "paper2"
+                ? "IB History HL/SL \u2014 Paper 2 Specimen"
+                : "IB History HL \u2014 Paper 3 Specimen (Africa and the Middle East)"}
             </Text>
             <Text fz="xs" c="#8B8B9E" lh={1.6}>
-              Answer two questions, each chosen from a different topic. Each question is worth 15 marks.
-              The maximum mark for this paper is 30. Type your essay answers below — everything auto-saves.
-              Use "Solve" for AI grading, "Show Markscheme" for the rubric, and "Level Descriptors" for the marking bands.
+              {paper === "paper2"
+                ? "Answer two questions, each chosen from a different topic. Each question is worth 15 marks. The maximum mark for this paper is 30. Type your essay answers below \u2014 everything auto-saves. Use \"Solve\" for AI grading, \"Show Markscheme\" for the rubric, and \"Level Descriptors\" for the marking bands."
+                : "Answer three questions. Each question is worth 15 marks. The maximum mark for this paper is 45. 2 hours 30 minutes. HL only. Type your essay answers below \u2014 everything auto-saves. Use \"Solve\" for AI grading, \"Show Markscheme\" for the rubric, and \"Level Descriptors\" for the marking bands."}
             </Text>
             <Group mt="sm" gap="xs">
               <Badge size="xs" variant="light" color="red" ff="'JetBrains Mono', monospace">
-                {HISTORY_QUESTIONS.length} questions
+                {questions.length} questions
               </Badge>
               <Badge size="xs" variant="light" color="violet" ff="'JetBrains Mono', monospace">
-                12 topics
+                {topics.length} topics
               </Badge>
               <Badge size="xs" variant="light" color="yellow" ff="'JetBrains Mono', monospace">
                 15 marks each
               </Badge>
+              {paper === "paper3" && (
+                <Badge size="xs" variant="light" color="cyan" ff="'JetBrains Mono', monospace">
+                  HL only
+                </Badge>
+              )}
             </Group>
           </Paper>
 
           {/* Questions grouped by topic */}
-          {TOPICS.map(topic => (
+          {topics.map(topic => (
             <Box key={topic} mb="xl">
               <Text
                 fz={11}
@@ -876,8 +1164,8 @@ export default function HistoryPage() {
                 {topic}
               </Text>
               <Stack gap="md">
-                {HISTORY_QUESTIONS.filter(q => q.topic === topic).map(q => (
-                  <HistoryQuestion key={q.id} q={q} />
+                {questions.filter(q => q.topic === topic).map(q => (
+                  <HistoryQuestion key={q.id} q={q} levelDescriptors={levelDesc} prefix={lsPrefix} />
                 ))}
               </Stack>
             </Box>
