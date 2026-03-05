@@ -82,16 +82,17 @@ async function handlePutState(uid, request, env) {
 
 // ─── User upsert (D1) ───────────────────────────────────────────────────────
 
-async function upsertUser(uid, displayName, email, env) {
+async function upsertUser(uid, displayName, email, username, env) {
   await env.DB.prepare(
-    `INSERT INTO users (uid, display_name, email, created_at, updated_at)
-     VALUES (?1, ?2, ?3, ?4, ?4)
+    `INSERT INTO users (uid, display_name, email, username, created_at, updated_at)
+     VALUES (?1, ?2, ?3, ?4, ?5, ?5)
      ON CONFLICT(uid) DO UPDATE SET
        display_name = ?2,
        email = ?3,
-       updated_at = ?4`
+       username = ?4,
+       updated_at = ?5`
   )
-    .bind(uid, displayName || "Student", email || "", Date.now())
+    .bind(uid, displayName || "Student", email || "", username || "", Date.now())
     .run();
 }
 
@@ -125,7 +126,7 @@ async function handlePostAttempt(uid, request, env) {
   const timestamp = Date.now();
 
   // Upsert user profile
-  await upsertUser(uid, body.displayName, body.email, env);
+  await upsertUser(uid, body.displayName, body.email, body.username, env);
 
   // Insert the attempt
   await env.DB.prepare(
@@ -163,7 +164,9 @@ async function handleAdminUsers(env) {
     `SELECT
        u.uid,
        u.display_name AS displayName,
+       u.username,
        u.email,
+       u.account_status AS accountStatus,
        COUNT(a.id) AS totalAttempts,
        SUM(CASE WHEN a.question_type = 'mcq' AND a.is_correct = 1 THEN 1 ELSE 0 END) AS mcqCorrect,
        SUM(CASE WHEN a.question_type = 'mcq' THEN 1 ELSE 0 END) AS mcqTotal,
@@ -178,6 +181,125 @@ async function handleAdminUsers(env) {
   ).all();
 
   return json(results);
+}
+
+// ─── Svix webhook signature verification (Web Crypto API) ───────────────────
+
+async function verifyWebhookSignature(request, secret) {
+  const svixId = request.headers.get("svix-id");
+  const svixTimestamp = request.headers.get("svix-timestamp");
+  const svixSignature = request.headers.get("svix-signature");
+
+  if (!svixId || !svixTimestamp || !svixSignature) {
+    return { valid: false, error: "Missing svix headers" };
+  }
+
+  // Replay protection: reject timestamps older than 5 minutes
+  const now = Math.floor(Date.now() / 1000);
+  if (Math.abs(now - parseInt(svixTimestamp, 10)) > 300) {
+    return { valid: false, error: "Timestamp too old or too new" };
+  }
+
+  const rawBody = await request.text();
+
+  // Decode signing secret (strip "whsec_" prefix, base64-decode)
+  const secretBytes = Uint8Array.from(
+    atob(secret.replace(/^whsec_/, "")),
+    (c) => c.charCodeAt(0)
+  );
+
+  const key = await crypto.subtle.importKey(
+    "raw",
+    secretBytes,
+    { name: "HMAC", hash: "SHA-256" },
+    false,
+    ["sign"]
+  );
+
+  const message = new TextEncoder().encode(
+    `${svixId}.${svixTimestamp}.${rawBody}`
+  );
+  const signatureBuffer = await crypto.subtle.sign("HMAC", key, message);
+
+  const computedSig = btoa(
+    String.fromCharCode(...new Uint8Array(signatureBuffer))
+  );
+
+  // Compare against each signature in header (space-separated "v1,<base64>" format)
+  const isValid = svixSignature.split(" ").some((sig) => {
+    const parts = sig.split(",");
+    return parts.length === 2 && parts[1] === computedSig;
+  });
+
+  return isValid
+    ? { valid: true, body: JSON.parse(rawBody) }
+    : { valid: false, error: "Signature mismatch" };
+}
+
+// ─── Clerk webhook handler ──────────────────────────────────────────────────
+
+async function handleClerkWebhook(request, env) {
+  const secret = env.CLERK_WEBHOOK_SECRET;
+  if (!secret) {
+    return json({ error: "Webhook secret not configured" }, 500);
+  }
+
+  const result = await verifyWebhookSignature(request, secret);
+  if (!result.valid) {
+    return json({ error: result.error }, 401);
+  }
+
+  const event = result.body;
+  const data = event.data;
+
+  switch (event.type) {
+    case "user.created":
+    case "user.updated": {
+      const uid = data.id;
+      const email =
+        data.email_addresses?.find((e) => e.id === data.primary_email_address_id)
+          ?.email_address || "";
+      const username = data.username || "";
+      const displayName =
+        [data.first_name, data.last_name].filter(Boolean).join(" ") ||
+        data.username ||
+        email.split("@")[0] ||
+        "Student";
+
+      await upsertUser(uid, displayName, email, username, env);
+      return json({ ok: true, event: event.type });
+    }
+
+    case "user.deleted": {
+      const uid = data.id;
+      if (uid) {
+        await env.DB.prepare(
+          `UPDATE users SET account_status = 'user_deleted', updated_at = ?1 WHERE uid = ?2`
+        ).bind(Date.now(), uid).run();
+      }
+      return json({ ok: true, event: event.type });
+    }
+
+    default:
+      return json({ ok: true, event: event.type, ignored: true });
+  }
+}
+
+// ─── Admin: update user status ──────────────────────────────────────────────
+
+async function handleAdminUpdateStatus(request, env) {
+  const { uid, status } = await request.json();
+
+  const validStatuses = ["active", "user_deleted", "admin_deleted"];
+  if (!uid || !validStatuses.includes(status)) {
+    return json({ error: "Invalid uid or status" }, 400);
+  }
+
+  await env.DB.prepare(
+    `UPDATE users SET account_status = ?1, updated_at = ?2 WHERE uid = ?3`
+  ).bind(status, Date.now(), uid).run();
+
+  return json({ ok: true });
 }
 
 // ─── Router ──────────────────────────────────────────────────────────────────
@@ -200,6 +322,16 @@ export default {
     // Admin: GET /api/admin/users
     if (path === "/api/admin/users" && request.method === "GET") {
       return handleAdminUsers(env);
+    }
+
+    // Admin: PUT /api/admin/users/status
+    if (path === "/api/admin/users/status" && request.method === "PUT") {
+      return handleAdminUpdateStatus(request, env);
+    }
+
+    // Clerk webhook: POST /api/webhooks/clerk
+    if (path === "/api/webhooks/clerk" && request.method === "POST") {
+      return handleClerkWebhook(request, env);
     }
 
     // State: GET/PUT /api/state/:uid (KV)

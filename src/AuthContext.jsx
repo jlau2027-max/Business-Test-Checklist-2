@@ -16,6 +16,7 @@ export function AuthProvider({ children }) {
   const user = isSignedIn && clerkUser ? {
     uid: clerkUser.id,
     email: clerkUser.primaryEmailAddress?.emailAddress || "",
+    username: clerkUser.username || "",
     displayName: clerkUser.fullName || clerkUser.username || clerkUser.firstName || clerkUser.primaryEmailAddress?.emailAddress?.split("@")[0] || "Student",
   } : null;
 

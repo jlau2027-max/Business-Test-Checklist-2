@@ -9,6 +9,7 @@ export async function saveAttempt(uid, attemptData, userInfo = {}) {
       ...attemptData,
       displayName: userInfo.displayName || "Student",
       email: userInfo.email || "",
+      username: userInfo.username || "",
     }),
   });
   if (!res.ok) throw new Error("Failed to save attempt");
@@ -18,6 +19,17 @@ export async function saveAttempt(uid, attemptData, userInfo = {}) {
 export async function getAllUsersStats() {
   const res = await fetch(`${WORKER_URL}/api/admin/users`);
   if (!res.ok) throw new Error("Failed to fetch admin data");
+  return await res.json();
+}
+
+// ─── Admin: update user account status ──────────────────────────────────────
+export async function updateUserStatus(uid, status) {
+  const res = await fetch(`${WORKER_URL}/api/admin/users/status`, {
+    method: "PUT",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ uid, status }),
+  });
+  if (!res.ok) throw new Error("Failed to update user status");
   return await res.json();
 }
 

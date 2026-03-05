@@ -33,7 +33,7 @@ export function useAttemptTracker(questionId, questionType, category, subject = 
             score: result.score ?? null,
             maxMarks: result.maxMarks ?? null,
           },
-          { displayName: user.displayName, email: user.email }
+          { displayName: user.displayName, email: user.email, username: user.username }
         );
       } catch (err) {
         console.error("Failed to save attempt:", err);

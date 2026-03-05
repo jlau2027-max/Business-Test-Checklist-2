@@ -11,6 +11,7 @@ import {
   computeCategoryStats,
   computeOverallStats,
   getWrongAnswers,
+  updateUserStatus,
 } from "./firestoreService.js";
 import LoginButton from "./LoginButton.jsx";
 
@@ -300,6 +301,19 @@ export default function AdminPage() {
   const overallMcqAcc = totalMcqTotal > 0 ? Math.round((totalMcqCorrect / totalMcqTotal) * 100) : null;
   const overallWrittenAvg = totalWrittenMax > 0 ? Math.round((totalWrittenScore / totalWrittenMax) * 100) : null;
 
+  const handleStatusChange = async (uid, newStatus) => {
+    try {
+      await updateUserStatus(uid, newStatus);
+      setUsersData((prev) =>
+        prev.map((u) =>
+          u.uid === uid ? { ...u, accountStatus: newStatus } : u
+        )
+      );
+    } catch (err) {
+      console.error("Failed to update status:", err);
+    }
+  };
+
   if (authLoading) return null;
 
   return (
@@ -429,12 +443,15 @@ export default function AdminPage() {
                   <Table.Thead>
                     <Table.Tr>
                       <Table.Th>NAME</Table.Th>
+                      <Table.Th>USERNAME</Table.Th>
                       <Table.Th>EMAIL</Table.Th>
+                      <Table.Th>STATUS</Table.Th>
                       <Table.Th style={{ textAlign: "right" }}>ATTEMPTS</Table.Th>
                       <Table.Th style={{ textAlign: "right" }}>MCQ %</Table.Th>
                       <Table.Th style={{ textAlign: "right" }}>WRITTEN %</Table.Th>
                       <Table.Th style={{ textAlign: "right" }}>TIME</Table.Th>
                       <Table.Th style={{ textAlign: "right" }}>LAST ACTIVE</Table.Th>
+                      <Table.Th>ACTIONS</Table.Th>
                     </Table.Tr>
                   </Table.Thead>
                   <Table.Tbody>
@@ -443,13 +460,33 @@ export default function AdminPage() {
                       const writtenAvg = u.writtenMax > 0 ? Math.round((u.writtenScore / u.writtenMax) * 100) : null;
                       const lastActive = u.lastActive ? new Date(u.lastActive).toLocaleDateString() : "—";
 
+                      const statusColor =
+                        (u.accountStatus || "active") === "active" ? "#34D399" :
+                        u.accountStatus === "admin_deleted" ? "#F87171" : "#FBBF24";
+
                       return (
                         <Table.Tr key={u.uid} onClick={() => setSelectedUser(u)}>
                           <Table.Td>
                             <Text fw={600} c="#F0EEE8" fz={13}>{u.displayName || "Student"}</Text>
                           </Table.Td>
                           <Table.Td>
+                            <Text c="#8B8B9E" fz={12} ff="'JetBrains Mono', monospace">{u.username || "---"}</Text>
+                          </Table.Td>
+                          <Table.Td>
                             <Text c="#8B8B9E" fz={12} truncate>{u.email || "—"}</Text>
+                          </Table.Td>
+                          <Table.Td>
+                            <Badge
+                              size="xs"
+                              ff="'JetBrains Mono', monospace"
+                              style={{
+                                backgroundColor: statusColor + "22",
+                                color: statusColor,
+                                border: "none",
+                              }}
+                            >
+                              {u.accountStatus || "active"}
+                            </Badge>
                           </Table.Td>
                           <Table.Td style={{ textAlign: "right" }}>
                             <Text ff="'JetBrains Mono', monospace" fz={13}>{u.totalAttempts}</Text>
@@ -479,6 +516,45 @@ export default function AdminPage() {
                           </Table.Td>
                           <Table.Td style={{ textAlign: "right" }}>
                             <Text ff="'JetBrains Mono', monospace" fz={12} c="#8B8B9E">{lastActive}</Text>
+                          </Table.Td>
+                          <Table.Td>
+                            {(u.accountStatus || "active") !== "admin_deleted" ? (
+                              <Button
+                                size="compact-xs"
+                                radius="md"
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  handleStatusChange(u.uid, "admin_deleted");
+                                }}
+                                style={{
+                                  backgroundColor: "#F8717122",
+                                  color: "#F87171",
+                                  border: "none",
+                                  fontFamily: "'JetBrains Mono', monospace",
+                                  fontSize: 10,
+                                }}
+                              >
+                                Disable
+                              </Button>
+                            ) : (
+                              <Button
+                                size="compact-xs"
+                                radius="md"
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  handleStatusChange(u.uid, "active");
+                                }}
+                                style={{
+                                  backgroundColor: "#34D39922",
+                                  color: "#34D399",
+                                  border: "none",
+                                  fontFamily: "'JetBrains Mono', monospace",
+                                  fontSize: 10,
+                                }}
+                              >
+                                Reactivate
+                              </Button>
+                            )}
                           </Table.Td>
                         </Table.Tr>
                       );

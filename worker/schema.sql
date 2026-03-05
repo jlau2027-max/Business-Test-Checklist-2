@@ -1,7 +1,9 @@
 CREATE TABLE IF NOT EXISTS users (
   uid TEXT PRIMARY KEY,
   display_name TEXT NOT NULL DEFAULT 'Student',
+  username TEXT NOT NULL DEFAULT '',
   email TEXT NOT NULL DEFAULT '',
+  account_status TEXT NOT NULL DEFAULT 'active',
   created_at INTEGER NOT NULL DEFAULT (unixepoch() * 1000),
   updated_at INTEGER NOT NULL DEFAULT (unixepoch() * 1000)
 );
