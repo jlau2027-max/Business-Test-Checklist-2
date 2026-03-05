@@ -1,0 +1,44 @@
+[
+  {
+    "id": "spec_a",
+    "label": "(a)",
+    "question": "Define the term direct costs.",
+    "marks": 2,
+    "markscheme": "A direct cost is a cost that can be specifically traced / attributed to a particular product, department, or project.\n\nAward [1] for a basic definition that conveys the idea of a cost linked to production.\nAward [2] for a clear definition that includes the concept of traceability to a specific product/output.\n\nExamples of direct costs include raw materials and direct labour."
+  },
+  {
+    "id": "spec_b",
+    "label": "(b)",
+    "question": "Explain one advantage and one disadvantage to NorthHaven Dairy (NHD) of leasing its new automated bottling machines rather than purchasing them outright.",
+    "marks": 4,
+    "markscheme": "Advantage of leasing (award up to [2]):\n• Lower upfront costs — leasing allows NHD to acquire the automated bottling machines without a large capital outlay [1], preserving cash flow for other operational needs such as marketing or raw material procurement [1].\n• Flexibility — leasing allows NHD to upgrade to newer technology at the end of the lease term [1], avoiding the risk of obsolescence [1].\n• Tax benefits — lease payments can often be deducted as a business expense [1], reducing NHD's taxable income [1].\n\nDisadvantage of leasing (award up to [2]):\n• Higher long-term cost — while individual lease payments may be lower, the total cost over time can exceed the purchase price [1], reducing NHD's long-term profitability [1].\n• No ownership — at the end of the lease, NHD does not own the machines [1], meaning they have no asset to show on their balance sheet or to resell [1].\n• Restrictions — lease agreements may limit how NHD can use or modify the equipment [1], reducing operational flexibility [1].\n\nAccept any reasonable advantage/disadvantage with appropriate application to NHD.\nAward [1] for identification, [1] for explanation/development with reference to NHD."
+  },
+  {
+    "id": "spec_c1",
+    "label": "(c)(i)",
+    "question": "Using the financial information below, calculate the profit margin for NHD. Show your working.\n\nFinancial Information for NHD:\n• Sales Revenue: $2,400,000\n• Cost of Goods Sold (COGS): $1,440,000\n• Operating Expenses: $600,000\n• Net Profit (before tax): $360,000\n• Total Assets: $3,000,000\n• Total Liabilities: $1,200,000\n• Capital Employed: $1,800,000",
+    "marks": 2,
+    "markscheme": "Profit Margin = (Net Profit / Sales Revenue) × 100\n\nProfit Margin = ($360,000 / $2,400,000) × 100 = 15%\n\nAward [1] for correct formula or working.\nAward [1] for correct answer of 15%.\n\nIf no working is shown but the answer is correct, award [2].\nIf the formula is correct but the answer is wrong due to arithmetic error, award [1]."
+  },
+  {
+    "id": "spec_c2",
+    "label": "(c)(ii)",
+    "question": "Using the financial information above, calculate the return on capital employed (ROCE) for NHD. Show your working.",
+    "marks": 2,
+    "markscheme": "ROCE = (Net Profit before tax / Capital Employed) × 100\n\nROCE = ($360,000 / $1,800,000) × 100 = 20%\n\nAward [1] for correct formula or working.\nAward [1] for correct answer of 20%.\n\nIf no working is shown but the answer is correct, award [2].\nIf the formula is correct but the answer is wrong due to arithmetic error, award [1]."
+  },
+  {
+    "id": "spec_d",
+    "label": "(d)",
+    "question": "Construct a Statement of Profit or Loss for NHD using the following additional financial information:\n\nAdditional Financial Information:\n• Interest Expense: $50,000\n• Tax Rate: 25%\n• Sales Revenue: $2,400,000\n• COGS: $1,440,000\n• Operating Expenses: $600,000",
+    "marks": 4,
+    "markscheme": "Statement of Profit or Loss for NHD:\n\nSales Revenue:                   $2,400,000\nLess Cost of Goods Sold:        ($1,440,000)\n─────────────────────────────────────────────\nGross Profit:                      $960,000\nLess Operating Expenses:          ($600,000)\n─────────────────────────────────────────────\nOperating Profit:                  $360,000\nLess Interest Expense:             ($50,000)\n─────────────────────────────────────────────\nNet Profit before Tax:             $310,000\nLess Tax (25%):                    ($77,500)\n─────────────────────────────────────────────\nNet Profit after Tax:              $232,500\n\nAward [1] for correct Gross Profit ($960,000).\nAward [1] for correct Operating Profit ($360,000).\nAward [1] for correct Net Profit before Tax ($310,000).\nAward [1] for correct Net Profit after Tax ($232,500).\n\nAccept alternative correct layouts. If one error carries through (own figure rule / OFR), award marks for subsequent correct calculations based on the student's own figures."
+  },
+  {
+    "id": "spec_e",
+    "label": "(e)",
+    "question": "Evaluate two strategies that NorthHaven Dairy (NHD) could use to improve its profit margin.",
+    "marks": 10,
+    "markscheme": "Possible strategies include but are not limited to:\n\n1. Reducing Costs:\n   • NHD could negotiate better prices with suppliers for raw milk and packaging materials to reduce COGS.\n   • Investing in automation (e.g., the new bottling machines) may reduce direct labour costs in the long run.\n   • Streamlining operations to reduce waste (e.g., lean production) could lower operating expenses.\n\n2. Increasing Revenue:\n   • NHD could diversify its product range (e.g., flavoured milks, cheese, yoghurt) to attract new customers and increase sales revenue.\n   • Premium pricing for organic or locally sourced products could increase revenue without proportionally increasing costs.\n   • Expanding distribution channels (e.g., online sales, partnerships with supermarkets) could grow the customer base.\n\n3. Improving Efficiency:\n   • Adopting new technology or processes to improve productivity and reduce per-unit costs.\n   • Training employees to improve output quality and reduce defect rates.\n\n4. Marketing and Branding:\n   • Investing in branding and marketing to build customer loyalty and justify higher prices.\n   • Positioning NHD as a sustainable/local brand may allow premium pricing.\n\nEvaluation should consider:\n• Short-term vs long-term impact of each strategy\n• Feasibility for NHD given its size and market position\n• Potential risks or trade-offs (e.g., cost-cutting may affect quality)\n• Which strategy is more likely to succeed and why\n\nLEVEL DESCRIPTORS:\n\nLevel 4 [9–10 marks]:\nA balanced, well-structured response that evaluates two strategies in depth. Analysis is thorough with clear application to NHD. A well-supported conclusion or judgement is offered that considers trade-offs and context.\n\nLevel 3 [7–8 marks]:\nA good response that evaluates two strategies with some depth. Analysis is mostly applied to NHD. Some attempt at a conclusion, but it may lack full justification or balance.\n\nLevel 2 [4–6 marks]:\nA partial response that identifies two strategies with some explanation. Limited analysis and application to NHD. May describe rather than evaluate. Little or no conclusion.\n\nLevel 1 [1–3 marks]:\nA limited response that identifies one or two strategies with little or no explanation. Largely generic with minimal reference to NHD. No evaluation or conclusion.\n\n[0 marks]: No relevant content."
+  }
+]

@@ -5,6 +5,8 @@ import {
   Accordion, Checkbox, Button, Collapse,
   Alert, Box, Stack, Textarea, useMantineTheme,
 } from "@mantine/core";
+import { useNavigate } from "react-router-dom";
+import AuthButton from "./components/AuthButton";
 
 // ─── localStorage helpers ──────────────────────────────────────────────────
 function loadLS(key, fallback) {
@@ -1027,6 +1029,10 @@ export default function App() {
                 <line x1="3" y1="18" x2="21" y2="18"/>
               </svg>
             </Button>
+            {/* Auth button */}
+            <div style={{ position: "absolute", right: 0, top: "50%", transform: "translateY(-50%)", display: "flex", gap: 8, alignItems: "center" }}>
+              <AuthButton />
+            </div>
             <Badge
               variant="light"
               size="sm"

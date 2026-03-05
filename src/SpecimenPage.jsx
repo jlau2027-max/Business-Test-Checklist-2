@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import {
   Container, Badge, Text, Group, Paper, Button, Box, Textarea, Collapse, Stack,
 } from "@mantine/core";
+import AuthButton from "./components/AuthButton";
 
 // ─── localStorage helpers ──────────────────────────────────────────────────
 function loadLS(key, fallback) {
@@ -380,7 +381,7 @@ export default function SpecimenPage() {
         }}
       >
         <Container size="lg" py="sm">
-          <Group justify="center" mb={4}>
+          <Group justify="center" mb={4} style={{ position: "relative" }}>
             <Badge
               variant="light"
               size="sm"
@@ -391,6 +392,9 @@ export default function SpecimenPage() {
             >
               IB HL Business Management
             </Badge>
+            <div style={{ position: "absolute", right: 0, top: "50%", transform: "translateY(-50%)", display: "flex", gap: 8, alignItems: "center" }}>
+              <AuthButton />
+            </div>
           </Group>
           <Text
             ta="center"

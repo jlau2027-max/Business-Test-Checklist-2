@@ -1,0 +1,166 @@
+[
+  {
+    "id": "sources",
+    "title": "3.1 – Sources of Finance",
+    "color": "#FB923C",
+    "items": [
+      "Difference between internal & external sources of finance",
+      "Short, medium & long-term finance — matched to purpose",
+      "Equity vs debt financing (pros & cons)",
+      "Why a business chooses one source over another",
+      "Retained profit, share capital, debentures, venture capital (HL)",
+      "Loan capital vs overdraft vs trade credit"
+    ]
+  },
+  {
+    "id": "costs",
+    "title": "3.2 – Costs & Revenues",
+    "color": "#7C6FFF",
+    "items": [
+      "Fixed, variable, semi-variable, direct & indirect costs",
+      "Total Revenue and Average Revenue",
+      "Contribution per unit = Selling Price – Variable Cost",
+      "Total Contribution = Contribution per unit × Quantity",
+      "Total Costs = Fixed Costs + Total Variable Costs",
+      "Profit = Total Revenue – Total Costs",
+      "Difference between profit and cash flow"
+    ]
+  },
+  {
+    "id": "cashflow",
+    "title": "3.3 – Cash Flow",
+    "color": "#38BDF8",
+    "items": [
+      "Construct and interpret a cash flow forecast",
+      "Net Cash Flow = Cash Inflows – Cash Outflows",
+      "Closing Balance = Opening Balance + Net Cash Flow",
+      "Causes of cash flow problems",
+      "Solutions: overdraft, debt factoring, sale of assets, better credit control",
+      "Difference between cash flow and profit (common exam trap!)"
+    ]
+  },
+  {
+    "id": "accounts",
+    "title": "3.4 – Final Accounts",
+    "color": "#34D399",
+    "items": [
+      "Income Statement layout: Revenue → Gross Profit → Net Profit",
+      "Balance Sheet structure: Assets = Equity + Liabilities",
+      "Current vs non-current assets and liabilities",
+      "Straight-line depreciation = (Cost – Residual Value) ÷ Useful Life (HL)",
+      "Reducing balance depreciation = Net Book Value × Rate % (HL)",
+      "Intangible assets: goodwill, patents, brand value (HL)"
+    ]
+  },
+  {
+    "id": "ratios",
+    "title": "3.5 – Profitability & Liquidity Ratios",
+    "color": "#FBBF24",
+    "items": [
+      "Gross Profit Margin = (Gross Profit ÷ Revenue) × 100 ✦ IN BOOKLET",
+      "Net Profit Margin = (Net Profit ÷ Revenue) × 100 ✦ IN BOOKLET",
+      "ROCE = (Net Profit ÷ Capital Employed) × 100 ✦ IN BOOKLET",
+      "Current Ratio = Current Assets ÷ Current Liabilities (ideal ~2:1) ✦ IN BOOKLET",
+      "Acid Test = (CA – Inventory) ÷ CL (ideal ~1:1) ✦ IN BOOKLET",
+      "Interpret ratios in context — not just calculate them!"
+    ]
+  },
+  {
+    "id": "efficiency",
+    "title": "3.6 – Efficiency Ratios (HL Only)",
+    "color": "#F87171",
+    "items": [
+      "Stock Turnover (times) = Cost of Sales ÷ Average Stock ✦ IN BOOKLET",
+      "Stock Turnover (days) = (Average Stock ÷ Cost of Sales) × 365 ✦ IN BOOKLET",
+      "Average Stock = (Opening Stock + Closing Stock) ÷ 2 ✦ IN BOOKLET",
+      "Debtor Days = (Debtors ÷ Revenue) × 365 ✦ IN BOOKLET",
+      "Creditor Days = (Creditors ÷ Cost of Sales) × 365 ✦ IN BOOKLET",
+      "Gearing = (Non-current Liabilities ÷ Capital Employed) × 100 ✦ IN BOOKLET",
+      "High vs low gearing — implications for risk and investment"
+    ]
+  },
+  {
+    "id": "investment",
+    "title": "3.7 – Investment Appraisal",
+    "color": "#A78BFA",
+    "items": [
+      "Payback Period — calculate and interpret",
+      "ARR = (Total Returns – Capital Cost) ÷ Years ÷ Capital Cost × 100 ✦ IN BOOKLET",
+      "NPV = Sum of discounted cash flows – Initial Investment ✦ IN BOOKLET (HL)",
+      "Discount factors/tables are provided in exam",
+      "Compare methods: qualitative vs quantitative factors",
+      "Limitations of each investment appraisal method"
+    ]
+  },
+  {
+    "id": "budgets",
+    "title": "3.8 – Budgets & Variance Analysis",
+    "color": "#38BDF8",
+    "items": [
+      "Variance = Actual – Budgeted ✦ MEMORISE",
+      "Favourable variance: better than expected",
+      "Adverse variance: worse than expected",
+      "For costs: Actual < Budgeted = Favourable",
+      "For revenue: Actual > Budgeted = Favourable",
+      "Zero-based vs incremental budgeting (pros & cons)",
+      "Limitations of budgets"
+    ]
+  },
+  {
+    "id": "breakeven",
+    "title": "5.5 – Breakeven Analysis",
+    "color": "#2DD4BF",
+    "items": [
+      "Breakeven Output = Fixed Costs ÷ Contribution per unit ✦ MEMORISE",
+      "Margin of Safety = Actual Output – Breakeven Output ✦ MEMORISE",
+      "Target Profit Output = (FC + Target Profit) ÷ Contribution ✦ MEMORISE",
+      "Draw and interpret breakeven charts",
+      "Limitations of breakeven analysis",
+      "How changes in price/costs affect the breakeven point"
+    ]
+  },
+  {
+    "id": "bmt",
+    "title": "BMT Tools",
+    "color": "#F472B6",
+    "items": [
+      "Business Plan — components, purpose, link to securing finance",
+      "Ansoff Matrix — 4 strategies, risk levels, finance implications",
+      "STEEPLE — apply each factor to a business scenario",
+      "Force Field Analysis — driving vs restraining forces (Lewin)",
+      "Apply BMT tools to justify business decisions in context"
+    ]
+  },
+  {
+    "id": "formulas",
+    "title": "Formulas to MEMORISE (Not in Booklet)",
+    "color": "#F87171",
+    "items": [
+      "Contribution per unit = Selling Price – Variable Cost per unit",
+      "Total Contribution = Contribution per unit × Quantity",
+      "Total Costs = Fixed Costs + Total Variable Costs",
+      "Profit = Total Revenue – Total Costs",
+      "Breakeven Output = Fixed Costs ÷ Contribution per unit",
+      "Margin of Safety = Actual Output – Breakeven Output",
+      "Target Profit Output = (FC + Target Profit) ÷ Contribution per unit",
+      "Straight-line depreciation = (Cost – Residual Value) ÷ Useful Life",
+      "Reducing balance = Net Book Value × Depreciation Rate %",
+      "Net Cash Flow = Cash Inflows – Cash Outflows",
+      "Closing Balance = Opening Balance + Net Cash Flow",
+      "Variance = Actual – Budgeted"
+    ]
+  },
+  {
+    "id": "examtips",
+    "title": "Exam Technique",
+    "color": "#7C6FFF",
+    "items": [
+      "Define key terms at the start of longer answers",
+      "Always use the business context given — never answer generically",
+      "For evaluate/justify: give both sides then make a justified conclusion",
+      "Show ALL working in calculations — method marks are available",
+      "Interpret ratios — don't just calculate, explain what it means",
+      "Link answers back to the specific business in the question"
+    ]
+  }
+]

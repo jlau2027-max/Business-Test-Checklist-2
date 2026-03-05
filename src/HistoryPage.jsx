@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import {
   Container, Badge, Text, Group, Paper, Button, Box, Textarea, Collapse, Stack,
 } from "@mantine/core";
+import AuthButton from "./components/AuthButton";
 
 // ─── localStorage helpers ──────────────────────────────────────────────────
 function loadLS(key, fallback) {
@@ -1060,6 +1061,9 @@ export default function HistoryPage() {
                 <line x1="3" y1="18" x2="21" y2="18"/>
               </svg>
             </Button>
+            <div style={{ position: "absolute", right: 0, top: "50%", transform: "translateY(-50%)", display: "flex", gap: 8, alignItems: "center" }}>
+              <AuthButton />
+            </div>
             <Badge
               variant="light"
               size="sm"

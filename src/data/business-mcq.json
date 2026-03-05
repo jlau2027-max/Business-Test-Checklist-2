@@ -1,0 +1,352 @@
+[
+  {
+    "id": "mcq1",
+    "cat": "Costs & Revenue",
+    "difficulty": "SL",
+    "q": "A product sells for $80. Variable cost per unit is $30. What is the contribution per unit?",
+    "options": [
+      "$30",
+      "$80",
+      "$50",
+      "$110"
+    ],
+    "answer": 2,
+    "explanation": "Contribution per unit = Selling Price − Variable Cost = $80 − $30 = $50."
+  },
+  {
+    "id": "mcq2",
+    "cat": "Cash Flow",
+    "difficulty": "SL",
+    "q": "A business has an opening balance of $4,000, cash inflows of $9,000 and cash outflows of $11,500. What is the closing balance?",
+    "options": [
+      "$1,500",
+      "$2,500",
+      "−$1,500",
+      "$4,500"
+    ],
+    "answer": 0,
+    "explanation": "Net cash flow = $9,000 − $11,500 = −$2,500. Closing balance = $4,000 − $2,500 = $1,500."
+  },
+  {
+    "id": "mcq3",
+    "cat": "Final Accounts",
+    "difficulty": "SL",
+    "q": "Which of the following is a CURRENT liability?",
+    "options": [
+      "Machinery",
+      "Mortgage (10-year)",
+      "Bank overdraft",
+      "Goodwill"
+    ],
+    "answer": 2,
+    "explanation": "A bank overdraft is repayable within 12 months — it is a current liability. Machinery and goodwill are assets; a mortgage is a non-current liability."
+  },
+  {
+    "id": "mcq4",
+    "cat": "Final Accounts",
+    "difficulty": "HL",
+    "q": "A machine costs $60,000, has a residual value of $6,000, and a useful life of 9 years. What is the annual straight-line depreciation?",
+    "options": [
+      "$6,000",
+      "$7,333",
+      "$6,667",
+      "$60,000"
+    ],
+    "answer": 0,
+    "explanation": "= (Cost − Residual value) / Useful life = ($60,000 − $6,000) / 9 = $54,000 / 9 = $6,000 per year."
+  },
+  {
+    "id": "mcq5",
+    "cat": "Ratio Analysis",
+    "difficulty": "SL",
+    "q": "A business has sales revenue of $400,000 and gross profit of $100,000. What is the gross profit margin?",
+    "options": [
+      "25%",
+      "40%",
+      "75%",
+      "100%"
+    ],
+    "answer": 0,
+    "explanation": "GPM = (Gross profit / Sales revenue) × 100 = ($100,000 / $400,000) × 100 = 25%."
+  },
+  {
+    "id": "mcq6",
+    "cat": "Ratio Analysis",
+    "difficulty": "SL",
+    "q": "Current assets = $60,000. Stock = $25,000. Current liabilities = $30,000. What is the acid test ratio?",
+    "options": [
+      "2.0",
+      "1.17",
+      "0.83",
+      "1.5"
+    ],
+    "answer": 1,
+    "explanation": "Acid test = (Current assets − Stock) / Current liabilities = ($60,000 − $25,000) / $30,000 = $35,000 / $30,000 = 1.17. Above the ideal 1:1 benchmark."
+  },
+  {
+    "id": "mcq7",
+    "cat": "Ratio Analysis (HL)",
+    "difficulty": "HL",
+    "q": "Non-current liabilities = $300,000. Capital employed = $750,000. What is the gearing ratio?",
+    "options": [
+      "25%",
+      "40%",
+      "60%",
+      "75%"
+    ],
+    "answer": 1,
+    "explanation": "Gearing = (Non-current liabilities / Capital employed) × 100 = ($300,000 / $750,000) × 100 = 40%. Moderate gearing — below the 50% high-gearing threshold."
+  },
+  {
+    "id": "mcq8",
+    "cat": "Investment Appraisal",
+    "difficulty": "SL",
+    "q": "Which statement about NPV is CORRECT?",
+    "options": [
+      "A negative NPV means the project is profitable",
+      "NPV ignores the time value of money",
+      "A positive NPV means the investment adds value in today's money",
+      "NPV is simpler to calculate than payback period"
+    ],
+    "answer": 2,
+    "explanation": "A positive NPV means the present value of future returns exceeds the initial cost — the project adds value in real money terms. NPV explicitly accounts for the time value of money."
+  },
+  {
+    "id": "mcq9",
+    "cat": "Budgets & Variance",
+    "difficulty": "HL",
+    "q": "Budgeted revenue was $60,000. Actual revenue was $54,000. What type of variance is this?",
+    "options": [
+      "Favourable variance of $6,000",
+      "Adverse variance of $6,000",
+      "Favourable variance of $54,000",
+      "No variance"
+    ],
+    "answer": 1,
+    "explanation": "Variance = Actual − Budgeted = $54,000 − $60,000 = −$6,000. For revenue, actual < budgeted = ADVERSE variance."
+  },
+  {
+    "id": "mcq10",
+    "cat": "Budgets & Variance",
+    "difficulty": "HL",
+    "q": "Budgeted costs = $40,000. Actual costs = $36,000. What type of variance is this?",
+    "options": [
+      "Adverse variance of $4,000",
+      "Favourable variance of $4,000",
+      "Adverse variance of $36,000",
+      "No variance"
+    ],
+    "answer": 1,
+    "explanation": "For costs: actual < budgeted = FAVOURABLE. The business spent $4,000 less than planned, which is positive."
+  },
+  {
+    "id": "mcq11",
+    "cat": "Breakeven",
+    "difficulty": "SL",
+    "q": "Fixed costs = $15,000. Selling price = $50. Variable cost = $20. What is the breakeven output?",
+    "options": [
+      "300 units",
+      "500 units",
+      "750 units",
+      "400 units"
+    ],
+    "answer": 1,
+    "explanation": "Contribution = $50 − $20 = $30. BEQ = Fixed costs / Contribution = $15,000 / $30 = 500 units."
+  },
+  {
+    "id": "mcq12",
+    "cat": "BMT Tools",
+    "difficulty": "SL/HL",
+    "q": "A business sells existing products in a brand new overseas market. Which Ansoff strategy is this?",
+    "options": [
+      "Market Penetration",
+      "Product Development",
+      "Market Development",
+      "Diversification"
+    ],
+    "answer": 2,
+    "explanation": "Market Development = existing product into a new market. This is medium-risk as the product is proven but the market is unfamiliar."
+  },
+  {
+    "id": "mcq13",
+    "cat": "Sources of Finance",
+    "difficulty": "SL",
+    "q": "Which is an INTERNAL source of finance?",
+    "options": [
+      "Bank loan",
+      "Retained profit",
+      "Venture capital",
+      "Crowdfunding"
+    ],
+    "answer": 1,
+    "explanation": "Retained profit is generated from within the business — it is an internal source of finance. All others require a third party."
+  },
+  {
+    "id": "mcq14",
+    "cat": "Costs & Revenue",
+    "difficulty": "SL",
+    "q": "Factory rent is $5,000 per month regardless of output. What type of cost is this?",
+    "options": [
+      "Variable cost",
+      "Direct cost",
+      "Fixed cost",
+      "Semi-variable cost"
+    ],
+    "answer": 2,
+    "explanation": "Factory rent does not change with the level of output — it is a fixed cost."
+  },
+  {
+    "id": "mcq15",
+    "cat": "Ratio Analysis (HL)",
+    "difficulty": "HL",
+    "q": "A business has debtor days of 65 and the industry average is 30. What does this suggest?",
+    "options": [
+      "The business collects payments faster than rivals",
+      "The business has too much stock",
+      "The business is very slow at collecting debts — a cash flow risk",
+      "The business has high gearing"
+    ],
+    "answer": 2,
+    "explanation": "High debtor days (65 vs industry 30) means customers are taking far longer than average to pay. This ties up cash and increases cash flow risk. The business should tighten credit control."
+  },
+  {
+    "id": "mcq16",
+    "cat": "Sources of Finance",
+    "difficulty": "SL",
+    "q": "Big Deal installed solar panels on a store roof. What type of expenditure is this?",
+    "options": [
+      "Revenue expenditure",
+      "Capital expenditure",
+      "Indirect cost",
+      "Trade credit"
+    ],
+    "answer": 1,
+    "explanation": "Solar panels are a fixed asset lasting more than one year — this is capital expenditure. Revenue expenditure covers day-to-day running costs."
+  },
+  {
+    "id": "mcq17",
+    "cat": "Costs & Revenue",
+    "difficulty": "SL",
+    "q": "Dunn Auto Repair pays Keith a fixed salary of $5,000/month to handle accounting. This is best classified as:",
+    "options": [
+      "A variable cost",
+      "A direct cost",
+      "A fixed indirect cost",
+      "A revenue stream"
+    ],
+    "answer": 2,
+    "explanation": "Keith's salary is fixed (doesn't change with output) and indirect (not directly tied to any single repair job) — making it a fixed indirect cost/overhead."
+  },
+  {
+    "id": "mcq18",
+    "cat": "Final Accounts",
+    "difficulty": "SL",
+    "q": "Crispy Collin's has trade creditors of $35,000 and a bank overdraft of $2,500. What are its total current liabilities?",
+    "options": [
+      "$35,000",
+      "$32,500",
+      "$37,500",
+      "$2,500"
+    ],
+    "answer": 2,
+    "explanation": "Current liabilities = Bank overdraft + Trade creditors + Other short-term loans = $2,500 + $35,000 + $0 = $37,500."
+  },
+  {
+    "id": "mcq19",
+    "cat": "Ratio Analysis",
+    "difficulty": "SL",
+    "q": "Cedar Hill Books had a current ratio of 1.75:1 in Year 1, falling to 1.55:1 in Year 3. What does this trend suggest?",
+    "options": [
+      "Cedar Hill is becoming more profitable",
+      "Cedar Hill's liquidity is declining",
+      "Cedar Hill is taking on more long-term debt",
+      "Cedar Hill's gross profit margin is rising"
+    ],
+    "answer": 1,
+    "explanation": "A falling current ratio indicates declining short-term liquidity — the business has less current assets relative to current liabilities each year."
+  },
+  {
+    "id": "mcq20",
+    "cat": "Investment Appraisal",
+    "difficulty": "SL",
+    "q": "On Air Sports paid $6m upfront for broadcast rights generating $2m/year for 8 years. What is the payback period?",
+    "options": [
+      "2 years",
+      "3 years",
+      "4 years",
+      "6 years"
+    ],
+    "answer": 1,
+    "explanation": "$2m + $2m + $2m = $6m after 3 years. Payback period = 3 years exactly."
+  },
+  {
+    "id": "mcq21",
+    "cat": "Budgets & Variance",
+    "difficulty": "HL",
+    "q": "Müller Foods budgeted advertising costs of $1,000m but actual costs were $1,039m. What is this variance?",
+    "options": [
+      "$39m favourable",
+      "$39m adverse",
+      "$961m favourable",
+      "$1,039m adverse"
+    ],
+    "answer": 1,
+    "explanation": "For costs: actual ($1,039m) > budgeted ($1,000m) = ADVERSE. Müller spent more on advertising than planned, hurting profit."
+  },
+  {
+    "id": "mcq22",
+    "cat": "Ratio Analysis (HL)",
+    "difficulty": "HL",
+    "q": "Fresh Cucina has non-current liabilities of $218m and total equity of $427m. What is its gearing ratio (approximately)?",
+    "options": [
+      "51%",
+      "34%",
+      "66%",
+      "22%"
+    ],
+    "answer": 1,
+    "explanation": "Capital employed = Non-current liabilities + Equity = $218m + $427m = $645m. Gearing = $218m / $645m × 100 = 33.8% ≈ 34%."
+  },
+  {
+    "id": "mcq23",
+    "cat": "Cash Flow",
+    "difficulty": "SL",
+    "q": "Which strategy provides the FASTEST solution to a cash flow crisis?",
+    "options": [
+      "Launching a new product",
+      "Debt factoring",
+      "Applying for a long-term loan",
+      "Reducing prices by 5%"
+    ],
+    "answer": 1,
+    "explanation": "Debt factoring — selling outstanding invoices to a third party immediately — provides the fastest cash injection. New products, long-term loans, and price cuts all take time to generate cash."
+  },
+  {
+    "id": "mcq24",
+    "cat": "Final Accounts",
+    "difficulty": "HL",
+    "q": "Using the units of production method, a machine costs $23,500, has a residual value of $1,000 and estimated life of 45,000 hours. What is depreciation per hour?",
+    "options": [
+      "$0.25",
+      "$0.50",
+      "$0.75",
+      "$1.00"
+    ],
+    "answer": 1,
+    "explanation": "= (Cost − Residual value) / Estimated total units = ($23,500 − $1,000) / 45,000 = $22,500 / 45,000 = $0.50 per hour."
+  },
+  {
+    "id": "mcq25",
+    "cat": "Sources of Finance",
+    "difficulty": "SL",
+    "q": "Manuel at Hail Cheeser! is considering selling shares to friends and family. What must he do first?",
+    "options": [
+      "Register as a sole trader",
+      "Become a private limited company",
+      "Apply for crowdfunding",
+      "Obtain microfinance"
+    ],
+    "answer": 1,
+    "explanation": "To sell shares to friends and family, Manuel must incorporate as a private limited company (Ltd). Sole traders and partnerships cannot issue shares."
+  }
+]
