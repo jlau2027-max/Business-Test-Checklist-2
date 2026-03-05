@@ -1,13 +1,91 @@
 const WORKER_URL = "https://ib-grading-hollen.c9tggsfst9.workers.dev";
 
 // ─── Save a single attempt ─────────────────────────────────────────────────
-export async function saveAttempt(uid, attemptData) {
+export async function saveAttempt(uid, attemptData, userInfo = {}) {
   const res = await fetch(`${WORKER_URL}/api/attempts/${uid}`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(attemptData),
+    body: JSON.stringify({
+      ...attemptData,
+      displayName: userInfo.displayName || "Student",
+      email: userInfo.email || "",
+      username: userInfo.username || "",
+    }),
   });
   if (!res.ok) throw new Error("Failed to save attempt");
+}
+
+// ─── Admin: get all users' stats ────────────────────────────────────────────
+export async function getAllUsersStats() {
+  const res = await fetch(`${WORKER_URL}/api/admin/users`);
+  if (!res.ok) throw new Error("Failed to fetch admin data");
+  return await res.json();
+}
+
+// ─── Admin: update user account status ──────────────────────────────────────
+export async function updateUserStatus(uid, status) {
+  const res = await fetch(`${WORKER_URL}/api/admin/users/status`, {
+    method: "PUT",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ uid, status }),
+  });
+  if (!res.ok) throw new Error("Failed to update user status");
+  return await res.json();
+}
+
+// ─── Admin: ban user via Clerk ──────────────────────────────────────────────
+export async function banUser(uid) {
+  const res = await fetch(`${WORKER_URL}/api/admin/users/ban`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ uid }),
+  });
+  if (!res.ok) throw new Error("Failed to ban user");
+  return await res.json();
+}
+
+// ─── Admin: unban user via Clerk ────────────────────────────────────────────
+export async function unbanUser(uid) {
+  const res = await fetch(`${WORKER_URL}/api/admin/users/unban`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ uid }),
+  });
+  if (!res.ok) throw new Error("Failed to unban user");
+  return await res.json();
+}
+
+// ─── Admin: force sign out via Clerk ────────────────────────────────────────
+export async function forceSignOut(uid) {
+  const res = await fetch(`${WORKER_URL}/api/admin/users/signout`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ uid }),
+  });
+  if (!res.ok) throw new Error("Failed to sign out user");
+  return await res.json();
+}
+
+// ─── Admin: edit user profile via Clerk ─────────────────────────────────────
+export async function editUserProfile(uid, { firstName, lastName, username }) {
+  const res = await fetch(`${WORKER_URL}/api/admin/users/profile`, {
+    method: "PATCH",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ uid, firstName, lastName, username }),
+  });
+  if (!res.ok) throw new Error("Failed to edit profile");
+  return await res.json();
+}
+
+// ─── Admin: change user role via Clerk ──────────────────────────────────────
+export async function changeUserRole(uid, role) {
+  const res = await fetch(`${WORKER_URL}/api/admin/users/role`, {
+    method: "PUT",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ uid, role }),
+  });
+  if (!res.ok) throw new Error("Failed to change role");
+  return await res.json();
 }
 
 // ─── Get all attempts for a user ────────────────────────────────────────────
