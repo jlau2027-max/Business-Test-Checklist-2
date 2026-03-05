@@ -1,8 +1,9 @@
 import { useState, useEffect } from "react";
 import {
   Container, Badge, Text, Group, Paper, Progress,
-  Button, Box, Stack, Table,
+  Button, Box, Stack, Table, Modal, TextInput,
 } from "@mantine/core";
+import { useDisclosure } from "@mantine/hooks";
 import { SignInButton } from "@clerk/react";
 import { useAuth } from "./AuthContext.jsx";
 import {
@@ -11,7 +12,10 @@ import {
   computeCategoryStats,
   computeOverallStats,
   getWrongAnswers,
-  updateUserStatus,
+  banUser,
+  unbanUser,
+  forceSignOut,
+  editUserProfile,
 } from "./firestoreService.js";
 import LoginButton from "./LoginButton.jsx";
 
@@ -278,6 +282,9 @@ export default function AdminPage() {
   const [usersData, setUsersData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [selectedUser, setSelectedUser] = useState(null);
+  const [editModalOpened, { open: openEditModal, close: closeEditModal }] = useDisclosure(false);
+  const [editingUser, setEditingUser] = useState(null);
+  const [editForm, setEditForm] = useState({ firstName: "", lastName: "", username: "" });
 
   useEffect(() => {
     if (!isAdmin) {
@@ -301,16 +308,64 @@ export default function AdminPage() {
   const overallMcqAcc = totalMcqTotal > 0 ? Math.round((totalMcqCorrect / totalMcqTotal) * 100) : null;
   const overallWrittenAvg = totalWrittenMax > 0 ? Math.round((totalWrittenScore / totalWrittenMax) * 100) : null;
 
-  const handleStatusChange = async (uid, newStatus) => {
+  const handleBan = async (uid) => {
     try {
-      await updateUserStatus(uid, newStatus);
+      await banUser(uid);
       setUsersData((prev) =>
-        prev.map((u) =>
-          u.uid === uid ? { ...u, accountStatus: newStatus } : u
-        )
+        prev.map((u) => (u.uid === uid ? { ...u, accountStatus: "banned" } : u))
       );
     } catch (err) {
-      console.error("Failed to update status:", err);
+      console.error("Failed to ban user:", err);
+    }
+  };
+
+  const handleUnban = async (uid) => {
+    try {
+      await unbanUser(uid);
+      setUsersData((prev) =>
+        prev.map((u) => (u.uid === uid ? { ...u, accountStatus: "active" } : u))
+      );
+    } catch (err) {
+      console.error("Failed to unban user:", err);
+    }
+  };
+
+  const handleForceSignOut = async (uid) => {
+    try {
+      const result = await forceSignOut(uid);
+      console.log(`Revoked ${result.revoked} session(s)`);
+    } catch (err) {
+      console.error("Failed to sign out user:", err);
+    }
+  };
+
+  const openEdit = (u) => {
+    setEditingUser(u);
+    // Split displayName into first/last as best guess
+    const parts = (u.displayName || "").split(" ");
+    setEditForm({
+      firstName: parts[0] || "",
+      lastName: parts.slice(1).join(" ") || "",
+      username: u.username || "",
+    });
+    openEditModal();
+  };
+
+  const handleEditSubmit = async () => {
+    if (!editingUser) return;
+    try {
+      const result = await editUserProfile(editingUser.uid, editForm);
+      setUsersData((prev) =>
+        prev.map((u) =>
+          u.uid === editingUser.uid
+            ? { ...u, displayName: result.displayName, email: result.email, username: result.username }
+            : u
+        )
+      );
+      closeEditModal();
+      setEditingUser(null);
+    } catch (err) {
+      console.error("Failed to edit profile:", err);
     }
   };
 
@@ -462,6 +517,7 @@ export default function AdminPage() {
 
                       const statusColor =
                         (u.accountStatus || "active") === "active" ? "#34D399" :
+                        u.accountStatus === "banned" ? "#F87171" :
                         u.accountStatus === "admin_deleted" ? "#F87171" : "#FBBF24";
 
                       return (
@@ -518,43 +574,79 @@ export default function AdminPage() {
                             <Text ff="'JetBrains Mono', monospace" fz={12} c="#8B8B9E">{lastActive}</Text>
                           </Table.Td>
                           <Table.Td>
-                            {(u.accountStatus || "active") !== "admin_deleted" ? (
+                            <Group gap={4} wrap="nowrap">
+                              {(u.accountStatus || "active") !== "banned" ? (
+                                <Button
+                                  size="compact-xs"
+                                  radius="md"
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    handleBan(u.uid);
+                                  }}
+                                  style={{
+                                    backgroundColor: "#F8717122",
+                                    color: "#F87171",
+                                    border: "none",
+                                    fontFamily: "'JetBrains Mono', monospace",
+                                    fontSize: 10,
+                                  }}
+                                >
+                                  Ban
+                                </Button>
+                              ) : (
+                                <Button
+                                  size="compact-xs"
+                                  radius="md"
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    handleUnban(u.uid);
+                                  }}
+                                  style={{
+                                    backgroundColor: "#34D39922",
+                                    color: "#34D399",
+                                    border: "none",
+                                    fontFamily: "'JetBrains Mono', monospace",
+                                    fontSize: 10,
+                                  }}
+                                >
+                                  Unban
+                                </Button>
+                              )}
                               <Button
                                 size="compact-xs"
                                 radius="md"
                                 onClick={(e) => {
                                   e.stopPropagation();
-                                  handleStatusChange(u.uid, "admin_deleted");
+                                  handleForceSignOut(u.uid);
                                 }}
                                 style={{
-                                  backgroundColor: "#F8717122",
-                                  color: "#F87171",
+                                  backgroundColor: "#FBBF2422",
+                                  color: "#FBBF24",
                                   border: "none",
                                   fontFamily: "'JetBrains Mono', monospace",
                                   fontSize: 10,
                                 }}
                               >
-                                Disable
+                                Sign Out
                               </Button>
-                            ) : (
                               <Button
                                 size="compact-xs"
                                 radius="md"
                                 onClick={(e) => {
                                   e.stopPropagation();
-                                  handleStatusChange(u.uid, "active");
+                                  openEdit(u);
                                 }}
                                 style={{
-                                  backgroundColor: "#34D39922",
-                                  color: "#34D399",
+                                  backgroundColor: "#7C6FFF22",
+                                  color: "#7C6FFF",
                                   border: "none",
                                   fontFamily: "'JetBrains Mono', monospace",
                                   fontSize: 10,
                                 }}
                               >
-                                Reactivate
+                                Edit
                               </Button>
-                            )}
+                            </Group>
                           </Table.Td>
                         </Table.Tr>
                       );
@@ -566,6 +658,79 @@ export default function AdminPage() {
           </Stack>
         )}
       </Container>
+
+      {/* Edit Profile Modal */}
+      <Modal
+        opened={editModalOpened}
+        onClose={closeEditModal}
+        title="Edit User Profile"
+        centered
+        styles={{
+          header: { backgroundColor: "#12121A", borderBottom: "1px solid #252533" },
+          title: { color: "#F0EEE8", fontWeight: 700, fontFamily: "'JetBrains Mono', monospace" },
+          body: { backgroundColor: "#12121A" },
+          content: { backgroundColor: "#12121A", border: "1px solid #252533" },
+          close: { color: "#8B8B9E" },
+        }}
+      >
+        <Stack gap="md">
+          <TextInput
+            label="First Name"
+            value={editForm.firstName}
+            onChange={(e) => setEditForm((f) => ({ ...f, firstName: e.target.value }))}
+            styles={{
+              label: { color: "#8B8B9E", fontSize: 11, fontFamily: "'JetBrains Mono', monospace", letterSpacing: 1, marginBottom: 4 },
+              input: { backgroundColor: "#1A1A24", border: "1px solid #252533", color: "#F0EEE8", fontFamily: "'JetBrains Mono', monospace" },
+            }}
+          />
+          <TextInput
+            label="Last Name"
+            value={editForm.lastName}
+            onChange={(e) => setEditForm((f) => ({ ...f, lastName: e.target.value }))}
+            styles={{
+              label: { color: "#8B8B9E", fontSize: 11, fontFamily: "'JetBrains Mono', monospace", letterSpacing: 1, marginBottom: 4 },
+              input: { backgroundColor: "#1A1A24", border: "1px solid #252533", color: "#F0EEE8", fontFamily: "'JetBrains Mono', monospace" },
+            }}
+          />
+          <TextInput
+            label="Username"
+            value={editForm.username}
+            onChange={(e) => setEditForm((f) => ({ ...f, username: e.target.value }))}
+            styles={{
+              label: { color: "#8B8B9E", fontSize: 11, fontFamily: "'JetBrains Mono', monospace", letterSpacing: 1, marginBottom: 4 },
+              input: { backgroundColor: "#1A1A24", border: "1px solid #252533", color: "#F0EEE8", fontFamily: "'JetBrains Mono', monospace" },
+            }}
+          />
+          <Group justify="flex-end" gap="sm" mt="md">
+            <Button
+              radius="md"
+              onClick={closeEditModal}
+              style={{
+                backgroundColor: "transparent",
+                color: "#8B8B9E",
+                border: "1px solid #252533",
+                fontFamily: "'JetBrains Mono', monospace",
+                fontSize: 12,
+              }}
+            >
+              Cancel
+            </Button>
+            <Button
+              radius="md"
+              onClick={handleEditSubmit}
+              style={{
+                backgroundColor: "#7C6FFF",
+                color: "#F0EEE8",
+                border: "none",
+                fontFamily: "'JetBrains Mono', monospace",
+                fontSize: 12,
+              }}
+            >
+              Save Changes
+            </Button>
+          </Group>
+        </Stack>
+      </Modal>
     </Box>
   );
 }

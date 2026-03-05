@@ -290,7 +290,7 @@ async function handleClerkWebhook(request, env) {
 async function handleAdminUpdateStatus(request, env) {
   const { uid, status } = await request.json();
 
-  const validStatuses = ["active", "user_deleted", "admin_deleted"];
+  const validStatuses = ["active", "user_deleted", "admin_deleted", "banned"];
   if (!uid || !validStatuses.includes(status)) {
     return json({ error: "Invalid uid or status" }, 400);
   }
@@ -302,6 +302,116 @@ async function handleAdminUpdateStatus(request, env) {
   return json({ ok: true });
 }
 
+// ─── Clerk Backend API helper ───────────────────────────────────────────────
+
+async function clerkAPI(env, method, path, body = null) {
+  const opts = {
+    method,
+    headers: {
+      Authorization: `Bearer ${env.CLERK_SECRET_KEY}`,
+      "Content-Type": "application/json",
+    },
+  };
+  if (body) opts.body = JSON.stringify(body);
+  const res = await fetch(`https://api.clerk.com/v1${path}`, opts);
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({}));
+    throw new Error(err?.errors?.[0]?.message || `Clerk API ${res.status}`);
+  }
+  return res.json();
+}
+
+// ─── Admin: ban user via Clerk ──────────────────────────────────────────────
+
+async function handleAdminBanUser(request, env) {
+  const { uid } = await request.json();
+  if (!uid) return json({ error: "Missing uid" }, 400);
+
+  try {
+    await clerkAPI(env, "POST", `/users/${uid}/ban`);
+    await env.DB.prepare(
+      `UPDATE users SET account_status = 'banned', updated_at = ?1 WHERE uid = ?2`
+    ).bind(Date.now(), uid).run();
+    return json({ ok: true });
+  } catch (error) {
+    return json({ error: "Failed to ban user", details: error.message }, 500);
+  }
+}
+
+// ─── Admin: unban user via Clerk ────────────────────────────────────────────
+
+async function handleAdminUnbanUser(request, env) {
+  const { uid } = await request.json();
+  if (!uid) return json({ error: "Missing uid" }, 400);
+
+  try {
+    await clerkAPI(env, "POST", `/users/${uid}/unban`);
+    await env.DB.prepare(
+      `UPDATE users SET account_status = 'active', updated_at = ?1 WHERE uid = ?2`
+    ).bind(Date.now(), uid).run();
+    return json({ ok: true });
+  } catch (error) {
+    return json({ error: "Failed to unban user", details: error.message }, 500);
+  }
+}
+
+// ─── Admin: force sign out via Clerk ────────────────────────────────────────
+
+async function handleAdminSignOut(request, env) {
+  const { uid } = await request.json();
+  if (!uid) return json({ error: "Missing uid" }, 400);
+
+  try {
+    const sessions = await clerkAPI(env, "GET", `/users/${uid}/sessions`);
+    let revoked = 0;
+    for (const session of sessions) {
+      if (session.status === "active") {
+        await clerkAPI(env, "POST", `/sessions/${session.id}/revoke`);
+        revoked++;
+      }
+    }
+    return json({ ok: true, revoked });
+  } catch (error) {
+    return json({ error: "Failed to sign out user", details: error.message }, 500);
+  }
+}
+
+// ─── Admin: edit user profile via Clerk ─────────────────────────────────────
+
+async function handleAdminEditProfile(request, env) {
+  const { uid, firstName, lastName, username } = await request.json();
+  if (!uid) return json({ error: "Missing uid" }, 400);
+
+  // Build Clerk update payload with only provided fields
+  const payload = {};
+  if (firstName !== undefined && firstName !== null) payload.first_name = firstName;
+  if (lastName !== undefined && lastName !== null) payload.last_name = lastName;
+  if (username !== undefined && username !== null) payload.username = username;
+
+  if (Object.keys(payload).length === 0) {
+    return json({ error: "No fields to update" }, 400);
+  }
+
+  try {
+    const updated = await clerkAPI(env, "PATCH", `/users/${uid}`, payload);
+
+    // Sync changes to D1
+    const newDisplayName =
+      [updated.first_name, updated.last_name].filter(Boolean).join(" ") ||
+      updated.username ||
+      "Student";
+    const newEmail =
+      updated.email_addresses?.find((e) => e.id === updated.primary_email_address_id)
+        ?.email_address || "";
+    const newUsername = updated.username || "";
+
+    await upsertUser(uid, newDisplayName, newEmail, newUsername, env);
+    return json({ ok: true, displayName: newDisplayName, email: newEmail, username: newUsername });
+  } catch (error) {
+    return json({ error: "Failed to edit profile", details: error.message }, 500);
+  }
+}
+
 // ─── Router ──────────────────────────────────────────────────────────────────
 
 export default {
@@ -310,7 +420,7 @@ export default {
       return new Response(null, {
         headers: {
           ...CORS,
-          "Access-Control-Allow-Methods": "GET, POST, PUT, OPTIONS",
+          "Access-Control-Allow-Methods": "GET, POST, PUT, PATCH, OPTIONS",
           "Access-Control-Allow-Headers": "Content-Type",
         },
       });
@@ -327,6 +437,26 @@ export default {
     // Admin: PUT /api/admin/users/status
     if (path === "/api/admin/users/status" && request.method === "PUT") {
       return handleAdminUpdateStatus(request, env);
+    }
+
+    // Admin: POST /api/admin/users/ban
+    if (path === "/api/admin/users/ban" && request.method === "POST") {
+      return handleAdminBanUser(request, env);
+    }
+
+    // Admin: POST /api/admin/users/unban
+    if (path === "/api/admin/users/unban" && request.method === "POST") {
+      return handleAdminUnbanUser(request, env);
+    }
+
+    // Admin: POST /api/admin/users/signout
+    if (path === "/api/admin/users/signout" && request.method === "POST") {
+      return handleAdminSignOut(request, env);
+    }
+
+    // Admin: PATCH /api/admin/users/profile
+    if (path === "/api/admin/users/profile" && request.method === "PATCH") {
+      return handleAdminEditProfile(request, env);
     }
 
     // Clerk webhook: POST /api/webhooks/clerk

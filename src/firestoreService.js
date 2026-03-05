@@ -33,6 +33,50 @@ export async function updateUserStatus(uid, status) {
   return await res.json();
 }
 
+// ─── Admin: ban user via Clerk ──────────────────────────────────────────────
+export async function banUser(uid) {
+  const res = await fetch(`${WORKER_URL}/api/admin/users/ban`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ uid }),
+  });
+  if (!res.ok) throw new Error("Failed to ban user");
+  return await res.json();
+}
+
+// ─── Admin: unban user via Clerk ────────────────────────────────────────────
+export async function unbanUser(uid) {
+  const res = await fetch(`${WORKER_URL}/api/admin/users/unban`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ uid }),
+  });
+  if (!res.ok) throw new Error("Failed to unban user");
+  return await res.json();
+}
+
+// ─── Admin: force sign out via Clerk ────────────────────────────────────────
+export async function forceSignOut(uid) {
+  const res = await fetch(`${WORKER_URL}/api/admin/users/signout`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ uid }),
+  });
+  if (!res.ok) throw new Error("Failed to sign out user");
+  return await res.json();
+}
+
+// ─── Admin: edit user profile via Clerk ─────────────────────────────────────
+export async function editUserProfile(uid, { firstName, lastName, username }) {
+  const res = await fetch(`${WORKER_URL}/api/admin/users/profile`, {
+    method: "PATCH",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ uid, firstName, lastName, username }),
+  });
+  if (!res.ok) throw new Error("Failed to edit profile");
+  return await res.json();
+}
+
 // ─── Get all attempts for a user ────────────────────────────────────────────
 export async function getUserAttempts(uid) {
   const res = await fetch(`${WORKER_URL}/api/attempts/${uid}`);
