@@ -16,7 +16,7 @@ export function AuthProvider({ children }) {
   const user = isSignedIn && clerkUser ? {
     uid: clerkUser.id,
     email: clerkUser.primaryEmailAddress?.emailAddress || "",
-    displayName: clerkUser.fullName || clerkUser.firstName || clerkUser.primaryEmailAddress?.emailAddress?.split("@")[0] || "Student",
+    displayName: clerkUser.fullName || clerkUser.username || clerkUser.firstName || clerkUser.primaryEmailAddress?.emailAddress?.split("@")[0] || "Student",
   } : null;
 
   const isAdmin = isSignedIn && clerkUser?.publicMetadata?.role === "admin";
