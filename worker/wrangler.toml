@@ -9,4 +9,4 @@ id = "9a2b38ab7ed94ec996ef5e4d08a47919"
 [[d1_databases]]
 binding = "CONTENT_DB"
 database_name = "ib-revision-content"
-database_id = "placeholder-create-via-wrangler"
+database_id = "c401f451-028c-4282-b570-84ee585beac1"
