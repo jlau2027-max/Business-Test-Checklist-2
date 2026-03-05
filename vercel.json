@@ -11,6 +11,7 @@
     { "source": "/api/:path*", "destination": "/api/:path*" },
     { "source": "/specimen", "destination": "/index.html" },
     { "source": "/history", "destination": "/index.html" },
-    { "source": "/dashboard", "destination": "/index.html" }
+    { "source": "/dashboard", "destination": "/index.html" },
+    { "source": "/admin", "destination": "/index.html" }
   ]
 }
