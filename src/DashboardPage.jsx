@@ -5,6 +5,8 @@ import {
 } from "@mantine/core";
 import { SignInButton } from "@clerk/react";
 import { useAuth } from "./AuthContext.jsx";
+import LoginButton from "./LoginButton.jsx";
+import Sidebar from "./Sidebar.jsx";
 import {
   getUserAttempts,
   computeCategoryStats,
@@ -60,6 +62,7 @@ export default function DashboardPage() {
   const { user, loading: authLoading } = useAuth();
   const [attempts, setAttempts] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [sidebarOpen, setSidebarOpen] = useState(false);
 
   useEffect(() => {
     if (!user) {
@@ -82,6 +85,8 @@ export default function DashboardPage() {
 
   return (
     <Box mih="100vh" bg="#09090F" style={{ fontFamily: "'Inter', sans-serif", color: "#F0EEE8" }}>
+      <Sidebar activeSubject="dashboard" sidebarOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
+
       {/* Header */}
       <Box
         style={{
@@ -97,8 +102,7 @@ export default function DashboardPage() {
         <Container size="lg" py="sm">
           <Group justify="center" mb={4} style={{ position: "relative" }}>
             <Button
-              component="a"
-              href="/"
+              onClick={() => setSidebarOpen(o => !o)}
               radius="md"
               style={{
                 position: "absolute",
@@ -108,14 +112,16 @@ export default function DashboardPage() {
                 backgroundColor: "transparent",
                 color: "#8B8B9E",
                 border: "1px solid #252533",
-                padding: "4px 12px",
+                padding: "4px 10px",
                 minWidth: "auto",
                 height: 32,
-                fontSize: 12,
-                fontFamily: "'JetBrains Mono', monospace",
               }}
             >
-              ← Hub
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
+                <line x1="3" y1="6" x2="21" y2="6"/>
+                <line x1="3" y1="12" x2="21" y2="12"/>
+                <line x1="3" y1="18" x2="21" y2="18"/>
+              </svg>
             </Button>
             <Badge
               variant="light"
@@ -127,6 +133,7 @@ export default function DashboardPage() {
             >
               Analytics
             </Badge>
+            <LoginButton />
           </Group>
           <Text ta="center" fw={800} fz={{ base: 22, sm: 30 }} c="#F0EEE8" style={{ letterSpacing: -0.5 }}>
             Your Dashboard
@@ -171,7 +178,7 @@ export default function DashboardPage() {
             <Text fz="sm" c="#8B8B9E" mb="lg">
               Start answering questions on the Revision Hub to see your analytics here.
             </Text>
-            <Button component="a" href="/" radius="md" style={{ backgroundColor: "#7C6FFF" }}>
+            <Button component="a" href="/business/checklist" radius="md" style={{ backgroundColor: "#7C6FFF" }}>
               Go to Revision Hub
             </Button>
           </Paper>

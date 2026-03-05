@@ -1,0 +1,162 @@
+import { Box, Container, Text, Group, Paper, Button, Badge } from "@mantine/core";
+import { Show, SignInButton, SignUpButton } from "@clerk/react";
+import LoginButton from "./LoginButton.jsx";
+
+export default function LandingPage() {
+  return (
+    <Box mih="100vh" bg="#09090F" style={{ fontFamily: "'Inter', sans-serif", color: "#F0EEE8" }}>
+      {/* Header */}
+      <Box
+        style={{
+          position: "sticky", top: 0, zIndex: 100,
+          background: "rgba(9, 9, 15, 0.85)",
+          backdropFilter: "blur(12px)",
+          WebkitBackdropFilter: "blur(12px)",
+          borderBottom: "1px solid rgba(255,255,255,0.04)",
+        }}
+      >
+        <Container size="lg" py="sm">
+          <Group justify="center" style={{ position: "relative" }}>
+            <Badge
+              variant="light"
+              size="sm"
+              tt="uppercase"
+              fw={700}
+              ff="'JetBrains Mono', monospace"
+              style={{ letterSpacing: 2, backgroundColor: "#7C6FFF18", color: "#A78BFA", border: "none" }}
+            >
+              IB Revision Hub
+            </Badge>
+            <LoginButton />
+          </Group>
+        </Container>
+      </Box>
+
+      {/* Hero */}
+      <Container size="sm" py={80}>
+        <Text
+          ta="center" fw={800}
+          fz={{ base: 28, sm: 40 }}
+          c="#F0EEE8"
+          style={{ letterSpacing: -1 }}
+          mb="xs"
+        >
+          IB Revision Hub
+        </Text>
+        <Text ta="center" fz="md" c="#8B8B9E" mb={40} maw={420} mx="auto">
+          Flashcards, MCQs, written practice with AI grading, and more — built for IB students.
+        </Text>
+
+        {/* Auth prompt for signed-out users */}
+        <Show when="signed-out">
+          <Group justify="center" gap="sm" mb={48}>
+            <SignInButton mode="modal">
+              <Button
+                radius="md"
+                size="md"
+                ff="'Inter', sans-serif"
+                fw={600}
+                style={{
+                  backgroundColor: "#7C6FFF",
+                  color: "#fff",
+                  border: "none",
+                  fontSize: 15,
+                }}
+              >
+                Sign In
+              </Button>
+            </SignInButton>
+            <SignUpButton mode="modal">
+              <Button
+                radius="md"
+                size="md"
+                variant="outline"
+                ff="'Inter', sans-serif"
+                fw={600}
+                style={{
+                  backgroundColor: "transparent",
+                  color: "#A78BFA",
+                  border: "1px solid #252533",
+                  fontSize: 15,
+                }}
+              >
+                Sign Up
+              </Button>
+            </SignUpButton>
+          </Group>
+        </Show>
+
+        <Show when="signed-in">
+          <Box mb={48} />
+        </Show>
+
+        {/* Subject cards */}
+        <Group grow gap="md">
+          <Paper
+            component="a"
+            href="/business/checklist"
+            bg="#12121A"
+            radius="lg"
+            p="xl"
+            style={{
+              border: "1px solid #252533",
+              textDecoration: "none",
+              cursor: "pointer",
+              transition: "border-color 0.2s, box-shadow 0.2s",
+            }}
+            onMouseEnter={e => { e.currentTarget.style.borderColor = "#7C6FFF"; e.currentTarget.style.boxShadow = "0 0 20px #7C6FFF22"; }}
+            onMouseLeave={e => { e.currentTarget.style.borderColor = "#252533"; e.currentTarget.style.boxShadow = "none"; }}
+          >
+            <Badge
+              size="xs"
+              variant="light"
+              ff="'JetBrains Mono', monospace"
+              mb="sm"
+              style={{ backgroundColor: "#7C6FFF18", color: "#A78BFA", border: "none" }}
+            >
+              HL
+            </Badge>
+            <Text fz="lg" fw={700} c="#F0EEE8" mb={4}>
+              Business Management
+            </Text>
+            <Text fz="sm" c="#8B8B9E" lh={1.5}>
+              Finance unit — checklist, flashcards, MCQs, written practice & specimen papers
+            </Text>
+          </Paper>
+
+          <Paper
+            component="a"
+            href="/history/specimen"
+            bg="#12121A"
+            radius="lg"
+            p="xl"
+            style={{
+              border: "1px solid #252533",
+              textDecoration: "none",
+              cursor: "pointer",
+              transition: "border-color 0.2s, box-shadow 0.2s",
+            }}
+            onMouseEnter={e => { e.currentTarget.style.borderColor = "#F87171"; e.currentTarget.style.boxShadow = "0 0 20px #F8717122"; }}
+            onMouseLeave={e => { e.currentTarget.style.borderColor = "#252533"; e.currentTarget.style.boxShadow = "none"; }}
+          >
+            <Badge
+              size="xs"
+              variant="light"
+              ff="'JetBrains Mono', monospace"
+              mb="sm"
+              style={{ backgroundColor: "#F8717118", color: "#F87171", border: "none" }}
+            >
+              HL / SL
+            </Badge>
+            <Text fz="lg" fw={700} c="#F0EEE8" mb={4}>
+              History
+            </Text>
+            <Text fz="sm" c="#8B8B9E" lh={1.5}>
+              Paper 2 & Paper 3 specimen questions with AI-powered grading
+            </Text>
+          </Paper>
+        </Group>
+      </Container>
+    </Box>
+  );
+}

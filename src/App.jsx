@@ -6,6 +6,7 @@ import {
   Alert, Box, Stack, Textarea, useMantineTheme,
 } from "@mantine/core";
 import LoginButton from "./LoginButton.jsx";
+import Sidebar from "./Sidebar.jsx";
 import { useAuth } from "./AuthContext.jsx";
 import { useAttemptTracker } from "./useAttemptTracker.js";
 import { syncToCloud } from "./stateSync.js";
@@ -927,7 +928,7 @@ function WrittenPracticeView() {
         </Button>
         <Button
           component="a"
-          href="/specimen"
+          href="/business/specimen"
           radius="md"
           ff="'JetBrains Mono', monospace"
           fw={700}
@@ -992,10 +993,13 @@ function WrittenPracticeView() {
 // ─────────────────────────────────────────────────────────────────────────────
 // ROOT APP
 // ─────────────────────────────────────────────────────────────────────────────
-export default function App() {
+export default function App({ initialTab = "checklist" }) {
   const { user } = useAuth();
-  const [tab, setTab] = useState(() => loadLS("revision_tab", "checklist"));
-  const switchTab = t => { setTab(t); saveLS("revision_tab", t); };
+  const [tab, setTab] = useState(initialTab);
+  const switchTab = t => {
+    const urlMap = { checklist: 'checklist', flashcards: 'flashcards', practice: 'multi-choice', written: 'written' };
+    window.location.href = `/business/${urlMap[t] || t}`;
+  };
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   // Content state — starts with hardcoded fallback, updates from API
@@ -1012,72 +1016,7 @@ export default function App() {
     <ContentCtx.Provider value={content}>
     <Box mih="100vh" bg="#09090F" style={{fontFamily:"'Inter', sans-serif",color:"#F0EEE8"}}>
 
-      {/* Sidebar overlay (mobile) */}
-      {sidebarOpen && (
-        <Box
-          onClick={() => setSidebarOpen(false)}
-          style={{
-            position: "fixed", inset: 0, zIndex: 199,
-            backgroundColor: "rgba(0,0,0,0.5)",
-          }}
-        />
-      )}
-
-      {/* Sidebar */}
-      <Box
-        style={{
-          position: "fixed",
-          top: 0,
-          left: sidebarOpen ? 0 : -220,
-          width: 220,
-          height: "100vh",
-          zIndex: 200,
-          backgroundColor: "#0D0D14",
-          borderRight: "1px solid #1A1A24",
-          display: "flex",
-          flexDirection: "column",
-          padding: "20px 12px",
-          gap: 8,
-          transition: "left 0.25s ease",
-        }}
-      >
-        <Text fz={11} ff="'JetBrains Mono', monospace" c="#55556A" lts={1} mb={4} px={8}>
-          SUBJECTS
-        </Text>
-        {[
-          { label: "Business", active: true, href: "/" },
-          { label: "History", active: false, href: "/history" },
-          ...(user ? [{ label: "Dashboard", active: false, href: "/dashboard" }] : []),
-        ].map(s => (
-          <Button
-            key={s.label}
-            component={s.active ? "button" : "a"}
-            href={s.active ? undefined : s.href}
-            radius="md"
-            ff="'JetBrains Mono', monospace"
-            fw={600}
-            onClick={() => setSidebarOpen(false)}
-            style={{
-              height: 44,
-              justifyContent: "flex-start",
-              paddingLeft: 14,
-              fontSize: 14,
-              backgroundColor: s.active ? "#7C6FFF" : "transparent",
-              color: s.active ? "#fff" : "#8B8B9E",
-              border: s.active ? "none" : "1px solid transparent",
-              boxShadow: s.active ? "0 0 12px #7C6FFF33" : "none",
-              textDecoration: "none",
-            }}
-          >
-            {s.label}
-          </Button>
-        ))}
-
-        <Box style={{ flex: 1 }} />
-        <Text fz={10} c="#33334A" ff="'JetBrains Mono', monospace" ta="center">
-          More subjects coming soon
-        </Text>
-      </Box>
+      <Sidebar activeSubject="business" sidebarOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
 
       {/* Sticky header with glassmorphism */}
       <Box
@@ -1140,14 +1079,15 @@ export default function App() {
 
           <Group gap={4} grow>
             {[
-              { value: "checklist", label: "Checklist" },
-              { value: "flashcards", label: "Flashcards" },
-              { value: "practice", label: "Multi-Choice" },
-              { value: "written", label: "Written" },
+              { value: "checklist", label: "Checklist", href: "/business/checklist" },
+              { value: "flashcards", label: "Flashcards", href: "/business/flashcards" },
+              { value: "practice", label: "Multi-Choice", href: "/business/multi-choice" },
+              { value: "written", label: "Written", href: "/business/written" },
             ].map(t => (
               <Button
                 key={t.value}
-                onClick={() => switchTab(t.value)}
+                component="a"
+                href={t.href}
                 radius={0}
                 fw={600}
                 ff="'Inter', sans-serif"
@@ -1162,6 +1102,7 @@ export default function App() {
                   borderRight: "none",
                   borderRadius: 0,
                   transition: "all 0.2s",
+                  textDecoration: "none",
                 }}
               >
                 {t.label}

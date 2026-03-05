@@ -1,0 +1,89 @@
+import { Box, Button, Text } from "@mantine/core";
+import { useAuth } from "./AuthContext.jsx";
+
+const SUBJECT_COLORS = {
+  business: "#7C6FFF",
+  history: "#F87171",
+  dashboard: "#A78BFA",
+};
+
+export default function Sidebar({ activeSubject, sidebarOpen, onClose }) {
+  const { user } = useAuth();
+
+  const items = [
+    { label: "Business", href: "/business/checklist", subject: "business" },
+    { label: "History", href: "/history/specimen", subject: "history" },
+    ...(user ? [{ label: "Dashboard", href: "/dashboard", subject: "dashboard" }] : []),
+  ];
+
+  return (
+    <>
+      {/* Sidebar overlay (mobile) */}
+      {sidebarOpen && (
+        <Box
+          onClick={onClose}
+          style={{
+            position: "fixed", inset: 0, zIndex: 199,
+            backgroundColor: "rgba(0,0,0,0.5)",
+          }}
+        />
+      )}
+
+      {/* Sidebar */}
+      <Box
+        style={{
+          position: "fixed",
+          top: 0,
+          left: sidebarOpen ? 0 : -220,
+          width: 220,
+          height: "100vh",
+          zIndex: 200,
+          backgroundColor: "#0D0D14",
+          borderRight: "1px solid #1A1A24",
+          display: "flex",
+          flexDirection: "column",
+          padding: "20px 12px",
+          gap: 8,
+          transition: "left 0.25s ease",
+        }}
+      >
+        <Text fz={11} ff="'JetBrains Mono', monospace" c="#55556A" lts={1} mb={4} px={8}>
+          SUBJECTS
+        </Text>
+        {items.map(s => {
+          const active = activeSubject === s.subject;
+          const color = SUBJECT_COLORS[s.subject] || "#7C6FFF";
+          return (
+            <Button
+              key={s.label}
+              component={active ? "button" : "a"}
+              href={active ? undefined : s.href}
+              radius="md"
+              ff="'JetBrains Mono', monospace"
+              fw={600}
+              onClick={onClose}
+              style={{
+                height: 44,
+                justifyContent: "flex-start",
+                paddingLeft: 14,
+                fontSize: 14,
+                backgroundColor: active ? color : "transparent",
+                color: active ? "#fff" : "#8B8B9E",
+                border: active ? "none" : "1px solid transparent",
+                boxShadow: active ? `0 0 12px ${color}33` : "none",
+                textDecoration: "none",
+              }}
+            >
+              {s.label}
+            </Button>
+          );
+        })}
+
+        <Box style={{ flex: 1 }} />
+        <Text fz={10} c="#33334A" ff="'JetBrains Mono', monospace" ta="center">
+          More subjects coming soon
+        </Text>
+      </Box>
+    </>
+  );
+}

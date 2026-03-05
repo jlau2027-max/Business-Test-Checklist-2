@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Container, Tabs, Text, Group, Box } from "@mantine/core";
+import { Container, Tabs, Text, Group, Box, SegmentedControl } from "@mantine/core";
 import AdminGuard from "./AdminGuard.jsx";
 import FlashcardAdmin from "./FlashcardAdmin.jsx";
 import McqAdmin from "./McqAdmin.jsx";
@@ -7,16 +7,28 @@ import WrittenAdmin from "./WrittenAdmin.jsx";
 import HistoryAdmin from "./HistoryAdmin.jsx";
 import ChecklistAdmin from "./ChecklistAdmin.jsx";
 
-const TAB_LIST = [
+const BUSINESS_TABS = [
+  { value: "checklist", label: "Checklist" },
   { value: "flashcards", label: "Flashcards" },
   { value: "mcq", label: "MCQ" },
   { value: "written", label: "Written" },
-  { value: "history", label: "History" },
-  { value: "checklist", label: "Checklist" },
+];
+
+const HISTORY_TABS = [
+  { value: "history", label: "History Questions" },
 ];
 
 export default function AdminPage() {
-  const [activeTab, setActiveTab] = useState("flashcards");
+  const [section, setSection] = useState("business");
+  const [activeTab, setActiveTab] = useState("checklist");
+
+  const tabs = section === "business" ? BUSINESS_TABS : HISTORY_TABS;
+
+  // Reset to first tab when switching sections
+  const handleSectionChange = (val) => {
+    setSection(val);
+    setActiveTab(val === "business" ? "checklist" : "history");
+  };
 
   return (
     <AdminGuard>
@@ -34,14 +46,46 @@ export default function AdminPage() {
             </Text>
             <Text
               component="a"
-              href="/"
+              href="/business/checklist"
               fz="sm"
               c="#8B8B9E"
-              style={{ textDecoration: "none", "&:hover": { color: "#F0EEE8" } }}
+              style={{ textDecoration: "none" }}
             >
               Back to App
             </Text>
           </Group>
+
+          {/* Section selector */}
+          <SegmentedControl
+            value={section}
+            onChange={handleSectionChange}
+            data={[
+              { label: "Business", value: "business" },
+              { label: "History", value: "history" },
+            ]}
+            mb="md"
+            radius="md"
+            styles={{
+              root: {
+                backgroundColor: "#12121A",
+                border: "1px solid #252533",
+              },
+              label: {
+                color: "#8B8B9E",
+                fontWeight: 600,
+                fontSize: 14,
+                fontFamily: "'JetBrains Mono', monospace",
+              },
+              indicator: {
+                backgroundColor: section === "business" ? "#7C6FFF" : "#F87171",
+              },
+              control: {
+                "&[data-active] .mantine-SegmentedControl-label": {
+                  color: "#fff",
+                },
+              },
+            }}
+          />
 
           {/* Tabs */}
           <Tabs
@@ -62,7 +106,7 @@ export default function AdminPage() {
                 borderBottom: "2px solid transparent",
                 "&[data-active]": {
                   color: "#F0EEE8",
-                  borderBottomColor: "#7C6FFF",
+                  borderBottomColor: section === "business" ? "#7C6FFF" : "#F87171",
                 },
                 "&:hover": {
                   backgroundColor: "#12121A",
@@ -75,13 +119,16 @@ export default function AdminPage() {
             }}
           >
             <Tabs.List>
-              {TAB_LIST.map((tab) => (
+              {tabs.map((tab) => (
                 <Tabs.Tab key={tab.value} value={tab.value}>
                   {tab.label}
                 </Tabs.Tab>
               ))}
             </Tabs.List>
 
+            <Tabs.Panel value="checklist">
+              <ChecklistAdmin />
+            </Tabs.Panel>
             <Tabs.Panel value="flashcards">
               <FlashcardAdmin />
             </Tabs.Panel>
@@ -93,9 +140,6 @@ export default function AdminPage() {
             </Tabs.Panel>
             <Tabs.Panel value="history">
               <HistoryAdmin />
-            </Tabs.Panel>
-            <Tabs.Panel value="checklist">
-              <ChecklistAdmin />
             </Tabs.Panel>
           </Tabs>
         </Container>

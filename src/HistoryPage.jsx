@@ -4,6 +4,7 @@ import {
 } from "@mantine/core";
 import { fetchHistoryQuestions } from "./api/contentApi.js";
 import LoginButton from "./LoginButton.jsx";
+import Sidebar from "./Sidebar.jsx";
 import { useAuth } from "./AuthContext.jsx";
 import { useAttemptTracker } from "./useAttemptTracker.js";
 import { syncToCloud } from "./stateSync.js";
@@ -1021,72 +1022,7 @@ export default function HistoryPage() {
   return (
     <Box mih="100vh" bg="#09090F" style={{ fontFamily: "'Inter', sans-serif", color: "#F0EEE8" }}>
 
-      {/* Sidebar overlay */}
-      {sidebarOpen && (
-        <Box
-          onClick={() => setSidebarOpen(false)}
-          style={{
-            position: "fixed", inset: 0, zIndex: 199,
-            backgroundColor: "rgba(0,0,0,0.5)",
-          }}
-        />
-      )}
-
-      {/* Sidebar */}
-      <Box
-        style={{
-          position: "fixed",
-          top: 0,
-          left: sidebarOpen ? 0 : -220,
-          width: 220,
-          height: "100vh",
-          zIndex: 200,
-          backgroundColor: "#0D0D14",
-          borderRight: "1px solid #1A1A24",
-          display: "flex",
-          flexDirection: "column",
-          padding: "20px 12px",
-          gap: 8,
-          transition: "left 0.25s ease",
-        }}
-      >
-        <Text fz={11} ff="'JetBrains Mono', monospace" c="#55556A" lts={1} mb={4} px={8}>
-          SUBJECTS
-        </Text>
-        {[
-          { label: "Business", active: false, href: "/" },
-          { label: "History", active: true, href: "/history" },
-          ...(user ? [{ label: "Dashboard", active: false, href: "/dashboard" }] : []),
-        ].map(s => (
-          <Button
-            key={s.label}
-            component={s.active ? "button" : "a"}
-            href={s.active ? undefined : s.href}
-            radius="md"
-            ff="'JetBrains Mono', monospace"
-            fw={600}
-            onClick={() => setSidebarOpen(false)}
-            style={{
-              height: 44,
-              justifyContent: "flex-start",
-              paddingLeft: 14,
-              fontSize: 14,
-              backgroundColor: s.active ? "#F87171" : "transparent",
-              color: s.active ? "#fff" : "#8B8B9E",
-              border: s.active ? "none" : "1px solid transparent",
-              boxShadow: s.active ? "0 0 12px #F8717133" : "none",
-              textDecoration: "none",
-            }}
-          >
-            {s.label}
-          </Button>
-        ))}
-
-        <Box style={{ flex: 1 }} />
-        <Text fz={10} c="#33334A" ff="'JetBrains Mono', monospace" ta="center">
-          More subjects coming soon
-        </Text>
-      </Box>
+      <Sidebar activeSubject="history" sidebarOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
 
       {/* Header */}
       <Box
