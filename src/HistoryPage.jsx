@@ -1,7 +1,8 @@
 import { useState, useEffect } from "react";
 import {
-  Container, Badge, Text, Group, Paper, Button, Box, Textarea, Collapse, Stack,
+  Container, Badge, Text, Group, Paper, Button, Box, Textarea, Collapse, Stack, Skeleton,
 } from "@mantine/core";
+import { fetchHistoryQuestions } from "./api/contentApi.js";
 import LoginButton from "./LoginButton.jsx";
 import { useAuth } from "./AuthContext.jsx";
 import { useAttemptTracker } from "./useAttemptTracker.js";
@@ -48,8 +49,8 @@ Marks   Level descriptor
 
 0       Answers do not reach a standard described by the descriptors above.`;
 
-// ─── History Paper 2 Questions Data ─────────────────────────────────────────
-const HISTORY_QUESTIONS = [
+// ─── History Paper 2 Questions Data (fallback) ──────────────────────────────
+const HISTORY_QUESTIONS_FALLBACK = [
   // ── Topic 1: Society and economy (750–1400) ──
   {
     id: "hist1",
@@ -491,8 +492,8 @@ Responses achieving marks in the top bands will include a clear judgment on the 
   },
 ];
 
-// ─── History Paper 3 Questions Data (Africa and the Middle East) ──────────
-const PAPER3_QUESTIONS = [
+// ─── History Paper 3 Questions Data (Africa and the Middle East, fallback) ──
+const PAPER3_QUESTIONS_FALLBACK = [
   // ── The 'Abbasid dynasty (750–1258) ──
   { id: "p3q1", number: 1, topic: "The \u2018Abbasid dynasty (750\u20131258)", question: "Discuss the extent to which military power was responsible for the defeat of the Umayyads by the \u2018Abbasids.", marks: 15, markscheme: `The focus of this question is on reasons for the defeat of the Umayyads, not the rise of the Abbasids. Candidates should discuss the extent to which military power was responsible, and consider other factors.
 
@@ -716,9 +717,7 @@ Points discussed may include: the weaknesses and failures of the one party syste
 Responses achieving marks in the top bands will include a clear judgment on the similarities and differences between the factors that led to the return to multi-party democracy in two countries.` },
 ];
 
-// ─── Group questions by topic ───────────────────────────────────────────────
-const P2_TOPICS = [...new Set(HISTORY_QUESTIONS.map(q => q.topic))];
-const P3_TOPICS = [...new Set(PAPER3_QUESTIONS.map(q => q.topic))];
+// ─── Group questions by topic (from fallback — will be recomputed dynamically) ─
 
 // ─── Single Question Component ─────────────────────────────────────────────
 function HistoryQuestion({ q, levelDescriptors, prefix }) {
@@ -953,14 +952,71 @@ export default function HistoryPage() {
   const { user } = useAuth();
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [paper, setPaper] = useState(() => loadLS("hist_paper_tab", "paper2"));
+  const [paper2Questions, setPaper2Questions] = useState(null);
+  const [paper3Questions, setPaper3Questions] = useState(null);
+  const [loadingP2, setLoadingP2] = useState(true);
+  const [loadingP3, setLoadingP3] = useState(true);
 
   useEffect(() => { saveLS("hist_paper_tab", paper); }, [paper]);
 
+  // Fetch Paper 2 questions from API
+  useEffect(() => {
+    let cancelled = false;
+    fetchHistoryQuestions("paper2")
+      .then((data) => {
+        if (cancelled) return;
+        const transformed = data.map((q) => ({
+          id: q.id,
+          number: q.question_number,
+          topic: q.topic,
+          question: q.question_text,
+          marks: q.marks,
+          markscheme: q.mark_scheme,
+        }));
+        setPaper2Questions(transformed);
+      })
+      .catch(() => {
+        if (!cancelled) setPaper2Questions(HISTORY_QUESTIONS_FALLBACK);
+      })
+      .finally(() => {
+        if (!cancelled) setLoadingP2(false);
+      });
+    return () => { cancelled = true; };
+  }, []);
+
+  // Fetch Paper 3 questions from API
+  useEffect(() => {
+    let cancelled = false;
+    fetchHistoryQuestions("paper3")
+      .then((data) => {
+        if (cancelled) return;
+        const transformed = data.map((q) => ({
+          id: q.id,
+          number: q.question_number,
+          topic: q.topic,
+          question: q.question_text,
+          marks: q.marks,
+          markscheme: q.mark_scheme,
+        }));
+        setPaper3Questions(transformed);
+      })
+      .catch(() => {
+        if (!cancelled) setPaper3Questions(PAPER3_QUESTIONS_FALLBACK);
+      })
+      .finally(() => {
+        if (!cancelled) setLoadingP3(false);
+      });
+    return () => { cancelled = true; };
+  }, []);
+
+  const HISTORY_QUESTIONS = paper2Questions || HISTORY_QUESTIONS_FALLBACK;
+  const PAPER3_QUESTIONS = paper3Questions || PAPER3_QUESTIONS_FALLBACK;
   const questions = paper === "paper2" ? HISTORY_QUESTIONS : PAPER3_QUESTIONS;
-  const topics = paper === "paper2" ? P2_TOPICS : P3_TOPICS;
+  const topics = [...new Set(questions.map(q => q.topic))];
   const totalMarks = questions.reduce((sum, q) => sum + q.marks, 0);
   const levelDesc = paper === "paper2" ? LEVEL_DESCRIPTORS : LEVEL_DESCRIPTORS_P3;
   const lsPrefix = paper === "paper2" ? "hist" : "p3";
+  const loading = paper === "paper2" ? loadingP2 : loadingP3;
 
   return (
     <Box mih="100vh" bg="#09090F" style={{ fontFamily: "'Inter', sans-serif", color: "#F0EEE8" }}>
@@ -1160,26 +1216,46 @@ export default function HistoryPage() {
           </Paper>
 
           {/* Questions grouped by topic */}
-          {topics.map(topic => (
-            <Box key={topic} mb="xl">
-              <Text
-                fz={11}
-                ff="'JetBrains Mono', monospace"
-                c="#F87171"
-                lts={1}
-                mb="md"
-                tt="uppercase"
-                fw={700}
-              >
-                {topic}
-              </Text>
-              <Stack gap="md">
-                {questions.filter(q => q.topic === topic).map(q => (
-                  <HistoryQuestion key={q.id} q={q} levelDescriptors={levelDesc} prefix={lsPrefix} />
-                ))}
-              </Stack>
-            </Box>
-          ))}
+          {loading
+            ? Array.from({ length: 4 }).map((_, i) => (
+                <Box key={i} mb="xl">
+                  <Skeleton height={14} width={200} mb="md" radius="sm" />
+                  <Stack gap="md">
+                    {Array.from({ length: 2 }).map((_, j) => (
+                      <Paper key={j} bg="#12121A" radius="lg" p="lg" mb="md" style={{ border: "1px solid #252533" }}>
+                        <Group mb="sm">
+                          <Skeleton height={24} width={40} radius="md" />
+                          <Skeleton height={20} width={70} radius="md" />
+                        </Group>
+                        <Skeleton height={16} mb="xs" radius="sm" />
+                        <Skeleton height={16} width="80%" mb="md" radius="sm" />
+                        <Skeleton height={160} radius="md" />
+                      </Paper>
+                    ))}
+                  </Stack>
+                </Box>
+              ))
+            : topics.map(topic => (
+                <Box key={topic} mb="xl">
+                  <Text
+                    fz={11}
+                    ff="'JetBrains Mono', monospace"
+                    c="#F87171"
+                    lts={1}
+                    mb="md"
+                    tt="uppercase"
+                    fw={700}
+                  >
+                    {topic}
+                  </Text>
+                  <Stack gap="md">
+                    {questions.filter(q => q.topic === topic).map(q => (
+                      <HistoryQuestion key={q.id} q={q} levelDescriptors={levelDesc} prefix={lsPrefix} />
+                    ))}
+                  </Stack>
+                </Box>
+              ))
+          }
         </div>
       </Container>
 
