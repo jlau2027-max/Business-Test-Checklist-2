@@ -19,28 +19,39 @@ const Page = path === '/specimen' ? SpecimenPage
            : path === '/dashboard' ? DashboardPage
            : App
 
-createRoot(document.getElementById('root')).render(
-  <StrictMode>
+const clerkAppearance = {
+  variables: {
+    colorPrimary: "#7C6FFF",
+    colorBackground: "#12121A",
+    colorInputBackground: "#1A1A24",
+    colorText: "#F0EEE8",
+    colorTextSecondary: "#8B8B9E",
+    borderRadius: "0.5rem",
+    fontFamily: "'Inter', sans-serif",
+  },
+}
+
+function AuthShell({ children }) {
+  if (!PUBLISHABLE_KEY) return children
+  return (
     <ClerkProvider
       publishableKey={PUBLISHABLE_KEY}
       afterSignOutUrl="/"
-      appearance={{
-        variables: {
-          colorPrimary: "#7C6FFF",
-          colorBackground: "#12121A",
-          colorInputBackground: "#1A1A24",
-          colorText: "#F0EEE8",
-          colorTextSecondary: "#8B8B9E",
-          borderRadius: "0.5rem",
-          fontFamily: "'Inter', sans-serif",
-        },
-      }}
+      appearance={clerkAppearance}
     >
-      <MantineProvider theme={theme} defaultColorScheme="dark">
-        <AuthProvider>
-          <Page />
-        </AuthProvider>
-      </MantineProvider>
+      <AuthProvider>
+        {children}
+      </AuthProvider>
     </ClerkProvider>
+  )
+}
+
+createRoot(document.getElementById('root')).render(
+  <StrictMode>
+    <MantineProvider theme={theme} defaultColorScheme="dark">
+      <AuthShell>
+        <Page />
+      </AuthShell>
+    </MantineProvider>
   </StrictMode>,
 )

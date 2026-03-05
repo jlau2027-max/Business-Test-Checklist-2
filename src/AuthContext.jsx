@@ -1,26 +1,32 @@
 import { createContext, useContext } from "react";
 import { useUser, useClerk } from "@clerk/react";
 
-const AuthContext = createContext(null);
+const AuthContext = createContext({ user: null, loading: false, logOut: () => {} });
 
 export function useAuth() {
-  const ctx = useContext(AuthContext);
-  if (!ctx) throw new Error("useAuth must be used within AuthProvider");
-  return ctx;
+  return useContext(AuthContext);
 }
 
 export function AuthProvider({ children }) {
-  const { isLoaded, isSignedIn, user: clerkUser } = useUser();
-  const { signOut } = useClerk();
+  let user = null;
+  let loading = false;
+  let logOut = () => {};
 
-  const user = isSignedIn && clerkUser ? {
-    uid: clerkUser.id,
-    email: clerkUser.primaryEmailAddress?.emailAddress || "",
-    displayName: clerkUser.fullName || clerkUser.firstName || clerkUser.primaryEmailAddress?.emailAddress?.split("@")[0] || "Student",
-  } : null;
+  try {
+    const { isLoaded, isSignedIn, user: clerkUser } = useUser();
+    const { signOut } = useClerk();
 
-  const loading = !isLoaded;
-  const logOut = () => signOut();
+    user = isSignedIn && clerkUser ? {
+      uid: clerkUser.id,
+      email: clerkUser.primaryEmailAddress?.emailAddress || "",
+      displayName: clerkUser.fullName || clerkUser.firstName || clerkUser.primaryEmailAddress?.emailAddress?.split("@")[0] || "Student",
+    } : null;
+
+    loading = !isLoaded;
+    logOut = () => signOut();
+  } catch {
+    // Clerk not available — auth features gracefully disabled
+  }
 
   return (
     <AuthContext.Provider value={{ user, loading, logOut }}>
