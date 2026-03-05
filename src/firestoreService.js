@@ -77,6 +77,17 @@ export async function editUserProfile(uid, { firstName, lastName, username }) {
   return await res.json();
 }
 
+// ─── Admin: change user role via Clerk ──────────────────────────────────────
+export async function changeUserRole(uid, role) {
+  const res = await fetch(`${WORKER_URL}/api/admin/users/role`, {
+    method: "PUT",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ uid, role }),
+  });
+  if (!res.ok) throw new Error("Failed to change role");
+  return await res.json();
+}
+
 // ─── Get all attempts for a user ────────────────────────────────────────────
 export async function getUserAttempts(uid) {
   const res = await fetch(`${WORKER_URL}/api/attempts/${uid}`);

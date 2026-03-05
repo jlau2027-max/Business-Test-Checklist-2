@@ -412,6 +412,30 @@ async function handleAdminEditProfile(request, env) {
   }
 }
 
+// ─── Admin: change user role via Clerk ──────────────────────────────────────
+
+async function handleAdminChangeRole(request, env) {
+  const { uid, role } = await request.json();
+  if (!uid) return json({ error: "Missing uid" }, 400);
+
+  const validRoles = ["origin", "two", "admin", "viewer", null];
+  if (!validRoles.includes(role)) {
+    return json({ error: "Invalid role. Must be: origin, two, admin, viewer, or null" }, 400);
+  }
+
+  try {
+    // Get existing publicMetadata so we don't overwrite other fields
+    const user = await clerkAPI(env, "GET", `/users/${uid}`);
+    const existingMeta = user.public_metadata || {};
+    const newMeta = { ...existingMeta, role: role };
+
+    await clerkAPI(env, "PATCH", `/users/${uid}`, { public_metadata: newMeta });
+    return json({ ok: true, role });
+  } catch (error) {
+    return json({ error: "Failed to change role", details: error.message }, 500);
+  }
+}
+
 // ─── Router ──────────────────────────────────────────────────────────────────
 
 export default {
@@ -457,6 +481,11 @@ export default {
     // Admin: PATCH /api/admin/users/profile
     if (path === "/api/admin/users/profile" && request.method === "PATCH") {
       return handleAdminEditProfile(request, env);
+    }
+
+    // Admin: PUT /api/admin/users/role
+    if (path === "/api/admin/users/role" && request.method === "PUT") {
+      return handleAdminChangeRole(request, env);
     }
 
     // Clerk webhook: POST /api/webhooks/clerk

@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import {
   Container, Badge, Text, Group, Paper, Progress,
-  Button, Box, Stack, Table, Modal, TextInput,
+  Button, Box, Stack, Table, Modal, TextInput, Select,
 } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { SignInButton } from "@clerk/react";
@@ -16,6 +16,7 @@ import {
   unbanUser,
   forceSignOut,
   editUserProfile,
+  changeUserRole,
 } from "./firestoreService.js";
 import LoginButton from "./LoginButton.jsx";
 
@@ -277,14 +278,38 @@ function UserDetail({ uid, displayName, onBack }) {
 
 // ─── Admin Page ──────────────────────────────────────────────────────────────
 
+// ─── Role permission helpers ────────────────────────────────────────────────
+// origin: all powers + change roles | two: ban/unban/signout/edit | admin: ban/unban/signout | viewer: read-only
+const canBanUnban = (role) => ["origin", "two", "admin"].includes(role);
+const canEdit = (role) => ["origin", "two"].includes(role);
+const canChangeRole = (role) => role === "origin";
+
+const ROLE_OPTIONS = [
+  { value: "origin", label: "Origin — Full access + role management" },
+  { value: "two", label: "Two — Ban/Unban/Sign Out/Edit" },
+  { value: "admin", label: "Admin — Ban/Unban/Sign Out" },
+  { value: "viewer", label: "Viewer — Read-only" },
+  { value: "__none__", label: "None — Remove admin access" },
+];
+
+const ROLE_COLORS = {
+  origin: "#F87171",
+  two: "#FB923C",
+  admin: "#7C6FFF",
+  viewer: "#38BDF8",
+};
+
 export default function AdminPage() {
-  const { user, isAdmin, loading: authLoading } = useAuth();
+  const { user, isAdmin, role, loading: authLoading } = useAuth();
   const [usersData, setUsersData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [selectedUser, setSelectedUser] = useState(null);
   const [editModalOpened, { open: openEditModal, close: closeEditModal }] = useDisclosure(false);
   const [editingUser, setEditingUser] = useState(null);
   const [editForm, setEditForm] = useState({ firstName: "", lastName: "", username: "" });
+  const [roleModalOpened, { open: openRoleModal, close: closeRoleModal }] = useDisclosure(false);
+  const [roleTarget, setRoleTarget] = useState(null);
+  const [selectedRole, setSelectedRole] = useState(null);
 
   useEffect(() => {
     if (!isAdmin) {
@@ -366,6 +391,24 @@ export default function AdminPage() {
       setEditingUser(null);
     } catch (err) {
       console.error("Failed to edit profile:", err);
+    }
+  };
+
+  const openRoleChange = (u) => {
+    setRoleTarget(u);
+    setSelectedRole(null);
+    openRoleModal();
+  };
+
+  const handleRoleSubmit = async () => {
+    if (!roleTarget || !selectedRole) return;
+    try {
+      const newRole = selectedRole === "__none__" ? null : selectedRole;
+      await changeUserRole(roleTarget.uid, newRole);
+      closeRoleModal();
+      setRoleTarget(null);
+    } catch (err) {
+      console.error("Failed to change role:", err);
     }
   };
 
@@ -575,77 +618,105 @@ export default function AdminPage() {
                           </Table.Td>
                           <Table.Td>
                             <Group gap={4} wrap="nowrap">
-                              {(u.accountStatus || "active") !== "banned" ? (
+                              {canBanUnban(role) && (
+                                <>
+                                  {(u.accountStatus || "active") !== "banned" ? (
+                                    <Button
+                                      size="compact-xs"
+                                      radius="md"
+                                      onClick={(e) => {
+                                        e.stopPropagation();
+                                        handleBan(u.uid);
+                                      }}
+                                      style={{
+                                        backgroundColor: "#F8717122",
+                                        color: "#F87171",
+                                        border: "none",
+                                        fontFamily: "'JetBrains Mono', monospace",
+                                        fontSize: 10,
+                                      }}
+                                    >
+                                      Ban
+                                    </Button>
+                                  ) : (
+                                    <Button
+                                      size="compact-xs"
+                                      radius="md"
+                                      onClick={(e) => {
+                                        e.stopPropagation();
+                                        handleUnban(u.uid);
+                                      }}
+                                      style={{
+                                        backgroundColor: "#34D39922",
+                                        color: "#34D399",
+                                        border: "none",
+                                        fontFamily: "'JetBrains Mono', monospace",
+                                        fontSize: 10,
+                                      }}
+                                    >
+                                      Unban
+                                    </Button>
+                                  )}
+                                  <Button
+                                    size="compact-xs"
+                                    radius="md"
+                                    onClick={(e) => {
+                                      e.stopPropagation();
+                                      handleForceSignOut(u.uid);
+                                    }}
+                                    style={{
+                                      backgroundColor: "#FBBF2422",
+                                      color: "#FBBF24",
+                                      border: "none",
+                                      fontFamily: "'JetBrains Mono', monospace",
+                                      fontSize: 10,
+                                    }}
+                                  >
+                                    Sign Out
+                                  </Button>
+                                </>
+                              )}
+                              {canEdit(role) && (
                                 <Button
                                   size="compact-xs"
                                   radius="md"
                                   onClick={(e) => {
                                     e.stopPropagation();
-                                    handleBan(u.uid);
+                                    openEdit(u);
                                   }}
                                   style={{
-                                    backgroundColor: "#F8717122",
-                                    color: "#F87171",
+                                    backgroundColor: "#7C6FFF22",
+                                    color: "#7C6FFF",
                                     border: "none",
                                     fontFamily: "'JetBrains Mono', monospace",
                                     fontSize: 10,
                                   }}
                                 >
-                                  Ban
-                                </Button>
-                              ) : (
-                                <Button
-                                  size="compact-xs"
-                                  radius="md"
-                                  onClick={(e) => {
-                                    e.stopPropagation();
-                                    handleUnban(u.uid);
-                                  }}
-                                  style={{
-                                    backgroundColor: "#34D39922",
-                                    color: "#34D399",
-                                    border: "none",
-                                    fontFamily: "'JetBrains Mono', monospace",
-                                    fontSize: 10,
-                                  }}
-                                >
-                                  Unban
+                                  Edit
                                 </Button>
                               )}
-                              <Button
-                                size="compact-xs"
-                                radius="md"
-                                onClick={(e) => {
-                                  e.stopPropagation();
-                                  handleForceSignOut(u.uid);
-                                }}
-                                style={{
-                                  backgroundColor: "#FBBF2422",
-                                  color: "#FBBF24",
-                                  border: "none",
-                                  fontFamily: "'JetBrains Mono', monospace",
-                                  fontSize: 10,
-                                }}
-                              >
-                                Sign Out
-                              </Button>
-                              <Button
-                                size="compact-xs"
-                                radius="md"
-                                onClick={(e) => {
-                                  e.stopPropagation();
-                                  openEdit(u);
-                                }}
-                                style={{
-                                  backgroundColor: "#7C6FFF22",
-                                  color: "#7C6FFF",
-                                  border: "none",
-                                  fontFamily: "'JetBrains Mono', monospace",
-                                  fontSize: 10,
-                                }}
-                              >
-                                Edit
-                              </Button>
+                              {canChangeRole(role) && (
+                                <Button
+                                  size="compact-xs"
+                                  radius="md"
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    openRoleChange(u);
+                                  }}
+                                  style={{
+                                    backgroundColor: "#FB923C22",
+                                    color: "#FB923C",
+                                    border: "none",
+                                    fontFamily: "'JetBrains Mono', monospace",
+                                    fontSize: 10,
+                                  }}
+                                >
+                                  Role
+                                </Button>
+                              )}
+                              {role === "viewer" && (
+                                <Text fz={10} c="#55556A" ff="'JetBrains Mono', monospace">View only</Text>
+                              )}
                             </Group>
                           </Table.Td>
                         </Table.Tr>
@@ -727,6 +798,66 @@ export default function AdminPage() {
               }}
             >
               Save Changes
+            </Button>
+          </Group>
+        </Stack>
+      </Modal>
+
+      {/* Change Role Modal (origin only) */}
+      <Modal
+        opened={roleModalOpened}
+        onClose={closeRoleModal}
+        title={`Change Role — ${roleTarget?.displayName || "User"}`}
+        centered
+        styles={{
+          header: { backgroundColor: "#12121A", borderBottom: "1px solid #252533" },
+          title: { color: "#F0EEE8", fontWeight: 700, fontFamily: "'JetBrains Mono', monospace", fontSize: 14 },
+          body: { backgroundColor: "#12121A" },
+          content: { backgroundColor: "#12121A", border: "1px solid #252533" },
+          close: { color: "#8B8B9E" },
+        }}
+      >
+        <Stack gap="md">
+          <Select
+            label="Select Role"
+            placeholder="Choose a role..."
+            data={ROLE_OPTIONS}
+            value={selectedRole}
+            onChange={setSelectedRole}
+            styles={{
+              label: { color: "#8B8B9E", fontSize: 11, fontFamily: "'JetBrains Mono', monospace", letterSpacing: 1, marginBottom: 4 },
+              input: { backgroundColor: "#1A1A24", border: "1px solid #252533", color: "#F0EEE8", fontFamily: "'JetBrains Mono', monospace" },
+              dropdown: { backgroundColor: "#1A1A24", border: "1px solid #252533" },
+              option: { color: "#F0EEE8", fontFamily: "'JetBrains Mono', monospace", fontSize: 12 },
+            }}
+          />
+          <Group justify="flex-end" gap="sm" mt="md">
+            <Button
+              radius="md"
+              onClick={closeRoleModal}
+              style={{
+                backgroundColor: "transparent",
+                color: "#8B8B9E",
+                border: "1px solid #252533",
+                fontFamily: "'JetBrains Mono', monospace",
+                fontSize: 12,
+              }}
+            >
+              Cancel
+            </Button>
+            <Button
+              radius="md"
+              onClick={handleRoleSubmit}
+              disabled={!selectedRole}
+              style={{
+                backgroundColor: selectedRole ? "#FB923C" : "#252533",
+                color: selectedRole ? "#F0EEE8" : "#55556A",
+                border: "none",
+                fontFamily: "'JetBrains Mono', monospace",
+                fontSize: 12,
+              }}
+            >
+              Save Role
             </Button>
           </Group>
         </Stack>
