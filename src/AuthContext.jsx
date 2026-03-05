@@ -20,7 +20,8 @@ export function AuthProvider({ children }) {
   const user = isSignedIn && clerkUser ? {
     uid: clerkUser.id,
     email: clerkUser.primaryEmailAddress?.emailAddress || "",
-    displayName: clerkUser.fullName || clerkUser.firstName || clerkUser.primaryEmailAddress?.emailAddress?.split("@")[0] || "Student",
+    username: clerkUser.username || "",
+    displayName: clerkUser.fullName || clerkUser.username || clerkUser.firstName || clerkUser.primaryEmailAddress?.emailAddress?.split("@")[0] || "Student",
   } : null;
 
   const role = (isSignedIn && clerkUser?.publicMetadata?.role) || null;
