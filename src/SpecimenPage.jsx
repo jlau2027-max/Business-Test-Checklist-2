@@ -1,8 +1,10 @@
 import { useState, useEffect } from "react";
 import {
-  Container, Badge, Text, Group, Paper, Button, Box, Textarea, Collapse, Stack,
+  Container, Badge, Text, Group, Paper, Button, Box, Textarea, Collapse, Stack, Skeleton,
 } from "@mantine/core";
+import { fetchWrittenQuestions } from "./api/contentApi.js";
 import LoginButton from "./LoginButton.jsx";
+import Sidebar from "./Sidebar.jsx";
 import { useAttemptTracker } from "./useAttemptTracker.js";
 import { syncToCloud } from "./stateSync.js";
 
@@ -16,8 +18,8 @@ function saveLS(key, value) {
   syncToCloud(key, value);
 }
 
-// ─── Specimen Questions Data ───────────────────────────────────────────────
-const SPECIMEN_QUESTIONS = [
+// ─── Specimen Questions Data (fallback) ─────────────────────────────────────
+const SPECIMEN_QUESTIONS_FALLBACK = [
   {
     id: "spec_a",
     label: "(a)",
@@ -369,10 +371,40 @@ function SpecimenQuestion({ q }) {
 
 // ─── Main Specimen Page ────────────────────────────────────────────────────
 export default function SpecimenPage() {
+  const [questions, setQuestions] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+
+  useEffect(() => {
+    let cancelled = false;
+    fetchWrittenQuestions({ type: "specimen" })
+      .then((data) => {
+        if (cancelled) return;
+        const transformed = data.map((q) => ({
+          id: q.id,
+          label: q.label,
+          question: q.question_text,
+          marks: q.marks,
+          markscheme: q.mark_scheme,
+        }));
+        setQuestions(transformed);
+      })
+      .catch(() => {
+        if (!cancelled) setQuestions(SPECIMEN_QUESTIONS_FALLBACK);
+      })
+      .finally(() => {
+        if (!cancelled) setLoading(false);
+      });
+    return () => { cancelled = true; };
+  }, []);
+
+  const SPECIMEN_QUESTIONS = questions || SPECIMEN_QUESTIONS_FALLBACK;
   const totalMarks = SPECIMEN_QUESTIONS.reduce((sum, q) => sum + q.marks, 0);
 
   return (
     <Box mih="100vh" bg="#09090F" style={{ fontFamily: "'Inter', sans-serif", color: "#F0EEE8" }}>
+      <Sidebar activeSubject="business" sidebarOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
+
       {/* Header */}
       <Box
         style={{
@@ -387,6 +419,29 @@ export default function SpecimenPage() {
       >
         <Container size="lg" py="sm">
           <Group justify="center" mb={4} style={{ position: "relative" }}>
+            {/* Sidebar toggle */}
+            <Button
+              onClick={() => setSidebarOpen(o => !o)}
+              radius="md"
+              style={{
+                position: "absolute",
+                left: 0,
+                top: "50%",
+                transform: "translateY(-50%)",
+                backgroundColor: "transparent",
+                color: "#8B8B9E",
+                border: "1px solid #252533",
+                padding: "4px 10px",
+                minWidth: "auto",
+                height: 32,
+              }}
+            >
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
+                <line x1="3" y1="6" x2="21" y2="6"/>
+                <line x1="3" y1="12" x2="21" y2="12"/>
+                <line x1="3" y1="18" x2="21" y2="18"/>
+              </svg>
+            </Button>
             <Badge
               variant="light"
               size="sm"
@@ -414,7 +469,7 @@ export default function SpecimenPage() {
           <Group justify="center">
             <Button
               component="a"
-              href="/"
+              href="/business/checklist"
               size="xs"
               radius="xl"
               ff="'JetBrains Mono', monospace"
@@ -469,9 +524,22 @@ Recently, NHD has been considering investing in new automated bottling machines 
 
           {/* Questions */}
           <Stack gap="md">
-            {SPECIMEN_QUESTIONS.map((q) => (
-              <SpecimenQuestion key={q.id} q={q} />
-            ))}
+            {loading
+              ? Array.from({ length: 6 }).map((_, i) => (
+                  <Paper key={i} bg="#12121A" radius="lg" p="lg" mb="md" style={{ border: "1px solid #252533" }}>
+                    <Group mb="sm">
+                      <Skeleton height={24} width={50} radius="md" />
+                      <Skeleton height={20} width={70} radius="md" />
+                    </Group>
+                    <Skeleton height={16} mb="xs" radius="sm" />
+                    <Skeleton height={16} width="80%" mb="md" radius="sm" />
+                    <Skeleton height={120} radius="md" />
+                  </Paper>
+                ))
+              : SPECIMEN_QUESTIONS.map((q) => (
+                  <SpecimenQuestion key={q.id} q={q} />
+                ))
+            }
           </Stack>
         </div>
       </Container>

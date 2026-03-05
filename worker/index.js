@@ -1,10 +1,19 @@
-const CORS = { "Access-Control-Allow-Origin": "*" };
+const CORS = {
+  "Access-Control-Allow-Origin": "*",
+};
 
 function json(data, status = 200) {
   return Response.json(data, { status, headers: CORS });
 }
 
-// ─── Grading (unchanged) ─────────────────────────────────────────────────────
+function jsonCached(data, status = 200) {
+  return Response.json(data, {
+    status,
+    headers: { ...CORS, "Cache-Control": "public, max-age=300" },
+  });
+}
+
+// ─── Grading endpoint (Claude API) ──────────────────────────────────────────
 
 async function handleGrade(request, env) {
   const { question, studentAnswer, expectedAnswer, marks } = await request.json();
@@ -338,105 +347,528 @@ async function handleAdminBanUser(request, env) {
   }
 }
 
-// ─── Admin: unban user via Clerk ────────────────────────────────────────────
+// ─── Auth / Clerk JWT verification ────────────────────────────────────────
 
-async function handleAdminUnbanUser(request, env) {
-  const { uid } = await request.json();
-  if (!uid) return json({ error: "Missing uid" }, 400);
+const EDIT_ROLES = ["origin", "two", "admin", "editor"];
+const DELETE_ROLES = ["origin", "two", "admin"];
+const ADMIN_ROLES = ["origin", "two", "admin", "editor", "viewer"];
 
-  try {
-    await clerkAPI(env, "POST", `/users/${uid}/unban`);
-    await env.DB.prepare(
-      `UPDATE users SET account_status = 'active', updated_at = ?1 WHERE uid = ?2`
-    ).bind(Date.now(), uid).run();
-    return json({ ok: true });
-  } catch (error) {
-    return json({ error: "Failed to unban user", details: error.message }, 500);
+let cachedJwks = null;
+let jwksCachedAt = 0;
+const JWKS_CACHE_TTL = 3600_000; // 1 hour
+
+async function fetchJwks(env) {
+  const now = Date.now();
+  if (cachedJwks && now - jwksCachedAt < JWKS_CACHE_TTL) {
+    return cachedJwks;
   }
+  const res = await fetch(env.CLERK_JWKS_URL);
+  const data = await res.json();
+  cachedJwks = data.keys;
+  jwksCachedAt = now;
+  return cachedJwks;
 }
 
-// ─── Admin: force sign out via Clerk ────────────────────────────────────────
+function base64UrlDecode(str) {
+  const padded = str.replace(/-/g, "+").replace(/_/g, "/");
+  const binary = atob(padded);
+  return Uint8Array.from(binary, (c) => c.charCodeAt(0));
+}
 
-async function handleAdminSignOut(request, env) {
-  const { uid } = await request.json();
-  if (!uid) return json({ error: "Missing uid" }, 400);
+function decodeJwtPart(part) {
+  return JSON.parse(new TextDecoder().decode(base64UrlDecode(part)));
+}
+
+async function verifyClerkJwt(request, env) {
+  const authHeader = request.headers.get("Authorization");
+  if (!authHeader || !authHeader.startsWith("Bearer ")) {
+    return { error: "Missing or invalid Authorization header", status: 401 };
+  }
+
+  const token = authHeader.slice(7);
+  const parts = token.split(".");
+  if (parts.length !== 3) {
+    return { error: "Malformed JWT", status: 401 };
+  }
 
   try {
-    const sessions = await clerkAPI(env, "GET", `/users/${uid}/sessions`);
-    let revoked = 0;
-    for (const session of sessions) {
-      if (session.status === "active") {
-        await clerkAPI(env, "POST", `/sessions/${session.id}/revoke`);
-        revoked++;
-      }
+    const header = decodeJwtPart(parts[0]);
+    const payload = decodeJwtPart(parts[1]);
+
+    // Check expiration
+    const now = Math.floor(Date.now() / 1000);
+    if (payload.exp && payload.exp < now) {
+      return { error: "Token expired", status: 401 };
     }
-    return json({ ok: true, revoked });
-  } catch (error) {
-    return json({ error: "Failed to sign out user", details: error.message }, 500);
+
+    // Check issuer
+    if (env.CLERK_ISSUER && payload.iss !== env.CLERK_ISSUER) {
+      return { error: "Invalid token issuer", status: 401 };
+    }
+
+    // Fetch JWKS and find matching key
+    const keys = await fetchJwks(env);
+    const jwk = keys.find((k) => k.kid === header.kid);
+    if (!jwk) {
+      // Bust cache and retry once
+      cachedJwks = null;
+      const freshKeys = await fetchJwks(env);
+      const freshJwk = freshKeys.find((k) => k.kid === header.kid);
+      if (!freshJwk) {
+        return { error: "No matching signing key found", status: 401 };
+      }
+      return await verifySignature(token, parts, freshJwk, payload);
+    }
+
+    return await verifySignature(token, parts, jwk, payload);
+  } catch (err) {
+    return { error: "JWT verification failed: " + err.message, status: 401 };
   }
 }
 
-// ─── Admin: edit user profile via Clerk ─────────────────────────────────────
+async function verifySignature(token, parts, jwk, payload) {
+  const cryptoKey = await crypto.subtle.importKey(
+    "jwk",
+    { kty: jwk.kty, n: jwk.n, e: jwk.e, alg: "RS256", ext: true },
+    { name: "RSASSA-PKCS1-v1_5", hash: "SHA-256" },
+    false,
+    ["verify"]
+  );
 
-async function handleAdminEditProfile(request, env) {
-  const { uid, firstName, lastName, username } = await request.json();
-  if (!uid) return json({ error: "Missing uid" }, 400);
+  const signatureBytes = base64UrlDecode(parts[2]);
+  const dataBytes = new TextEncoder().encode(parts[0] + "." + parts[1]);
 
-  // Build Clerk update payload with only provided fields
-  const payload = {};
-  if (firstName !== undefined && firstName !== null) payload.first_name = firstName;
-  if (lastName !== undefined && lastName !== null) payload.last_name = lastName;
-  if (username !== undefined && username !== null) payload.username = username;
+  const valid = await crypto.subtle.verify(
+    "RSASSA-PKCS1-v1_5",
+    cryptoKey,
+    signatureBytes,
+    dataBytes
+  );
 
-  if (Object.keys(payload).length === 0) {
-    return json({ error: "No fields to update" }, 400);
+  if (!valid) {
+    return { error: "Invalid JWT signature", status: 401 };
   }
 
-  try {
-    const updated = await clerkAPI(env, "PATCH", `/users/${uid}`, payload);
-
-    // Sync changes to D1
-    const newDisplayName =
-      [updated.first_name, updated.last_name].filter(Boolean).join(" ") ||
-      updated.username ||
-      "Student";
-    const newEmail =
-      updated.email_addresses?.find((e) => e.id === updated.primary_email_address_id)
-        ?.email_address || "";
-    const newUsername = updated.username || "";
-
-    await upsertUser(uid, newDisplayName, newEmail, newUsername, env);
-    return json({ ok: true, displayName: newDisplayName, email: newEmail, username: newUsername });
-  } catch (error) {
-    return json({ error: "Failed to edit profile", details: error.message }, 500);
-  }
+  return { payload };
 }
 
-// ─── Admin: change user role via Clerk ──────────────────────────────────────
-
-async function handleAdminChangeRole(request, env) {
-  const { uid, role } = await request.json();
-  if (!uid) return json({ error: "Missing uid" }, 400);
-
-  const validRoles = ["origin", "two", "admin", "viewer", null];
-  if (!validRoles.includes(role)) {
-    return json({ error: "Invalid role. Must be: origin, two, admin, viewer, or null" }, 400);
-  }
-
-  try {
-    // Get existing publicMetadata so we don't overwrite other fields
-    const user = await clerkAPI(env, "GET", `/users/${uid}`);
-    const existingMeta = user.public_metadata || {};
-    const newMeta = { ...existingMeta, role: role };
-
-    await clerkAPI(env, "PATCH", `/users/${uid}`, { public_metadata: newMeta });
-    return json({ ok: true, role });
-  } catch (error) {
-    return json({ error: "Failed to change role", details: error.message }, 500);
-  }
+function getUserRole(payload) {
+  return payload?.publicMetadata?.role || payload?.public_metadata?.role || null;
 }
 
-// ─── Router ──────────────────────────────────────────────────────────────────
+async function requireAuth(request, env, allowedRoles) {
+  const result = await verifyClerkJwt(request, env);
+  if (result.error) {
+    return { response: json({ error: result.error }, result.status) };
+  }
+
+  const role = getUserRole(result.payload);
+  if (!role || !allowedRoles.includes(role)) {
+    return { response: json({ error: "Forbidden: insufficient role" }, 403) };
+  }
+
+  return { payload: result.payload, role };
+}
+
+// ─── Public Content API (D1) ──────────────────────────────────────────────
+
+async function handleGetFlashcardTopics(env) {
+  const { results } = await env.CONTENT_DB.prepare(
+    `SELECT ft.*, COUNT(f.id) as card_count
+     FROM flashcard_topics ft
+     LEFT JOIN flashcards f ON f.topic_id = ft.id
+     GROUP BY ft.id
+     ORDER BY ft.sort_order`
+  ).all();
+  return jsonCached(results);
+}
+
+async function handleGetFlashcards(topicId, env) {
+  const { results } = await env.CONTENT_DB.prepare(
+    `SELECT * FROM flashcards WHERE topic_id = ? ORDER BY sort_order`
+  ).bind(topicId).all();
+  return jsonCached(results);
+}
+
+async function handleGetMcq(url, env) {
+  let sql = `SELECT * FROM mcq_questions WHERE 1=1`;
+  const bindings = [];
+  const category = url.searchParams.get("category");
+  const difficulty = url.searchParams.get("difficulty");
+  if (category) { sql += ` AND category = ?`; bindings.push(category); }
+  if (difficulty) { sql += ` AND difficulty = ?`; bindings.push(difficulty); }
+  sql += ` ORDER BY sort_order`;
+  const { results } = await env.CONTENT_DB.prepare(sql).bind(...bindings).all();
+  return jsonCached(results);
+}
+
+async function handleGetWritten(url, env) {
+  let sql = `SELECT * FROM written_questions WHERE 1=1`;
+  const bindings = [];
+  const type = url.searchParams.get("type");
+  const category = url.searchParams.get("category");
+  const difficulty = url.searchParams.get("difficulty");
+  if (type) { sql += ` AND question_type = ?`; bindings.push(type); }
+  if (category) { sql += ` AND category = ?`; bindings.push(category); }
+  if (difficulty) { sql += ` AND difficulty = ?`; bindings.push(difficulty); }
+  sql += ` ORDER BY sort_order`;
+  const { results } = await env.CONTENT_DB.prepare(sql).bind(...bindings).all();
+  return jsonCached(results);
+}
+
+async function handleGetHistory(url, env) {
+  let sql = `SELECT * FROM history_questions WHERE 1=1`;
+  const bindings = [];
+  const paper = url.searchParams.get("paper");
+  if (paper) { sql += ` AND paper = ?`; bindings.push(paper); }
+  sql += ` ORDER BY sort_order`;
+  const { results } = await env.CONTENT_DB.prepare(sql).bind(...bindings).all();
+  return jsonCached(results);
+}
+
+async function handleGetChecklist(env) {
+  const { results: sections } = await env.CONTENT_DB.prepare(
+    `SELECT * FROM checklist_sections ORDER BY sort_order`
+  ).all();
+  const { results: items } = await env.CONTENT_DB.prepare(
+    `SELECT * FROM checklist_items ORDER BY sort_order`
+  ).all();
+  const sectionsWithItems = sections.map((s) => ({
+    ...s,
+    items: items.filter((i) => i.section_id === s.id),
+  }));
+  return jsonCached(sectionsWithItems);
+}
+
+async function handleGetColors(env) {
+  const { results } = await env.CONTENT_DB.prepare(
+    `SELECT * FROM category_colors`
+  ).all();
+  return jsonCached(results);
+}
+
+// ─── Admin CRUD helpers ───────────────────────────────────────────────────
+
+function slugify(text) {
+  return text
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-|-$/g, "");
+}
+
+async function getNextId(env, table, prefix) {
+  const row = await env.CONTENT_DB.prepare(
+    `SELECT id FROM ${table} ORDER BY id DESC LIMIT 1`
+  ).first();
+  if (!row) return `${prefix}1`;
+  const match = row.id.match(/(\d+)$/);
+  const num = match ? parseInt(match[1], 10) + 1 : 1;
+  return `${prefix}${num}`;
+}
+
+async function getNextSortOrder(env, table, whereClause = "", bindings = []) {
+  const sql = `SELECT MAX(sort_order) as max_sort FROM ${table}${whereClause ? " WHERE " + whereClause : ""}`;
+  const row = await env.CONTENT_DB.prepare(sql).bind(...bindings).first();
+  return (row?.max_sort ?? -1) + 1;
+}
+
+// ─── Admin CRUD: Flashcard Topics ─────────────────────────────────────────
+
+async function handleAdminFlashcardTopicsPost(request, env) {
+  const body = await request.json();
+  const id = body.id || slugify(body.label || body.title || "topic");
+  const sort_order = body.sort_order ?? await getNextSortOrder(env, "flashcard_topics");
+  await env.CONTENT_DB.prepare(
+    `INSERT INTO flashcard_topics (id, label, color, sort_order) VALUES (?, ?, ?, ?)`
+  ).bind(id, body.label, body.color || '#7C6FFF', sort_order).run();
+  return json({ ok: true, id }, 201);
+}
+
+async function handleAdminFlashcardTopicsPut(id, request, env) {
+  const body = await request.json();
+  const fields = [];
+  const values = [];
+  for (const [key, val] of Object.entries(body)) {
+    if (key === "id") continue;
+    fields.push(`${key} = ?`);
+    values.push(val);
+  }
+  if (fields.length === 0) return json({ error: "No fields to update" }, 400);
+  values.push(id);
+  await env.CONTENT_DB.prepare(
+    `UPDATE flashcard_topics SET ${fields.join(", ")} WHERE id = ?`
+  ).bind(...values).run();
+  return json({ ok: true });
+}
+
+async function handleAdminFlashcardTopicsDelete(id, env) {
+  await env.CONTENT_DB.prepare(`DELETE FROM flashcard_topics WHERE id = ?`).bind(id).run();
+  return json({ ok: true });
+}
+
+// ─── Admin CRUD: Flashcards ───────────────────────────────────────────────
+
+async function handleAdminFlashcardsPost(request, env) {
+  const body = await request.json();
+  const id = body.id || crypto.randomUUID();
+  const sort_order = body.sort_order ?? await getNextSortOrder(env, "flashcards", "topic_id = ?", [body.topic_id]);
+  await env.CONTENT_DB.prepare(
+    `INSERT INTO flashcards (id, topic_id, term, definition, formula, sort_order) VALUES (?, ?, ?, ?, ?, ?)`
+  ).bind(id, body.topic_id, body.term, body.definition, body.formula || null, sort_order).run();
+  return json({ ok: true, id }, 201);
+}
+
+async function handleAdminFlashcardsPut(id, request, env) {
+  const body = await request.json();
+  const fields = [];
+  const values = [];
+  for (const [key, val] of Object.entries(body)) {
+    if (key === "id") continue;
+    fields.push(`${key} = ?`);
+    values.push(val);
+  }
+  if (fields.length === 0) return json({ error: "No fields to update" }, 400);
+  values.push(id);
+  await env.CONTENT_DB.prepare(
+    `UPDATE flashcards SET ${fields.join(", ")} WHERE id = ?`
+  ).bind(...values).run();
+  return json({ ok: true });
+}
+
+async function handleAdminFlashcardsDelete(id, env) {
+  await env.CONTENT_DB.prepare(`DELETE FROM flashcards WHERE id = ?`).bind(id).run();
+  return json({ ok: true });
+}
+
+// ─── Admin CRUD: MCQ ──────────────────────────────────────────────────────
+
+async function handleAdminMcqPost(request, env) {
+  const body = await request.json();
+  const id = body.id || await getNextId(env, "mcq_questions", "mcq");
+  const sort_order = body.sort_order ?? await getNextSortOrder(env, "mcq_questions");
+  await env.CONTENT_DB.prepare(
+    `INSERT INTO mcq_questions (id, category, difficulty, question_text, option_a, option_b, option_c, option_d, correct_option, explanation, sort_order)
+     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
+  ).bind(
+    id, body.category || null, body.difficulty || null, body.question_text,
+    body.option_a, body.option_b, body.option_c, body.option_d,
+    body.correct_option, body.explanation || null, sort_order
+  ).run();
+  return json({ ok: true, id }, 201);
+}
+
+async function handleAdminMcqPut(id, request, env) {
+  const body = await request.json();
+  const fields = [];
+  const values = [];
+  for (const [key, val] of Object.entries(body)) {
+    if (key === "id") continue;
+    fields.push(`${key} = ?`);
+    values.push(val);
+  }
+  if (fields.length === 0) return json({ error: "No fields to update" }, 400);
+  values.push(id);
+  await env.CONTENT_DB.prepare(
+    `UPDATE mcq_questions SET ${fields.join(", ")} WHERE id = ?`
+  ).bind(...values).run();
+  return json({ ok: true });
+}
+
+async function handleAdminMcqDelete(id, env) {
+  await env.CONTENT_DB.prepare(`DELETE FROM mcq_questions WHERE id = ?`).bind(id).run();
+  return json({ ok: true });
+}
+
+// ─── Admin CRUD: Written Questions ────────────────────────────────────────
+
+async function handleAdminWrittenPost(request, env) {
+  const body = await request.json();
+  const prefix = body.question_type === "specimen" ? "spec" : body.question_type === "ten_marker" ? "tm" : "wr";
+  const id = body.id || await getNextId(env, "written_questions", prefix);
+  const sort_order = body.sort_order ?? await getNextSortOrder(env, "written_questions");
+  await env.CONTENT_DB.prepare(
+    `INSERT INTO written_questions (id, category, difficulty, question_type, marks, question_text, mark_scheme, label, sort_order)
+     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`
+  ).bind(
+    id, body.category || null, body.difficulty || null, body.question_type || 'short_answer',
+    body.marks || null, body.question_text, body.mark_scheme || null, body.label || null, sort_order
+  ).run();
+  return json({ ok: true, id }, 201);
+}
+
+async function handleAdminWrittenPut(id, request, env) {
+  const body = await request.json();
+  const fields = [];
+  const values = [];
+  for (const [key, val] of Object.entries(body)) {
+    if (key === "id") continue;
+    fields.push(`${key} = ?`);
+    values.push(val);
+  }
+  if (fields.length === 0) return json({ error: "No fields to update" }, 400);
+  values.push(id);
+  await env.CONTENT_DB.prepare(
+    `UPDATE written_questions SET ${fields.join(", ")} WHERE id = ?`
+  ).bind(...values).run();
+  return json({ ok: true });
+}
+
+async function handleAdminWrittenDelete(id, env) {
+  await env.CONTENT_DB.prepare(`DELETE FROM written_questions WHERE id = ?`).bind(id).run();
+  return json({ ok: true });
+}
+
+// ─── Admin CRUD: History Questions ────────────────────────────────────────
+
+async function handleAdminHistoryPost(request, env) {
+  const body = await request.json();
+  const prefix = body.paper === "paper3" ? "p3q" : "hist";
+  const id = body.id || await getNextId(env, "history_questions", prefix);
+  const sort_order = body.sort_order ?? await getNextSortOrder(env, "history_questions");
+  await env.CONTENT_DB.prepare(
+    `INSERT INTO history_questions (id, paper, topic, question_number, question_text, marks, mark_scheme, sort_order)
+     VALUES (?, ?, ?, ?, ?, ?, ?, ?)`
+  ).bind(
+    id, body.paper || null, body.topic || null, body.question_number || null,
+    body.question_text, body.marks || 15, body.mark_scheme || null, sort_order
+  ).run();
+  return json({ ok: true, id }, 201);
+}
+
+async function handleAdminHistoryPut(id, request, env) {
+  const body = await request.json();
+  const fields = [];
+  const values = [];
+  for (const [key, val] of Object.entries(body)) {
+    if (key === "id") continue;
+    fields.push(`${key} = ?`);
+    values.push(val);
+  }
+  if (fields.length === 0) return json({ error: "No fields to update" }, 400);
+  values.push(id);
+  await env.CONTENT_DB.prepare(
+    `UPDATE history_questions SET ${fields.join(", ")} WHERE id = ?`
+  ).bind(...values).run();
+  return json({ ok: true });
+}
+
+async function handleAdminHistoryDelete(id, env) {
+  await env.CONTENT_DB.prepare(`DELETE FROM history_questions WHERE id = ?`).bind(id).run();
+  return json({ ok: true });
+}
+
+// ─── Admin CRUD: Checklist Sections ───────────────────────────────────────
+
+async function handleAdminChecklistSectionsPost(request, env) {
+  const body = await request.json();
+  const id = body.id || crypto.randomUUID();
+  const sort_order = body.sort_order ?? await getNextSortOrder(env, "checklist_sections");
+  await env.CONTENT_DB.prepare(
+    `INSERT INTO checklist_sections (id, title, color, sort_order) VALUES (?, ?, ?, ?)`
+  ).bind(id, body.title, body.color || '#7C6FFF', sort_order).run();
+  return json({ ok: true, id }, 201);
+}
+
+async function handleAdminChecklistSectionsPut(id, request, env) {
+  const body = await request.json();
+  const fields = [];
+  const values = [];
+  for (const [key, val] of Object.entries(body)) {
+    if (key === "id") continue;
+    fields.push(`${key} = ?`);
+    values.push(val);
+  }
+  if (fields.length === 0) return json({ error: "No fields to update" }, 400);
+  values.push(id);
+  await env.CONTENT_DB.prepare(
+    `UPDATE checklist_sections SET ${fields.join(", ")} WHERE id = ?`
+  ).bind(...values).run();
+  return json({ ok: true });
+}
+
+async function handleAdminChecklistSectionsDelete(id, env) {
+  await env.CONTENT_DB.prepare(`DELETE FROM checklist_sections WHERE id = ?`).bind(id).run();
+  return json({ ok: true });
+}
+
+// ─── Admin CRUD: Checklist Items ──────────────────────────────────────────
+
+async function handleAdminChecklistItemsPost(request, env) {
+  const body = await request.json();
+  const id = body.id || crypto.randomUUID();
+  const sort_order = body.sort_order ?? await getNextSortOrder(env, "checklist_items", "section_id = ?", [body.section_id]);
+  await env.CONTENT_DB.prepare(
+    `INSERT INTO checklist_items (id, section_id, text, sort_order) VALUES (?, ?, ?, ?)`
+  ).bind(id, body.section_id, body.text, sort_order).run();
+  return json({ ok: true, id }, 201);
+}
+
+async function handleAdminChecklistItemsPut(id, request, env) {
+  const body = await request.json();
+  const fields = [];
+  const values = [];
+  for (const [key, val] of Object.entries(body)) {
+    if (key === "id") continue;
+    fields.push(`${key} = ?`);
+    values.push(val);
+  }
+  if (fields.length === 0) return json({ error: "No fields to update" }, 400);
+  values.push(id);
+  await env.CONTENT_DB.prepare(
+    `UPDATE checklist_items SET ${fields.join(", ")} WHERE id = ?`
+  ).bind(...values).run();
+  return json({ ok: true });
+}
+
+async function handleAdminChecklistItemsDelete(id, env) {
+  await env.CONTENT_DB.prepare(`DELETE FROM checklist_items WHERE id = ?`).bind(id).run();
+  return json({ ok: true });
+}
+
+// ─── Admin: Reorder ───────────────────────────────────────────────────────
+
+const REORDER_TABLES = [
+  "flashcard_topics", "flashcards", "mcq_questions", "written_questions",
+  "history_questions", "checklist_sections", "checklist_items", "category_colors",
+];
+
+async function handleAdminReorder(table, request, env) {
+  if (!REORDER_TABLES.includes(table)) {
+    return json({ error: `Invalid table: ${table}` }, 400);
+  }
+  const items = await request.json();
+  if (!Array.isArray(items)) {
+    return json({ error: "Expected array of {id, sort_order}" }, 400);
+  }
+  const stmt = env.CONTENT_DB.prepare(
+    `UPDATE ${table} SET sort_order = ? WHERE id = ?`
+  );
+  const batch = items.map((item) => stmt.bind(item.sort_order, item.id));
+  await env.CONTENT_DB.batch(batch);
+  return json({ ok: true });
+}
+
+// ─── Admin: Colors ────────────────────────────────────────────────────────
+
+async function handleAdminColorsPut(request, env) {
+  const body = await request.json();
+  // Upsert: category is PRIMARY KEY in migration schema
+  const existing = await env.CONTENT_DB.prepare(
+    `SELECT category FROM category_colors WHERE category = ?`
+  ).bind(body.category).first();
+  if (existing) {
+    await env.CONTENT_DB.prepare(
+      `UPDATE category_colors SET color = ? WHERE category = ?`
+    ).bind(body.color, body.category).run();
+  } else {
+    await env.CONTENT_DB.prepare(
+      `INSERT INTO category_colors (category, color) VALUES (?, ?)`
+    ).bind(body.category, body.color).run();
+  }
+  return json({ ok: true });
+}
+
+// ─── Router ───────────────────────────────────────────────────────────────
 
 export default {
   async fetch(request, env) {
@@ -444,14 +876,17 @@ export default {
       return new Response(null, {
         headers: {
           ...CORS,
-          "Access-Control-Allow-Methods": "GET, POST, PUT, PATCH, OPTIONS",
-          "Access-Control-Allow-Headers": "Content-Type",
+          "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
+          "Access-Control-Allow-Headers": "Content-Type, Authorization",
         },
       });
     }
 
     const url = new URL(request.url);
     const path = url.pathname;
+    const method = request.method;
+
+    // ── Existing routes (unchanged) ─────────────────────────────────────
 
     // Admin: GET /api/admin/users
     if (path === "/api/admin/users" && request.method === "GET") {
@@ -514,6 +949,191 @@ export default {
     // Grading: POST / or POST /grade
     if (request.method === "POST" && (path === "/" || path === "/grade")) {
       return handleGrade(request, env);
+    }
+
+    // ── Public Content API (no auth) ────────────────────────────────────
+
+    if (method === "GET" && path === "/api/content/flashcard-topics") {
+      return handleGetFlashcardTopics(env);
+    }
+
+    const flashcardsMatch = path.match(/^\/api\/content\/flashcards\/([^/]+)$/);
+    if (method === "GET" && flashcardsMatch) {
+      return handleGetFlashcards(flashcardsMatch[1], env);
+    }
+
+    if (method === "GET" && path === "/api/content/mcq") {
+      return handleGetMcq(url, env);
+    }
+
+    if (method === "GET" && path === "/api/content/written") {
+      return handleGetWritten(url, env);
+    }
+
+    if (method === "GET" && path === "/api/content/history") {
+      return handleGetHistory(url, env);
+    }
+
+    if (method === "GET" && path === "/api/content/checklist") {
+      return handleGetChecklist(env);
+    }
+
+    if (method === "GET" && path === "/api/content/colors") {
+      return handleGetColors(env);
+    }
+
+    // ── Admin CRUD routes (auth required) ───────────────────────────────
+
+    if (path.startsWith("/api/admin/")) {
+      // --- Reorder ---
+      const reorderMatch = path.match(/^\/api\/admin\/reorder\/([^/]+)$/);
+      if (reorderMatch && method === "PUT") {
+        const auth = await requireAuth(request, env, EDIT_ROLES);
+        if (auth.response) return auth.response;
+        return handleAdminReorder(reorderMatch[1], request, env);
+      }
+
+      // --- Colors ---
+      if (path === "/api/admin/colors" && method === "PUT") {
+        const auth = await requireAuth(request, env, EDIT_ROLES);
+        if (auth.response) return auth.response;
+        return handleAdminColorsPut(request, env);
+      }
+
+      // --- Flashcard Topics ---
+      if (path === "/api/admin/flashcard-topics" && method === "POST") {
+        const auth = await requireAuth(request, env, EDIT_ROLES);
+        if (auth.response) return auth.response;
+        return handleAdminFlashcardTopicsPost(request, env);
+      }
+      const ftPutMatch = path.match(/^\/api\/admin\/flashcard-topics\/([^/]+)$/);
+      if (ftPutMatch && method === "PUT") {
+        const auth = await requireAuth(request, env, EDIT_ROLES);
+        if (auth.response) return auth.response;
+        return handleAdminFlashcardTopicsPut(ftPutMatch[1], request, env);
+      }
+      const ftDelMatch = path.match(/^\/api\/admin\/flashcard-topics\/([^/]+)$/);
+      if (ftDelMatch && method === "DELETE") {
+        const auth = await requireAuth(request, env, DELETE_ROLES);
+        if (auth.response) return auth.response;
+        return handleAdminFlashcardTopicsDelete(ftDelMatch[1], env);
+      }
+
+      // --- Flashcards ---
+      if (path === "/api/admin/flashcards" && method === "POST") {
+        const auth = await requireAuth(request, env, EDIT_ROLES);
+        if (auth.response) return auth.response;
+        return handleAdminFlashcardsPost(request, env);
+      }
+      const fcPutMatch = path.match(/^\/api\/admin\/flashcards\/([^/]+)$/);
+      if (fcPutMatch && method === "PUT") {
+        const auth = await requireAuth(request, env, EDIT_ROLES);
+        if (auth.response) return auth.response;
+        return handleAdminFlashcardsPut(fcPutMatch[1], request, env);
+      }
+      const fcDelMatch = path.match(/^\/api\/admin\/flashcards\/([^/]+)$/);
+      if (fcDelMatch && method === "DELETE") {
+        const auth = await requireAuth(request, env, DELETE_ROLES);
+        if (auth.response) return auth.response;
+        return handleAdminFlashcardsDelete(fcDelMatch[1], env);
+      }
+
+      // --- MCQ ---
+      if (path === "/api/admin/mcq" && method === "POST") {
+        const auth = await requireAuth(request, env, EDIT_ROLES);
+        if (auth.response) return auth.response;
+        return handleAdminMcqPost(request, env);
+      }
+      const mcqPutMatch = path.match(/^\/api\/admin\/mcq\/([^/]+)$/);
+      if (mcqPutMatch && method === "PUT") {
+        const auth = await requireAuth(request, env, EDIT_ROLES);
+        if (auth.response) return auth.response;
+        return handleAdminMcqPut(mcqPutMatch[1], request, env);
+      }
+      const mcqDelMatch = path.match(/^\/api\/admin\/mcq\/([^/]+)$/);
+      if (mcqDelMatch && method === "DELETE") {
+        const auth = await requireAuth(request, env, DELETE_ROLES);
+        if (auth.response) return auth.response;
+        return handleAdminMcqDelete(mcqDelMatch[1], env);
+      }
+
+      // --- Written ---
+      if (path === "/api/admin/written" && method === "POST") {
+        const auth = await requireAuth(request, env, EDIT_ROLES);
+        if (auth.response) return auth.response;
+        return handleAdminWrittenPost(request, env);
+      }
+      const wrPutMatch = path.match(/^\/api\/admin\/written\/([^/]+)$/);
+      if (wrPutMatch && method === "PUT") {
+        const auth = await requireAuth(request, env, EDIT_ROLES);
+        if (auth.response) return auth.response;
+        return handleAdminWrittenPut(wrPutMatch[1], request, env);
+      }
+      const wrDelMatch = path.match(/^\/api\/admin\/written\/([^/]+)$/);
+      if (wrDelMatch && method === "DELETE") {
+        const auth = await requireAuth(request, env, DELETE_ROLES);
+        if (auth.response) return auth.response;
+        return handleAdminWrittenDelete(wrDelMatch[1], env);
+      }
+
+      // --- History ---
+      if (path === "/api/admin/history" && method === "POST") {
+        const auth = await requireAuth(request, env, EDIT_ROLES);
+        if (auth.response) return auth.response;
+        return handleAdminHistoryPost(request, env);
+      }
+      const hiPutMatch = path.match(/^\/api\/admin\/history\/([^/]+)$/);
+      if (hiPutMatch && method === "PUT") {
+        const auth = await requireAuth(request, env, EDIT_ROLES);
+        if (auth.response) return auth.response;
+        return handleAdminHistoryPut(hiPutMatch[1], request, env);
+      }
+      const hiDelMatch = path.match(/^\/api\/admin\/history\/([^/]+)$/);
+      if (hiDelMatch && method === "DELETE") {
+        const auth = await requireAuth(request, env, DELETE_ROLES);
+        if (auth.response) return auth.response;
+        return handleAdminHistoryDelete(hiDelMatch[1], env);
+      }
+
+      // --- Checklist Sections ---
+      if (path === "/api/admin/checklist-sections" && method === "POST") {
+        const auth = await requireAuth(request, env, EDIT_ROLES);
+        if (auth.response) return auth.response;
+        return handleAdminChecklistSectionsPost(request, env);
+      }
+      const csPutMatch = path.match(/^\/api\/admin\/checklist-sections\/([^/]+)$/);
+      if (csPutMatch && method === "PUT") {
+        const auth = await requireAuth(request, env, EDIT_ROLES);
+        if (auth.response) return auth.response;
+        return handleAdminChecklistSectionsPut(csPutMatch[1], request, env);
+      }
+      const csDelMatch = path.match(/^\/api\/admin\/checklist-sections\/([^/]+)$/);
+      if (csDelMatch && method === "DELETE") {
+        const auth = await requireAuth(request, env, DELETE_ROLES);
+        if (auth.response) return auth.response;
+        return handleAdminChecklistSectionsDelete(csDelMatch[1], env);
+      }
+
+      // --- Checklist Items ---
+      if (path === "/api/admin/checklist-items" && method === "POST") {
+        const auth = await requireAuth(request, env, EDIT_ROLES);
+        if (auth.response) return auth.response;
+        return handleAdminChecklistItemsPost(request, env);
+      }
+      const ciPutMatch = path.match(/^\/api\/admin\/checklist-items\/([^/]+)$/);
+      if (ciPutMatch && method === "PUT") {
+        const auth = await requireAuth(request, env, EDIT_ROLES);
+        if (auth.response) return auth.response;
+        return handleAdminChecklistItemsPut(ciPutMatch[1], request, env);
+      }
+      const ciDelMatch = path.match(/^\/api\/admin\/checklist-items\/([^/]+)$/);
+      if (ciDelMatch && method === "DELETE") {
+        const auth = await requireAuth(request, env, DELETE_ROLES);
+        if (auth.response) return auth.response;
+        return handleAdminChecklistItemsDelete(ciDelMatch[1], env);
+      }
+
+      return json({ error: "Not found" }, 404);
     }
 
     return json({ error: "Not found" }, 404);

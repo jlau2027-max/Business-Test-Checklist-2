@@ -3,6 +3,10 @@ import { useUser, useClerk } from "@clerk/react";
 
 const AuthContext = createContext(null);
 
+const EDIT_ROLES = ['origin', 'two', 'admin', 'editor'];
+const DELETE_ROLES = ['origin', 'two', 'admin'];
+const ADMIN_ROLES = ['origin', 'two', 'admin', 'editor', 'viewer'];
+
 export function useAuth() {
   const ctx = useContext(AuthContext);
   if (!ctx) throw new Error("useAuth must be used within AuthProvider");
@@ -20,14 +24,21 @@ export function AuthProvider({ children }) {
     displayName: clerkUser.fullName || clerkUser.username || clerkUser.firstName || clerkUser.primaryEmailAddress?.emailAddress?.split("@")[0] || "Student",
   } : null;
 
-  const ADMIN_ROLES = ["origin", "two", "admin", "viewer"];
   const role = (isSignedIn && clerkUser?.publicMetadata?.role) || null;
-  const isAdmin = ADMIN_ROLES.includes(role);
+
   const loading = !isLoaded;
   const logOut = () => signOut();
 
   return (
-    <AuthContext.Provider value={{ user, loading, logOut, isAdmin, role }}>
+    <AuthContext.Provider value={{
+      user,
+      loading,
+      logOut,
+      role,
+      isAdmin: ADMIN_ROLES.includes(role),
+      canEditContent: EDIT_ROLES.includes(role),
+      canDeleteContent: DELETE_ROLES.includes(role),
+    }}>
       {children}
     </AuthContext.Provider>
   );

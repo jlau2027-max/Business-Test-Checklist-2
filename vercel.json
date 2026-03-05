@@ -1,16 +1,12 @@
 {
   "redirects": [
-    {
-      "source": "/:path*",
-      "has": [{ "type": "host", "value": "business-test-checklist-2.vercel.app" }],
-      "destination": "https://jasperlaulvl7student.com/:path*",
-      "permanent": true
-    }
+    { "source": "/specimen", "destination": "/business/specimen", "statusCode": 301 },
+    { "source": "/history", "destination": "/history/specimen", "statusCode": 301 }
   ],
   "rewrites": [
     { "source": "/api/:path*", "destination": "/api/:path*" },
-    { "source": "/specimen", "destination": "/index.html" },
-    { "source": "/history", "destination": "/index.html" },
+    { "source": "/business/:path*", "destination": "/index.html" },
+    { "source": "/history/:path*", "destination": "/index.html" },
     { "source": "/dashboard", "destination": "/index.html" },
     { "source": "/admin", "destination": "/index.html" }
   ]

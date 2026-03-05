@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, createContext, useContext } from "react";
 import { Analytics } from "@vercel/analytics/react";
 import {
   Container, Badge, Text, Group, Paper, Progress,
@@ -6,9 +6,11 @@ import {
   Alert, Box, Stack, Textarea, useMantineTheme,
 } from "@mantine/core";
 import LoginButton from "./LoginButton.jsx";
+import Sidebar from "./Sidebar.jsx";
 import { useAuth } from "./AuthContext.jsx";
 import { useAttemptTracker } from "./useAttemptTracker.js";
 import { syncToCloud } from "./stateSync.js";
+import { fetchFlashcardTopics, fetchFlashcards, fetchMcqQuestions, fetchWrittenQuestions, fetchChecklist, fetchCategoryColors } from "./api/contentApi.js";
 
 // ─── localStorage helpers ──────────────────────────────────────────────────
 function loadLS(key, fallback) {
@@ -243,23 +245,83 @@ const CAT_COLORS = {
 const ALL_CATS = ["All", ...Array.from(new Set(MCQ_QUESTIONS.map(q=>q.cat)))];
 
 // ─────────────────────────────────────────────────────────────────────────────
+// CONTENT CONTEXT — provides API-fetched data (falls back to hardcoded above)
+// ─────────────────────────────────────────────────────────────────────────────
+const FALLBACK_CONTENT = {
+  checklistSections: CHECKLIST_SECTIONS,
+  flashcardCategories: FLASHCARD_CATEGORIES,
+  mcqQuestions: MCQ_QUESTIONS,
+  writtenQuestions: WRITTEN_QUESTIONS,
+  written10MarkQuestions: WRITTEN_10_MARK_QUESTIONS,
+  catColors: CAT_COLORS,
+  allCats: ALL_CATS,
+};
+const ContentCtx = createContext(FALLBACK_CONTENT);
+function useContent() { return useContext(ContentCtx); }
+
+async function fetchAppContent() {
+  const [checklistRaw, mcqRaw, writtenRaw, colorsRaw, topicsRaw] = await Promise.all([
+    fetchChecklist(), fetchMcqQuestions(), fetchWrittenQuestions(), fetchCategoryColors(), fetchFlashcardTopics(),
+  ]);
+
+  // Checklist: API items are {id,text} objects → flatten to strings
+  const checklistSections = checklistRaw.map(sec => ({
+    ...sec,
+    items: sec.items ? sec.items.map(item => typeof item === "string" ? item : item.text) : [],
+  }));
+
+  // MCQ: remap field names
+  const mcqQuestions = mcqRaw.map(q => ({
+    id: q.id, cat: q.category, difficulty: q.difficulty, q: q.question_text,
+    options: [q.option_a, q.option_b, q.option_c, q.option_d],
+    answer: q.correct_option, explanation: q.explanation,
+  }));
+
+  // Written: remap + split by question_type
+  const allWritten = writtenRaw.map(q => ({
+    id: q.id, cat: q.category, difficulty: q.difficulty, marks: q.marks,
+    q: q.question_text, modelAnswer: q.mark_scheme, _type: q.question_type,
+  }));
+  const writtenQuestions = allWritten.filter(q => q._type === "short_answer");
+  const written10MarkQuestions = allWritten.filter(q => q._type === "ten_marker");
+
+  // Colors: array → object map
+  const catColors = Array.isArray(colorsRaw)
+    ? Object.fromEntries(colorsRaw.map(c => [c.category, c.color]))
+    : colorsRaw;
+
+  // Flashcards: fetch topics then cards per topic
+  const flashcardCategories = await Promise.all(topicsRaw.map(async t => {
+    try {
+      const cards = await fetchFlashcards(t.id);
+      return { id: t.id, label: t.label, color: t.color, cards: cards.map(c => ({ term: c.term, def: c.definition, formula: c.formula })) };
+    } catch { return { id: t.id, label: t.label, color: t.color, cards: [] }; }
+  }));
+
+  const allCats = ["All", ...Array.from(new Set(mcqQuestions.map(q => q.cat)))];
+
+  return { checklistSections, flashcardCategories, mcqQuestions, writtenQuestions, written10MarkQuestions, catColors, allCats };
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
 // SUB-COMPONENTS
 // ─────────────────────────────────────────────────────────────────────────────
 
 function ChecklistView() {
+  const { checklistSections } = useContent();
   const [checked, setChecked] = useState(() => loadLS("checklist_checked", {}));
   const [openSections, setOpenSections] = useState(() => {
     const collapsed = loadLS("checklist_collapsed", {});
-    return CHECKLIST_SECTIONS.filter(s => !collapsed[s.id]).map(s => s.id);
+    return checklistSections.filter(s => !collapsed[s.id]).map(s => s.id);
   });
   const toggle = id => setChecked(p => { const next = { ...p, [id]: !p[id] }; saveLS("checklist_checked", next); return next; });
   const handleAccordion = (value) => {
     setOpenSections(value);
     const collapsed = {};
-    CHECKLIST_SECTIONS.forEach(s => { if (!value.includes(s.id)) collapsed[s.id] = true; });
+    checklistSections.forEach(s => { if (!value.includes(s.id)) collapsed[s.id] = true; });
     saveLS("checklist_collapsed", collapsed);
   };
-  const totalItems = CHECKLIST_SECTIONS.reduce((s,sec)=>s+sec.items.length,0);
+  const totalItems = checklistSections.reduce((s,sec)=>s+sec.items.length,0);
   const checkedCount = Object.values(checked).filter(Boolean).length;
   const progress = Math.round((checkedCount/totalItems)*100);
   const progColor = progress<30?"#F87171":progress<70?"#FBBF24":"#34D399";
@@ -309,7 +371,7 @@ function ChecklistView() {
           chevron: { color: "#55556A" },
         }}
       >
-        {CHECKLIST_SECTIONS.map(section => {
+        {checklistSections.map(section => {
           const sectionChecked = section.items.filter((_,i)=>checked[`${section.id}-${i}`]).length;
           const allDone = sectionChecked===section.items.length;
           return (
@@ -414,15 +476,17 @@ function FlashCard({card, catColor}) {
 }
 
 function FlashcardsView() {
-  const [activeCat,setActiveCat]=useState(()=>loadLS("fc_cat", FLASHCARD_CATEGORIES[0].id));
+  const { flashcardCategories } = useContent();
+  const [activeCat,setActiveCat]=useState(()=>loadLS("fc_cat", flashcardCategories[0]?.id));
   const [cardIdx,setCardIdx]=useState(0);
-  const currentCat=FLASHCARD_CATEGORIES.find(c=>c.id===activeCat);
-  const currentCard=currentCat.cards[cardIdx];
+  const currentCat=flashcardCategories.find(c=>c.id===activeCat) || flashcardCategories[0];
+  if (!currentCat || !currentCat.cards || currentCat.cards.length === 0) return <Text ta="center" c="#55556A" py="xl">Loading flashcards…</Text>;
+  const currentCard=currentCat.cards[Math.min(cardIdx, currentCat.cards.length - 1)];
   return (
     <div style={{maxWidth:680,margin:"0 auto",padding:"0 0 40px"}}>
       {/* Category filters */}
       <Group gap={8} mb="lg" style={{flexWrap:"wrap"}}>
-        {FLASHCARD_CATEGORIES.map(cat=>(
+        {flashcardCategories.map(cat=>(
           <Button
             key={cat.id}
             size="xs"
@@ -484,9 +548,10 @@ function FlashcardsView() {
 }
 
 function MCQItem({q, displayNum}) {
+  const { catColors } = useContent();
   const [selected,setSelected]=useState(null);
   const [confirmed,setConfirmed]=useState(false);
-  const color=CAT_COLORS[q.cat]||"#7C6FFF";
+  const color=catColors[q.cat]||"#7C6FFF";
   const { recordAttempt, resetTimer } = useAttemptTracker(q.id, "mcq", q.cat, "business", q.difficulty);
   return (
     <Paper bg="#1A1A24" radius="lg" mb="sm" style={{ border:"1px solid #252533", overflow:"hidden", transition:"all 0.2s" }}>
@@ -573,6 +638,7 @@ function MCQItem({q, displayNum}) {
 }
 
 function PracticeView() {
+  const { mcqQuestions, allCats, catColors } = useContent();
   const [filterCat,setFilterCat]=useState("All");
 
   const catMatchFn = (qCat, fCat) => {
@@ -581,14 +647,14 @@ function PracticeView() {
     return normalise(qCat) === normalise(fCat);
   };
 
-  const filtered = MCQ_QUESTIONS.filter(q => catMatchFn(q.cat, filterCat));
+  const filtered = mcqQuestions.filter(q => catMatchFn(q.cat, filterCat));
 
   return (
     <div style={{maxWidth:1060,margin:"0 auto",padding:"0 0 40px"}}>
       {/* Category filter */}
       <Group gap={8} mb="lg" style={{flexWrap:"wrap"}}>
-        {ALL_CATS.map(cat => {
-          const c = CAT_COLORS[cat] || "#7C6FFF";
+        {allCats.map(cat => {
+          const c = catColors[cat] || "#7C6FFF";
           const active = filterCat === cat;
           return (
             <Button
@@ -631,11 +697,12 @@ function PracticeView() {
 // ─────────────────────────────────────────────────────────────────────────────
 
 function WrittenPracticeItem({q, displayNum}) {
+  const { catColors } = useContent();
   const [answer, setAnswer] = useState(() => loadLS(`written_ans_${q.id}`, ""));
   const [revealed, setRevealed] = useState(false);
   const [grading, setGrading] = useState(false);
   const [gradeResult, setGradeResult] = useState(() => loadLS(`written_grade_${q.id}`, null));
-  const color = CAT_COLORS[q.cat] || "#7C6FFF";
+  const color = catColors[q.cat] || "#7C6FFF";
   const { recordAttempt } = useAttemptTracker(q.id, "written", q.cat, "business", q.difficulty);
 
   useEffect(() => { saveLS(`written_ans_${q.id}`, answer); }, [answer, q.id]);
@@ -796,10 +863,11 @@ function WrittenPracticeItem({q, displayNum}) {
 }
 
 function WrittenPracticeView() {
+  const { writtenQuestions, written10MarkQuestions, catColors } = useContent();
   const [mode, setMode] = useState("short"); // "short" or "10mark"
   const [filterCat, setFilterCat] = useState("All");
 
-  const writtenCats = ["All", ...Array.from(new Set(WRITTEN_QUESTIONS.map(q => q.cat)))];
+  const writtenCats = ["All", ...Array.from(new Set(writtenQuestions.map(q => q.cat)))];
 
   const catMatchFn = (qCat, fCat) => {
     if (fCat === "All") return true;
@@ -808,8 +876,8 @@ function WrittenPracticeView() {
   };
 
   const filtered = mode === "10mark"
-    ? WRITTEN_10_MARK_QUESTIONS
-    : WRITTEN_QUESTIONS.filter(q => catMatchFn(q.cat, filterCat));
+    ? written10MarkQuestions
+    : writtenQuestions.filter(q => catMatchFn(q.cat, filterCat));
 
   return (
     <div style={{maxWidth:1060, margin:"0 auto", padding:"0 0 40px"}}>
@@ -860,7 +928,7 @@ function WrittenPracticeView() {
         </Button>
         <Button
           component="a"
-          href="/specimen"
+          href="/business/specimen"
           radius="md"
           ff="'JetBrains Mono', monospace"
           fw={700}
@@ -883,7 +951,7 @@ function WrittenPracticeView() {
       {mode === "short" && (
         <Group gap={8} mb="lg" style={{flexWrap:"wrap"}}>
           {writtenCats.map(cat => {
-            const c = CAT_COLORS[cat] || "#7C6FFF";
+            const c = catColors[cat] || "#7C6FFF";
             const active = filterCat === cat;
             return (
               <Button
@@ -925,82 +993,30 @@ function WrittenPracticeView() {
 // ─────────────────────────────────────────────────────────────────────────────
 // ROOT APP
 // ─────────────────────────────────────────────────────────────────────────────
-export default function App() {
+export default function App({ initialTab = "checklist" }) {
   const { user } = useAuth();
-  const [tab, setTab] = useState(() => loadLS("revision_tab", "checklist"));
-  const switchTab = t => { setTab(t); saveLS("revision_tab", t); };
-
+  const [tab, setTab] = useState(initialTab);
+  const switchTab = t => {
+    const urlMap = { checklist: 'checklist', flashcards: 'flashcards', practice: 'multi-choice', written: 'written' };
+    window.location.href = `/business/${urlMap[t] || t}`;
+  };
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
+  // Content state — starts with hardcoded fallback, updates from API
+  const [content, setContent] = useState(FALLBACK_CONTENT);
+  useEffect(() => {
+    let cancelled = false;
+    fetchAppContent()
+      .then(data => { if (!cancelled) setContent(data); })
+      .catch(err => console.warn("Content API unavailable, using fallback data:", err.message));
+    return () => { cancelled = true; };
+  }, []);
+
   return (
+    <ContentCtx.Provider value={content}>
     <Box mih="100vh" bg="#09090F" style={{fontFamily:"'Inter', sans-serif",color:"#F0EEE8"}}>
 
-      {/* Sidebar overlay (mobile) */}
-      {sidebarOpen && (
-        <Box
-          onClick={() => setSidebarOpen(false)}
-          style={{
-            position: "fixed", inset: 0, zIndex: 199,
-            backgroundColor: "rgba(0,0,0,0.5)",
-          }}
-        />
-      )}
-
-      {/* Sidebar */}
-      <Box
-        style={{
-          position: "fixed",
-          top: 0,
-          left: sidebarOpen ? 0 : -220,
-          width: 220,
-          height: "100vh",
-          zIndex: 200,
-          backgroundColor: "#0D0D14",
-          borderRight: "1px solid #1A1A24",
-          display: "flex",
-          flexDirection: "column",
-          padding: "20px 12px",
-          gap: 8,
-          transition: "left 0.25s ease",
-        }}
-      >
-        <Text fz={11} ff="'JetBrains Mono', monospace" c="#55556A" lts={1} mb={4} px={8}>
-          SUBJECTS
-        </Text>
-        {[
-          { label: "Business", active: true, href: "/" },
-          { label: "History", active: false, href: "/history" },
-          ...(user ? [{ label: "Dashboard", active: false, href: "/dashboard" }] : []),
-        ].map(s => (
-          <Button
-            key={s.label}
-            component={s.active ? "button" : "a"}
-            href={s.active ? undefined : s.href}
-            radius="md"
-            ff="'JetBrains Mono', monospace"
-            fw={600}
-            onClick={() => setSidebarOpen(false)}
-            style={{
-              height: 44,
-              justifyContent: "flex-start",
-              paddingLeft: 14,
-              fontSize: 14,
-              backgroundColor: s.active ? "#7C6FFF" : "transparent",
-              color: s.active ? "#fff" : "#8B8B9E",
-              border: s.active ? "none" : "1px solid transparent",
-              boxShadow: s.active ? "0 0 12px #7C6FFF33" : "none",
-              textDecoration: "none",
-            }}
-          >
-            {s.label}
-          </Button>
-        ))}
-
-        <Box style={{ flex: 1 }} />
-        <Text fz={10} c="#33334A" ff="'JetBrains Mono', monospace" ta="center">
-          More subjects coming soon
-        </Text>
-      </Box>
+      <Sidebar activeSubject="business" sidebarOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
 
       {/* Sticky header with glassmorphism */}
       <Box
@@ -1058,19 +1074,20 @@ export default function App() {
             Finance Unit — Revision Hub
           </Text>
           <Text ta="center" fz="xs" c="#55556A" mb="sm">
-            Units 3.1–3.9 · 5.5 Breakeven · BMT Tools · {MCQ_QUESTIONS.length} MCQs · {WRITTEN_QUESTIONS.length} Written · {WRITTEN_10_MARK_QUESTIONS.length} Extended
+            Units 3.1–3.9 · 5.5 Breakeven · BMT Tools · {content.mcqQuestions.length} MCQs · {content.writtenQuestions.length} Written · {content.written10MarkQuestions.length} Extended
           </Text>
 
           <Group gap={4} grow>
             {[
-              { value: "checklist", label: "Checklist" },
-              { value: "flashcards", label: "Flashcards" },
-              { value: "practice", label: "Multi-Choice" },
-              { value: "written", label: "Written" },
+              { value: "checklist", label: "Checklist", href: "/business/checklist" },
+              { value: "flashcards", label: "Flashcards", href: "/business/flashcards" },
+              { value: "practice", label: "Multi-Choice", href: "/business/multi-choice" },
+              { value: "written", label: "Written", href: "/business/written" },
             ].map(t => (
               <Button
                 key={t.value}
-                onClick={() => switchTab(t.value)}
+                component="a"
+                href={t.href}
                 radius={0}
                 fw={600}
                 ff="'Inter', sans-serif"
@@ -1085,6 +1102,7 @@ export default function App() {
                   borderRight: "none",
                   borderRadius: 0,
                   transition: "all 0.2s",
+                  textDecoration: "none",
                 }}
               >
                 {t.label}
@@ -1136,5 +1154,6 @@ export default function App() {
 
       <Analytics />
     </Box>
+    </ContentCtx.Provider>
   );
 }
