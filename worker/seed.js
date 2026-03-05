@@ -69,72 +69,59 @@ function extractConst(source, name) {
   const closer = opener === "[" ? "]" : opener === "{" ? "}" : null;
   if (!closer) throw new Error(`Unexpected opener '${opener}' for const ${name}`);
 
+  // State machine: code / string_dq / string_sq / template / line_comment / block_comment
   let depth = 0;
-  let inString = false;
-  let stringChar = null;
-  let inTemplate = false;
-  let templateDepth = 0;
-  let escaped = false;
+  let state = "code";
+  let tplDepth = 0;
   let endIdx = -1;
 
   for (let i = startIdx; i < source.length; i++) {
     const ch = source[i];
+    const next = i + 1 < source.length ? source[i + 1] : "";
 
-    if (escaped) {
-      escaped = false;
-      continue;
-    }
-
-    if (ch === "\\") {
-      escaped = true;
-      continue;
-    }
-
-    if (inTemplate) {
-      if (ch === "`" && templateDepth === 0) {
-        inTemplate = false;
-        continue;
-      }
-      if (ch === "$" && i + 1 < source.length && source[i + 1] === "{") {
-        templateDepth++;
-        i++;
-        continue;
-      }
-      if (ch === "}" && templateDepth > 0) {
-        templateDepth--;
-        continue;
-      }
-      continue;
-    }
-
-    if (inString) {
-      if (ch === stringChar) {
-        inString = false;
-      }
-      continue;
-    }
-
-    if (ch === "`") {
-      inTemplate = true;
-      templateDepth = 0;
-      continue;
-    }
-
-    if (ch === '"' || ch === "'") {
-      inString = true;
-      stringChar = ch;
-      continue;
-    }
-
-    if (ch === opener) {
-      depth++;
-    } else if (ch === closer) {
-      depth--;
-      if (depth === 0) {
-        endIdx = i + 1;
+    switch (state) {
+      case "code":
+        // Check for comments first
+        if (ch === "/" && next === "/") { state = "line_comment"; i++; break; }
+        if (ch === "/" && next === "*") { state = "block_comment"; i++; break; }
+        if (ch === '"') { state = "string_dq"; break; }
+        if (ch === "'") { state = "string_sq"; break; }
+        if (ch === "`") { state = "template"; tplDepth = 0; break; }
+        if (ch === opener) { depth++; break; }
+        if (ch === closer) {
+          depth--;
+          if (depth === 0) { endIdx = i + 1; }
+          break;
+        }
         break;
-      }
+
+      case "line_comment":
+        if (ch === "\n") { state = "code"; }
+        break;
+
+      case "block_comment":
+        if (ch === "*" && next === "/") { state = "code"; i++; }
+        break;
+
+      case "string_dq":
+        if (ch === "\\") { i++; break; } // skip escaped char
+        if (ch === '"') { state = "code"; }
+        break;
+
+      case "string_sq":
+        if (ch === "\\") { i++; break; } // skip escaped char
+        if (ch === "'") { state = "code"; }
+        break;
+
+      case "template":
+        if (ch === "\\") { i++; break; } // skip escaped char
+        if (ch === "`" && tplDepth === 0) { state = "code"; break; }
+        if (ch === "$" && next === "{") { tplDepth++; i++; break; }
+        if (ch === "}" && tplDepth > 0) { tplDepth--; break; }
+        break;
     }
+
+    if (endIdx !== -1) break;
   }
 
   if (endIdx === -1) throw new Error(`Could not find closing '${closer}' for const ${name}`);
@@ -176,6 +163,10 @@ const PAPER3_QUESTIONS = extractConst(historySource, "PAPER3_QUESTIONS_FALLBACK"
 
 const stmts = [];
 
+// Clear existing data for idempotent seeding
+stmts.push(`DELETE FROM flashcards`);
+stmts.push(`DELETE FROM checklist_items`);
+
 // 1. Category colors
 if (typeof CAT_COLORS === "object" && !Array.isArray(CAT_COLORS)) {
   for (const [category, color] of Object.entries(CAT_COLORS)) {
@@ -198,9 +189,8 @@ CHECKLIST_SECTIONS.forEach((sec, si) => {
     `INSERT OR IGNORE INTO checklist_sections (id, title, color, sort_order) VALUES (${esc(sec.id)}, ${esc(sec.title)}, ${esc(sec.color)}, ${si})`
   );
   sec.items.forEach((item, ii) => {
-    const itemId = `${sec.id}_${ii}`;
     stmts.push(
-      `INSERT OR IGNORE INTO checklist_items (id, section_id, text, sort_order) VALUES (${esc(itemId)}, ${esc(sec.id)}, ${esc(item)}, ${ii})`
+      `INSERT INTO checklist_items (section_id, text, sort_order) VALUES (${esc(sec.id)}, ${esc(item)}, ${ii})`
     );
   });
 });
@@ -213,7 +203,7 @@ FLASHCARD_CATEGORIES.forEach((cat, ci) => {
   if (cat.cards) {
     cat.cards.forEach((card, fi) => {
       stmts.push(
-        `INSERT OR IGNORE INTO flashcards (topic_id, term, definition, formula, sort_order) VALUES (${esc(cat.id)}, ${esc(card.term)}, ${esc(card.def)}, ${esc(card.formula)}, ${fi})`
+        `INSERT INTO flashcards (topic_id, term, definition, formula, sort_order) VALUES (${esc(cat.id)}, ${esc(card.term)}, ${esc(card.def)}, ${esc(card.formula)}, ${fi})`
       );
     });
   }
