@@ -8,7 +8,7 @@ import App from './App.jsx'
 import SpecimenPage from './SpecimenPage.jsx'
 import HistoryPage from './HistoryPage.jsx'
 import DashboardPage from './DashboardPage.jsx'
-import { AuthProvider, useAuth } from './AuthContext.jsx'
+import { AuthProvider } from './AuthContext.jsx'
 import theme from './theme.js'
 
 const PUBLISHABLE_KEY = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY
@@ -18,12 +18,6 @@ const Page = path === '/specimen' ? SpecimenPage
            : path === '/history' ? HistoryPage
            : path === '/dashboard' ? DashboardPage
            : App
-
-function AuthGate({ children }) {
-  const { loading } = useAuth()
-  if (loading) return null
-  return children
-}
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
@@ -44,9 +38,7 @@ createRoot(document.getElementById('root')).render(
     >
       <MantineProvider theme={theme} defaultColorScheme="dark">
         <AuthProvider>
-          <AuthGate>
-            <Page />
-          </AuthGate>
+          <Page />
         </AuthProvider>
       </MantineProvider>
     </ClerkProvider>
