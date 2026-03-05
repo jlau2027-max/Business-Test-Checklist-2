@@ -347,6 +347,93 @@ async function handleAdminBanUser(request, env) {
   }
 }
 
+// ─── Admin: unban user via Clerk ────────────────────────────────────────────
+
+async function handleAdminUnbanUser(request, env) {
+  const { uid } = await request.json();
+  if (!uid) return json({ error: "Missing uid" }, 400);
+
+  try {
+    await clerkAPI(env, "POST", `/users/${uid}/unban`);
+    await env.DB.prepare(
+      `UPDATE users SET account_status = 'active', updated_at = ?1 WHERE uid = ?2`
+    ).bind(Date.now(), uid).run();
+    return json({ ok: true });
+  } catch (error) {
+    return json({ error: "Failed to unban user", details: error.message }, 500);
+  }
+}
+
+// ─── Admin: force sign out via Clerk ────────────────────────────────────────
+
+async function handleAdminSignOut(request, env) {
+  const { uid } = await request.json();
+  if (!uid) return json({ error: "Missing uid" }, 400);
+
+  try {
+    const sessions = await clerkAPI(env, "GET", `/users/${uid}/sessions`);
+    let revoked = 0;
+    for (const session of sessions) {
+      if (session.status === "active") {
+        await clerkAPI(env, "POST", `/sessions/${session.id}/revoke`);
+        revoked++;
+      }
+    }
+    return json({ ok: true, revoked });
+  } catch (error) {
+    return json({ error: "Failed to sign out user", details: error.message }, 500);
+  }
+}
+
+// ─── Admin: edit user profile via Clerk ─────────────────────────────────────
+
+async function handleAdminEditProfile(request, env) {
+  const { uid, firstName, lastName, username } = await request.json();
+  if (!uid) return json({ error: "Missing uid" }, 400);
+
+  try {
+    const updated = await clerkAPI(env, "PATCH", `/users/${uid}`, {
+      first_name: firstName || "",
+      last_name: lastName || "",
+      username: username || undefined,
+    });
+
+    const displayName = [firstName, lastName].filter(Boolean).join(" ") || username || "Student";
+    const email = updated.email_addresses?.find(
+      (e) => e.id === updated.primary_email_address_id
+    )?.email_address || "";
+
+    await env.DB.prepare(
+      `UPDATE users SET display_name = ?1, email = ?2, username = ?3, updated_at = ?4 WHERE uid = ?5`
+    ).bind(displayName, email, username || "", Date.now(), uid).run();
+
+    return json({ displayName, email, username: username || "" });
+  } catch (error) {
+    return json({ error: "Failed to edit profile", details: error.message }, 500);
+  }
+}
+
+// ─── Admin: change user role via Clerk ──────────────────────────────────────
+
+async function handleAdminChangeRole(request, env) {
+  const { uid, role } = await request.json();
+  if (!uid) return json({ error: "Missing uid" }, 400);
+
+  const validRoles = ["origin", "two", "admin", "editor", "viewer"];
+  if (role !== null && !validRoles.includes(role)) {
+    return json({ error: "Invalid role" }, 400);
+  }
+
+  try {
+    await clerkAPI(env, "PATCH", `/users/${uid}`, {
+      public_metadata: { role: role },
+    });
+    return json({ ok: true, role });
+  } catch (error) {
+    return json({ error: "Failed to change role", details: error.message }, 500);
+  }
+}
+
 // ─── Auth / Clerk JWT verification ────────────────────────────────────────
 
 const EDIT_ROLES = ["origin", "two", "admin", "editor"];

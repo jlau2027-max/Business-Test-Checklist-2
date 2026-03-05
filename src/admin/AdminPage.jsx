@@ -6,6 +6,7 @@ import McqAdmin from "./McqAdmin.jsx";
 import WrittenAdmin from "./WrittenAdmin.jsx";
 import HistoryAdmin from "./HistoryAdmin.jsx";
 import ChecklistAdmin from "./ChecklistAdmin.jsx";
+import UsersAdmin from "./UsersAdmin.jsx";
 
 const BUSINESS_TABS = [
   { value: "checklist", label: "Checklist" },
@@ -18,16 +19,20 @@ const HISTORY_TABS = [
   { value: "history", label: "History Questions" },
 ];
 
+const USERS_TABS = [
+  { value: "users", label: "User Management" },
+];
+
 export default function AdminPage() {
   const [section, setSection] = useState("business");
   const [activeTab, setActiveTab] = useState("checklist");
 
-  const tabs = section === "business" ? BUSINESS_TABS : HISTORY_TABS;
+  const tabs = section === "business" ? BUSINESS_TABS : section === "history" ? HISTORY_TABS : USERS_TABS;
 
   // Reset to first tab when switching sections
   const handleSectionChange = (val) => {
     setSection(val);
-    setActiveTab(val === "business" ? "checklist" : "history");
+    setActiveTab(val === "business" ? "checklist" : val === "history" ? "history" : "users");
   };
 
   return (
@@ -62,6 +67,7 @@ export default function AdminPage() {
             data={[
               { label: "Business", value: "business" },
               { label: "History", value: "history" },
+              { label: "Users", value: "users" },
             ]}
             mb="md"
             radius="md"
@@ -77,7 +83,7 @@ export default function AdminPage() {
                 fontFamily: "'JetBrains Mono', monospace",
               },
               indicator: {
-                backgroundColor: section === "business" ? "#7C6FFF" : "#F87171",
+                backgroundColor: section === "business" ? "#7C6FFF" : section === "history" ? "#F87171" : "#38BDF8",
               },
               control: {
                 "&[data-active] .mantine-SegmentedControl-label": {
@@ -106,7 +112,7 @@ export default function AdminPage() {
                 borderBottom: "2px solid transparent",
                 "&[data-active]": {
                   color: "#F0EEE8",
-                  borderBottomColor: section === "business" ? "#7C6FFF" : "#F87171",
+                  borderBottomColor: section === "business" ? "#7C6FFF" : section === "history" ? "#F87171" : "#38BDF8",
                 },
                 "&:hover": {
                   backgroundColor: "#12121A",
@@ -140,6 +146,9 @@ export default function AdminPage() {
             </Tabs.Panel>
             <Tabs.Panel value="history">
               <HistoryAdmin />
+            </Tabs.Panel>
+            <Tabs.Panel value="users">
+              <UsersAdmin />
             </Tabs.Panel>
           </Tabs>
         </Container>
