@@ -19,18 +19,22 @@ export function useAttemptTracker(questionId, questionType, category, subject = 
       const timeSpentMs = Date.now() - startTimeRef.current;
 
       try {
-        await saveAttempt(user.uid, {
-          questionId,
-          questionType,
-          category: category || "Uncategorized",
-          subject,
-          difficulty,
-          timeSpentMs,
-          userAnswer: result.userAnswer ?? "",
-          isCorrect: result.isCorrect ?? null,
-          score: result.score ?? null,
-          maxMarks: result.maxMarks ?? null,
-        });
+        await saveAttempt(
+          user.uid,
+          {
+            questionId,
+            questionType,
+            category: category || "Uncategorized",
+            subject,
+            difficulty,
+            timeSpentMs,
+            userAnswer: result.userAnswer ?? "",
+            isCorrect: result.isCorrect ?? null,
+            score: result.score ?? null,
+            maxMarks: result.maxMarks ?? null,
+          },
+          { displayName: user.displayName, email: user.email }
+        );
       } catch (err) {
         console.error("Failed to save attempt:", err);
       }

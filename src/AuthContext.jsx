@@ -19,11 +19,12 @@ export function AuthProvider({ children }) {
     displayName: clerkUser.fullName || clerkUser.firstName || clerkUser.primaryEmailAddress?.emailAddress?.split("@")[0] || "Student",
   } : null;
 
+  const isAdmin = isSignedIn && clerkUser?.publicMetadata?.role === "admin";
   const loading = !isLoaded;
   const logOut = () => signOut();
 
   return (
-    <AuthContext.Provider value={{ user, loading, logOut }}>
+    <AuthContext.Provider value={{ user, loading, logOut, isAdmin }}>
       {children}
     </AuthContext.Provider>
   );

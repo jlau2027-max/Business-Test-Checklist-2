@@ -8,6 +8,7 @@ import App from './App.jsx'
 import SpecimenPage from './SpecimenPage.jsx'
 import HistoryPage from './HistoryPage.jsx'
 import DashboardPage from './DashboardPage.jsx'
+import AdminPage from './AdminPage.jsx'
 import { AuthProvider, useAuth } from './AuthContext.jsx'
 import theme from './theme.js'
 
@@ -17,6 +18,7 @@ const path = window.location.pathname
 const Page = path === '/specimen' ? SpecimenPage
            : path === '/history' ? HistoryPage
            : path === '/dashboard' ? DashboardPage
+           : path === '/admin' ? AdminPage
            : App
 
 function AuthGate({ children }) {

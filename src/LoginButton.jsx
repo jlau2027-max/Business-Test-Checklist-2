@@ -1,7 +1,9 @@
 import { Button } from "@mantine/core";
 import { Show, SignInButton, UserButton } from "@clerk/react";
+import { useAuth } from "./AuthContext.jsx";
 
 export default function LoginButton() {
+  const { isAdmin } = useAuth();
   return (
     <>
       <Show when="signed-out">
@@ -63,6 +65,17 @@ export default function LoginButton() {
                 }
                 href="/dashboard"
               />
+              {isAdmin && (
+                <UserButton.Link
+                  label="Admin"
+                  labelIcon={
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
+                      <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                    </svg>
+                  }
+                  href="/admin"
+                />
+              )}
               <UserButton.Action label="manageAccount" />
               <UserButton.Action label="signOut" />
             </UserButton.MenuItems>

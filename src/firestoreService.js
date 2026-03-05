@@ -1,13 +1,24 @@
 const WORKER_URL = "https://ib-grading-hollen.c9tggsfst9.workers.dev";
 
 // ─── Save a single attempt ─────────────────────────────────────────────────
-export async function saveAttempt(uid, attemptData) {
+export async function saveAttempt(uid, attemptData, userInfo = {}) {
   const res = await fetch(`${WORKER_URL}/api/attempts/${uid}`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(attemptData),
+    body: JSON.stringify({
+      ...attemptData,
+      displayName: userInfo.displayName || "Student",
+      email: userInfo.email || "",
+    }),
   });
   if (!res.ok) throw new Error("Failed to save attempt");
+}
+
+// ─── Admin: get all users' stats ────────────────────────────────────────────
+export async function getAllUsersStats() {
+  const res = await fetch(`${WORKER_URL}/api/admin/users`);
+  if (!res.ok) throw new Error("Failed to fetch admin data");
+  return await res.json();
 }
 
 // ─── Get all attempts for a user ────────────────────────────────────────────
