@@ -540,7 +540,8 @@ async function verifySignature(token, parts, jwk, payload) {
 }
 
 function getUserRole(payload) {
-  return payload?.publicMetadata?.role || payload?.public_metadata?.role || null;
+  return payload?.publicMetadata?.role || payload?.public_metadata?.role
+    || payload?.metadata?.role || null;
 }
 
 async function requireAuth(request, env, allowedRoles) {
@@ -549,7 +550,19 @@ async function requireAuth(request, env, allowedRoles) {
     return { response: json({ error: result.error }, result.status) };
   }
 
-  const role = getUserRole(result.payload);
+  let role = getUserRole(result.payload);
+
+  // Clerk JWTs don't include publicMetadata by default — fall back to
+  // Clerk Backend API to look up the user's role when not in the token
+  if (!role && env.CLERK_SECRET_KEY && result.payload.sub) {
+    try {
+      const user = await clerkAPI(env, "GET", `/users/${result.payload.sub}`);
+      role = user?.public_metadata?.role || null;
+    } catch (_) {
+      // API lookup failed — proceed without role
+    }
+  }
+
   if (!role || !allowedRoles.includes(role)) {
     return { response: json({ error: "Forbidden: insufficient role" }, 403) };
   }
