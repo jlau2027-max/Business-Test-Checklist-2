@@ -60,9 +60,9 @@ export default function LandingPage() {
         </div>
 
         {/* Hero */}
-        <div className="max-w-2xl mx-auto px-4 flex flex-col items-center" style={{ paddingTop: 20, paddingBottom: 120 }}>
+        <div className="max-w-2xl mx-auto px-4 flex flex-col items-center" style={{ paddingTop: 0, paddingBottom: 120 }}>
           {/* ASCII art title */}
-          <div style={{ position: "relative", width: "280%", maxWidth: "2400px", height: "clamp(600px, 90vw, 1100px)", marginBottom: 8 }}>
+          <div style={{ position: "relative", width: "280%", maxWidth: "2400px", height: "clamp(450px, 65vw, 800px)", marginBottom: -20 }}>
             <ASCIIText
               text="ib rev"
               enableWaves={false}
