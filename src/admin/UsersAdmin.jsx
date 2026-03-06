@@ -224,7 +224,7 @@ function UserDetail({ uid, displayName, onBack }) {
                       style={{ backgroundColor: isGood ? "#34D399" : "#F87171" }}
                     />
                     <span
-                      className="text-xs px-1.5 py-0.5 rounded-fullshrink-0"
+                      className="text-xs px-1.5 py-0.5 rounded-full shrink-0"
                       style={{ backgroundColor: color + "22", color, fontFamily: "'JetBrains Mono', monospace" }}
                     >
                       {a.questionType.toUpperCase()}

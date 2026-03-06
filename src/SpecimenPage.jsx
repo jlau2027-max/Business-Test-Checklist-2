@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Button, TextArea, Spinner, Skeleton } from "@heroui/react";
+import { Button, TextArea, Spinner, Skeleton, Surface } from "@heroui/react";
 import { fetchWrittenQuestions } from "./api/contentApi.js";
 import LoginButton from "./LoginButton.jsx";
 import Sidebar from "./Sidebar.jsx";
@@ -221,7 +221,7 @@ function SpecimenQuestion({ q }) {
   const minRows = q.marks >= 10 ? 16 : q.marks >= 4 ? 10 : 6;
 
   return (
-    <div className="bg-[#12121A] rounded-lg p-4 mb-3" style={{ border: "1px solid #252533" }}>
+    <Surface className="rounded-2xl p-4 mb-3">
       {/* Question header */}
       <div className="flex items-start gap-2 mb-2" style={{ flexWrap: "nowrap" }}>
         <span
@@ -292,14 +292,14 @@ function SpecimenQuestion({ q }) {
           </Button>
         )}
 
-        <span className="text-xs px-1.5 py-0.5 rounded-fullml-auto" style={{ backgroundColor: "rgba(45,212,191,0.1)", color: "#2DD4BF", fontFamily: "'JetBrains Mono', monospace" }}>
+        <span className="text-xs px-1.5 py-0.5 rounded-full ml-auto" style={{ backgroundColor: "rgba(45,212,191,0.1)", color: "#2DD4BF", fontFamily: "'JetBrains Mono', monospace" }}>
           auto-saved
         </span>
       </div>
 
       {/* AI Grade Result */}
       {gradeResult && (
-        <div className="bg-[#1A1A24] rounded-2xl p-3 mt-3" style={{ border: "1px solid #252533" }}>
+        <Surface variant="secondary" className="rounded-2xl p-3 mt-3">
           {gradeResult.score !== null && (
             <div className="flex items-center mb-1">
               <span
@@ -318,7 +318,7 @@ function SpecimenQuestion({ q }) {
           <span className="block text-[#B0ADA6]" style={{ fontSize: 13, lineHeight: 1.7, whiteSpace: "pre-line" }}>
             {gradeResult.feedback}
           </span>
-        </div>
+        </Surface>
       )}
 
       {/* Markscheme reveal */}
@@ -332,7 +332,7 @@ function SpecimenQuestion({ q }) {
           </span>
         </div>
       )}
-    </div>
+    </Surface>
   );
 }
 
@@ -406,7 +406,7 @@ export default function SpecimenPage() {
               </svg>
             </Button>
             <span
-              className="text-xs px-2 py-0.5 rounded-fulluppercase font-bold"
+              className="text-xs px-2 py-0.5 rounded-full uppercase font-bold"
               style={{ letterSpacing: 2, backgroundColor: "#2DD4BF18", color: "#2DD4BF", border: "none", fontFamily: "'JetBrains Mono', monospace" }}
             >
               IB HL Business Management
@@ -440,7 +440,7 @@ export default function SpecimenPage() {
       <div className="max-w-4xl mx-auto py-6 px-3">
         <div style={{ maxWidth: 1060, margin: "0 auto", padding: "0 0 40px" }}>
           {/* Exam info banner */}
-          <div className="bg-[#12121A] rounded-lg p-4 mb-6" style={{ border: "1px solid #252533" }}>
+          <Surface className="rounded-3xl p-4 mb-6">
             <span className="text-sm text-[#F0EEE8] font-semibold block" style={{ marginBottom: 4 }}>
               Unit 3 Finance Test — February 2026
             </span>
@@ -456,10 +456,10 @@ export default function SpecimenPage() {
                 {totalMarks} marks
               </span>
             </div>
-          </div>
+          </Surface>
 
           {/* Case study context */}
-          <div className="bg-[#12121A] rounded-lg p-4 mb-6" style={{ border: "1px solid #1E3A5F" }}>
+          <Surface className="rounded-3xl p-4 mb-6" style={{ border: "1px solid #1E3A5F" }}>
             <span className="block text-[#60A5FA] mb-2" style={{ fontSize: 11, fontFamily: "'JetBrains Mono', monospace", letterSpacing: 1 }}>
               CASE STUDY
             </span>
@@ -471,13 +471,13 @@ export default function SpecimenPage() {
 
 Recently, NHD has been considering investing in new automated bottling machines to increase efficiency and reduce labour costs. The company is evaluating whether to lease or purchase these machines outright.`}
             </span>
-          </div>
+          </Surface>
 
           {/* Questions */}
           <div className="flex flex-col gap-4">
             {loading
               ? Array.from({ length: 6 }).map((_, i) => (
-                  <div key={i} className="bg-[#12121A] rounded-lg p-4 mb-3" style={{ border: "1px solid #252533" }}>
+                  <Surface key={i} className="rounded-2xl p-4 mb-3">
                     <div className="flex items-center gap-2 mb-2">
                       <Skeleton className="h-6 w-[50px] rounded-md" />
                       <Skeleton className="h-5 w-[70px] rounded-md" />
@@ -485,7 +485,7 @@ Recently, NHD has been considering investing in new automated bottling machines 
                     <Skeleton className="h-4 rounded-sm mb-1" />
                     <Skeleton className="h-4 rounded-sm mb-4 w-[80%]" />
                     <Skeleton className="h-[120px] rounded-md" />
-                  </div>
+                  </Surface>
                 ))
               : SPECIMEN_QUESTIONS.map((q) => (
                   <SpecimenQuestion key={q.id} q={q} />

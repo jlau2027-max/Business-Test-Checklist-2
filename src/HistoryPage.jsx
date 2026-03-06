@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Button, TextArea, Spinner, Skeleton } from "@heroui/react";
+import { Button, TextArea, Spinner, Skeleton, Surface } from "@heroui/react";
 import { fetchHistoryQuestions } from "./api/contentApi.js";
 import LoginButton from "./LoginButton.jsx";
 import Sidebar from "./Sidebar.jsx";
@@ -768,7 +768,7 @@ function HistoryQuestion({ q, levelDescriptors, prefix }) {
   };
 
   return (
-    <div className="bg-[#12121A] rounded-lg p-4 mb-3" style={{ border: "1px solid #252533" }}>
+    <Surface className="rounded-2xl p-4 mb-3">
       {/* Question header */}
       <div className="flex items-start gap-2 mb-2" style={{ flexWrap: "nowrap" }}>
         <span
@@ -849,14 +849,14 @@ function HistoryQuestion({ q, levelDescriptors, prefix }) {
           </Button>
         )}
 
-        <span className="text-xs px-1.5 py-0.5 rounded-fullml-auto" style={{ backgroundColor: "rgba(248,113,113,0.1)", color: "#F87171", fontFamily: "'JetBrains Mono', monospace" }}>
+        <span className="text-xs px-1.5 py-0.5 rounded-full ml-auto" style={{ backgroundColor: "rgba(248,113,113,0.1)", color: "#F87171", fontFamily: "'JetBrains Mono', monospace" }}>
           auto-saved
         </span>
       </div>
 
       {/* AI Grade Result */}
       {gradeResult && (
-        <div className="bg-[#1A1A24] rounded-2xl p-3 mt-3" style={{ border: "1px solid #252533" }}>
+        <Surface variant="secondary" className="rounded-2xl p-3 mt-3">
           {gradeResult.score !== null && (
             <div className="flex items-center mb-1">
               <span
@@ -875,7 +875,7 @@ function HistoryQuestion({ q, levelDescriptors, prefix }) {
           <span className="block text-[#B0ADA6]" style={{ fontSize: 13, lineHeight: 1.7, whiteSpace: "pre-line" }}>
             {gradeResult.feedback}
           </span>
-        </div>
+        </Surface>
       )}
 
       {/* Markscheme reveal */}
@@ -901,7 +901,7 @@ function HistoryQuestion({ q, levelDescriptors, prefix }) {
           </span>
         </div>
       )}
-    </div>
+    </Surface>
   );
 }
 
@@ -1015,7 +1015,7 @@ export default function HistoryPage() {
               </svg>
             </Button>
             <span
-              className="text-xs px-2 py-0.5 rounded-fulluppercase font-bold"
+              className="text-xs px-2 py-0.5 rounded-full uppercase font-bold"
               style={{ letterSpacing: 2, backgroundColor: "#F8717118", color: "#F87171", border: "none", fontFamily: "'JetBrains Mono', monospace" }}
             >
               IB HL History
@@ -1066,7 +1066,7 @@ export default function HistoryPage() {
       <div className="max-w-4xl mx-auto py-6 px-3">
         <div style={{ maxWidth: 1060, margin: "0 auto", padding: "0 0 40px" }}>
           {/* Exam info banner */}
-          <div className="bg-[#12121A] rounded-lg p-4 mb-6" style={{ border: "1px solid #252533" }}>
+          <Surface className="rounded-3xl p-4 mb-6">
             <span className="text-sm text-[#F0EEE8] font-semibold block" style={{ marginBottom: 4 }}>
               {paper === "paper2"
                 ? "IB History HL/SL \u2014 Paper 2 Specimen"
@@ -1093,7 +1093,7 @@ export default function HistoryPage() {
                 </span>
               )}
             </div>
-          </div>
+          </Surface>
 
           {/* Questions grouped by topic */}
           {loading
@@ -1102,7 +1102,7 @@ export default function HistoryPage() {
                   <Skeleton className="h-3.5 w-[200px] rounded-sm mb-4" />
                   <div className="flex flex-col gap-4">
                     {Array.from({ length: 2 }).map((_, j) => (
-                      <div key={j} className="bg-[#12121A] rounded-lg p-4 mb-3" style={{ border: "1px solid #252533" }}>
+                      <Surface key={j} className="rounded-2xl p-4 mb-3">
                         <div className="flex items-center gap-2 mb-2">
                           <Skeleton className="h-6 w-[40px] rounded-md" />
                           <Skeleton className="h-5 w-[70px] rounded-md" />
@@ -1110,7 +1110,7 @@ export default function HistoryPage() {
                         <Skeleton className="h-4 rounded-sm mb-1" />
                         <Skeleton className="h-4 rounded-sm mb-4 w-[80%]" />
                         <Skeleton className="h-[160px] rounded-md" />
-                      </div>
+                      </Surface>
                     ))}
                   </div>
                 </div>

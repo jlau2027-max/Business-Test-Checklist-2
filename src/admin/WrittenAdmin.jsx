@@ -432,7 +432,7 @@ export default function WrittenAdmin() {
                       className="hover:bg-[#1A1A2A] border-b border-[#1A1A24]"
                     >
                       <Table.Cell className="px-4 py-2">
-                        <span className="text-xs px-2 py-0.5 rounded-fullbg-[#7C6FFF22] text-[#A78BFA]">
+                        <span className="text-xs px-2 py-0.5 rounded-full bg-[#7C6FFF22] text-[#A78BFA]">
                           {q.category || "-"}
                         </span>
                       </Table.Cell>

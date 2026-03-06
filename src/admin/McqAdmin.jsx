@@ -350,7 +350,7 @@ export default function McqAdmin() {
                             </span>
                           </Table.Cell>
                           <Table.Cell className="p-3.5 text-sm">
-                            <span className="inline-flex items-center gap-1 text-xs px-2 py-0.5 rounded-fullbg-green-600 text-white">
+                            <span className="inline-flex items-center gap-1 text-xs px-2 py-0.5 rounded-full bg-green-600 text-white">
                               <IconCheck size={10} />
                               {OPTION_LETTERS[q.correct_option] ?? "?"}
                             </span>

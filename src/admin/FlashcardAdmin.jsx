@@ -540,7 +540,7 @@ export default function FlashcardAdmin() {
                           >
                             {topic.label}
                           </span>
-                          <span className="text-xs px-2 py-0.5 rounded-fullbg-[#252533] text-[#8B8B9E] shrink-0">
+                          <span className="text-xs px-2 py-0.5 rounded-full bg-[#252533] text-[#8B8B9E] shrink-0">
                             {topic.card_count ?? 0}
                           </span>
                         </div>

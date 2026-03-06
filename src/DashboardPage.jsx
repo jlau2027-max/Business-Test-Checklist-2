@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Button } from "@heroui/react";
+import { Button, Surface } from "@heroui/react";
 import { SignInButton } from "@clerk/react";
 import { useAuth } from "./AuthContext.jsx";
 import LoginButton from "./LoginButton.jsx";
@@ -40,7 +40,7 @@ function formatTime(ms) {
 
 function StatCard({ label, value, sub, color = "#7C6FFF" }) {
   return (
-    <div className="bg-[#12121A] rounded-lg p-4" style={{ border: "1px solid #252533", flex: 1, minWidth: 160 }}>
+    <Surface className="rounded-2xl p-4" style={{ flex: 1, minWidth: 160 }}>
       <span className="block text-[#55556A] mb-1" style={{ fontSize: 11, fontFamily: "'JetBrains Mono', monospace", letterSpacing: 1 }}>
         {label}
       </span>
@@ -52,7 +52,7 @@ function StatCard({ label, value, sub, color = "#7C6FFF" }) {
           {sub}
         </span>
       )}
-    </div>
+    </Surface>
   );
 }
 
@@ -118,7 +118,7 @@ export default function DashboardPage() {
               </svg>
             </Button>
             <span
-              className="text-xs px-2 py-0.5 rounded-fulluppercase font-bold"
+              className="text-xs px-2 py-0.5 rounded-full uppercase font-bold"
               style={{ letterSpacing: 2, backgroundColor: "#7C6FFF18", color: "#A78BFA", border: "none", fontFamily: "'JetBrains Mono', monospace" }}
             >
               Analytics
@@ -140,7 +140,7 @@ export default function DashboardPage() {
       <div className="max-w-4xl mx-auto py-6 px-3">
         {!user ? (
           /* Guest prompt */
-          <div className="bg-[#12121A] rounded-lg p-6 text-center" style={{ border: "1px solid #252533" }}>
+          <Surface className="rounded-3xl p-6 text-center">
             <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#55556A" strokeWidth="1.5" strokeLinecap="round" style={{ marginBottom: 16 }}>
               <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
               <circle cx="12" cy="7" r="4"/>
@@ -160,11 +160,11 @@ export default function DashboardPage() {
                 Sign In
               </Button>
             </SignInButton>
-          </div>
+          </Surface>
         ) : loading ? (
           <span className="text-center block text-[#55556A] py-6">Loading your analytics...</span>
         ) : attempts.length === 0 ? (
-          <div className="bg-[#12121A] rounded-lg p-6 text-center" style={{ border: "1px solid #252533" }}>
+          <Surface className="rounded-3xl p-6 text-center">
             <span className="font-bold text-lg text-[#F0EEE8] block mb-1">
               No data yet
             </span>
@@ -176,7 +176,7 @@ export default function DashboardPage() {
                 Go to Revision Hub
               </Button>
             </a>
-          </div>
+          </Surface>
         ) : (
           <div className="flex flex-col gap-8">
             {/* Overview Cards */}
@@ -208,7 +208,7 @@ export default function DashboardPage() {
             </div>
 
             {/* Category Breakdown */}
-            <div className="bg-[#12121A] rounded-lg p-4" style={{ border: "1px solid #252533" }}>
+            <Surface className="rounded-2xl p-4">
               <span className="block text-[#55556A] mb-4" style={{ fontSize: 11, fontFamily: "'JetBrains Mono', monospace", letterSpacing: 1 }}>
                 PERFORMANCE BY TOPIC
               </span>
@@ -249,17 +249,17 @@ export default function DashboardPage() {
                     );
                   })}
               </div>
-            </div>
+            </Surface>
 
             {/* Wrong Answers */}
             {wrongAnswers.length > 0 && (
-              <div className="bg-[#12121A] rounded-lg p-4" style={{ border: "1px solid #252533" }}>
+              <Surface className="rounded-2xl p-4">
                 <span className="block text-[#55556A] mb-4" style={{ fontSize: 11, fontFamily: "'JetBrains Mono', monospace", letterSpacing: 1 }}>
                   QUESTIONS TO REVIEW ({wrongAnswers.length})
                 </span>
                 <div className="flex flex-col gap-2">
                   {wrongAnswers.slice(0, 20).map((a, i) => (
-                    <div key={a.id || i} className="bg-[#1A1A24] rounded-2xl p-2" style={{ border: "1px solid #252533" }}>
+                    <Surface key={a.id || i} variant="secondary" className="rounded-2xl p-2">
                       <div className="flex gap-2 flex-wrap mb-1">
                         <span
                           className="text-xs px-1.5 py-0.5 rounded-full"
@@ -292,14 +292,14 @@ export default function DashboardPage() {
                       <span className="text-[#B0ADA6]" style={{ fontSize: 13, lineHeight: 1.5 }}>
                         {a.questionId}
                       </span>
-                    </div>
+                    </Surface>
                   ))}
                 </div>
-              </div>
+              </Surface>
             )}
 
             {/* Recent Activity */}
-            <div className="bg-[#12121A] rounded-lg p-4" style={{ border: "1px solid #252533" }}>
+            <Surface className="rounded-2xl p-4">
               <span className="block text-[#55556A] mb-4" style={{ fontSize: 11, fontFamily: "'JetBrains Mono', monospace", letterSpacing: 1 }}>
                 RECENT ACTIVITY
               </span>
@@ -337,7 +337,7 @@ export default function DashboardPage() {
                   );
                 })}
               </div>
-            </div>
+            </Surface>
           </div>
         )}
       </div>
