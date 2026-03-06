@@ -9,6 +9,7 @@ import DashboardPage from './DashboardPage.jsx'
 import AdminPage from './admin/AdminPage.jsx'
 import LandingPage from './LandingPage.jsx'
 import { AuthProvider, useAuth } from './AuthContext.jsx'
+import ThemeToggle from './ThemeToggle.jsx'
 
 const PUBLISHABLE_KEY = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY || 'pk_live_Y2xlcmsuamFzcGVybGF1bHZsN3N0dWRlbnQuY29tJA'
 
@@ -59,10 +60,10 @@ createRoot(document.getElementById('root')).render(
       appearance={{
         variables: {
           colorPrimary: "#7C6FFF",
-          colorBackground: "#12121A",
-          colorInputBackground: "#1A1A24",
-          colorText: "#F0EEE8",
-          colorTextSecondary: "#8B8B9E",
+          colorBackground: "var(--bg-card)",
+          colorInputBackground: "var(--bg-input)",
+          colorText: "var(--text-primary)",
+          colorTextSecondary: "var(--text-secondary)",
           borderRadius: "0.5rem",
           fontFamily: "'JSans', sans-serif",
         },
@@ -71,6 +72,9 @@ createRoot(document.getElementById('root')).render(
       <AuthProvider>
         <AuthGate>
           <Page {...pageProps} />
+          <div style={{ position: "fixed", top: 16, right: 16, zIndex: 9999 }}>
+            <ThemeToggle />
+          </div>
         </AuthGate>
       </AuthProvider>
     </ClerkProvider>

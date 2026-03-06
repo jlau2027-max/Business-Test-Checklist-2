@@ -239,7 +239,7 @@ function SpecimenQuestion({ q }) {
       </div>
 
       {/* Question text */}
-      <span className="block text-[#F0EEE8] mb-4" style={{ fontSize: 14, lineHeight: 1.7, whiteSpace: "pre-line" }}>
+      <span className="block text-[var(--text-primary)] mb-4" style={{ fontSize: 14, lineHeight: 1.7, whiteSpace: "pre-line" }}>
         {q.question}
       </span>
 
@@ -250,7 +250,7 @@ function SpecimenQuestion({ q }) {
         placeholder="Type your answer here..."
         rows={minRows}
         fullWidth
-        className="rounded-2xl mb-2 bg-[#09090F] border border-[#252533] text-[#F0EEE8] text-sm leading-[1.7] placeholder:text-[#55556A] focus:border-[#7C6FFF] p-3"
+        className="rounded-2xl mb-2 bg-[var(--bg-base)] border border-[var(--border)] text-[var(--text-primary)] text-sm leading-[1.7] placeholder:text-[var(--text-muted)] focus:border-[#7C6FFF] p-3"
         style={{ fontFamily: "'JSans', sans-serif", resize: "vertical" }}
       />
 
@@ -274,7 +274,7 @@ function SpecimenQuestion({ q }) {
           size="sm"
           variant="ghost"
           onPress={() => setRevealed((r) => !r)}
-          className={`rounded-full ${revealed ? "text-[#8B8B9E]" : "bg-[#8B5CF6] text-white"}`}
+          className={`rounded-full ${revealed ? "text-[var(--text-secondary)]" : "bg-[#8B5CF6] text-white"}`}
           style={{ fontFamily: "'JSans', sans-serif" }}
         >
           {revealed ? "Hide Markscheme" : "Show Markscheme"}
@@ -285,7 +285,7 @@ function SpecimenQuestion({ q }) {
             size="sm"
             variant="ghost"
             onPress={handleClear}
-            className="rounded-full text-[#8B8B9E]"
+            className="rounded-full text-[var(--text-secondary)]"
             style={{ fontFamily: "'JSans', sans-serif" }}
           >
             Clear
@@ -323,7 +323,7 @@ function SpecimenQuestion({ q }) {
 
       {/* Markscheme reveal */}
       {revealed && (
-        <div className="mt-4 pt-4" style={{ borderTop: "1px solid #252533" }}>
+        <div className="mt-4 pt-4" style={{ borderTop: "1px solid var(--border)" }}>
           <span className="block text-[#34D399] mb-2" style={{ fontSize: 11, fontFamily: "'JSans', sans-serif", letterSpacing: 1 }}>
             MARKSCHEME
           </span>
@@ -369,7 +369,7 @@ export default function SpecimenPage() {
   const totalMarks = SPECIMEN_QUESTIONS.reduce((sum, q) => sum + q.marks, 0);
 
   return (
-    <div className="min-h-screen" style={{ backgroundColor: "#09090F", fontFamily: "'JSans', sans-serif", color: "#F0EEE8" }}>
+    <div className="min-h-screen" style={{ backgroundColor: "var(--bg-base)", fontFamily: "'JSans', sans-serif", color: "var(--text-primary)" }}>
       <Sidebar activeSubject="business" sidebarOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
 
       {/* Header */}
@@ -391,7 +391,7 @@ export default function SpecimenPage() {
               isIconOnly
               variant="outline"
               onPress={() => setSidebarOpen(o => !o)}
-              className="rounded-full bg-transparent text-[#8B8B9E] border-[#252533] min-w-[auto] h-8 px-[10px]"
+              className="rounded-full bg-transparent text-[var(--text-secondary)] border-[var(--border)] min-w-[auto] h-8 px-[10px]"
               style={{
                 position: "absolute",
                 left: 0,
@@ -414,19 +414,19 @@ export default function SpecimenPage() {
             <LoginButton />
           </div>
           <span
-            className="text-center block font-extrabold text-[#F0EEE8]"
+            className="text-center block font-extrabold text-[var(--text-primary)]"
             style={{ fontSize: "clamp(22px, 4vw, 30px)", letterSpacing: -0.5 }}
           >
             Specimen Paper
           </span>
-          <span className="text-center block text-xs text-[#55556A] mb-2">
+          <span className="text-center block text-xs text-[var(--text-muted)] mb-2">
             Unit 3 — Finance · {totalMarks} marks total
           </span>
           <div className="flex items-center justify-center">
             <a href="/business/checklist" style={{ textDecoration: "none" }}>
               <Button
                 size="sm"
-                className="rounded-full bg-[#1A1A24] text-[#8B8B9E] border border-[#252533]"
+                className="rounded-full bg-[var(--bg-input)] text-[var(--text-secondary)] border border-[var(--border)]"
                 style={{ fontFamily: "'JSans', sans-serif" }}
               >
                 ← Back to Revision Hub
@@ -441,10 +441,10 @@ export default function SpecimenPage() {
         <div style={{ maxWidth: 1060, margin: "0 auto", padding: "0 0 40px" }}>
           {/* Exam info banner */}
           <Surface className="rounded-3xl p-4 mb-6">
-            <span className="text-sm text-[#F0EEE8] font-semibold block" style={{ marginBottom: 4 }}>
+            <span className="text-sm text-[var(--text-primary)] font-semibold block" style={{ marginBottom: 4 }}>
               Unit 3 Finance Test — February 2026
             </span>
-            <span className="text-xs text-[#8B8B9E] block" style={{ lineHeight: 1.6 }}>
+            <span className="text-xs text-[var(--text-secondary)] block" style={{ lineHeight: 1.6 }}>
               Answer all questions. The maximum mark for this test is {totalMarks}. Type your answers in the boxes
               below — everything auto-saves. Use "Solve" for AI grading and "Show Markscheme" to reveal the rubric.
             </span>
@@ -463,7 +463,7 @@ export default function SpecimenPage() {
             <span className="block text-[#60A5FA] mb-2" style={{ fontSize: 11, fontFamily: "'JSans', sans-serif", letterSpacing: 1 }}>
               CASE STUDY
             </span>
-            <span className="block text-[#F0EEE8] font-semibold mb-1" style={{ fontSize: 14 }}>
+            <span className="block text-[var(--text-primary)] font-semibold mb-1" style={{ fontSize: 14 }}>
               NorthHaven Dairy (NHD)
             </span>
             <span className="block text-[#B0ADA6]" style={{ fontSize: 13, lineHeight: 1.7, whiteSpace: "pre-line" }}>

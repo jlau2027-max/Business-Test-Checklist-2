@@ -39,7 +39,7 @@ export default function Sidebar({ activeSubject, sidebarOpen, onClose }) {
           height: "100vh",
           zIndex: 200,
           backgroundColor: "#0D0D14",
-          borderRight: "1px solid #1A1A24",
+          borderRight: "1px solid var(--bg-input)",
           display: "flex",
           flexDirection: "column",
           padding: "20px 12px",
@@ -47,7 +47,7 @@ export default function Sidebar({ activeSubject, sidebarOpen, onClose }) {
           transition: "left 0.25s ease",
         }}
       >
-        <span className="text-[#55556A] mb-1 px-2" style={{ fontSize: 11, fontFamily: "'JSans', sans-serif", letterSpacing: 1 }}>
+        <span className="text-[var(--text-muted)] mb-1 px-2" style={{ fontSize: 11, fontFamily: "'JSans', sans-serif", letterSpacing: 1 }}>
           SUBJECTS
         </span>
         {items.map(s => {
@@ -63,7 +63,7 @@ export default function Sidebar({ activeSubject, sidebarOpen, onClose }) {
                 paddingLeft: 14,
                 fontFamily: "'JSans', sans-serif",
                 backgroundColor: active ? color : "transparent",
-                color: active ? "#fff" : "#8B8B9E",
+                color: active ? "#fff" : "var(--text-secondary)",
                 border: active ? "none" : "1px solid transparent",
                 boxShadow: active ? `0 0 12px ${color}33` : "none",
               }}
@@ -79,7 +79,7 @@ export default function Sidebar({ activeSubject, sidebarOpen, onClose }) {
         })}
 
         <div style={{ flex: 1 }} />
-        <span className="text-center block" style={{ fontSize: 10, color: "#33334A", fontFamily: "'JSans', sans-serif" }}>
+        <span className="text-center block" style={{ fontSize: 10, color: "var(--text-dim)", fontFamily: "'JSans', sans-serif" }}>
           More subjects coming soon
         </span>
       </div>

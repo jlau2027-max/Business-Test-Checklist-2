@@ -786,7 +786,7 @@ function HistoryQuestion({ q, levelDescriptors, prefix }) {
       </div>
 
       {/* Question text */}
-      <span className="block text-[#F0EEE8] mb-4" style={{ fontSize: 14, lineHeight: 1.7, whiteSpace: "pre-line" }}>
+      <span className="block text-[var(--text-primary)] mb-4" style={{ fontSize: 14, lineHeight: 1.7, whiteSpace: "pre-line" }}>
         {q.question}
       </span>
 
@@ -797,7 +797,7 @@ function HistoryQuestion({ q, levelDescriptors, prefix }) {
         placeholder="Type your essay answer here..."
         rows={16}
         fullWidth
-        className="rounded-2xl mb-2 bg-[#09090F] border border-[#252533] text-[#F0EEE8] text-sm leading-[1.7] placeholder:text-[#55556A] focus:border-[#F87171] p-3"
+        className="rounded-2xl mb-2 bg-[var(--bg-base)] border border-[var(--border)] text-[var(--text-primary)] text-sm leading-[1.7] placeholder:text-[var(--text-muted)] focus:border-[#F87171] p-3"
         style={{ fontFamily: "'JSans', sans-serif", resize: "vertical" }}
       />
 
@@ -821,7 +821,7 @@ function HistoryQuestion({ q, levelDescriptors, prefix }) {
           size="sm"
           variant="ghost"
           onPress={() => setRevealed((r) => !r)}
-          className={`rounded-full ${revealed ? "text-[#8B8B9E]" : "bg-[#8B5CF6] text-white"}`}
+          className={`rounded-full ${revealed ? "text-[var(--text-secondary)]" : "bg-[#8B5CF6] text-white"}`}
           style={{ fontFamily: "'JSans', sans-serif" }}
         >
           {revealed ? "Hide Markscheme" : "Show Markscheme"}
@@ -831,7 +831,7 @@ function HistoryQuestion({ q, levelDescriptors, prefix }) {
           size="sm"
           variant="ghost"
           onPress={() => setLevelsRevealed((r) => !r)}
-          className={`rounded-full ${levelsRevealed ? "text-[#8B8B9E]" : "bg-[#FBBF24] text-black"}`}
+          className={`rounded-full ${levelsRevealed ? "text-[var(--text-secondary)]" : "bg-[#FBBF24] text-black"}`}
           style={{ fontFamily: "'JSans', sans-serif" }}
         >
           {levelsRevealed ? "Hide Levels" : "Level Descriptors"}
@@ -842,7 +842,7 @@ function HistoryQuestion({ q, levelDescriptors, prefix }) {
             size="sm"
             variant="ghost"
             onPress={handleClear}
-            className="rounded-full text-[#8B8B9E]"
+            className="rounded-full text-[var(--text-secondary)]"
             style={{ fontFamily: "'JSans', sans-serif" }}
           >
             Clear
@@ -880,7 +880,7 @@ function HistoryQuestion({ q, levelDescriptors, prefix }) {
 
       {/* Markscheme reveal */}
       {revealed && (
-        <div className="mt-4 pt-4" style={{ borderTop: "1px solid #252533" }}>
+        <div className="mt-4 pt-4" style={{ borderTop: "1px solid var(--border)" }}>
           <span className="block text-[#34D399] mb-2" style={{ fontSize: 11, fontFamily: "'JSans', sans-serif", letterSpacing: 1 }}>
             MARKSCHEME
           </span>
@@ -892,7 +892,7 @@ function HistoryQuestion({ q, levelDescriptors, prefix }) {
 
       {/* Level descriptors reveal */}
       {levelsRevealed && (
-        <div className="mt-4 pt-4" style={{ borderTop: "1px solid #252533" }}>
+        <div className="mt-4 pt-4" style={{ borderTop: "1px solid var(--border)" }}>
           <span className="block text-[#FBBF24] mb-2" style={{ fontSize: 11, fontFamily: "'JSans', sans-serif", letterSpacing: 1 }}>
             LEVEL DESCRIPTORS
           </span>
@@ -977,7 +977,7 @@ export default function HistoryPage() {
   const loading = paper === "paper2" ? loadingP2 : loadingP3;
 
   return (
-    <div className="min-h-screen" style={{ backgroundColor: "#09090F", fontFamily: "'JSans', sans-serif", color: "#F0EEE8" }}>
+    <div className="min-h-screen" style={{ backgroundColor: "var(--bg-base)", fontFamily: "'JSans', sans-serif", color: "var(--text-primary)" }}>
 
       <Sidebar activeSubject="history" sidebarOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
 
@@ -1000,7 +1000,7 @@ export default function HistoryPage() {
               isIconOnly
               variant="outline"
               onPress={() => setSidebarOpen(o => !o)}
-              className="rounded-full bg-transparent text-[#8B8B9E] border-[#252533] min-w-[auto] h-8 px-[10px]"
+              className="rounded-full bg-transparent text-[var(--text-secondary)] border-[var(--border)] min-w-[auto] h-8 px-[10px]"
               style={{
                 position: "absolute",
                 left: 0,
@@ -1023,12 +1023,12 @@ export default function HistoryPage() {
             <LoginButton />
           </div>
           <span
-            className="text-center block font-extrabold text-[#F0EEE8]"
+            className="text-center block font-extrabold text-[var(--text-primary)]"
             style={{ fontSize: "clamp(22px, 4vw, 30px)", letterSpacing: -0.5 }}
           >
             {paper === "paper2" ? "Paper 2 \u2014 Specimen" : "Paper 3 \u2014 Specimen"}
           </span>
-          <span className="text-center block text-xs text-[#55556A] mb-2">
+          <span className="text-center block text-xs text-[var(--text-muted)] mb-2">
             {paper === "paper2"
               ? `12 topics \u00B7 ${questions.length} questions \u00B7 ${totalMarks} marks total`
               : `18 topics \u00B7 ${questions.length} questions \u00B7 ${totalMarks} marks total`}
@@ -1047,9 +1047,9 @@ export default function HistoryPage() {
                 className="rounded-full font-semibold text-[13px]"
                 style={{
                   fontFamily: "'JSans', sans-serif",
-                  backgroundColor: paper === t.key ? "#F0EEE8" : "transparent",
-                  color: paper === t.key ? "#09090F" : "#55556A",
-                  border: paper === t.key ? "none" : "1px solid #252533",
+                  backgroundColor: paper === t.key ? "var(--text-primary)" : "transparent",
+                  color: paper === t.key ? "var(--bg-base)" : "var(--text-muted)",
+                  border: paper === t.key ? "none" : "1px solid var(--border)",
                   height: 34,
                   paddingLeft: 16,
                   paddingRight: 16,
@@ -1067,12 +1067,12 @@ export default function HistoryPage() {
         <div style={{ maxWidth: 1060, margin: "0 auto", padding: "0 0 40px" }}>
           {/* Exam info banner */}
           <Surface className="rounded-3xl p-4 mb-6">
-            <span className="text-sm text-[#F0EEE8] font-semibold block" style={{ marginBottom: 4 }}>
+            <span className="text-sm text-[var(--text-primary)] font-semibold block" style={{ marginBottom: 4 }}>
               {paper === "paper2"
                 ? "IB History HL/SL \u2014 Paper 2 Specimen"
                 : "IB History HL \u2014 Paper 3 Specimen (Africa and the Middle East)"}
             </span>
-            <span className="text-xs text-[#8B8B9E] block" style={{ lineHeight: 1.6 }}>
+            <span className="text-xs text-[var(--text-secondary)] block" style={{ lineHeight: 1.6 }}>
               {paper === "paper2"
                 ? "Answer two questions, each chosen from a different topic. Each question is worth 15 marks. The maximum mark for this paper is 30. Type your essay answers below \u2014 everything auto-saves. Use \"Solve\" for AI grading, \"Show Markscheme\" for the rubric, and \"Level Descriptors\" for the marking bands."
                 : "Answer three questions. Each question is worth 15 marks. The maximum mark for this paper is 45. 2 hours 30 minutes. HL only. Type your essay answers below \u2014 everything auto-saves. Use \"Solve\" for AI grading, \"Show Markscheme\" for the rubric, and \"Level Descriptors\" for the marking bands."}

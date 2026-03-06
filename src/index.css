@@ -1,6 +1,32 @@
 @import "tailwindcss";
 @import "@heroui/styles";
 
+/* ── Theme variables ──────────────────────────────────────────── */
+:root {
+  --bg-base: #F5F5F8;
+  --bg-card: #FFFFFF;
+  --bg-input: #EDEDF2;
+  --bg-elevated: #E2E2EA;
+  --text-primary: #1A1A2E;
+  --text-secondary: #6B6B80;
+  --text-muted: #9090A0;
+  --text-dim: #B0B0C0;
+  --border: #DDDDE5;
+}
+
+.dark {
+  --bg-base: #09090F;
+  --bg-card: #12121A;
+  --bg-input: #1A1A24;
+  --bg-elevated: #1E1E2A;
+  --text-primary: #F0EEE8;
+  --text-secondary: #8B8B9E;
+  --text-muted: #55556A;
+  --text-dim: #33334A;
+  --border: #252533;
+}
+
+/* ── Font ─────────────────────────────────────────────────────── */
 @font-face {
   font-family: 'JSans';
   src: url('/JSans.ttf') format('truetype');
@@ -9,20 +35,29 @@
   font-display: swap;
 }
 
+/* ── Base ─────────────────────────────────────────────────────── */
 html, body, #root {
   margin: 0;
   padding: 0;
   width: 100%;
   min-height: 100vh;
-  background: #09090F;
+  background: var(--bg-base);
   font-family: 'JSans', sans-serif;
+  color: var(--text-primary);
 }
 
 *, *::before, *::after {
   box-sizing: border-box;
 }
 
-/* 3D Flashcard flip styles */
+/* ── View transition (animated theme toggle) ──────────────────── */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none;
+  mix-blend-mode: normal;
+}
+
+/* ── 3D Flashcard flip styles ─────────────────────────────────── */
 .flashcard-container {
   perspective: 1000px;
   height: 240px;

@@ -9,20 +9,20 @@ export default function ConfirmDeleteModal({ opened, onClose, onConfirm, title, 
       onOpenChange={(open) => { if (!open) onClose(); }}
     >
       <Modal.Container>
-        <Modal.Dialog className="sm:max-w-md" style={{ backgroundColor: "#12121A", border: "1px solid #252533" }}>
+        <Modal.Dialog className="sm:max-w-md" style={{ backgroundColor: "var(--bg-card)", border: "1px solid var(--border)" }}>
           <Modal.CloseTrigger />
-          <Modal.Header style={{ borderBottom: "1px solid #252533" }}>
-            <Modal.Heading style={{ color: "#F0EEE8", fontWeight: 700, fontFamily: "'JSans', sans-serif" }}>
+          <Modal.Header style={{ borderBottom: "1px solid var(--border)" }}>
+            <Modal.Heading style={{ color: "var(--text-primary)", fontWeight: 700, fontFamily: "'JSans', sans-serif" }}>
               {title || "Confirm Delete"}
             </Modal.Heading>
           </Modal.Header>
           <Modal.Body>
-            <p className="text-sm text-[#8B8B9E]">
+            <p className="text-sm text-[var(--text-secondary)]">
               {message || "Are you sure you want to delete this item? This action cannot be undone."}
             </p>
           </Modal.Body>
           <Modal.Footer>
-            <Button variant="ghost" className="rounded-full text-[#8B8B9E]" onPress={onClose} isDisabled={loading}>Cancel</Button>
+            <Button variant="ghost" className="rounded-full text-[var(--text-secondary)]" onPress={onClose} isDisabled={loading}>Cancel</Button>
             <Button variant="danger" className="rounded-full" onPress={onConfirm} isPending={loading}>
               {({isPending}) => <>
                 {isPending && <Spinner color="current" size="sm" />}

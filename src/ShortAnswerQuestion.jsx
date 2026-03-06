@@ -51,8 +51,8 @@ export default function ShortAnswerQuestion({
   const scoreColor = grade >= 4 ? '#34D399' : grade >= 2 ? '#FBBF24' : '#F87171';
 
   return (
-    <div className="bg-[#12121A] rounded-lg p-4" style={{ border: '1px solid #252533' }}>
-      <span className="font-semibold text-base text-[#F0EEE8] block mb-4">{question}</span>
+    <div className="bg-[var(--bg-card)] rounded-lg p-4" style={{ border: '1px solid var(--border)' }}>
+      <span className="font-semibold text-base text-[var(--text-primary)] block mb-4">{question}</span>
 
       <TextArea
         value={studentAnswer}
@@ -61,7 +61,7 @@ export default function ShortAnswerQuestion({
         disabled={submitted}
         rows={5}
         fullWidth
-        className="rounded-2xl bg-[#1A1A24] border border-[#252533] text-[#F0EEE8] text-sm leading-relaxed placeholder:text-[#55556A] focus:border-[#7C6FFF] p-3"
+        className="rounded-2xl bg-[var(--bg-input)] border border-[var(--border)] text-[var(--text-primary)] text-sm leading-relaxed placeholder:text-[var(--text-muted)] focus:border-[#7C6FFF] p-3"
         style={{ fontFamily: "'JSans', sans-serif", resize: "vertical" }}
       />
 
@@ -74,7 +74,7 @@ export default function ShortAnswerQuestion({
           className={`rounded-full mt-4 font-semibold border-none ${
             studentAnswer.trim()
               ? 'bg-gradient-to-br from-[#7C6FFF] to-[#A78BFA] text-white shadow-[0_4px_16px_#7C6FFF30]'
-              : 'bg-[#1E1E2A] text-[#55556A] shadow-none'
+              : 'bg-[var(--bg-elevated)] text-[var(--text-muted)] shadow-none'
           }`}
         >
           {({isPending}) => <>
@@ -83,7 +83,7 @@ export default function ShortAnswerQuestion({
           </>}
         </Button>
       ) : (
-        <Button variant="ghost" className="mt-4 text-[#8B8B9E]" onPress={reset}>
+        <Button variant="ghost" className="mt-4 text-[var(--text-secondary)]" onPress={reset}>
           Try Again
         </Button>
       )}
@@ -103,7 +103,7 @@ export default function ShortAnswerQuestion({
             value={(grade / 5) * 100}
             color={scoreColor}
           />
-          <span className="text-sm text-[#8B8B9E] block mt-2" style={{ lineHeight: 1.6 }}>{feedback}</span>
+          <span className="text-sm text-[var(--text-secondary)] block mt-2" style={{ lineHeight: 1.6 }}>{feedback}</span>
         </div>
       )}
     </div>

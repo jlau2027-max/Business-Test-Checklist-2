@@ -329,12 +329,12 @@ function ChecklistView() {
       {/* Progress card */}
       <Surface className="rounded-3xl p-6 mb-6">
         <div className="flex items-center justify-between mb-1">
-          <span className="text-sm text-[#8B8B9E]" style={{fontFamily:"'JSans', sans-serif"}}>Overall Progress</span>
+          <span className="text-sm text-[var(--text-secondary)]" style={{fontFamily:"'JSans', sans-serif"}}>Overall Progress</span>
           <span className="text-2xl font-extrabold" style={{color: progColor}}>{progress}%</span>
         </div>
         <ProgressBar value={progress} color={progColor} animated />
         <div className="flex items-center justify-between mt-3">
-          <span className="text-xs text-[#55556A]">{checkedCount} of {totalItems} topics covered</span>
+          <span className="text-xs text-[var(--text-muted)]">{checkedCount} of {totalItems} topics covered</span>
           <span className="text-xs px-2 py-0.5 rounded-full" style={{fontFamily:"'JSans', sans-serif", backgroundColor:"#34D39922", color:"#34D399"}}>auto-saved</span>
         </div>
       </Surface>
@@ -351,12 +351,12 @@ function ChecklistView() {
           const sectionChecked = section.items.filter((_,i)=>checked[`${section.id}-${i}`]).length;
           const allDone = sectionChecked===section.items.length;
           return (
-            <Accordion.Item key={section.id} id={section.id} className="bg-[#12121A] rounded-2xl overflow-hidden">
+            <Accordion.Item key={section.id} id={section.id} className="bg-[var(--bg-card)] rounded-2xl overflow-hidden">
               <Accordion.Heading>
-                <Accordion.Trigger className="w-full flex items-center gap-2 px-5 py-3.5 hover:bg-[#1A1A24] transition-colors">
+                <Accordion.Trigger className="w-full flex items-center gap-2 px-5 py-3.5 hover:bg-[var(--bg-input)] transition-colors">
                   <span className="text-xs px-2 py-0.5 rounded-full font-bold" style={{backgroundColor: section.color + "22", color: section.color, fontFamily: "'JSans', sans-serif"}}>{sectionChecked}/{section.items.length}</span>
-                  <span className="text-sm font-semibold" style={{color: allDone ? section.color : "#F0EEE8"}}>{allDone && "✓ "}{section.title}</span>
-                  <Accordion.Indicator className="ml-auto shrink-0 text-[#55556A]">
+                  <span className="text-sm font-semibold" style={{color: allDone ? section.color : "var(--text-primary)"}}>{allDone && "✓ "}{section.title}</span>
+                  <Accordion.Indicator className="ml-auto shrink-0 text-[var(--text-muted)]">
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polyline points="6 9 12 15 18 9"/></svg>
                   </Accordion.Indicator>
                 </Accordion.Trigger>
@@ -373,7 +373,7 @@ function ChecklistView() {
                           key={key}
                           isSelected={!!isChecked}
                           onChange={() => toggle(key)}
-                          className="flex items-start gap-2.5 py-1.5 px-1 rounded-lg cursor-pointer hover:bg-[#1A1A24] transition-colors max-w-full"
+                          className="flex items-start gap-2.5 py-1.5 px-1 rounded-lg cursor-pointer hover:bg-[var(--bg-input)] transition-colors max-w-full"
                         >
                           <Checkbox.Control
                             className="mt-1 shrink-0"
@@ -385,7 +385,7 @@ function ChecklistView() {
                             <Checkbox.Indicator />
                           </Checkbox.Control>
                           <Checkbox.Content>
-                            <span className="text-sm leading-relaxed cursor-pointer" style={{color: isChecked ? "#55556A" : isImportant ? "#FBBF24" : "#C8C4BC", textDecoration: isChecked ? "line-through" : "none"}}>{item}</span>
+                            <span className="text-sm leading-relaxed cursor-pointer" style={{color: isChecked ? "var(--text-muted)" : isImportant ? "#FBBF24" : "#C8C4BC", textDecoration: isChecked ? "line-through" : "none"}}>{item}</span>
                           </Checkbox.Content>
                         </Checkbox>
                       );
@@ -398,7 +398,7 @@ function ChecklistView() {
         })}
       </Accordion>
 
-      <span className="text-center block text-xs text-[#55556A] mt-6">
+      <span className="text-center block text-xs text-[var(--text-muted)] mt-6">
         Click any item to mark it as revised ·{" "}
         <span className="text-[#7C6FFF] cursor-pointer" onClick={()=>{ setChecked({}); saveLS("checklist_checked", {}); }}>Reset all</span>
       </span>
@@ -413,30 +413,30 @@ function FlashCard({card, catColor}) {
       <div className={`flashcard-inner${flipped ? " flipped" : ""}`}>
         {/* Front */}
         <div
-          className="flashcard-face bg-[#1A1A24]"
+          className="flashcard-face bg-[var(--bg-input)]"
           style={{
-            border: "1px solid #252533",
+            border: "1px solid var(--border)",
             boxShadow: "0 2px 8px rgba(0,0,0,0.3)",
             alignItems: "center",
             padding: 24,
             textAlign: "center",
           }}
         >
-          <span className="block text-[11px] uppercase text-[#55556A] mb-4" style={{fontFamily:"'JSans', sans-serif", letterSpacing:2}}>TERM</span>
-          <span className="block text-[20px] font-bold text-[#F0EEE8]" style={{lineHeight:1.3}}>{card.term}</span>
-          <span className="block text-[11px] text-[#55556A] mt-6">tap to reveal</span>
+          <span className="block text-[11px] uppercase text-[var(--text-muted)] mb-4" style={{fontFamily:"'JSans', sans-serif", letterSpacing:2}}>TERM</span>
+          <span className="block text-[20px] font-bold text-[var(--text-primary)]" style={{lineHeight:1.3}}>{card.term}</span>
+          <span className="block text-[11px] text-[var(--text-muted)] mt-6">tap to reveal</span>
         </div>
         {/* Back */}
         <div
-          className="flashcard-face flashcard-back bg-[#1A1A24]"
+          className="flashcard-face flashcard-back bg-[var(--bg-input)]"
           style={{
-            border: "1px solid #252533",
+            border: "1px solid var(--border)",
             boxShadow: "0 2px 8px rgba(0,0,0,0.3)",
             padding: 20,
             overflowY: "auto",
           }}
         >
-          <span className="block text-[11px] uppercase text-[#55556A] mb-2" style={{fontFamily:"'JSans', sans-serif", letterSpacing:2}}>DEFINITION</span>
+          <span className="block text-[11px] uppercase text-[var(--text-muted)] mb-2" style={{fontFamily:"'JSans', sans-serif", letterSpacing:2}}>DEFINITION</span>
           <span className="block text-[13px] text-[#C8C4BC]" style={{lineHeight:1.65}}>{card.def}</span>
           {card.formula && (
             <div className="mt-2 p-2" style={{ background: "#0D0D14", borderRadius: 8, borderLeft: `3px solid ${catColor}` }}>
@@ -455,7 +455,7 @@ function FlashcardsView() {
   const [activeCat,setActiveCat]=useState(()=>loadLS("fc_cat", flashcardCategories[0]?.id));
   const [cardIdx,setCardIdx]=useState(0);
   const currentCat=flashcardCategories.find(c=>c.id===activeCat) || flashcardCategories[0];
-  if (!currentCat || !currentCat.cards || currentCat.cards.length === 0) return <span className="text-center block text-[#55556A] py-8">Loading flashcards…</span>;
+  if (!currentCat || !currentCat.cards || currentCat.cards.length === 0) return <span className="text-center block text-[var(--text-muted)] py-8">Loading flashcards…</span>;
   const currentCard=currentCat.cards[Math.min(cardIdx, currentCat.cards.length - 1)];
   return (
     <div style={{maxWidth:680,margin:"0 auto",padding:"0 0 40px"}}>
@@ -469,9 +469,9 @@ function FlashcardsView() {
             className="rounded-full text-xs"
             style={{
               fontFamily: "'JSans', sans-serif",
-              backgroundColor: activeCat===cat.id ? cat.color : "#1A1A24",
-              color: activeCat===cat.id ? "#fff" : "#8B8B9E",
-              border: `1px solid ${activeCat===cat.id ? cat.color : "#252533"}`,
+              backgroundColor: activeCat===cat.id ? cat.color : "var(--bg-input)",
+              color: activeCat===cat.id ? "#fff" : "var(--text-secondary)",
+              border: `1px solid ${activeCat===cat.id ? cat.color : "var(--border)"}`,
             }}
           >
             {cat.label}
@@ -481,8 +481,8 @@ function FlashcardsView() {
 
       {/* Progress */}
       <div className="flex items-center justify-between mb-4">
-        <span className="text-xs text-[#55556A]" style={{fontFamily:"'JSans', sans-serif"}}>{cardIdx+1} / {currentCat.cards.length} — {currentCat.label}</span>
-        <div style={{background:"#1A1A24",borderRadius:99,height:4,width:140,overflow:"hidden"}}>
+        <span className="text-xs text-[var(--text-muted)]" style={{fontFamily:"'JSans', sans-serif"}}>{cardIdx+1} / {currentCat.cards.length} — {currentCat.label}</span>
+        <div style={{background:"var(--bg-input)",borderRadius:99,height:4,width:140,overflow:"hidden"}}>
           <div style={{width:`${((cardIdx+1)/currentCat.cards.length)*100}%`,height:"100%",background:currentCat.color,borderRadius:99,transition:"width 0.3s"}}/>
         </div>
       </div>
@@ -497,7 +497,7 @@ function FlashcardsView() {
           size="md"
           isDisabled={cardIdx===0}
           onPress={()=>setCardIdx(i=>Math.max(0,i-1))}
-          className="rounded-full bg-[#1A1A24] border border-[#252533] text-[#8B8B9E] disabled:bg-[#12121A] disabled:border-[#1E1E2A]"
+          className="rounded-full bg-[var(--bg-input)] border border-[var(--border)] text-[var(--text-secondary)] disabled:bg-[var(--bg-card)] disabled:border-[var(--bg-elevated)]"
           style={{flex:1}}
         >
           Previous
@@ -509,13 +509,13 @@ function FlashcardsView() {
           className="rounded-full border-none text-white"
           style={{
             flex:1,
-            background: cardIdx===currentCat.cards.length-1 ? "#1E1E2A" : currentCat.color,
+            background: cardIdx===currentCat.cards.length-1 ? "var(--bg-elevated)" : currentCat.color,
           }}
         >
           Next
         </Button>
       </div>
-      <span className="text-center block text-xs text-[#55556A] mt-4">Tap any card to flip it</span>
+      <span className="text-center block text-xs text-[var(--text-muted)] mt-4">Tap any card to flip it</span>
     </div>
   );
 }
@@ -532,9 +532,9 @@ function MCQItem({q, displayNum}) {
         <div className="flex gap-2 mb-2 flex-wrap">
           <span className="text-xs px-2 py-0.5 rounded-full" style={{fontFamily:"'JSans', sans-serif",backgroundColor:color,color:"#fff"}}>MCQ</span>
           <span className="text-xs px-2 py-0.5 rounded-full" style={{fontFamily:"'JSans', sans-serif",backgroundColor:color+"22",color:color}}>{ q.cat}</span>
-          <span className="text-xs px-2 py-0.5 rounded-full" style={{fontFamily:"'JSans', sans-serif",backgroundColor:"#1E1E2A",color:"#8B8B9E"}}>{q.difficulty}</span>
+          <span className="text-xs px-2 py-0.5 rounded-full" style={{fontFamily:"'JSans', sans-serif",backgroundColor:"var(--bg-elevated)",color:"var(--text-secondary)"}}>{q.difficulty}</span>
         </div>
-        <span className="block text-[15px] text-[#F0EEE8] font-semibold" style={{lineHeight:1.6}}>Q{displayNum}. {q.q}</span>
+        <span className="block text-[15px] text-[var(--text-primary)] font-semibold" style={{lineHeight:1.6}}>Q{displayNum}. {q.q}</span>
       </div>
       <div className="flex flex-col gap-2 p-4 pt-2">
         <RadioGroup
@@ -546,11 +546,11 @@ function MCQItem({q, displayNum}) {
           {q.options.map((opt,i) => {
             const isSelected=selected===i;
             const isCorrect=i===q.answer;
-            let bg="#12121A",border="#252533",tc="#C8C4BC";
+            let bg="var(--bg-card)",border="var(--border)",tc="#C8C4BC";
             if(confirmed){
               if(isCorrect){bg="#34D399"+"22";border="#34D399";tc="#6EE7B7";}
               else if(isSelected&&!isCorrect){bg="#F87171"+"22";border="#F87171";tc="#FCA5A5";}
-            } else if(isSelected){bg=color+"22";border=color;tc="#F0EEE8";}
+            } else if(isSelected){bg=color+"22";border=color;tc="var(--text-primary)";}
             return (
               <Radio
                 key={i}
@@ -568,7 +568,7 @@ function MCQItem({q, displayNum}) {
                   <div className="flex items-center gap-2 flex-nowrap">
                     <div style={{
                       width:28,height:28,borderRadius:'50%',flexShrink:0,
-                      background:confirmed&&isCorrect?"#34D399":confirmed&&isSelected&&!isCorrect?"#F87171":isSelected?color:"#252533",
+                      background:confirmed&&isCorrect?"#34D399":confirmed&&isSelected&&!isCorrect?"#F87171":isSelected?color:"var(--border)",
                       display:"flex",alignItems:"center",justifyContent:"center",
                     }}>
                       <span className="text-[11px] text-white font-bold" style={{fontFamily:"'JSans', sans-serif"}}>
@@ -589,8 +589,8 @@ function MCQItem({q, displayNum}) {
             onPress={()=>{if(selected!==null){setConfirmed(true);recordAttempt({userAnswer:selected,isCorrect:selected===q.answer});}}}
             className="rounded-full mt-1 font-semibold border-none"
             style={{
-              background: selected!==null ? color : "#1E1E2A",
-              color: selected===null ? "#55556A" : "#fff",
+              background: selected!==null ? color : "var(--bg-elevated)",
+              color: selected===null ? "var(--text-muted)" : "#fff",
             }}
           >
             Check Answer
@@ -601,8 +601,8 @@ function MCQItem({q, displayNum}) {
             <Alert.Content>
               <Alert.Title style={{fontFamily: "'JSans', sans-serif", fontSize: 12}}>{selected===q.answer ? "Correct!" : "Incorrect"}</Alert.Title>
               <Alert.Description>
-                <span className="text-sm text-[#8B8B9E] leading-relaxed">{q.explanation}</span>
-                <Button variant="ghost" size="sm" className="mt-2 text-[#8B8B9E]" onPress={()=>{setSelected(null);setConfirmed(false);resetTimer();}}>Try Again</Button>
+                <span className="text-sm text-[var(--text-secondary)] leading-relaxed">{q.explanation}</span>
+                <Button variant="ghost" size="sm" className="mt-2 text-[var(--text-secondary)]" onPress={()=>{setSelected(null);setConfirmed(false);resetTimer();}}>Try Again</Button>
               </Alert.Description>
             </Alert.Content>
           </Alert>
@@ -638,9 +638,9 @@ function PracticeView() {
               className="rounded-full"
               onPress={()=>setFilterCat(cat)}
               style={{
-                backgroundColor: active ? c : "#1A1A24",
-                color: active ? "#fff" : "#8B8B9E",
-                border: `1px solid ${active ? c : "#252533"}`,
+                backgroundColor: active ? c : "var(--bg-input)",
+                color: active ? "#fff" : "var(--text-secondary)",
+                border: `1px solid ${active ? c : "var(--border)"}`,
                 boxShadow: "none",
                 fontFamily: "'JSans', sans-serif",
               }}
@@ -652,12 +652,12 @@ function PracticeView() {
       </div>
 
       {/* Summary */}
-      <span className="block text-xs text-[#55556A] mb-6" style={{fontFamily:"'JSans', sans-serif"}}>
+      <span className="block text-xs text-[var(--text-muted)] mb-6" style={{fontFamily:"'JSans', sans-serif"}}>
         Showing {filtered.length} question{filtered.length!==1?"s":""}{filterCat!=="All"?` · ${filterCat}`:""}
       </span>
 
       {filtered.length === 0 && (
-        <span className="text-center block py-10 text-[#55556A] text-sm">No questions match this filter.</span>
+        <span className="text-center block py-10 text-[var(--text-muted)] text-sm">No questions match this filter.</span>
       )}
 
       {filtered.map((q, i) => (
@@ -715,17 +715,17 @@ function WrittenPracticeItem({q, displayNum}) {
   const scorePct = gradeResult?.score != null ? gradeResult.score / (gradeResult.maxMarks || q.marks) : 0;
   const scoreColor = gradeResult?.score != null
     ? scorePct >= 0.75 ? "#34D399" : scorePct >= 0.4 ? "#FBBF24" : "#F87171"
-    : "#8B8B9E";
+    : "var(--text-secondary)";
 
   return (
     <Surface variant="secondary" className="rounded-2xl mb-4 overflow-hidden">
       <div style={{borderLeft:`4px solid ${color}`, padding:"18px 20px"}}>
         <div className="flex gap-2 mb-2 flex-wrap">
           <span className="text-xs px-2 py-0.5 rounded-full" style={{fontFamily:"'JSans', sans-serif",backgroundColor:color+"22", color}}>{q.cat}</span>
-          <span className="text-xs px-2 py-0.5 rounded-full" style={{fontFamily:"'JSans', sans-serif",backgroundColor:"#1E1E2A", color:"#8B8B9E"}}>{q.difficulty}</span>
+          <span className="text-xs px-2 py-0.5 rounded-full" style={{fontFamily:"'JSans', sans-serif",backgroundColor:"var(--bg-elevated)", color:"var(--text-secondary)"}}>{q.difficulty}</span>
           <span className="text-xs px-2 py-0.5 rounded-full ml-auto" style={{fontFamily:"'JSans', sans-serif",backgroundColor:"#2A2800", color:"#FBBF24", border:"1px solid #5A4A00"}}>[ {q.marks} marks ]</span>
         </div>
-        <span className="block text-[15px] text-[#F0EEE8] font-semibold" style={{lineHeight:1.6, whiteSpace:"pre-line"}}>Q{displayNum}. {q.q}</span>
+        <span className="block text-[15px] text-[var(--text-primary)] font-semibold" style={{lineHeight:1.6, whiteSpace:"pre-line"}}>Q{displayNum}. {q.q}</span>
       </div>
 
       <div style={{padding:"12px 20px 16px"}}>
@@ -736,7 +736,7 @@ function WrittenPracticeItem({q, displayNum}) {
           rows={5}
           disabled={grading}
           fullWidth
-          className="rounded-2xl bg-[#12121A] border border-[#252533] text-[#F0EEE8] text-sm leading-relaxed placeholder:text-[#55556A] p-3 mb-2"
+          className="rounded-2xl bg-[var(--bg-card)] border border-[var(--border)] text-[var(--text-primary)] text-sm leading-relaxed placeholder:text-[var(--text-muted)] p-3 mb-2"
           style={{ fontFamily: "'JSans', sans-serif", resize: "vertical" }}
         />
 
@@ -748,7 +748,7 @@ function WrittenPracticeItem({q, displayNum}) {
             isPending={grading}
             isDisabled={!answer.trim() || grading}
             style={{
-              background: answer.trim() && !grading ? "#7C6FFF" : "#1E1E2A",
+              background: answer.trim() && !grading ? "#7C6FFF" : "var(--bg-elevated)",
               fontFamily: "'JSans', sans-serif",
             }}
           >
@@ -761,7 +761,7 @@ function WrittenPracticeItem({q, displayNum}) {
             size="sm"
             variant="ghost"
             className={revealed
-              ? "rounded-full text-[#8B8B9E]"
+              ? "rounded-full text-[var(--text-secondary)]"
               : "rounded-full"
             }
             onPress={()=>setRevealed(r=>!r)}
@@ -778,7 +778,7 @@ function WrittenPracticeItem({q, displayNum}) {
             <Button
               size="sm"
               variant="ghost"
-              className="rounded-full text-[#8B8B9E]"
+              className="rounded-full text-[var(--text-secondary)]"
               style={{ fontFamily: "'JSans', sans-serif" }}
               onPress={()=>{ setAnswer(""); setGradeResult(null); saveLS(`written_ans_${q.id}`, ""); saveLS(`written_grade_${q.id}`, null); }}
             >
@@ -789,20 +789,20 @@ function WrittenPracticeItem({q, displayNum}) {
 
         {/* AI Grade Result */}
         {gradeResult && (
-          <Alert status={gradeResult.score == null ? "warning" : scorePct >= 0.75 ? "success" : scorePct >= 0.4 ? "warning" : "danger"} className="mt-4 rounded-2xl" style={{backgroundColor: (gradeResult.score == null ? "#8B8B9E" : scoreColor) + "11", border: `1px solid ${gradeResult.score == null ? "#8B8B9E" : scoreColor}44`}}>
+          <Alert status={gradeResult.score == null ? "warning" : scorePct >= 0.75 ? "success" : scorePct >= 0.4 ? "warning" : "danger"} className="mt-4 rounded-2xl" style={{backgroundColor: (gradeResult.score == null ? "var(--text-secondary)" : scoreColor) + "11", border: `1px solid ${gradeResult.score == null ? "var(--text-secondary)" : scoreColor}44`}}>
             <Alert.Indicator />
             <Alert.Content>
               <Alert.Title style={{fontFamily: "'JSans', sans-serif", fontSize: 12}}>{gradeResult.score != null ? `AI Score: ${gradeResult.score}/${gradeResult.maxMarks || q.marks}` : "Grading Error"}</Alert.Title>
               <Alert.Description>
                 {gradeResult.score != null && <ProgressBar value={scorePct * 100} color={scoreColor} animated className="mb-2" />}
-                <span className="text-sm text-[#8B8B9E] leading-relaxed">{gradeResult.feedback}</span>
+                <span className="text-sm text-[var(--text-secondary)] leading-relaxed">{gradeResult.feedback}</span>
               </Alert.Description>
             </Alert.Content>
           </Alert>
         )}
 
         {revealed && (
-          <div className="mt-4 pt-4 border-t border-[#252533]">
+          <div className="mt-4 pt-4 border-t border-[var(--border)]">
             <span className="block text-[11px] text-[#34D399] mb-2" style={{fontFamily:"'JSans', sans-serif", letterSpacing:1}}>MARKSCHEME</span>
             <span className="block text-[13px] text-[#B0ADA6]" style={{lineHeight:1.7, whiteSpace:"pre-line"}}>{q.modelAnswer}</span>
           </div>
@@ -832,8 +832,8 @@ function WrittenPracticeView() {
   return (
     <div style={{maxWidth:1060, margin:"0 auto", padding:"0 0 40px"}}>
       <Surface className="rounded-3xl p-5 mb-6">
-        <span className="block text-sm text-[#F0EEE8] font-semibold mb-1">Written Practice</span>
-        <span className="block text-xs text-[#8B8B9E]" style={{lineHeight:1.5}}>
+        <span className="block text-sm text-[var(--text-primary)] font-semibold mb-1">Written Practice</span>
+        <span className="block text-xs text-[var(--text-secondary)]" style={{lineHeight:1.5}}>
           Answer each question in the text box, then reveal the markscheme to compare.
         </span>
       </Surface>
@@ -846,9 +846,9 @@ function WrittenPracticeView() {
           style={{
             flex: 1,
             height: 48,
-            backgroundColor: mode === "short" ? "#7C6FFF" : "#1A1A24",
-            color: mode === "short" ? "#fff" : "#8B8B9E",
-            border: `2px solid ${mode === "short" ? "#7C6FFF" : "#252533"}`,
+            backgroundColor: mode === "short" ? "#7C6FFF" : "var(--bg-input)",
+            color: mode === "short" ? "#fff" : "var(--text-secondary)",
+            border: `2px solid ${mode === "short" ? "#7C6FFF" : "var(--border)"}`,
             fontSize: 15,
             lineHeight: 1,
             boxShadow: mode === "short" ? "0 0 16px #7C6FFF33" : "none",
@@ -863,9 +863,9 @@ function WrittenPracticeView() {
           style={{
             flex: 1,
             height: 48,
-            backgroundColor: mode === "10mark" ? "#F87171" : "#1A1A24",
-            color: mode === "10mark" ? "#fff" : "#8B8B9E",
-            border: `2px solid ${mode === "10mark" ? "#F87171" : "#252533"}`,
+            backgroundColor: mode === "10mark" ? "#F87171" : "var(--bg-input)",
+            color: mode === "10mark" ? "#fff" : "var(--text-secondary)",
+            border: `2px solid ${mode === "10mark" ? "#F87171" : "var(--border)"}`,
             fontSize: 15,
             lineHeight: 1,
             boxShadow: mode === "10mark" ? "0 0 16px #F8717133" : "none",
@@ -880,7 +880,7 @@ function WrittenPracticeView() {
             className="rounded-full font-bold"
             style={{
               height: 48,
-              backgroundColor: "#1A1A24",
+              backgroundColor: "var(--bg-input)",
               color: "#2DD4BF",
               border: "2px solid #2DD4BF",
               fontSize: 15,
@@ -906,9 +906,9 @@ function WrittenPracticeView() {
                 className="rounded-full"
                 onPress={()=>setFilterCat(cat)}
                 style={{
-                  backgroundColor: active ? c : "#1A1A24",
-                  color: active ? "#fff" : "#8B8B9E",
-                  border: `1px solid ${active ? c : "#252533"}`,
+                  backgroundColor: active ? c : "var(--bg-input)",
+                  color: active ? "#fff" : "var(--text-secondary)",
+                  border: `1px solid ${active ? c : "var(--border)"}`,
                   boxShadow: "none",
                   fontFamily: "'JSans', sans-serif",
                 }}
@@ -920,13 +920,13 @@ function WrittenPracticeView() {
         </div>
       )}
 
-      <span className="block text-xs text-[#55556A] mb-6" style={{fontFamily:"'JSans', sans-serif"}}>
+      <span className="block text-xs text-[var(--text-muted)] mb-6" style={{fontFamily:"'JSans', sans-serif"}}>
         Showing {filtered.length} question{filtered.length!==1?"s":""}{mode === "short" && filterCat!=="All"?` · ${filterCat}`:""}
         {mode === "10mark" ? " · 10 Markers" : ""}
       </span>
 
       {filtered.length === 0 && (
-        <span className="text-center block py-10 text-[#55556A] text-sm">No questions match this filter.</span>
+        <span className="text-center block py-10 text-[var(--text-muted)] text-sm">No questions match this filter.</span>
       )}
 
       {filtered.map((q, i) => (
@@ -960,7 +960,7 @@ export default function App({ initialTab = "checklist" }) {
 
   return (
     <ContentCtx.Provider value={content}>
-    <div className="min-h-screen bg-[#09090F]" style={{fontFamily:"'JSans', sans-serif",color:"#F0EEE8"}}>
+    <div className="min-h-screen bg-[var(--bg-base)]" style={{fontFamily:"'JSans', sans-serif",color:"var(--text-primary)"}}>
 
       <Sidebar activeSubject="business" sidebarOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
 
@@ -981,7 +981,7 @@ export default function App({ initialTab = "checklist" }) {
               isIconOnly
               variant="outline"
               onPress={() => setSidebarOpen(o => !o)}
-              className="rounded-full border-[#252533] text-[#8B8B9E] bg-transparent min-w-[auto] h-8 px-2.5"
+              className="rounded-full border-[var(--border)] text-[var(--text-secondary)] bg-transparent min-w-[auto] h-8 px-2.5"
               style={{
                 position: "absolute",
                 left: 0,
@@ -1000,7 +1000,7 @@ export default function App({ initialTab = "checklist" }) {
             </span>
             <LoginButton />
           </div>
-          <h1 className="text-center font-extrabold text-[22px] sm:text-[30px] text-[#F0EEE8]" style={{letterSpacing: -0.5}}>Finance Unit — Revision Hub</h1>
+          <h1 className="text-center font-extrabold text-[22px] sm:text-[30px] text-[var(--text-primary)]" style={{letterSpacing: -0.5}}>Finance Unit — Revision Hub</h1>
 
           <Tabs variant="secondary" selectedKey={tab}>
             <Tabs.ListContainer>
@@ -1013,7 +1013,7 @@ export default function App({ initialTab = "checklist" }) {
                 ].map(t => (
                   <Tabs.Tab key={t.value} id={t.value}
                     render={(domProps) => <a {...domProps} href={t.href} style={{textDecoration:"none", flex:1, textAlign:"center"}} />}
-                    className="text-[13px] font-semibold py-2.5 text-[#55556A] data-[selected=true]:text-[#F0EEE8]"
+                    className="text-[13px] font-semibold py-2.5 text-[var(--text-muted)] data-[selected=true]:text-[var(--text-primary)]"
                     style={{fontFamily: "'JSans', sans-serif"}}
                   >
                     {t.label}

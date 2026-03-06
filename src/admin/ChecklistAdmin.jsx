@@ -310,7 +310,7 @@ export default function ChecklistAdmin() {
       <div className="flex flex-col gap-6">
         {/* Header */}
         <div className="flex items-center justify-between">
-          <span className="text-xl font-bold text-[#F0EEE8]">
+          <span className="text-xl font-bold text-[var(--text-primary)]">
             Checklist
           </span>
           {canEditContent && (
@@ -325,7 +325,7 @@ export default function ChecklistAdmin() {
             <Alert.Content className="flex-1">
               <Alert.Description>{successMsg}</Alert.Description>
             </Alert.Content>
-            <CloseButton onPress={() => setSuccessMsg(null)} className="text-[#8B8B9E] ml-2" />
+            <CloseButton onPress={() => setSuccessMsg(null)} className="text-[var(--text-secondary)] ml-2" />
           </Alert>
         )}
 
@@ -336,7 +336,7 @@ export default function ChecklistAdmin() {
             <Alert.Content className="flex-1">
               <Alert.Description>{error}</Alert.Description>
             </Alert.Content>
-            <CloseButton onPress={() => setError(null)} className="text-[#8B8B9E] ml-2" />
+            <CloseButton onPress={() => setError(null)} className="text-[var(--text-secondary)] ml-2" />
           </Alert>
         )}
 
@@ -348,9 +348,9 @@ export default function ChecklistAdmin() {
             ))}
           </div>
         ) : sections.length === 0 ? (
-          <div className="bg-[#12121A] rounded-lg p-6 border border-[#252533]">
+          <div className="bg-[var(--bg-card)] rounded-lg p-6 border border-[var(--border)]">
             <div className="flex flex-col items-center gap-2 py-8">
-              <span className="text-sm text-[#8B8B9E]">
+              <span className="text-sm text-[var(--text-secondary)]">
                 No sections found.{" "}
                 {canEditContent
                   ? 'Click "Add Section" to create one.'
@@ -369,24 +369,24 @@ export default function ChecklistAdmin() {
                   key={section.id}
                   isExpanded={isExpanded}
                   onExpandedChange={() => toggleSection(section.id)}
-                  className="bg-[#12121A] rounded-lg border border-[#252533] overflow-hidden"
+                  className="bg-[var(--bg-card)] rounded-lg border border-[var(--border)] overflow-hidden"
                 >
                   {/* Section header row */}
                   <Disclosure.Heading>
                     <Disclosure.Trigger className="flex items-center w-full px-4 py-3 gap-3 bg-transparent border-none cursor-pointer text-left">
                       {isExpanded ? (
-                        <IconChevronDown size={16} color="#8B8B9E" />
+                        <IconChevronDown size={16} color="var(--text-secondary)" />
                       ) : (
-                        <IconChevronRight size={16} color="#8B8B9E" />
+                        <IconChevronRight size={16} color="var(--text-secondary)" />
                       )}
                       <div
                         className="w-2.5 h-2.5 rounded-full shrink-0"
-                        style={{ backgroundColor: section.color || "#8B8B9E" }}
+                        style={{ backgroundColor: section.color || "var(--text-secondary)" }}
                       />
-                      <span className="text-sm font-semibold text-[#F0EEE8] flex-1">
+                      <span className="text-sm font-semibold text-[var(--text-primary)] flex-1">
                         {section.title}
                       </span>
-                      <span className="text-xs px-2 py-0.5 rounded-full bg-[#252533] text-[#8B8B9E]">
+                      <span className="text-xs px-2 py-0.5 rounded-full bg-[var(--border)] text-[var(--text-secondary)]">
                         {items.length} item{items.length !== 1 ? "s" : ""}
                       </span>
                       {(canEditContent || canDeleteContent) && (
@@ -414,9 +414,9 @@ export default function ChecklistAdmin() {
 
                   {/* Expanded items */}
                   <Disclosure.Content>
-                    <Disclosure.Body className="border-t border-[#252533] bg-[#0E0E16]">
+                    <Disclosure.Body className="border-t border-[var(--border)] bg-[#0E0E16]">
                       {items.length === 0 ? (
-                        <span className="text-sm text-[#8B8B9E] p-4 block text-center">
+                        <span className="text-sm text-[var(--text-secondary)] p-4 block text-center">
                           No items in this section.
                         </span>
                       ) : (
@@ -424,10 +424,10 @@ export default function ChecklistAdmin() {
                           {items.map((item) => (
                             <div
                               key={item.id}
-                              className="flex items-center gap-2 px-4 py-3 border-b border-[#1E1E2A]"
+                              className="flex items-center gap-2 px-4 py-3 border-b border-[var(--bg-elevated)]"
                             >
                               <span
-                                className="text-sm text-[#F0EEE8] flex-1 line-clamp-2"
+                                className="text-sm text-[var(--text-primary)] flex-1 line-clamp-2"
                               >
                                 {item.text}
                               </span>
@@ -474,10 +474,10 @@ export default function ChecklistAdmin() {
       {/* ---- Section Create / Edit Modal ---- */}
       <Modal.Backdrop variant="opaque" isKeyboardDismissDisabled={false} isOpen={sectionModalOpened} onOpenChange={(open) => { if (!open) closeSectionModal(); }}>
         <Modal.Container>
-          <Modal.Dialog className="sm:max-w-md" style={{ backgroundColor: "#12121A", border: "1px solid #252533" }}>
+          <Modal.Dialog className="sm:max-w-md" style={{ backgroundColor: "var(--bg-card)", border: "1px solid var(--border)" }}>
             <Modal.CloseTrigger />
-            <Modal.Header style={{ borderBottom: "1px solid #252533" }}>
-              <Modal.Heading style={{ color: "#F0EEE8", fontWeight: 700, fontFamily: "'JSans', sans-serif" }}>{editingSection ? "Edit Section" : "New Section"}</Modal.Heading>
+            <Modal.Header style={{ borderBottom: "1px solid var(--border)" }}>
+              <Modal.Heading style={{ color: "var(--text-primary)", fontWeight: 700, fontFamily: "'JSans', sans-serif" }}>{editingSection ? "Edit Section" : "New Section"}</Modal.Heading>
             </Modal.Header>
             <Modal.Body>
               <div className="flex flex-col gap-4">
@@ -491,28 +491,28 @@ export default function ChecklistAdmin() {
                 )}
 
                 <TextField className="w-full" name="title" onChange={(val) => updateSectionField("title", val)}>
-                  <Label className="text-[#8B8B9E] text-[11px] tracking-wider mb-1" style={{ fontFamily: "'JSans', sans-serif" }}>Title</Label>
-                  <Input value={sectionForm.title} placeholder="Enter section title..." className="bg-[#1A1A24] border border-[#252533] text-[#F0EEE8] rounded-full" style={{ fontFamily: "'JSans', sans-serif" }} />
+                  <Label className="text-[var(--text-secondary)] text-[11px] tracking-wider mb-1" style={{ fontFamily: "'JSans', sans-serif" }}>Title</Label>
+                  <Input value={sectionForm.title} placeholder="Enter section title..." className="bg-[var(--bg-input)] border border-[var(--border)] text-[var(--text-primary)] rounded-full" style={{ fontFamily: "'JSans', sans-serif" }} />
                 </TextField>
 
                 <div className="flex items-end gap-3">
                   <TextField className="flex-1" name="color" onChange={(val) => updateSectionField("color", val)}>
-                    <Label className="text-[#8B8B9E] text-[11px] tracking-wider mb-1" style={{ fontFamily: "'JSans', sans-serif" }}>Color (hex)</Label>
-                    <Input value={sectionForm.color} placeholder="#7C6FFF" className="bg-[#1A1A24] border border-[#252533] text-[#F0EEE8] rounded-full" style={{ fontFamily: "'JSans', sans-serif" }} />
+                    <Label className="text-[var(--text-secondary)] text-[11px] tracking-wider mb-1" style={{ fontFamily: "'JSans', sans-serif" }}>Color (hex)</Label>
+                    <Input value={sectionForm.color} placeholder="#7C6FFF" className="bg-[var(--bg-input)] border border-[var(--border)] text-[var(--text-primary)] rounded-full" style={{ fontFamily: "'JSans', sans-serif" }} />
                   </TextField>
-                  <div className="w-9 h-9 rounded-lg border border-[#252533] shrink-0" style={{ backgroundColor: sectionForm.color || "#8B8B9E" }} />
+                  <div className="w-9 h-9 rounded-lg border border-[var(--border)] shrink-0" style={{ backgroundColor: sectionForm.color || "var(--text-secondary)" }} />
                 </div>
 
                 <TextField className="w-full" name="sort_order" onChange={(val) => updateSectionField("sort_order", val)}>
-                  <Label className="text-[#8B8B9E] text-[11px] tracking-wider mb-1" style={{ fontFamily: "'JSans', sans-serif" }}>Sort Order</Label>
-                  <Input type="number" value={String(sectionForm.sort_order)} placeholder="0" className="bg-[#1A1A24] border border-[#252533] text-[#F0EEE8] rounded-full" style={{ fontFamily: "'JSans', sans-serif" }} />
+                  <Label className="text-[var(--text-secondary)] text-[11px] tracking-wider mb-1" style={{ fontFamily: "'JSans', sans-serif" }}>Sort Order</Label>
+                  <Input type="number" value={String(sectionForm.sort_order)} placeholder="0" className="bg-[var(--bg-input)] border border-[var(--border)] text-[var(--text-primary)] rounded-full" style={{ fontFamily: "'JSans', sans-serif" }} />
                 </TextField>
               </div>
             </Modal.Body>
             <Modal.Footer>
               {/* Actions */}
               <div className="flex items-center justify-end gap-2 mt-2">
-                <Button variant="ghost" className="rounded-full text-[#8B8B9E]" onPress={closeSectionModal} isDisabled={savingSection}>Cancel</Button>
+                <Button variant="ghost" className="rounded-full text-[var(--text-secondary)]" onPress={closeSectionModal} isDisabled={savingSection}>Cancel</Button>
                 <Button className="rounded-full bg-[#7C6FFF] text-white border-none" onPress={handleSaveSection} isPending={savingSection}>{({isPending}) => <>{isPending && <Spinner color="current" size="sm" />}{isPending ? "Saving..." : (editingSection ? "Save Changes" : "Create Section")}</>}</Button>
               </div>
             </Modal.Footer>
@@ -523,10 +523,10 @@ export default function ChecklistAdmin() {
       {/* ---- Item Create / Edit Modal ---- */}
       <Modal.Backdrop variant="opaque" isKeyboardDismissDisabled={false} isOpen={itemModalOpened} onOpenChange={(open) => { if (!open) closeItemModal(); }}>
         <Modal.Container>
-          <Modal.Dialog className="sm:max-w-md" style={{ backgroundColor: "#12121A", border: "1px solid #252533" }}>
+          <Modal.Dialog className="sm:max-w-md" style={{ backgroundColor: "var(--bg-card)", border: "1px solid var(--border)" }}>
             <Modal.CloseTrigger />
-            <Modal.Header style={{ borderBottom: "1px solid #252533" }}>
-              <Modal.Heading style={{ color: "#F0EEE8", fontWeight: 700, fontFamily: "'JSans', sans-serif" }}>{editingItem ? "Edit Item" : "New Item"}</Modal.Heading>
+            <Modal.Header style={{ borderBottom: "1px solid var(--border)" }}>
+              <Modal.Heading style={{ color: "var(--text-primary)", fontWeight: 700, fontFamily: "'JSans', sans-serif" }}>{editingItem ? "Edit Item" : "New Item"}</Modal.Heading>
             </Modal.Header>
             <Modal.Body>
               <div className="flex flex-col gap-4">
@@ -540,20 +540,20 @@ export default function ChecklistAdmin() {
                 )}
 
                 <div>
-                  <label className="text-[#8B8B9E] text-xs font-medium mb-1 block" style={{ fontFamily: "'JSans', sans-serif" }}>Text</label>
-                  <TextArea value={itemForm.text} onChange={(e) => updateItemField("text", e.target.value)} placeholder="Enter checklist item text..." className="w-full bg-[#1A1A24] border border-[#252533] text-[#F0EEE8] rounded-2xl min-h-[80px]" style={{ fontFamily: "'JSans', sans-serif" }} />
+                  <label className="text-[var(--text-secondary)] text-xs font-medium mb-1 block" style={{ fontFamily: "'JSans', sans-serif" }}>Text</label>
+                  <TextArea value={itemForm.text} onChange={(e) => updateItemField("text", e.target.value)} placeholder="Enter checklist item text..." className="w-full bg-[var(--bg-input)] border border-[var(--border)] text-[var(--text-primary)] rounded-2xl min-h-[80px]" style={{ fontFamily: "'JSans', sans-serif" }} />
                 </div>
 
                 <TextField className="w-full" name="sort_order" onChange={(val) => updateItemField("sort_order", val)}>
-                  <Label className="text-[#8B8B9E] text-[11px] tracking-wider mb-1" style={{ fontFamily: "'JSans', sans-serif" }}>Sort Order</Label>
-                  <Input type="number" value={String(itemForm.sort_order)} placeholder="0" className="bg-[#1A1A24] border border-[#252533] text-[#F0EEE8] rounded-full" style={{ fontFamily: "'JSans', sans-serif" }} />
+                  <Label className="text-[var(--text-secondary)] text-[11px] tracking-wider mb-1" style={{ fontFamily: "'JSans', sans-serif" }}>Sort Order</Label>
+                  <Input type="number" value={String(itemForm.sort_order)} placeholder="0" className="bg-[var(--bg-input)] border border-[var(--border)] text-[var(--text-primary)] rounded-full" style={{ fontFamily: "'JSans', sans-serif" }} />
                 </TextField>
               </div>
             </Modal.Body>
             <Modal.Footer>
               {/* Actions */}
               <div className="flex items-center justify-end gap-2 mt-2">
-                <Button variant="ghost" className="rounded-full text-[#8B8B9E]" onPress={closeItemModal} isDisabled={savingItem}>Cancel</Button>
+                <Button variant="ghost" className="rounded-full text-[var(--text-secondary)]" onPress={closeItemModal} isDisabled={savingItem}>Cancel</Button>
                 <Button className="rounded-full bg-[#7C6FFF] text-white border-none" onPress={handleSaveItem} isPending={savingItem}>{({isPending}) => <>{isPending && <Spinner color="current" size="sm" />}{isPending ? "Saving..." : (editingItem ? "Save Changes" : "Create Item")}</>}</Button>
               </div>
             </Modal.Footer>

@@ -24,7 +24,7 @@ const CAT_COLORS = {
   "BMT Tools": "#F472B6",
   "Sources of Finance": "#FB923C",
   "Specimen Exam": "#2DD4BF",
-  "Migrated": "#8B8B9E",
+  "Migrated": "var(--text-secondary)",
 };
 
 function formatTime(ms) {
@@ -41,14 +41,14 @@ function formatTime(ms) {
 function StatCard({ label, value, sub, color = "#7C6FFF" }) {
   return (
     <Surface className="rounded-2xl p-4" style={{ flex: 1, minWidth: 160 }}>
-      <span className="block text-[#55556A] mb-1" style={{ fontSize: 11, fontFamily: "'JSans', sans-serif", letterSpacing: 1 }}>
+      <span className="block text-[var(--text-muted)] mb-1" style={{ fontSize: 11, fontFamily: "'JSans', sans-serif", letterSpacing: 1 }}>
         {label}
       </span>
       <span className="block font-extrabold" style={{ fontSize: 28, color, fontFamily: "'JSans', sans-serif" }}>
         {value}
       </span>
       {sub && (
-        <span className="block text-[#8B8B9E] mt-0.5" style={{ fontSize: 12 }}>
+        <span className="block text-[var(--text-secondary)] mt-0.5" style={{ fontSize: 12 }}>
           {sub}
         </span>
       )}
@@ -82,7 +82,7 @@ export default function DashboardPage() {
   if (authLoading) return null;
 
   return (
-    <div className="min-h-screen" style={{ backgroundColor: "#09090F", fontFamily: "'JSans', sans-serif", color: "#F0EEE8" }}>
+    <div className="min-h-screen" style={{ backgroundColor: "var(--bg-base)", fontFamily: "'JSans', sans-serif", color: "var(--text-primary)" }}>
       <Sidebar activeSubject="dashboard" sidebarOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
 
       {/* Header */}
@@ -103,7 +103,7 @@ export default function DashboardPage() {
               isIconOnly
               variant="outline"
               onPress={() => setSidebarOpen(o => !o)}
-              className="rounded-full bg-transparent text-[#8B8B9E] border-[#252533] min-w-[auto] h-8 px-[10px]"
+              className="rounded-full bg-transparent text-[var(--text-secondary)] border-[var(--border)] min-w-[auto] h-8 px-[10px]"
               style={{
                 position: "absolute",
                 left: 0,
@@ -126,12 +126,12 @@ export default function DashboardPage() {
             <LoginButton />
           </div>
           <span
-            className="text-center block font-extrabold text-[#F0EEE8]"
+            className="text-center block font-extrabold text-[var(--text-primary)]"
             style={{ fontSize: "clamp(22px, 4vw, 30px)", letterSpacing: -0.5 }}
           >
             Your Dashboard
           </span>
-          <span className="text-center block text-xs text-[#55556A] mb-2">
+          <span className="text-center block text-xs text-[var(--text-muted)] mb-2">
             Track your revision progress and performance
           </span>
         </div>
@@ -141,14 +141,14 @@ export default function DashboardPage() {
         {!user ? (
           /* Guest prompt */
           <Surface className="rounded-3xl p-6 text-center">
-            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#55556A" strokeWidth="1.5" strokeLinecap="round" style={{ marginBottom: 16 }}>
+            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="var(--text-muted)" strokeWidth="1.5" strokeLinecap="round" style={{ marginBottom: 16 }}>
               <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
               <circle cx="12" cy="7" r="4"/>
             </svg>
-            <span className="font-bold text-lg text-[#F0EEE8] block mb-1">
+            <span className="font-bold text-lg text-[var(--text-primary)] block mb-1">
               Sign in to view your analytics
             </span>
-            <span className="text-sm text-[#8B8B9E] block mb-4 mx-auto" style={{ maxWidth: 400 }}>
+            <span className="text-sm text-[var(--text-secondary)] block mb-4 mx-auto" style={{ maxWidth: 400 }}>
               Track your accuracy per topic, review wrong answers, and see time spent on each question.
             </span>
             <SignInButton mode="modal">
@@ -162,13 +162,13 @@ export default function DashboardPage() {
             </SignInButton>
           </Surface>
         ) : loading ? (
-          <span className="text-center block text-[#55556A] py-6">Loading your analytics...</span>
+          <span className="text-center block text-[var(--text-muted)] py-6">Loading your analytics...</span>
         ) : attempts.length === 0 ? (
           <Surface className="rounded-3xl p-6 text-center">
-            <span className="font-bold text-lg text-[#F0EEE8] block mb-1">
+            <span className="font-bold text-lg text-[var(--text-primary)] block mb-1">
               No data yet
             </span>
-            <span className="text-sm text-[#8B8B9E] block mb-4">
+            <span className="text-sm text-[var(--text-secondary)] block mb-4">
               Start answering questions on the Revision Hub to see your analytics here.
             </span>
             <a href="/business/checklist" style={{ textDecoration: "none" }}>
@@ -185,7 +185,7 @@ export default function DashboardPage() {
                 label="TOTAL ATTEMPTS"
                 value={overall.totalAttempts}
                 sub={`${overall.mcqTotal} MCQ + ${overall.totalAttempts - overall.mcqTotal} written`}
-                color="#F0EEE8"
+                color="var(--text-primary)"
               />
               <StatCard
                 label="MCQ ACCURACY"
@@ -209,7 +209,7 @@ export default function DashboardPage() {
 
             {/* Category Breakdown */}
             <Surface className="rounded-2xl p-4">
-              <span className="block text-[#55556A] mb-4" style={{ fontSize: 11, fontFamily: "'JSans', sans-serif", letterSpacing: 1 }}>
+              <span className="block text-[var(--text-muted)] mb-4" style={{ fontSize: 11, fontFamily: "'JSans', sans-serif", letterSpacing: 1 }}>
                 PERFORMANCE BY TOPIC
               </span>
               <div className="flex flex-col gap-4">
@@ -223,7 +223,7 @@ export default function DashboardPage() {
                         <div className="flex items-center justify-between mb-1">
                           <div className="flex items-center gap-2">
                             <div style={{ width: 10, height: 10, borderRadius: 3, backgroundColor: color }} />
-                            <span className="text-[#F0EEE8] font-semibold" style={{ fontSize: 13 }}>{cat.category}</span>
+                            <span className="text-[var(--text-primary)] font-semibold" style={{ fontSize: 13 }}>{cat.category}</span>
                           </div>
                           <div className="flex items-center gap-1">
                             {cat.mcqAccuracy != null && (
@@ -236,7 +236,7 @@ export default function DashboardPage() {
                                 Written: {cat.writtenAvg}%
                               </span>
                             )}
-                            <span className="text-[#55556A]" style={{ fontSize: 11, fontFamily: "'JSans', sans-serif" }}>
+                            <span className="text-[var(--text-muted)]" style={{ fontSize: 11, fontFamily: "'JSans', sans-serif" }}>
                               {cat.totalAttempts} attempt{cat.totalAttempts !== 1 ? "s" : ""} · avg {formatTime(cat.avgTimeMs)}
                             </span>
                           </div>
@@ -254,7 +254,7 @@ export default function DashboardPage() {
             {/* Wrong Answers */}
             {wrongAnswers.length > 0 && (
               <Surface className="rounded-2xl p-4">
-                <span className="block text-[#55556A] mb-4" style={{ fontSize: 11, fontFamily: "'JSans', sans-serif", letterSpacing: 1 }}>
+                <span className="block text-[var(--text-muted)] mb-4" style={{ fontSize: 11, fontFamily: "'JSans', sans-serif", letterSpacing: 1 }}>
                   QUESTIONS TO REVIEW ({wrongAnswers.length})
                 </span>
                 <div className="flex flex-col gap-2">
@@ -284,7 +284,7 @@ export default function DashboardPage() {
                           {a.category}
                         </span>
                         {a.timeSpentMs > 0 && (
-                          <span className="text-[#55556A] ml-auto" style={{ fontSize: 10, fontFamily: "'JSans', sans-serif" }}>
+                          <span className="text-[var(--text-muted)] ml-auto" style={{ fontSize: 10, fontFamily: "'JSans', sans-serif" }}>
                             {formatTime(a.timeSpentMs)}
                           </span>
                         )}
@@ -300,7 +300,7 @@ export default function DashboardPage() {
 
             {/* Recent Activity */}
             <Surface className="rounded-2xl p-4">
-              <span className="block text-[#55556A] mb-4" style={{ fontSize: 11, fontFamily: "'JSans', sans-serif", letterSpacing: 1 }}>
+              <span className="block text-[var(--text-muted)] mb-4" style={{ fontSize: 11, fontFamily: "'JSans', sans-serif", letterSpacing: 1 }}>
                 RECENT ACTIVITY
               </span>
               <div className="flex flex-col gap-1">
@@ -311,7 +311,7 @@ export default function DashboardPage() {
                     : a.score != null && a.maxMarks != null && a.score / a.maxMarks >= 0.5;
 
                   return (
-                    <div key={a.id || i} className="flex items-center gap-2 py-1" style={{ borderBottom: "1px solid #1A1A24" }}>
+                    <div key={a.id || i} className="flex items-center gap-2 py-1" style={{ borderBottom: "1px solid var(--bg-input)" }}>
                       <div style={{
                         width: 8, height: 8, borderRadius: "50%",
                         backgroundColor: isGood ? "#34D399" : "#F87171",
@@ -320,16 +320,16 @@ export default function DashboardPage() {
                       <span className="text-xs px-1.5 py-0.5 rounded-full" style={{ backgroundColor: color + "22", color, border: "none", fontFamily: "'JSans', sans-serif", flexShrink: 0 }}>
                         {a.questionType.toUpperCase()}
                       </span>
-                      <span className="text-[#8B8B9E] truncate" style={{ fontSize: 12, flex: 1 }}>
+                      <span className="text-[var(--text-secondary)] truncate" style={{ fontSize: 12, flex: 1 }}>
                         {a.category} — {a.questionId}
                       </span>
-                      <span className="text-[#55556A]" style={{ fontSize: 11, fontFamily: "'JSans', sans-serif", flexShrink: 0 }}>
+                      <span className="text-[var(--text-muted)]" style={{ fontSize: 11, fontFamily: "'JSans', sans-serif", flexShrink: 0 }}>
                         {a.questionType === "mcq"
                           ? (a.isCorrect ? "Correct" : "Wrong")
                           : (a.score != null ? `${a.score}/${a.maxMarks}` : "—")}
                       </span>
                       {a.timeSpentMs > 0 && (
-                        <span className="text-[#55556A]" style={{ fontSize: 10, fontFamily: "'JSans', sans-serif", flexShrink: 0 }}>
+                        <span className="text-[var(--text-muted)]" style={{ fontSize: 10, fontFamily: "'JSans', sans-serif", flexShrink: 0 }}>
                           {formatTime(a.timeSpentMs)}
                         </span>
                       )}

@@ -4,7 +4,7 @@ import LoginButton from "./LoginButton.jsx";
 
 export default function LandingPage() {
   return (
-    <div className="min-h-screen" style={{ backgroundColor: "#09090F", fontFamily: "'JSans', sans-serif", color: "#F0EEE8" }}>
+    <div className="min-h-screen" style={{ backgroundColor: "var(--bg-base)", fontFamily: "'JSans', sans-serif", color: "var(--text-primary)" }}>
       {/* Header */}
       <div
         style={{
@@ -31,12 +31,12 @@ export default function LandingPage() {
       {/* Hero */}
       <div className="max-w-xl mx-auto px-4" style={{ paddingTop: 80, paddingBottom: 80 }}>
         <span
-          className="text-center block font-extrabold text-[#F0EEE8] mb-1"
+          className="text-center block font-extrabold text-[var(--text-primary)] mb-1"
           style={{ fontSize: "clamp(28px, 5vw, 40px)", letterSpacing: -1 }}
         >
           IB Revision Hub
         </span>
-        <span className="text-center block text-base text-[#8B8B9E] mx-auto" style={{ marginBottom: 40, maxWidth: 420 }}>
+        <span className="text-center block text-base text-[var(--text-secondary)] mx-auto" style={{ marginBottom: 40, maxWidth: 420 }}>
           Flashcards, MCQs, written practice with AI grading, and more — built for IB students.
         </span>
 
@@ -58,7 +58,7 @@ export default function LandingPage() {
                 render={(props) => <button {...props} />}
                 size="md"
                 variant="outline"
-                className="rounded-full bg-transparent text-[#A78BFA] border border-[#252533] text-[15px] font-semibold"
+                className="rounded-full bg-transparent text-[#A78BFA] border border-[var(--border)] text-[15px] font-semibold"
                 style={{ fontFamily: "'JSans', sans-serif" }}
               >
                 Sign Up
@@ -75,15 +75,15 @@ export default function LandingPage() {
         <div className="flex gap-4 grow">
           <a
             href="/business/checklist"
-            className="bg-[#12121A] rounded-lg p-6 flex-1"
+            className="bg-[var(--bg-card)] rounded-lg p-6 flex-1"
             style={{
-              border: "1px solid #252533",
+              border: "1px solid var(--border)",
               textDecoration: "none",
               cursor: "pointer",
               transition: "border-color 0.2s, box-shadow 0.2s",
             }}
             onMouseEnter={e => { e.currentTarget.style.borderColor = "#7C6FFF"; e.currentTarget.style.boxShadow = "0 0 20px #7C6FFF22"; }}
-            onMouseLeave={e => { e.currentTarget.style.borderColor = "#252533"; e.currentTarget.style.boxShadow = "none"; }}
+            onMouseLeave={e => { e.currentTarget.style.borderColor = "var(--border)"; e.currentTarget.style.boxShadow = "none"; }}
           >
             <span
               className="text-xs px-1.5 py-0.5 rounded-full mb-2 inline-block"
@@ -91,25 +91,25 @@ export default function LandingPage() {
             >
               HL
             </span>
-            <span className="font-bold text-lg text-[#F0EEE8] block" style={{ marginBottom: 4 }}>
+            <span className="font-bold text-lg text-[var(--text-primary)] block" style={{ marginBottom: 4 }}>
               Business Management
             </span>
-            <span className="text-sm text-[#8B8B9E]" style={{ lineHeight: 1.5 }}>
+            <span className="text-sm text-[var(--text-secondary)]" style={{ lineHeight: 1.5 }}>
               Finance unit — checklist, flashcards, MCQs, written practice & specimen papers
             </span>
           </a>
 
           <a
             href="/history/specimen"
-            className="bg-[#12121A] rounded-lg p-6 flex-1"
+            className="bg-[var(--bg-card)] rounded-lg p-6 flex-1"
             style={{
-              border: "1px solid #252533",
+              border: "1px solid var(--border)",
               textDecoration: "none",
               cursor: "pointer",
               transition: "border-color 0.2s, box-shadow 0.2s",
             }}
             onMouseEnter={e => { e.currentTarget.style.borderColor = "#F87171"; e.currentTarget.style.boxShadow = "0 0 20px #F8717122"; }}
-            onMouseLeave={e => { e.currentTarget.style.borderColor = "#252533"; e.currentTarget.style.boxShadow = "none"; }}
+            onMouseLeave={e => { e.currentTarget.style.borderColor = "var(--border)"; e.currentTarget.style.boxShadow = "none"; }}
           >
             <span
               className="text-xs px-1.5 py-0.5 rounded-full mb-2 inline-block"
@@ -117,10 +117,10 @@ export default function LandingPage() {
             >
               HL / SL
             </span>
-            <span className="font-bold text-lg text-[#F0EEE8] block" style={{ marginBottom: 4 }}>
+            <span className="font-bold text-lg text-[var(--text-primary)] block" style={{ marginBottom: 4 }}>
               History
             </span>
-            <span className="text-sm text-[#8B8B9E]" style={{ lineHeight: 1.5 }}>
+            <span className="text-sm text-[var(--text-secondary)]" style={{ lineHeight: 1.5 }}>
               Paper 2 & Paper 3 specimen questions with AI-powered grading
             </span>
           </a>

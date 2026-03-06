@@ -40,8 +40,8 @@ export default function AdminPage() {
         <div className="max-w-7xl mx-auto px-4 py-6">
           {/* Header */}
           <div className="flex items-center justify-between mb-6">
-            <h1 className="text-xl font-extrabold text-[#F0EEE8]">Admin Panel</h1>
-            <a href="/business/checklist" className="text-sm text-[#8B8B9E] no-underline hover:text-[#F0EEE8]">
+            <h1 className="text-xl font-extrabold text-[var(--text-primary)]">Admin Panel</h1>
+            <a href="/business/checklist" className="text-sm text-[var(--text-secondary)] no-underline hover:text-[var(--text-primary)]">
               Back to App
             </a>
           </div>
@@ -54,16 +54,16 @@ export default function AdminPage() {
             className="mb-4"
           >
             <Tabs.ListContainer>
-              <Tabs.List aria-label="Admin sections" className="bg-[#12121A] border border-[#252533] rounded-lg p-1">
-                <Tabs.Tab id="business" className="font-semibold text-sm font-mono text-[#8B8B9E] data-[selected=true]:text-white rounded-full px-4 py-2">
+              <Tabs.List aria-label="Admin sections" className="bg-[var(--bg-card)] border border-[var(--border)] rounded-lg p-1">
+                <Tabs.Tab id="business" className="font-semibold text-sm font-mono text-[var(--text-secondary)] data-[selected=true]:text-white rounded-full px-4 py-2">
                   Business
                   <Tabs.Indicator className="bg-[#7C6FFF] rounded-full" />
                 </Tabs.Tab>
-                <Tabs.Tab id="history" className="font-semibold text-sm font-mono text-[#8B8B9E] data-[selected=true]:text-white rounded-full px-4 py-2">
+                <Tabs.Tab id="history" className="font-semibold text-sm font-mono text-[var(--text-secondary)] data-[selected=true]:text-white rounded-full px-4 py-2">
                   History
                   <Tabs.Indicator className="bg-[#F87171] rounded-full" />
                 </Tabs.Tab>
-                <Tabs.Tab id="users" className="font-semibold text-sm font-mono text-[#8B8B9E] data-[selected=true]:text-white rounded-full px-4 py-2">
+                <Tabs.Tab id="users" className="font-semibold text-sm font-mono text-[var(--text-secondary)] data-[selected=true]:text-white rounded-full px-4 py-2">
                   Users
                   <Tabs.Indicator className="bg-[#38BDF8] rounded-full" />
                 </Tabs.Tab>
@@ -78,12 +78,12 @@ export default function AdminPage() {
             onSelectionChange={setActiveTab}
           >
             <Tabs.ListContainer>
-              <Tabs.List aria-label="Sub-tabs" className="border-b border-[#252533]">
+              <Tabs.List aria-label="Sub-tabs" className="border-b border-[var(--border)]">
                 {tabs.map((tab) => (
                   <Tabs.Tab
                     key={tab.value}
                     id={tab.value}
-                    className="font-semibold text-sm text-[#8B8B9E] data-[selected=true]:text-[#F0EEE8] px-5 py-2.5 hover:bg-[#12121A] hover:text-[#F0EEE8]"
+                    className="font-semibold text-sm text-[var(--text-secondary)] data-[selected=true]:text-[var(--text-primary)] px-5 py-2.5 hover:bg-[var(--bg-card)] hover:text-[var(--text-primary)]"
                   >
                     {tab.label}
                     <Tabs.Indicator />

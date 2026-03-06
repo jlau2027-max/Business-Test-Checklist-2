@@ -24,21 +24,21 @@ export default function CategorySelect({ value, onChange, categories, label, ...
       onSelectionChange={(key) => onChange(key)}
       {...props}
     >
-      <Label className="text-[#8B8B9E] text-[11px] tracking-wider mb-1" style={{ fontFamily: "'JSans', sans-serif" }}>
+      <Label className="text-[var(--text-secondary)] text-[11px] tracking-wider mb-1" style={{ fontFamily: "'JSans', sans-serif" }}>
         {label || "Category"}
       </Label>
-      <Select.Trigger className="bg-[#1A1A24] border border-[#252533] text-[#F0EEE8] rounded-full" style={{ fontFamily: "'JSans', sans-serif" }}>
+      <Select.Trigger className="bg-[var(--bg-input)] border border-[var(--border)] text-[var(--text-primary)] rounded-full" style={{ fontFamily: "'JSans', sans-serif" }}>
         <Select.Value />
         <Select.Indicator />
       </Select.Trigger>
-      <Select.Popover className="bg-[#1A1A24] border border-[#252533]">
+      <Select.Popover className="bg-[var(--bg-input)] border border-[var(--border)]">
         <ListBox>
           {cats.map((c) => (
             <ListBox.Item
               key={c.value || c.category}
               id={c.value || c.category}
               textValue={c.value || c.category}
-              className="text-[#F0EEE8] text-xs"
+              className="text-[var(--text-primary)] text-xs"
               style={{ fontFamily: "'JSans', sans-serif" }}
             >
               <span className="inline-block w-2 h-2 rounded-full mr-2" style={{ backgroundColor: c.color }} />

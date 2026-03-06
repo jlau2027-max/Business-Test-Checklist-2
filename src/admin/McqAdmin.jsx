@@ -90,7 +90,7 @@ function truncate(str, max = 80) {
   return str.length > max ? str.slice(0, max) + "..." : str;
 }
 function getCategoryColor(category) {
-  return CATEGORY_COLORS[category] || "#8B8B9E";
+  return CATEGORY_COLORS[category] || "var(--text-secondary)";
 }
 // ---------------------------------------------------------------------------
 // McqAdmin Component
@@ -238,7 +238,7 @@ export default function McqAdmin() {
       <div className="flex flex-col gap-6">
         {/* Header */}
         <div className="flex items-center justify-between">
-          <span className="text-xl font-bold text-[#F0EEE8]">
+          <span className="text-xl font-bold text-[var(--text-primary)]">
             MCQ Questions
           </span>
           {canEditContent && (
@@ -252,7 +252,7 @@ export default function McqAdmin() {
             <Alert.Content className="flex-1">
               <Alert.Description>{successMsg}</Alert.Description>
             </Alert.Content>
-            <CloseButton onPress={() => setSuccessMsg(null)} className="text-[#8B8B9E] hover:text-white" />
+            <CloseButton onPress={() => setSuccessMsg(null)} className="text-[var(--text-secondary)] hover:text-white" />
           </Alert>
         )}
         {/* Error alert */}
@@ -262,11 +262,11 @@ export default function McqAdmin() {
             <Alert.Content className="flex-1">
               <Alert.Description>{error}</Alert.Description>
             </Alert.Content>
-            <CloseButton onPress={() => setError(null)} className="text-[#8B8B9E] hover:text-white" />
+            <CloseButton onPress={() => setError(null)} className="text-[var(--text-secondary)] hover:text-white" />
           </Alert>
         )}
         {/* Filters */}
-        <div className="bg-[#12121A] rounded-lg p-4 border border-[#252533]">
+        <div className="bg-[var(--bg-card)] rounded-lg p-4 border border-[var(--border)]">
           <div className="flex flex-wrap items-center gap-4">
             <div className="min-w-[220px]">
               <CategorySelect
@@ -277,14 +277,14 @@ export default function McqAdmin() {
               />
             </div>
             <div className="flex flex-col gap-1">
-              <span className="text-sm font-medium text-[#8B8B9E]">
+              <span className="text-sm font-medium text-[var(--text-secondary)]">
                 Difficulty
               </span>
               <Tabs variant="primary" selectedKey={filterDifficulty} onSelectionChange={setFilterDifficulty}>
                 <Tabs.ListContainer>
-                  <Tabs.List aria-label="Difficulty filter" className="bg-[#1A1A24] rounded-lg p-0.5">
+                  <Tabs.List aria-label="Difficulty filter" className="bg-[var(--bg-input)] rounded-lg p-0.5">
                     {DIFFICULTY_FILTER_OPTIONS.map(opt => (
-                      <Tabs.Tab key={opt.value} id={opt.value} className="text-[#8B8B9E] text-sm px-3.5 py-1.5 data-[selected=true]:text-white rounded-full">
+                      <Tabs.Tab key={opt.value} id={opt.value} className="text-[var(--text-secondary)] text-sm px-3.5 py-1.5 data-[selected=true]:text-white rounded-full">
                         {opt.label}
                         <Tabs.Indicator className="bg-[#7C6FFF] rounded-full" />
                       </Tabs.Tab>
@@ -294,13 +294,13 @@ export default function McqAdmin() {
               </Tabs>
             </div>
             <div className="flex-1" />
-            <span className="text-sm text-[#8B8B9E] self-end">
+            <span className="text-sm text-[var(--text-secondary)] self-end">
               {loading ? "Loading..." : `${questions.length} question${questions.length !== 1 ? "s" : ""}`}
             </span>
           </div>
         </div>
         {/* Questions table */}
-        <div className="bg-[#12121A] rounded-lg border border-[#252533] overflow-hidden">
+        <div className="bg-[var(--bg-card)] rounded-lg border border-[var(--border)] overflow-hidden">
           {loading ? (
             <div className="flex flex-col gap-2 p-4">
               {Array.from({ length: 6 }).map((_, i) => (
@@ -309,7 +309,7 @@ export default function McqAdmin() {
             </div>
           ) : questions.length === 0 ? (
             <div className="flex flex-col items-center gap-2 py-8">
-              <span className="text-sm text-[#8B8B9E]">
+              <span className="text-sm text-[var(--text-secondary)]">
                 No questions found. {canEditContent ? "Click \"Add Question\" to create one." : ""}
               </span>
             </div>
@@ -319,24 +319,24 @@ export default function McqAdmin() {
                 <Table.ScrollContainer>
                   <Table.Content>
                     <Table.Header className="bg-[#0E0E16]">
-                      <Table.Column className="text-[#8B8B9E] text-xs font-semibold uppercase tracking-wider p-3.5" style={{ width: 140 }}>Category</Table.Column>
-                      <Table.Column className="text-[#8B8B9E] text-xs font-semibold uppercase tracking-wider p-3.5" style={{ width: 80 }}>Difficulty</Table.Column>
-                      <Table.Column className="text-[#8B8B9E] text-xs font-semibold uppercase tracking-wider p-3.5">Question</Table.Column>
-                      <Table.Column className="text-[#8B8B9E] text-xs font-semibold uppercase tracking-wider p-3.5" style={{ width: 70 }}>Answer</Table.Column>
+                      <Table.Column className="text-[var(--text-secondary)] text-xs font-semibold uppercase tracking-wider p-3.5" style={{ width: 140 }}>Category</Table.Column>
+                      <Table.Column className="text-[var(--text-secondary)] text-xs font-semibold uppercase tracking-wider p-3.5" style={{ width: 80 }}>Difficulty</Table.Column>
+                      <Table.Column className="text-[var(--text-secondary)] text-xs font-semibold uppercase tracking-wider p-3.5">Question</Table.Column>
+                      <Table.Column className="text-[var(--text-secondary)] text-xs font-semibold uppercase tracking-wider p-3.5" style={{ width: 70 }}>Answer</Table.Column>
                       {(canEditContent || canDeleteContent) && (
-                        <Table.Column className="text-[#8B8B9E] text-xs font-semibold uppercase tracking-wider p-3.5 text-right" style={{ width: 90 }}>Actions</Table.Column>
+                        <Table.Column className="text-[var(--text-secondary)] text-xs font-semibold uppercase tracking-wider p-3.5 text-right" style={{ width: 90 }}>Actions</Table.Column>
                       )}
                     </Table.Header>
                     <Table.Body>
                       {questions.map((q) => (
-                        <Table.Row key={q.id} className="hover:bg-[#16161F] border-b border-[#1E1E2A]">
+                        <Table.Row key={q.id} className="hover:bg-[#16161F] border-b border-[var(--bg-elevated)]">
                           <Table.Cell className="p-3.5 text-sm">
                             <div className="flex items-center gap-1.5 flex-nowrap">
                               <div
                                 className="w-2 h-2 rounded-full shrink-0"
                                 style={{ backgroundColor: getCategoryColor(q.category) }}
                               />
-                              <span className="text-xs text-[#F0EEE8] line-clamp-1">
+                              <span className="text-xs text-[var(--text-primary)] line-clamp-1">
                                 {q.category}
                               </span>
                             </div>
@@ -345,7 +345,7 @@ export default function McqAdmin() {
                             <DifficultyBadge difficulty={q.difficulty} />
                           </Table.Cell>
                           <Table.Cell className="p-3.5 text-sm">
-                            <span className="text-sm text-[#F0EEE8] line-clamp-1">
+                            <span className="text-sm text-[var(--text-primary)] line-clamp-1">
                               {truncate(q.question_text)}
                             </span>
                           </Table.Cell>
@@ -390,10 +390,10 @@ export default function McqAdmin() {
       {/* ---- Create / Edit Modal ---- */}
       <Modal.Backdrop variant="opaque" isKeyboardDismissDisabled={false} isOpen={modalOpened} onOpenChange={(open) => { if (!open) closeModal(); }}>
         <Modal.Container>
-          <Modal.Dialog className="sm:max-w-lg" style={{ backgroundColor: "#12121A", border: "1px solid #252533" }}>
+          <Modal.Dialog className="sm:max-w-lg" style={{ backgroundColor: "var(--bg-card)", border: "1px solid var(--border)" }}>
             <Modal.CloseTrigger />
-            <Modal.Header style={{ borderBottom: "1px solid #252533" }}>
-              <Modal.Heading style={{ color: "#F0EEE8", fontWeight: 700, fontFamily: "'JSans', sans-serif" }}>
+            <Modal.Header style={{ borderBottom: "1px solid var(--border)" }}>
+              <Modal.Heading style={{ color: "var(--text-primary)", fontWeight: 700, fontFamily: "'JSans', sans-serif" }}>
                 {editingQuestion ? "Edit Question" : "New Question"}
               </Modal.Heading>
             </Modal.Header>
@@ -414,14 +414,14 @@ export default function McqAdmin() {
                     onChange={(val) => updateField("category", val)}
                   />
                   <div className="flex flex-col gap-1">
-                    <span className="text-sm font-medium text-[#8B8B9E]">
+                    <span className="text-sm font-medium text-[var(--text-secondary)]">
                       Difficulty
                     </span>
                     <Tabs variant="primary" selectedKey={form.difficulty} onSelectionChange={(val) => updateField("difficulty", val)}>
                       <Tabs.ListContainer>
-                        <Tabs.List aria-label="Difficulty selection" className="bg-[#1A1A24] rounded-lg p-0.5 w-full">
+                        <Tabs.List aria-label="Difficulty selection" className="bg-[var(--bg-input)] rounded-lg p-0.5 w-full">
                           {DIFFICULTY_FORM_OPTIONS.map(opt => (
-                            <Tabs.Tab key={opt.value} id={opt.value} className="text-[#8B8B9E] text-sm px-3.5 py-1.5 data-[selected=true]:text-white rounded-full flex-1 text-center">
+                            <Tabs.Tab key={opt.value} id={opt.value} className="text-[var(--text-secondary)] text-sm px-3.5 py-1.5 data-[selected=true]:text-white rounded-full flex-1 text-center">
                               {opt.label}
                               <Tabs.Indicator className="bg-[#7C6FFF] rounded-full" />
                             </Tabs.Tab>
@@ -433,34 +433,34 @@ export default function McqAdmin() {
                 </div>
                 {/* Question text */}
                 <div>
-                  <label className="text-[#8B8B9E] text-xs font-medium mb-1 block">Question</label>
+                  <label className="text-[var(--text-secondary)] text-xs font-medium mb-1 block">Question</label>
                   <TextArea
                     value={form.question_text}
                     onChange={(e) => updateField("question_text", e.target.value)}
                     placeholder="Enter the question text..."
-                    className="w-full bg-[#1A1A24] border border-[#252533] text-[#F0EEE8] rounded-2xl min-h-[80px]"
+                    className="w-full bg-[var(--bg-input)] border border-[var(--border)] text-[var(--text-primary)] rounded-2xl min-h-[80px]"
                     rows={3}
                   />
                 </div>
                 {/* Options */}
                 <div className="flex flex-col gap-2">
-                  <span className="text-sm font-medium text-[#8B8B9E]">
+                  <span className="text-sm font-medium text-[var(--text-secondary)]">
                     Answer Options
                   </span>
                   {["a", "b", "c", "d"].map((letter, idx) => (
                     <TextField key={letter} className="w-full" name={`option_${letter}`} onChange={(val) => updateField(`option_${letter}`, val)}>
-                      <Label className="text-[#8B8B9E] text-[11px] tracking-wider mb-1" style={{ fontFamily: "'JSans', sans-serif" }}>Option {OPTION_LETTERS[idx]}</Label>
+                      <Label className="text-[var(--text-secondary)] text-[11px] tracking-wider mb-1" style={{ fontFamily: "'JSans', sans-serif" }}>Option {OPTION_LETTERS[idx]}</Label>
                       <Input
                         value={form[`option_${letter}`]}
                         placeholder={`Enter option ${OPTION_LETTERS[idx]}...`}
-                        className="bg-[#1A1A24] border border-[#252533] text-[#F0EEE8] rounded-full"
+                        className="bg-[var(--bg-input)] border border-[var(--border)] text-[var(--text-primary)] rounded-full"
                       />
                     </TextField>
                   ))}
                 </div>
                 {/* Correct answer */}
                 <RadioGroup value={form.correct_option} onChange={(val) => updateField("correct_option", val)} name="correct_option">
-                  <Label className="text-[#8B8B9E] text-xs font-medium">Correct Answer</Label>
+                  <Label className="text-[var(--text-secondary)] text-xs font-medium">Correct Answer</Label>
                   <div className="flex items-center gap-6 mt-2">
                     {OPTION_LETTERS.map((letter, idx) => (
                       <Radio key={idx} value={String(idx)}>
@@ -468,7 +468,7 @@ export default function McqAdmin() {
                           <Radio.Indicator />
                         </Radio.Control>
                         <Radio.Content>
-                          <Label className="text-[#F0EEE8] text-sm">{`${letter}${form[`option_${letter.toLowerCase()}`] ? `: ${truncate(form[`option_${letter.toLowerCase()}`], 30)}` : ""}`}</Label>
+                          <Label className="text-[var(--text-primary)] text-sm">{`${letter}${form[`option_${letter.toLowerCase()}`] ? `: ${truncate(form[`option_${letter.toLowerCase()}`], 30)}` : ""}`}</Label>
                         </Radio.Content>
                       </Radio>
                     ))}
@@ -476,19 +476,19 @@ export default function McqAdmin() {
                 </RadioGroup>
                 {/* Explanation */}
                 <div>
-                  <label className="text-[#8B8B9E] text-xs font-medium mb-1 block">Explanation (shown when incorrect)</label>
+                  <label className="text-[var(--text-secondary)] text-xs font-medium mb-1 block">Explanation (shown when incorrect)</label>
                   <TextArea
                     value={form.explanation}
                     onChange={(e) => updateField("explanation", e.target.value)}
                     placeholder="Explain why the correct answer is right..."
-                    className="w-full bg-[#1A1A24] border border-[#252533] text-[#F0EEE8] rounded-2xl min-h-[60px]"
+                    className="w-full bg-[var(--bg-input)] border border-[var(--border)] text-[var(--text-primary)] rounded-2xl min-h-[60px]"
                     rows={2}
                   />
                 </div>
               </div>
             </Modal.Body>
             <Modal.Footer>
-              <Button variant="ghost" className="rounded-full text-[#8B8B9E]" onPress={closeModal} isDisabled={saving}>Cancel</Button>
+              <Button variant="ghost" className="rounded-full text-[var(--text-secondary)]" onPress={closeModal} isDisabled={saving}>Cancel</Button>
               <Button className="rounded-full bg-[#7C6FFF] text-white border-none" onPress={handleSave} isPending={saving}>{({isPending}) => <>{isPending && <Spinner color="current" size="sm" />}{isPending ? "Saving..." : (editingQuestion ? "Save Changes" : "Create Question")}</>}</Button>
             </Modal.Footer>
           </Modal.Dialog>

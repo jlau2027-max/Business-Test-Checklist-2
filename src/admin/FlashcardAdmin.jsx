@@ -16,8 +16,8 @@ import ConfirmDeleteModal from "./components/ConfirmDeleteModal.jsx";
 // ---------------------------------------------------------------------------
 // Style constants
 // ---------------------------------------------------------------------------
-const TEXT_COLOR = "#F0EEE8";
-const MUTED = "#8B8B9E";
+const TEXT_COLOR = "var(--text-primary)";
+const MUTED = "var(--text-secondary)";
 const DEFAULT_COLOR = "#7C6FFF";
 
 // ---------------------------------------------------------------------------
@@ -48,9 +48,9 @@ function Toast({ message, type, onClose }) {
     >
       <Alert.Indicator />
       <Alert.Content className="flex-1">
-        <Alert.Description className="text-[#F0EEE8]">{message}</Alert.Description>
+        <Alert.Description className="text-[var(--text-primary)]">{message}</Alert.Description>
       </Alert.Content>
-      <CloseButton onPress={onClose} className="text-[#8B8B9E] ml-2 hover:text-white" />
+      <CloseButton onPress={onClose} className="text-[var(--text-secondary)] ml-2 hover:text-white" />
     </Alert>
   );
 }
@@ -111,9 +111,9 @@ function TopicModal({ opened, onClose, topic, onSave }) {
   return (
     <Modal.Backdrop variant="opaque" isKeyboardDismissDisabled={false} isOpen={opened} onOpenChange={(open) => { if (!open) onClose(); }}>
       <Modal.Container>
-        <Modal.Dialog className="sm:max-w-md" style={{ backgroundColor: "#12121A", border: "1px solid #252533" }}>
+        <Modal.Dialog className="sm:max-w-md" style={{ backgroundColor: "var(--bg-card)", border: "1px solid var(--border)" }}>
           <Modal.CloseTrigger />
-          <Modal.Header style={{ borderBottom: "1px solid #252533" }}>
+          <Modal.Header style={{ borderBottom: "1px solid var(--border)" }}>
             <Modal.Heading style={{ color: TEXT_COLOR, fontWeight: 700, fontFamily: "'JSans', sans-serif" }}>
               {isEdit ? "Edit Topic" : "Create Topic"}
             </Modal.Heading>
@@ -125,32 +125,32 @@ function TopicModal({ opened, onClose, topic, onSave }) {
                   <Alert status="danger" className="bg-[#2A1215] border border-[#5C2020]">
                     <Alert.Indicator />
                     <Alert.Content>
-                      <Alert.Description className="text-[#F0EEE8]">{error}</Alert.Description>
+                      <Alert.Description className="text-[var(--text-primary)]">{error}</Alert.Description>
                     </Alert.Content>
                   </Alert>
                 )}
                 <TextField className="w-full" name="label" onChange={(val) => setLabel(val)}>
-                  <Label className="text-[#8B8B9E] text-[11px] tracking-wider mb-1" style={{ fontFamily: "'JSans', sans-serif" }}>Label</Label>
-                  <Input value={label} placeholder="e.g. Ratio Analysis" className="bg-[#1A1A24] border border-[#252533] text-[#F0EEE8] rounded-full" style={{ fontFamily: "'JSans', sans-serif" }} />
+                  <Label className="text-[var(--text-secondary)] text-[11px] tracking-wider mb-1" style={{ fontFamily: "'JSans', sans-serif" }}>Label</Label>
+                  <Input value={label} placeholder="e.g. Ratio Analysis" className="bg-[var(--bg-input)] border border-[var(--border)] text-[var(--text-primary)] rounded-full" style={{ fontFamily: "'JSans', sans-serif" }} />
                 </TextField>
                 <TextField className="w-full" name="id" isReadOnly={isEdit} onChange={(val) => { if (!isEdit) setId(val); }}>
-                  <Label className="text-[#8B8B9E] text-[11px] tracking-wider mb-1" style={{ fontFamily: "'JSans', sans-serif" }}>ID</Label>
+                  <Label className="text-[var(--text-secondary)] text-[11px] tracking-wider mb-1" style={{ fontFamily: "'JSans', sans-serif" }}>ID</Label>
                   <Input
                     value={id}
                     placeholder="Auto-generated from label"
-                    className={`bg-[#1A1A24] border border-[#252533] text-[#F0EEE8] rounded-full ${isEdit ? "opacity-50 cursor-not-allowed" : ""}`}
+                    className={`bg-[var(--bg-input)] border border-[var(--border)] text-[var(--text-primary)] rounded-full ${isEdit ? "opacity-50 cursor-not-allowed" : ""}`}
                     style={{ fontFamily: "'JSans', sans-serif" }}
                   />
                 </TextField>
                 <div className="flex items-end gap-3">
                   <TextField className="flex-1" name="color" onChange={setColor}>
-                    <Label className="text-[#8B8B9E] text-[11px] tracking-wider mb-1" style={{ fontFamily: "'JSans', sans-serif" }}>Color</Label>
-                    <Input value={color} placeholder="#7C6FFF" className="bg-[#1A1A24] border border-[#252533] text-[#F0EEE8] rounded-full" style={{ fontFamily: "'JSans', sans-serif" }} />
+                    <Label className="text-[var(--text-secondary)] text-[11px] tracking-wider mb-1" style={{ fontFamily: "'JSans', sans-serif" }}>Color</Label>
+                    <Input value={color} placeholder="#7C6FFF" className="bg-[var(--bg-input)] border border-[var(--border)] text-[var(--text-primary)] rounded-full" style={{ fontFamily: "'JSans', sans-serif" }} />
                   </TextField>
-                  <div className="w-9 h-9 rounded-lg border border-[#252533] shrink-0" style={{ backgroundColor: color || "#8B8B9E" }} />
+                  <div className="w-9 h-9 rounded-lg border border-[var(--border)] shrink-0" style={{ backgroundColor: color || "var(--text-secondary)" }} />
                 </div>
                 <div className="flex items-center justify-end gap-2 mt-1">
-                  <Button variant="ghost" className="rounded-full text-[#8B8B9E]" onPress={onClose} isDisabled={saving}>
+                  <Button variant="ghost" className="rounded-full text-[var(--text-secondary)]" onPress={onClose} isDisabled={saving}>
                     Cancel
                   </Button>
                   <Button type="submit" className="rounded-full bg-[#7C6FFF] text-white border-none" isPending={saving}>
@@ -225,9 +225,9 @@ function CardModal({ opened, onClose, card, topicId, onSave }) {
   return (
     <Modal.Backdrop variant="opaque" isKeyboardDismissDisabled={false} isOpen={opened} onOpenChange={(open) => { if (!open) onClose(); }}>
       <Modal.Container>
-        <Modal.Dialog className="sm:max-w-lg" style={{ backgroundColor: "#12121A", border: "1px solid #252533" }}>
+        <Modal.Dialog className="sm:max-w-lg" style={{ backgroundColor: "var(--bg-card)", border: "1px solid var(--border)" }}>
           <Modal.CloseTrigger />
-          <Modal.Header style={{ borderBottom: "1px solid #252533" }}>
+          <Modal.Header style={{ borderBottom: "1px solid var(--border)" }}>
             <Modal.Heading style={{ color: TEXT_COLOR, fontWeight: 700, fontFamily: "'JSans', sans-serif" }}>
               {isEdit ? "Edit Card" : "Create Card"}
             </Modal.Heading>
@@ -239,30 +239,30 @@ function CardModal({ opened, onClose, card, topicId, onSave }) {
                   <Alert status="danger" className="bg-[#2A1215] border border-[#5C2020]">
                     <Alert.Indicator />
                     <Alert.Content>
-                      <Alert.Description className="text-[#F0EEE8]">{error}</Alert.Description>
+                      <Alert.Description className="text-[var(--text-primary)]">{error}</Alert.Description>
                     </Alert.Content>
                   </Alert>
                 )}
                 <TextField className="w-full" name="term" onChange={(val) => setTerm(val)}>
-                  <Label className="text-[#8B8B9E] text-[11px] tracking-wider mb-1" style={{ fontFamily: "'JSans', sans-serif" }}>Term</Label>
-                  <Input value={term} placeholder="e.g. Net Present Value" className="bg-[#1A1A24] border border-[#252533] text-[#F0EEE8] rounded-full" style={{ fontFamily: "'JSans', sans-serif" }} />
+                  <Label className="text-[var(--text-secondary)] text-[11px] tracking-wider mb-1" style={{ fontFamily: "'JSans', sans-serif" }}>Term</Label>
+                  <Input value={term} placeholder="e.g. Net Present Value" className="bg-[var(--bg-input)] border border-[var(--border)] text-[var(--text-primary)] rounded-full" style={{ fontFamily: "'JSans', sans-serif" }} />
                 </TextField>
                 <div>
-                  <label className="text-[#8B8B9E] text-xs font-medium mb-1 block" style={{ fontFamily: "'JSans', sans-serif" }}>Definition</label>
+                  <label className="text-[var(--text-secondary)] text-xs font-medium mb-1 block" style={{ fontFamily: "'JSans', sans-serif" }}>Definition</label>
                   <TextArea
                     value={definition}
                     onChange={(e) => setDefinition(e.target.value)}
                     placeholder="Enter the definition..."
-                    className="w-full bg-[#1A1A24] border border-[#252533] text-[#F0EEE8] rounded-2xl min-h-[80px]"
+                    className="w-full bg-[var(--bg-input)] border border-[var(--border)] text-[var(--text-primary)] rounded-2xl min-h-[80px]"
                     rows={3}
                   />
                 </div>
                 <TextField className="w-full" name="formula" onChange={(val) => setFormula(val)}>
-                  <Label className="text-[#8B8B9E] text-[11px] tracking-wider mb-1" style={{ fontFamily: "'JSans', sans-serif" }}>Formula (optional)</Label>
-                  <Input value={formula} placeholder="e.g. NPV = Sum of PV of cash flows - initial investment" className="bg-[#1A1A24] border border-[#252533] text-[#F0EEE8] rounded-full" style={{ fontFamily: "'JSans', sans-serif" }} />
+                  <Label className="text-[var(--text-secondary)] text-[11px] tracking-wider mb-1" style={{ fontFamily: "'JSans', sans-serif" }}>Formula (optional)</Label>
+                  <Input value={formula} placeholder="e.g. NPV = Sum of PV of cash flows - initial investment" className="bg-[var(--bg-input)] border border-[var(--border)] text-[var(--text-primary)] rounded-full" style={{ fontFamily: "'JSans', sans-serif" }} />
                 </TextField>
                 <div className="flex items-center justify-end gap-2 mt-1">
-                  <Button variant="ghost" className="rounded-full text-[#8B8B9E]" onPress={onClose} isDisabled={saving}>
+                  <Button variant="ghost" className="rounded-full text-[var(--text-secondary)]" onPress={onClose} isDisabled={saving}>
                     Cancel
                   </Button>
                   <Button type="submit" className="rounded-full bg-[#7C6FFF] text-white border-none" isPending={saving}>
@@ -316,7 +316,7 @@ function IconPlus() {
 
 function IconCards() {
   return (
-    <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#55556A" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+    <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="var(--text-muted)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
       <rect x="2" y="4" width="20" height="16" rx="2" />
       <line x1="6" y1="9" x2="18" y2="9" />
       <line x1="6" y1="13" x2="14" y2="13" />
@@ -481,12 +481,12 @@ export default function FlashcardAdmin() {
       >
         {/* ---- LEFT PANEL: Topics ---- */}
         <div
-          className="bg-[#12121A] rounded-xl border border-[#252533] flex flex-col"
+          className="bg-[var(--bg-card)] rounded-xl border border-[var(--border)] flex flex-col"
           style={{ width: 320, minWidth: 280, flexShrink: 0 }}
         >
           {/* Header */}
-          <div className="flex items-center justify-between px-4 py-3" style={{ borderBottom: "1px solid #252533" }}>
-            <span className="font-bold text-base text-[#F0EEE8]">
+          <div className="flex items-center justify-between px-4 py-3" style={{ borderBottom: "1px solid var(--border)" }}>
+            <span className="font-bold text-base text-[var(--text-primary)]">
               Topics
             </span>
             {canEditContent && (
@@ -511,7 +511,7 @@ export default function FlashcardAdmin() {
                   <Skeleton key={i} className="h-12 rounded-md mb-1.5" />
                 ))
               ) : topics.length === 0 ? (
-                <span className="text-sm text-[#8B8B9E] text-center py-8">
+                <span className="text-sm text-[var(--text-secondary)] text-center py-8">
                   No topics yet.
                 </span>
               ) : (
@@ -536,11 +536,11 @@ export default function FlashcardAdmin() {
                             }}
                           />
                           <span
-                            className={`text-sm text-[#F0EEE8] truncate min-w-0 ${isSelected ? "font-semibold" : "font-normal"}`}
+                            className={`text-sm text-[var(--text-primary)] truncate min-w-0 ${isSelected ? "font-semibold" : "font-normal"}`}
                           >
                             {topic.label}
                           </span>
-                          <span className="text-xs px-2 py-0.5 rounded-full bg-[#252533] text-[#8B8B9E] shrink-0">
+                          <span className="text-xs px-2 py-0.5 rounded-full bg-[var(--border)] text-[var(--text-secondary)] shrink-0">
                             {topic.card_count ?? 0}
                           </span>
                         </div>
@@ -553,7 +553,7 @@ export default function FlashcardAdmin() {
                                 isIconOnly
                                 size="sm"
                                 variant="ghost"
-                                className="text-[#8B8B9E]"
+                                className="text-[var(--text-secondary)]"
                                 onPress={(e) => {
                                   setEditingTopic(topic);
                                   setTopicModalOpen(true);
@@ -571,7 +571,7 @@ export default function FlashcardAdmin() {
                                 isIconOnly
                                 size="sm"
                                 variant="ghost"
-                                className="text-[#8B8B9E]"
+                                className="text-[var(--text-secondary)]"
                                 onPress={() => {
                                   setDeleteTarget({ type: "topic", item: topic });
                                 }}
@@ -594,12 +594,12 @@ export default function FlashcardAdmin() {
 
         {/* ---- RIGHT PANEL: Cards ---- */}
         <div
-          className="bg-[#12121A] rounded-xl border border-[#252533] flex flex-col flex-1"
+          className="bg-[var(--bg-card)] rounded-xl border border-[var(--border)] flex flex-col flex-1"
           style={{ minWidth: 360 }}
         >
           {/* Header */}
-          <div className="flex items-center justify-between px-4 py-3" style={{ borderBottom: "1px solid #252533" }}>
-            <span className="font-bold text-base text-[#F0EEE8]">
+          <div className="flex items-center justify-between px-4 py-3" style={{ borderBottom: "1px solid var(--border)" }}>
+            <span className="font-bold text-base text-[var(--text-primary)]">
               {selectedTopic ? `${selectedTopic.label} Cards` : "Cards"}
             </span>
             {canEditContent && selectedTopic && (
@@ -622,7 +622,7 @@ export default function FlashcardAdmin() {
               /* Placeholder when no topic is selected */
               <div className="flex flex-col items-center justify-center gap-2 py-20">
                 <IconCards />
-                <span className="text-sm text-[#8B8B9E] text-center">
+                <span className="text-sm text-[var(--text-secondary)] text-center">
                   Select a topic to view its flashcards.
                 </span>
               </div>
@@ -635,7 +635,7 @@ export default function FlashcardAdmin() {
             ) : cards.length === 0 ? (
               <div className="flex flex-col items-center justify-center gap-2 py-20">
                 <IconCards />
-                <span className="text-sm text-[#8B8B9E] text-center">
+                <span className="text-sm text-[var(--text-secondary)] text-center">
                   No cards in this topic yet.
                 </span>
                 {canEditContent && (
@@ -657,19 +657,19 @@ export default function FlashcardAdmin() {
                   <Table.ScrollContainer>
                     <Table.Content>
                       <Table.Header>
-                        <Table.Column className="text-[#8B8B9E] text-[11px] font-semibold uppercase tracking-wider">Term</Table.Column>
-                        <Table.Column className="text-[#8B8B9E] text-[11px] font-semibold uppercase tracking-wider">Definition</Table.Column>
-                        <Table.Column className="text-[#8B8B9E] text-[11px] font-semibold uppercase tracking-wider">Formula</Table.Column>
-                        <Table.Column className="text-[#8B8B9E] text-[11px] font-semibold uppercase tracking-wider text-right" style={{ width: 80 }}>Actions</Table.Column>
+                        <Table.Column className="text-[var(--text-secondary)] text-[11px] font-semibold uppercase tracking-wider">Term</Table.Column>
+                        <Table.Column className="text-[var(--text-secondary)] text-[11px] font-semibold uppercase tracking-wider">Definition</Table.Column>
+                        <Table.Column className="text-[var(--text-secondary)] text-[11px] font-semibold uppercase tracking-wider">Formula</Table.Column>
+                        <Table.Column className="text-[var(--text-secondary)] text-[11px] font-semibold uppercase tracking-wider text-right" style={{ width: 80 }}>Actions</Table.Column>
                       </Table.Header>
                       <Table.Body>
                         {cards.map((card) => (
-                          <Table.Row key={card.id} className="hover:bg-[#16161F] border-b border-[#252533]/15">
-                            <Table.Cell className="text-[#F0EEE8] text-sm font-medium whitespace-nowrap">
+                          <Table.Row key={card.id} className="hover:bg-[#16161F] border-b border-[var(--border)]/15">
+                            <Table.Cell className="text-[var(--text-primary)] text-sm font-medium whitespace-nowrap">
                               {card.term}
                             </Table.Cell>
                             <Table.Cell>
-                              <span className="text-xs text-[#8B8B9E] line-clamp-2">
+                              <span className="text-xs text-[var(--text-secondary)] line-clamp-2">
                                 {truncate(card.definition, 120)}
                               </span>
                             </Table.Cell>
@@ -679,7 +679,7 @@ export default function FlashcardAdmin() {
                                   {truncate(card.formula, 60)}
                                 </span>
                               ) : (
-                                <span className="text-xs text-[#55556A]">--</span>
+                                <span className="text-xs text-[var(--text-muted)]">--</span>
                               )}
                             </Table.Cell>
                             <Table.Cell>
@@ -690,7 +690,7 @@ export default function FlashcardAdmin() {
                                       isIconOnly
                                       size="sm"
                                       variant="ghost"
-                                      className="text-[#8B8B9E]"
+                                      className="text-[var(--text-secondary)]"
                                       onPress={() => {
                                         setEditingCard(card);
                                         setCardModalOpen(true);
@@ -707,7 +707,7 @@ export default function FlashcardAdmin() {
                                       isIconOnly
                                       size="sm"
                                       variant="ghost"
-                                      className="text-[#8B8B9E]"
+                                      className="text-[var(--text-secondary)]"
                                       onPress={() => setDeleteTarget({ type: "card", item: card })}
                                     >
                                       <IconTrash />

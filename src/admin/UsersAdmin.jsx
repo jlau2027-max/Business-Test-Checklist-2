@@ -27,7 +27,7 @@ const CAT_COLORS = {
   "BMT Tools": "#F472B6",
   "Sources of Finance": "#FB923C",
   "Specimen Exam": "#2DD4BF",
-  "Migrated": "#8B8B9E",
+  "Migrated": "var(--text-secondary)",
 };
 
 function formatTime(ms) {
@@ -43,15 +43,15 @@ function formatTime(ms) {
 
 function StatCard({ label, value, sub, color = "#7C6FFF" }) {
   return (
-    <div className="bg-[#12121A] rounded-lg p-6 border border-[#252533] flex-1 min-w-[160px]">
-      <span className="text-[11px] text-[#55556A] tracking-wider block mb-1" style={{ fontFamily: "'JSans', sans-serif" }}>
+    <div className="bg-[var(--bg-card)] rounded-lg p-6 border border-[var(--border)] flex-1 min-w-[160px]">
+      <span className="text-[11px] text-[var(--text-muted)] tracking-wider block mb-1" style={{ fontFamily: "'JSans', sans-serif" }}>
         {label}
       </span>
       <span className="text-[28px] font-extrabold block" style={{ color, fontFamily: "'JSans', sans-serif" }}>
         {value}
       </span>
       {sub && (
-        <span className="text-xs text-[#8B8B9E] block mt-0.5">
+        <span className="text-xs text-[var(--text-secondary)] block mt-0.5">
           {sub}
         </span>
       )}
@@ -74,7 +74,7 @@ function UserDetail({ uid, displayName, onBack }) {
   }, [uid]);
 
   if (loading) {
-    return <span className="block text-center text-[#55556A] py-8">Loading user data...</span>;
+    return <span className="block text-center text-[var(--text-muted)] py-8">Loading user data...</span>;
   }
 
   const overall = computeOverallStats(attempts);
@@ -84,14 +84,14 @@ function UserDetail({ uid, displayName, onBack }) {
   return (
     <div className="flex flex-col gap-8">
       <div className="flex items-center gap-2">
-        <Button variant="outline" onPress={onBack} className="rounded-full border-[#252533] text-[#8B8B9E] bg-transparent min-w-[auto] h-8 px-3 text-xs" style={{ fontFamily: "'JSans', sans-serif" }}>← All Users</Button>
-        <span className="text-lg font-bold text-[#F0EEE8]">{displayName}</span>
+        <Button variant="outline" onPress={onBack} className="rounded-full border-[var(--border)] text-[var(--text-secondary)] bg-transparent min-w-[auto] h-8 px-3 text-xs" style={{ fontFamily: "'JSans', sans-serif" }}>← All Users</Button>
+        <span className="text-lg font-bold text-[var(--text-primary)]">{displayName}</span>
       </div>
 
       {attempts.length === 0 ? (
-        <div className="bg-[#12121A] rounded-lg p-8 border border-[#252533] text-center">
-          <span className="text-lg font-bold text-[#F0EEE8] block mb-1">No data yet</span>
-          <span className="text-sm text-[#8B8B9E]">This user hasn't answered any questions.</span>
+        <div className="bg-[var(--bg-card)] rounded-lg p-8 border border-[var(--border)] text-center">
+          <span className="text-lg font-bold text-[var(--text-primary)] block mb-1">No data yet</span>
+          <span className="text-sm text-[var(--text-secondary)]">This user hasn't answered any questions.</span>
         </div>
       ) : (
         <>
@@ -101,7 +101,7 @@ function UserDetail({ uid, displayName, onBack }) {
               label="TOTAL ATTEMPTS"
               value={overall.totalAttempts}
               sub={`${overall.mcqTotal} MCQ + ${overall.totalAttempts - overall.mcqTotal} written`}
-              color="#F0EEE8"
+              color="var(--text-primary)"
             />
             <StatCard
               label="MCQ ACCURACY"
@@ -124,8 +124,8 @@ function UserDetail({ uid, displayName, onBack }) {
           </div>
 
           {/* Category Breakdown */}
-          <div className="bg-[#12121A] rounded-lg p-6 border border-[#252533]">
-            <span className="text-[11px] text-[#55556A] tracking-wider block mb-4" style={{ fontFamily: "'JSans', sans-serif" }}>
+          <div className="bg-[var(--bg-card)] rounded-lg p-6 border border-[var(--border)]">
+            <span className="text-[11px] text-[var(--text-muted)] tracking-wider block mb-4" style={{ fontFamily: "'JSans', sans-serif" }}>
               PERFORMANCE BY TOPIC
             </span>
             <div className="flex flex-col gap-4">
@@ -139,7 +139,7 @@ function UserDetail({ uid, displayName, onBack }) {
                       <div className="flex items-center justify-between mb-1">
                         <div className="flex items-center gap-2">
                           <div className="w-2.5 h-2.5 rounded-sm" style={{ backgroundColor: color }} />
-                          <span className="text-[13px] text-[#F0EEE8] font-semibold">{cat.category}</span>
+                          <span className="text-[13px] text-[var(--text-primary)] font-semibold">{cat.category}</span>
                         </div>
                         <div className="flex items-center gap-2">
                           {cat.mcqAccuracy != null && (
@@ -152,7 +152,7 @@ function UserDetail({ uid, displayName, onBack }) {
                               Written: {cat.writtenAvg}%
                             </span>
                           )}
-                          <span className="text-[11px] text-[#55556A]" style={{ fontFamily: "'JSans', sans-serif" }}>
+                          <span className="text-[11px] text-[var(--text-muted)]" style={{ fontFamily: "'JSans', sans-serif" }}>
                             {cat.totalAttempts} attempt{cat.totalAttempts !== 1 ? "s" : ""} · avg {formatTime(cat.avgTimeMs)}
                           </span>
                         </div>
@@ -169,13 +169,13 @@ function UserDetail({ uid, displayName, onBack }) {
 
           {/* Wrong Answers */}
           {wrongAnswers.length > 0 && (
-            <div className="bg-[#12121A] rounded-lg p-6 border border-[#252533]">
-              <span className="text-[11px] text-[#55556A] tracking-wider block mb-4" style={{ fontFamily: "'JSans', sans-serif" }}>
+            <div className="bg-[var(--bg-card)] rounded-lg p-6 border border-[var(--border)]">
+              <span className="text-[11px] text-[var(--text-muted)] tracking-wider block mb-4" style={{ fontFamily: "'JSans', sans-serif" }}>
                 QUESTIONS TO REVIEW ({wrongAnswers.length})
               </span>
               <div className="flex flex-col gap-2">
                 {wrongAnswers.slice(0, 20).map((a, i) => (
-                  <div key={a.id || i} className="bg-[#1A1A24] rounded-2xl p-3 border border-[#252533]">
+                  <div key={a.id || i} className="bg-[var(--bg-input)] rounded-2xl p-3 border border-[var(--border)]">
                     <div className="flex items-center gap-2 mb-1 flex-wrap">
                       <span
                         className="text-xs px-1.5 py-0.5 rounded-full"
@@ -206,8 +206,8 @@ function UserDetail({ uid, displayName, onBack }) {
           )}
 
           {/* Recent Activity */}
-          <div className="bg-[#12121A] rounded-lg p-6 border border-[#252533]">
-            <span className="text-[11px] text-[#55556A] tracking-wider block mb-4" style={{ fontFamily: "'JSans', sans-serif" }}>
+          <div className="bg-[var(--bg-card)] rounded-lg p-6 border border-[var(--border)]">
+            <span className="text-[11px] text-[var(--text-muted)] tracking-wider block mb-4" style={{ fontFamily: "'JSans', sans-serif" }}>
               RECENT ACTIVITY
             </span>
             <div className="flex flex-col gap-1">
@@ -218,7 +218,7 @@ function UserDetail({ uid, displayName, onBack }) {
                   : a.score != null && a.maxMarks != null && a.score / a.maxMarks >= 0.5;
 
                 return (
-                  <div key={a.id || i} className="flex items-center gap-2 py-1" style={{ borderBottom: "1px solid #1A1A24" }}>
+                  <div key={a.id || i} className="flex items-center gap-2 py-1" style={{ borderBottom: "1px solid var(--bg-input)" }}>
                     <div
                       className="w-2 h-2 rounded-full shrink-0"
                       style={{ backgroundColor: isGood ? "#34D399" : "#F87171" }}
@@ -229,16 +229,16 @@ function UserDetail({ uid, displayName, onBack }) {
                     >
                       {a.questionType.toUpperCase()}
                     </span>
-                    <span className="text-xs text-[#8B8B9E] flex-1 truncate">
+                    <span className="text-xs text-[var(--text-secondary)] flex-1 truncate">
                       {a.category} — {a.questionId}
                     </span>
-                    <span className="text-[11px] text-[#55556A] shrink-0" style={{ fontFamily: "'JSans', sans-serif" }}>
+                    <span className="text-[11px] text-[var(--text-muted)] shrink-0" style={{ fontFamily: "'JSans', sans-serif" }}>
                       {a.questionType === "mcq"
                         ? (a.isCorrect ? "Correct" : "Wrong")
                         : (a.score != null ? `${a.score}/${a.maxMarks}` : "—")}
                     </span>
                     {a.timeSpentMs > 0 && (
-                      <span className="text-[10px] text-[#55556A] shrink-0" style={{ fontFamily: "'JSans', sans-serif" }}>
+                      <span className="text-[10px] text-[var(--text-muted)] shrink-0" style={{ fontFamily: "'JSans', sans-serif" }}>
                         {formatTime(a.timeSpentMs)}
                       </span>
                     )}
@@ -387,7 +387,7 @@ export default function UsersAdmin() {
   };
 
   if (authLoading || loading) {
-    return <span className="block text-center text-[#55556A] py-8">Loading user data...</span>;
+    return <span className="block text-center text-[var(--text-muted)] py-8">Loading user data...</span>;
   }
 
   if (selectedUser) {
@@ -405,7 +405,7 @@ export default function UsersAdmin() {
       <div className="flex flex-col gap-8">
         {/* Aggregate Stats */}
         <div className="flex flex-wrap gap-4 grow">
-          <StatCard label="TOTAL USERS" value={totalUsers} color="#F0EEE8" />
+          <StatCard label="TOTAL USERS" value={totalUsers} color="var(--text-primary)" />
           <StatCard label="TOTAL ATTEMPTS" value={totalAttempts} color="#7C6FFF" />
           <StatCard
             label="OVERALL MCQ"
@@ -422,27 +422,27 @@ export default function UsersAdmin() {
         </div>
 
         {/* Users Table */}
-        <div className="bg-[#12121A] rounded-lg p-6 border border-[#252533] overflow-auto">
-          <span className="text-[11px] text-[#55556A] tracking-wider block mb-4" style={{ fontFamily: "'JSans', sans-serif" }}>
+        <div className="bg-[var(--bg-card)] rounded-lg p-6 border border-[var(--border)] overflow-auto">
+          <span className="text-[11px] text-[var(--text-muted)] tracking-wider block mb-4" style={{ fontFamily: "'JSans', sans-serif" }}>
             ALL USERS ({totalUsers})
           </span>
           {usersData.length === 0 ? (
-            <span className="block text-center text-[#55556A] py-4">No users found.</span>
+            <span className="block text-center text-[var(--text-muted)] py-4">No users found.</span>
           ) : (
             <Table>
               <Table.ScrollContainer>
                 <Table.Content aria-label="All users" className="min-w-[1100px]" style={{ borderCollapse: "collapse" }}>
                   <Table.Header>
-                    <Table.Column isRowHeader className="text-[#55556A] text-[11px] tracking-wider" style={{ fontFamily: "'JSans', sans-serif", padding: "8px 12px", borderBottom: "1px solid #252533", background: "transparent" }}>NAME</Table.Column>
-                    <Table.Column className="text-[#55556A] text-[11px] tracking-wider" style={{ fontFamily: "'JSans', sans-serif", padding: "8px 12px", borderBottom: "1px solid #252533", background: "transparent" }}>USERNAME</Table.Column>
-                    <Table.Column className="text-[#55556A] text-[11px] tracking-wider" style={{ fontFamily: "'JSans', sans-serif", padding: "8px 12px", borderBottom: "1px solid #252533", background: "transparent" }}>EMAIL</Table.Column>
-                    <Table.Column className="text-[#55556A] text-[11px] tracking-wider" style={{ fontFamily: "'JSans', sans-serif", padding: "8px 12px", borderBottom: "1px solid #252533", background: "transparent" }}>STATUS</Table.Column>
-                    <Table.Column className="text-[#55556A] text-[11px] tracking-wider text-right" style={{ fontFamily: "'JSans', sans-serif", padding: "8px 12px", borderBottom: "1px solid #252533", background: "transparent" }}>ATTEMPTS</Table.Column>
-                    <Table.Column className="text-[#55556A] text-[11px] tracking-wider text-right" style={{ fontFamily: "'JSans', sans-serif", padding: "8px 12px", borderBottom: "1px solid #252533", background: "transparent" }}>MCQ %</Table.Column>
-                    <Table.Column className="text-[#55556A] text-[11px] tracking-wider text-right" style={{ fontFamily: "'JSans', sans-serif", padding: "8px 12px", borderBottom: "1px solid #252533", background: "transparent" }}>WRITTEN %</Table.Column>
-                    <Table.Column className="text-[#55556A] text-[11px] tracking-wider text-right" style={{ fontFamily: "'JSans', sans-serif", padding: "8px 12px", borderBottom: "1px solid #252533", background: "transparent" }}>TIME</Table.Column>
-                    <Table.Column className="text-[#55556A] text-[11px] tracking-wider text-right" style={{ fontFamily: "'JSans', sans-serif", padding: "8px 12px", borderBottom: "1px solid #252533", background: "transparent" }}>LAST ACTIVE</Table.Column>
-                    <Table.Column className="text-[#55556A] text-[11px] tracking-wider" style={{ fontFamily: "'JSans', sans-serif", padding: "8px 12px", borderBottom: "1px solid #252533", background: "transparent" }}>ACTIONS</Table.Column>
+                    <Table.Column isRowHeader className="text-[var(--text-muted)] text-[11px] tracking-wider" style={{ fontFamily: "'JSans', sans-serif", padding: "8px 12px", borderBottom: "1px solid var(--border)", background: "transparent" }}>NAME</Table.Column>
+                    <Table.Column className="text-[var(--text-muted)] text-[11px] tracking-wider" style={{ fontFamily: "'JSans', sans-serif", padding: "8px 12px", borderBottom: "1px solid var(--border)", background: "transparent" }}>USERNAME</Table.Column>
+                    <Table.Column className="text-[var(--text-muted)] text-[11px] tracking-wider" style={{ fontFamily: "'JSans', sans-serif", padding: "8px 12px", borderBottom: "1px solid var(--border)", background: "transparent" }}>EMAIL</Table.Column>
+                    <Table.Column className="text-[var(--text-muted)] text-[11px] tracking-wider" style={{ fontFamily: "'JSans', sans-serif", padding: "8px 12px", borderBottom: "1px solid var(--border)", background: "transparent" }}>STATUS</Table.Column>
+                    <Table.Column className="text-[var(--text-muted)] text-[11px] tracking-wider text-right" style={{ fontFamily: "'JSans', sans-serif", padding: "8px 12px", borderBottom: "1px solid var(--border)", background: "transparent" }}>ATTEMPTS</Table.Column>
+                    <Table.Column className="text-[var(--text-muted)] text-[11px] tracking-wider text-right" style={{ fontFamily: "'JSans', sans-serif", padding: "8px 12px", borderBottom: "1px solid var(--border)", background: "transparent" }}>MCQ %</Table.Column>
+                    <Table.Column className="text-[var(--text-muted)] text-[11px] tracking-wider text-right" style={{ fontFamily: "'JSans', sans-serif", padding: "8px 12px", borderBottom: "1px solid var(--border)", background: "transparent" }}>WRITTEN %</Table.Column>
+                    <Table.Column className="text-[var(--text-muted)] text-[11px] tracking-wider text-right" style={{ fontFamily: "'JSans', sans-serif", padding: "8px 12px", borderBottom: "1px solid var(--border)", background: "transparent" }}>TIME</Table.Column>
+                    <Table.Column className="text-[var(--text-muted)] text-[11px] tracking-wider text-right" style={{ fontFamily: "'JSans', sans-serif", padding: "8px 12px", borderBottom: "1px solid var(--border)", background: "transparent" }}>LAST ACTIVE</Table.Column>
+                    <Table.Column className="text-[var(--text-muted)] text-[11px] tracking-wider" style={{ fontFamily: "'JSans', sans-serif", padding: "8px 12px", borderBottom: "1px solid var(--border)", background: "transparent" }}>ACTIONS</Table.Column>
                   </Table.Header>
                   <Table.Body>
                     {usersData.map((u) => {
@@ -455,18 +455,18 @@ export default function UsersAdmin() {
                         u.accountStatus === "banned" ? "#F87171" :
                         u.accountStatus === "admin_deleted" ? "#F87171" : "#FBBF24";
 
-                      const cellStyle = { padding: "10px 12px", borderBottom: "1px solid #1A1A24", cursor: "pointer" };
+                      const cellStyle = { padding: "10px 12px", borderBottom: "1px solid var(--bg-input)", cursor: "pointer" };
                       const selectUser = () => setSelectedUser(u);
                       return (
-                        <Table.Row key={u.uid} className="hover:bg-[#1A1A24] transition-colors">
+                        <Table.Row key={u.uid} className="hover:bg-[var(--bg-input)] transition-colors">
                           <Table.Cell style={cellStyle} onClick={selectUser}>
-                            <span className="font-semibold text-[#F0EEE8] text-[13px]">{u.displayName || "Student"}</span>
+                            <span className="font-semibold text-[var(--text-primary)] text-[13px]">{u.displayName || "Student"}</span>
                           </Table.Cell>
                           <Table.Cell style={cellStyle} onClick={selectUser}>
-                            <span className="text-[#8B8B9E] text-xs" style={{ fontFamily: "'JSans', sans-serif" }}>{u.username || "---"}</span>
+                            <span className="text-[var(--text-secondary)] text-xs" style={{ fontFamily: "'JSans', sans-serif" }}>{u.username || "---"}</span>
                           </Table.Cell>
                           <Table.Cell style={cellStyle} onClick={selectUser}>
-                            <span className="text-[#8B8B9E] text-xs truncate">{u.email || "—"}</span>
+                            <span className="text-[var(--text-secondary)] text-xs truncate">{u.email || "—"}</span>
                           </Table.Cell>
                           <Table.Cell style={cellStyle} onClick={selectUser}>
                             <span
@@ -488,7 +488,7 @@ export default function UsersAdmin() {
                               style={{
                                 fontFamily: "'JSans', sans-serif",
                                 fontSize: 13,
-                                color: mcqAcc == null ? "#55556A" : mcqAcc >= 75 ? "#34D399" : mcqAcc >= 40 ? "#FBBF24" : "#F87171",
+                                color: mcqAcc == null ? "var(--text-muted)" : mcqAcc >= 75 ? "#34D399" : mcqAcc >= 40 ? "#FBBF24" : "#F87171",
                               }}
                             >
                               {mcqAcc != null ? `${mcqAcc}%` : "—"}
@@ -499,21 +499,21 @@ export default function UsersAdmin() {
                               style={{
                                 fontFamily: "'JSans', sans-serif",
                                 fontSize: 13,
-                                color: writtenAvg == null ? "#55556A" : writtenAvg >= 75 ? "#34D399" : writtenAvg >= 40 ? "#FBBF24" : "#F87171",
+                                color: writtenAvg == null ? "var(--text-muted)" : writtenAvg >= 75 ? "#34D399" : writtenAvg >= 40 ? "#FBBF24" : "#F87171",
                               }}
                             >
                               {writtenAvg != null ? `${writtenAvg}%` : "—"}
                             </span>
                           </Table.Cell>
                           <Table.Cell style={{ ...cellStyle, textAlign: "right" }} onClick={selectUser}>
-                            <span className="text-[#8B8B9E] text-xs" style={{ fontFamily: "'JSans', sans-serif" }}>
+                            <span className="text-[var(--text-secondary)] text-xs" style={{ fontFamily: "'JSans', sans-serif" }}>
                               {formatTime(u.totalTimeMs)}
                             </span>
                           </Table.Cell>
                           <Table.Cell style={{ ...cellStyle, textAlign: "right" }} onClick={selectUser}>
-                            <span className="text-[#8B8B9E] text-xs" style={{ fontFamily: "'JSans', sans-serif" }}>{lastActive}</span>
+                            <span className="text-[var(--text-secondary)] text-xs" style={{ fontFamily: "'JSans', sans-serif" }}>{lastActive}</span>
                           </Table.Cell>
-                          <Table.Cell style={{ padding: "10px 12px", borderBottom: "1px solid #1A1A24" }}>
+                          <Table.Cell style={{ padding: "10px 12px", borderBottom: "1px solid var(--bg-input)" }}>
                             <div className="flex gap-1 flex-nowrap">
                               {canBanUnban(role) && (
                                 <>
@@ -532,7 +532,7 @@ export default function UsersAdmin() {
                                 <Button size="sm" className="rounded-full" onPress={() => openRoleChange(u)} style={{backgroundColor: "#FB923C", color: "#fff", border: "none", fontFamily: "'JSans', sans-serif", fontSize: 10,}}>Role</Button>
                               )}
                               {role === "viewer" && (
-                                <span className="text-[10px] text-[#55556A]" style={{ fontFamily: "'JSans', sans-serif" }}>View only</span>
+                                <span className="text-[10px] text-[var(--text-muted)]" style={{ fontFamily: "'JSans', sans-serif" }}>View only</span>
                               )}
                             </div>
                           </Table.Cell>
@@ -555,32 +555,32 @@ export default function UsersAdmin() {
         onOpenChange={setEditModalOpened}
       >
         <Modal.Container>
-          <Modal.Dialog className="sm:max-w-md" style={{ backgroundColor: "#12121A", border: "1px solid #252533" }}>
+          <Modal.Dialog className="sm:max-w-md" style={{ backgroundColor: "var(--bg-card)", border: "1px solid var(--border)" }}>
             <Modal.CloseTrigger />
-            <Modal.Header style={{ borderBottom: "1px solid #252533" }}>
-              <Modal.Heading style={{ color: "#F0EEE8", fontWeight: 700, fontFamily: "'JSans', sans-serif" }}>
+            <Modal.Header style={{ borderBottom: "1px solid var(--border)" }}>
+              <Modal.Heading style={{ color: "var(--text-primary)", fontWeight: 700, fontFamily: "'JSans', sans-serif" }}>
                 Edit User Profile
               </Modal.Heading>
             </Modal.Header>
             <Modal.Body>
               <div className="flex flex-col gap-4">
                 <TextField className="w-full" name="firstName" onChange={(val) => setEditForm((f) => ({ ...f, firstName: val }))}>
-                  <Label className="text-[#8B8B9E] text-[11px] tracking-wider mb-1" style={{ fontFamily: "'JSans', sans-serif" }}>First Name</Label>
-                  <Input value={editForm.firstName} className="bg-[#1A1A24] border border-[#252533] text-[#F0EEE8] rounded-full" style={{ fontFamily: "'JSans', sans-serif" }} />
+                  <Label className="text-[var(--text-secondary)] text-[11px] tracking-wider mb-1" style={{ fontFamily: "'JSans', sans-serif" }}>First Name</Label>
+                  <Input value={editForm.firstName} className="bg-[var(--bg-input)] border border-[var(--border)] text-[var(--text-primary)] rounded-full" style={{ fontFamily: "'JSans', sans-serif" }} />
                 </TextField>
                 <TextField className="w-full" name="lastName" onChange={(val) => setEditForm((f) => ({ ...f, lastName: val }))}>
-                  <Label className="text-[#8B8B9E] text-[11px] tracking-wider mb-1" style={{ fontFamily: "'JSans', sans-serif" }}>Last Name</Label>
-                  <Input value={editForm.lastName} className="bg-[#1A1A24] border border-[#252533] text-[#F0EEE8] rounded-full" style={{ fontFamily: "'JSans', sans-serif" }} />
+                  <Label className="text-[var(--text-secondary)] text-[11px] tracking-wider mb-1" style={{ fontFamily: "'JSans', sans-serif" }}>Last Name</Label>
+                  <Input value={editForm.lastName} className="bg-[var(--bg-input)] border border-[var(--border)] text-[var(--text-primary)] rounded-full" style={{ fontFamily: "'JSans', sans-serif" }} />
                 </TextField>
                 <TextField className="w-full" name="username" onChange={(val) => setEditForm((f) => ({ ...f, username: val }))}>
-                  <Label className="text-[#8B8B9E] text-[11px] tracking-wider mb-1" style={{ fontFamily: "'JSans', sans-serif" }}>Username</Label>
-                  <Input value={editForm.username} className="bg-[#1A1A24] border border-[#252533] text-[#F0EEE8] rounded-full" style={{ fontFamily: "'JSans', sans-serif" }} />
+                  <Label className="text-[var(--text-secondary)] text-[11px] tracking-wider mb-1" style={{ fontFamily: "'JSans', sans-serif" }}>Username</Label>
+                  <Input value={editForm.username} className="bg-[var(--bg-input)] border border-[var(--border)] text-[var(--text-primary)] rounded-full" style={{ fontFamily: "'JSans', sans-serif" }} />
                 </TextField>
               </div>
             </Modal.Body>
             <Modal.Footer>
-              <Button variant="outline" className="rounded-full border-[#252533] text-[#8B8B9E] bg-transparent" onPress={() => setEditModalOpened(false)} style={{ fontFamily: "'JSans', sans-serif", fontSize: 12 }}>Cancel</Button>
-              <Button className="rounded-full bg-[#7C6FFF] text-[#F0EEE8] border-none" onPress={handleEditSubmit} style={{ fontFamily: "'JSans', sans-serif", fontSize: 12 }}>Save Changes</Button>
+              <Button variant="outline" className="rounded-full border-[var(--border)] text-[var(--text-secondary)] bg-transparent" onPress={() => setEditModalOpened(false)} style={{ fontFamily: "'JSans', sans-serif", fontSize: 12 }}>Cancel</Button>
+              <Button className="rounded-full bg-[#7C6FFF] text-[var(--text-primary)] border-none" onPress={handleEditSubmit} style={{ fontFamily: "'JSans', sans-serif", fontSize: 12 }}>Save Changes</Button>
             </Modal.Footer>
           </Modal.Dialog>
         </Modal.Container>
@@ -594,10 +594,10 @@ export default function UsersAdmin() {
         onOpenChange={setRoleModalOpened}
       >
         <Modal.Container>
-          <Modal.Dialog className="sm:max-w-md" style={{ backgroundColor: "#12121A", border: "1px solid #252533" }}>
+          <Modal.Dialog className="sm:max-w-md" style={{ backgroundColor: "var(--bg-card)", border: "1px solid var(--border)" }}>
             <Modal.CloseTrigger />
-            <Modal.Header style={{ borderBottom: "1px solid #252533" }}>
-              <Modal.Heading style={{ color: "#F0EEE8", fontWeight: 700, fontFamily: "'JSans', sans-serif", fontSize: 14 }}>
+            <Modal.Header style={{ borderBottom: "1px solid var(--border)" }}>
+              <Modal.Heading style={{ color: "var(--text-primary)", fontWeight: 700, fontFamily: "'JSans', sans-serif", fontSize: 14 }}>
                 {`Change Role — ${roleTarget?.displayName || "User"}`}
               </Modal.Heading>
             </Modal.Header>
@@ -608,15 +608,15 @@ export default function UsersAdmin() {
                 value={selectedRole}
                 onChange={(val) => setSelectedRole(val)}
               >
-                <Label className="text-[#8B8B9E] text-[11px] tracking-wider mb-1" style={{ fontFamily: "'JSans', sans-serif" }}>Select Role</Label>
-                <Select.Trigger className="bg-[#1A1A24] border border-[#252533] text-[#F0EEE8] rounded-full" style={{ fontFamily: "'JSans', sans-serif" }}>
+                <Label className="text-[var(--text-secondary)] text-[11px] tracking-wider mb-1" style={{ fontFamily: "'JSans', sans-serif" }}>Select Role</Label>
+                <Select.Trigger className="bg-[var(--bg-input)] border border-[var(--border)] text-[var(--text-primary)] rounded-full" style={{ fontFamily: "'JSans', sans-serif" }}>
                   <Select.Value />
                   <Select.Indicator />
                 </Select.Trigger>
-                <Select.Popover className="bg-[#1A1A24] border border-[#252533]">
+                <Select.Popover className="bg-[var(--bg-input)] border border-[var(--border)]">
                   <ListBox>
                     {ROLE_OPTIONS.map((opt) => (
-                      <ListBox.Item key={opt.value} id={opt.value} textValue={opt.label} className="text-[#F0EEE8] text-xs" style={{ fontFamily: "'JSans', sans-serif" }}>
+                      <ListBox.Item key={opt.value} id={opt.value} textValue={opt.label} className="text-[var(--text-primary)] text-xs" style={{ fontFamily: "'JSans', sans-serif" }}>
                         {opt.label}
                         <ListBox.ItemIndicator />
                       </ListBox.Item>
@@ -626,11 +626,11 @@ export default function UsersAdmin() {
               </Select>
             </Modal.Body>
             <Modal.Footer>
-              <Button variant="outline" className="rounded-full border-[#252533] text-[#8B8B9E] bg-transparent" onPress={() => setRoleModalOpened(false)} style={{ fontFamily: "'JSans', sans-serif", fontSize: 12 }}>Cancel</Button>
+              <Button variant="outline" className="rounded-full border-[var(--border)] text-[var(--text-secondary)] bg-transparent" onPress={() => setRoleModalOpened(false)} style={{ fontFamily: "'JSans', sans-serif", fontSize: 12 }}>Cancel</Button>
               <Button className="rounded-full border-none" onPress={handleRoleSubmit} isDisabled={!selectedRole}
                 style={{
-                  backgroundColor: selectedRole ? "#FB923C" : "#252533",
-                  color: selectedRole ? "#F0EEE8" : "#55556A",
+                  backgroundColor: selectedRole ? "#FB923C" : "var(--border)",
+                  color: selectedRole ? "var(--text-primary)" : "var(--text-muted)",
                   border: "none",
                   fontFamily: "'JSans', sans-serif",
                   fontSize: 12,

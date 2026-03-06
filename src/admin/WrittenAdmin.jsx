@@ -289,13 +289,13 @@ export default function WrittenAdmin() {
         <Tabs.ListContainer>
           <Tabs.List
             aria-label="Question type"
-            className="bg-[#1A1A24] border border-[#252533] rounded-lg p-0.5"
+            className="bg-[var(--bg-input)] border border-[var(--border)] rounded-lg p-0.5"
           >
             {QUESTION_TYPES.map((opt) => (
               <Tabs.Tab
                 key={opt.value}
                 id={opt.value}
-                className="text-[#8B8B9E] text-sm font-medium px-4 py-2 data-[selected=true]:text-white rounded-full"
+                className="text-[var(--text-secondary)] text-sm font-medium px-4 py-2 data-[selected=true]:text-white rounded-full"
               >
                 {opt.label}
                 <Tabs.Indicator className="bg-[#7C6FFF] rounded-full" />
@@ -306,7 +306,7 @@ export default function WrittenAdmin() {
       </Tabs>
 
       {/* ---------- Filter bar ---------- */}
-      <div className="bg-[#12121A] rounded-lg p-4 border border-[#252533]">
+      <div className="bg-[var(--bg-card)] rounded-lg p-4 border border-[var(--border)]">
         <div className="flex flex-wrap items-center justify-between gap-2">
           <div className="flex flex-wrap items-center gap-2">
             <CategorySelect
@@ -323,18 +323,18 @@ export default function WrittenAdmin() {
               selectedKey={filterDifficulty}
               onSelectionChange={setFilterDifficulty}
             >
-              <Select.Trigger className="bg-[#1A1A24] border border-[#252533] text-[#F0EEE8] rounded-full text-sm">
+              <Select.Trigger className="bg-[var(--bg-input)] border border-[var(--border)] text-[var(--text-primary)] rounded-full text-sm">
                 <Select.Value />
                 <Select.Indicator />
               </Select.Trigger>
-              <Select.Popover className="bg-[#1A1A24] border border-[#252533]">
+              <Select.Popover className="bg-[var(--bg-input)] border border-[var(--border)]">
                 <ListBox>
                   {DIFFICULTY_OPTIONS.map((opt) => (
                     <ListBox.Item
                       key={opt.value}
                       id={opt.value}
                       textValue={opt.label}
-                      className="text-[#F0EEE8] text-xs"
+                      className="text-[var(--text-primary)] text-xs"
                     >
                       {opt.label}
                       <ListBox.ItemIndicator />
@@ -367,15 +367,15 @@ export default function WrittenAdmin() {
           <Alert.Content className="flex-1">
             <Alert.Description>{error}</Alert.Description>
           </Alert.Content>
-          <CloseButton onPress={() => setError(null)} className="text-[#8B8B9E] hover:text-white" />
+          <CloseButton onPress={() => setError(null)} className="text-[var(--text-secondary)] hover:text-white" />
         </Alert>
       )}
 
       {/* ---------- Loading state ---------- */}
       {loading && (
-        <div className="bg-[#12121A] rounded-lg p-6 border border-[#252533] text-center">
+        <div className="bg-[var(--bg-card)] rounded-lg p-6 border border-[var(--border)] text-center">
           <Spinner color="current" size="md" />
-          <span className="text-sm text-[#8B8B9E] mt-2 block">
+          <span className="text-sm text-[var(--text-secondary)] mt-2 block">
             Loading questions...
           </span>
         </div>
@@ -383,11 +383,11 @@ export default function WrittenAdmin() {
 
       {/* ---------- Empty state ---------- */}
       {!loading && !error && questions.length === 0 && (
-        <div className="bg-[#12121A] rounded-lg p-6 border border-[#252533] text-center">
-          <span className="text-lg text-[#55556A] font-semibold block">
+        <div className="bg-[var(--bg-card)] rounded-lg p-6 border border-[var(--border)] text-center">
+          <span className="text-lg text-[var(--text-muted)] font-semibold block">
             No questions found
           </span>
-          <span className="text-sm text-[#8B8B9E] mt-1 block">
+          <span className="text-sm text-[var(--text-secondary)] mt-1 block">
             {filterCategory || filterDifficulty
               ? "Try changing the filters."
               : 'Click "Add Question" to create the first one.'}
@@ -397,30 +397,30 @@ export default function WrittenAdmin() {
 
       {/* ---------- Questions table ---------- */}
       {!loading && questions.length > 0 && (
-        <div className="bg-[#12121A] rounded-lg border border-[#252533] overflow-hidden">
+        <div className="bg-[var(--bg-card)] rounded-lg border border-[var(--border)] overflow-hidden">
           <Table className="w-full">
             <Table.ScrollContainer>
               <Table.Content>
                 <Table.Header className="bg-[#0D0D14]">
-                  <Table.Column className="text-[#8B8B9E] text-xs font-semibold uppercase tracking-wider border-b border-[#252533] px-4 py-2">
+                  <Table.Column className="text-[var(--text-secondary)] text-xs font-semibold uppercase tracking-wider border-b border-[var(--border)] px-4 py-2">
                     Category
                   </Table.Column>
-                  <Table.Column className="text-[#8B8B9E] text-xs font-semibold uppercase tracking-wider border-b border-[#252533] px-4 py-2">
+                  <Table.Column className="text-[var(--text-secondary)] text-xs font-semibold uppercase tracking-wider border-b border-[var(--border)] px-4 py-2">
                     Difficulty
                   </Table.Column>
-                  <Table.Column className="text-[#8B8B9E] text-xs font-semibold uppercase tracking-wider border-b border-[#252533] px-4 py-2">
+                  <Table.Column className="text-[var(--text-secondary)] text-xs font-semibold uppercase tracking-wider border-b border-[var(--border)] px-4 py-2">
                     Marks
                   </Table.Column>
                   {activeType === "specimen" && (
-                    <Table.Column className="text-[#8B8B9E] text-xs font-semibold uppercase tracking-wider border-b border-[#252533] px-4 py-2">
+                    <Table.Column className="text-[var(--text-secondary)] text-xs font-semibold uppercase tracking-wider border-b border-[var(--border)] px-4 py-2">
                       Label
                     </Table.Column>
                   )}
-                  <Table.Column className="text-[#8B8B9E] text-xs font-semibold uppercase tracking-wider border-b border-[#252533] px-4 py-2">
+                  <Table.Column className="text-[var(--text-secondary)] text-xs font-semibold uppercase tracking-wider border-b border-[var(--border)] px-4 py-2">
                     Question
                   </Table.Column>
                   {canEditContent && (
-                    <Table.Column className="text-[#8B8B9E] text-xs font-semibold uppercase tracking-wider border-b border-[#252533] px-4 py-2 w-[100px]">
+                    <Table.Column className="text-[var(--text-secondary)] text-xs font-semibold uppercase tracking-wider border-b border-[var(--border)] px-4 py-2 w-[100px]">
                       Actions
                     </Table.Column>
                   )}
@@ -429,7 +429,7 @@ export default function WrittenAdmin() {
                   {questions.map((q) => (
                     <Table.Row
                       key={q.id}
-                      className="hover:bg-[#1A1A2A] border-b border-[#1A1A24]"
+                      className="hover:bg-[#1A1A2A] border-b border-[var(--bg-input)]"
                     >
                       <Table.Cell className="px-4 py-2">
                         <span className="text-xs px-2 py-0.5 rounded-full bg-[#7C6FFF22] text-[#A78BFA]">
@@ -449,7 +449,7 @@ export default function WrittenAdmin() {
                       {activeType === "specimen" && (
                         <Table.Cell className="px-4 py-2">
                           <span
-                            className="text-sm text-[#8B8B9E]"
+                            className="text-sm text-[var(--text-secondary)]"
                             style={{
                               fontFamily: "'JSans', sans-serif",
                             }}
@@ -459,7 +459,7 @@ export default function WrittenAdmin() {
                         </Table.Cell>
                       )}
                       <Table.Cell className="px-4 py-2">
-                        <span className="text-sm text-[#F0EEE8] line-clamp-2">
+                        <span className="text-sm text-[var(--text-primary)] line-clamp-2">
                           {truncate(q.question_text, 120)}
                         </span>
                       </Table.Cell>
@@ -508,9 +508,9 @@ export default function WrittenAdmin() {
 
           <div
             className="px-4 py-2"
-            style={{ borderTop: "1px solid #252533" }}
+            style={{ borderTop: "1px solid var(--border)" }}
           >
-            <span className="text-xs text-[#55556A]">
+            <span className="text-xs text-[var(--text-muted)]">
               {questions.length} question{questions.length !== 1 ? "s" : ""}
             </span>
           </div>
@@ -530,13 +530,13 @@ export default function WrittenAdmin() {
           <Modal.Dialog
             className="sm:max-w-lg"
             style={{
-              backgroundColor: "#12121A",
-              border: "1px solid #252533",
+              backgroundColor: "var(--bg-card)",
+              border: "1px solid var(--border)",
             }}
           >
             <Modal.CloseTrigger />
-            <Modal.Header style={{ borderBottom: "1px solid #252533" }}>
-              <Modal.Heading style={{ color: "#F0EEE8", fontWeight: 700 }}>
+            <Modal.Header style={{ borderBottom: "1px solid var(--border)" }}>
+              <Modal.Heading style={{ color: "var(--text-primary)", fontWeight: 700 }}>
                 {editing ? "Edit Question" : "New Question"}
               </Modal.Heading>
             </Modal.Header>
@@ -544,7 +544,7 @@ export default function WrittenAdmin() {
               <div className="flex flex-col gap-4">
                 {/* Question type */}
                 <div>
-                  <span className="text-sm font-medium text-[#8B8B9E] mb-1 block">
+                  <span className="text-sm font-medium text-[var(--text-secondary)] mb-1 block">
                     Question Type
                   </span>
                   <Tabs
@@ -555,13 +555,13 @@ export default function WrittenAdmin() {
                     <Tabs.ListContainer>
                       <Tabs.List
                         aria-label="Question type selector"
-                        className="bg-[#1A1A24] border border-[#252533] rounded-lg p-0.5 w-full"
+                        className="bg-[var(--bg-input)] border border-[var(--border)] rounded-lg p-0.5 w-full"
                       >
                         {QUESTION_TYPES.map((opt) => (
                           <Tabs.Tab
                             key={opt.value}
                             id={opt.value}
-                            className="text-[#8B8B9E] text-sm font-medium px-4 py-2 data-[selected=true]:text-white rounded-full flex-1 text-center"
+                            className="text-[var(--text-secondary)] text-sm font-medium px-4 py-2 data-[selected=true]:text-white rounded-full flex-1 text-center"
                           >
                             {opt.label}
                             <Tabs.Indicator className="bg-[#7C6FFF] rounded-full" />
@@ -580,7 +580,7 @@ export default function WrittenAdmin() {
 
                 {/* Difficulty */}
                 <div>
-                  <span className="text-sm font-medium text-[#8B8B9E] mb-1 block">
+                  <span className="text-sm font-medium text-[var(--text-secondary)] mb-1 block">
                     Difficulty
                   </span>
                   <Tabs
@@ -591,13 +591,13 @@ export default function WrittenAdmin() {
                     <Tabs.ListContainer>
                       <Tabs.List
                         aria-label="Difficulty selector"
-                        className="bg-[#1A1A24] border border-[#252533] rounded-lg p-0.5 w-full"
+                        className="bg-[var(--bg-input)] border border-[var(--border)] rounded-lg p-0.5 w-full"
                       >
                         {DIFFICULTY_OPTIONS.map((opt) => (
                           <Tabs.Tab
                             key={opt.value}
                             id={opt.value}
-                            className="text-[#8B8B9E] text-sm font-medium px-4 py-2 data-[selected=true]:text-white rounded-full flex-1 text-center"
+                            className="text-[var(--text-secondary)] text-sm font-medium px-4 py-2 data-[selected=true]:text-white rounded-full flex-1 text-center"
                           >
                             {opt.label}
                             <Tabs.Indicator className="bg-[#7C6FFF] rounded-full" />
@@ -618,14 +618,14 @@ export default function WrittenAdmin() {
                     maxValue={30}
                   >
                     <Label
-                      className="text-[#8B8B9E] text-[11px] tracking-wider mb-1"
+                      className="text-[var(--text-secondary)] text-[11px] tracking-wider mb-1"
                       style={{ fontFamily: "'JSans', sans-serif" }}
                     >
                       Marks
                     </Label>
                     <NumberField.Group>
                       <NumberField.DecrementButton />
-                      <NumberField.Input className="bg-[#1A1A24] border border-[#252533] text-[#F0EEE8] rounded-full" />
+                      <NumberField.Input className="bg-[var(--bg-input)] border border-[var(--border)] text-[var(--text-primary)] rounded-full" />
                       <NumberField.IncrementButton />
                     </NumberField.Group>
                   </NumberField>
@@ -635,7 +635,7 @@ export default function WrittenAdmin() {
                     name="label"
                     onChange={(val) => setFormLabel(val)}
                   >
-                    <Label className="text-[#8B8B9E] text-[11px] tracking-wider mb-1">
+                    <Label className="text-[var(--text-secondary)] text-[11px] tracking-wider mb-1">
                       Label
                     </Label>
                     <Input
@@ -645,38 +645,38 @@ export default function WrittenAdmin() {
                           ? 'e.g. "(a)", "(b)(i)"'
                           : "Optional"
                       }
-                      className="bg-[#1A1A24] border border-[#252533] text-[#F0EEE8] rounded-full"
+                      className="bg-[var(--bg-input)] border border-[var(--border)] text-[var(--text-primary)] rounded-full"
                     />
                   </TextField>
                 </div>
 
                 {/* Question text */}
                 <div>
-                  <label className="text-[#8B8B9E] text-xs font-medium mb-1 block">
+                  <label className="text-[var(--text-secondary)] text-xs font-medium mb-1 block">
                     Question
                   </label>
                   <TextArea
                     value={formQuestion}
                     onChange={(e) => setFormQuestion(e.target.value)}
                     placeholder="Enter the question text..."
-                    className="w-full bg-[#1A1A24] border border-[#252533] text-[#F0EEE8] rounded-2xl min-h-[80px]"
+                    className="w-full bg-[var(--bg-input)] border border-[var(--border)] text-[var(--text-primary)] rounded-2xl min-h-[80px]"
                     rows={3}
                   />
                 </div>
 
                 {/* Mark scheme */}
                 <div>
-                  <label className="text-[#8B8B9E] text-xs font-medium mb-1 block">
+                  <label className="text-[var(--text-secondary)] text-xs font-medium mb-1 block">
                     Mark Scheme / Model Answer
                   </label>
                   <TextArea
                     value={formMarkScheme}
                     onChange={(e) => setFormMarkScheme(e.target.value)}
                     placeholder="Enter the mark scheme or model answer..."
-                    className="w-full bg-[#1A1A24] border border-[#252533] text-[#F0EEE8] rounded-2xl min-h-[160px]"
+                    className="w-full bg-[var(--bg-input)] border border-[var(--border)] text-[var(--text-primary)] rounded-2xl min-h-[160px]"
                     rows={6}
                   />
-                  <span className="text-xs text-[#55556A] mt-1 block">
+                  <span className="text-xs text-[var(--text-muted)] mt-1 block">
                     This is sent to the AI marker along with the student's
                     answer. Use [1], [2] notation for mark points.
                   </span>
@@ -700,7 +700,7 @@ export default function WrittenAdmin() {
               <div className="flex items-center justify-end gap-2">
                 <Button
                   variant="ghost"
-                  className="rounded-full text-[#8B8B9E]"
+                  className="rounded-full text-[var(--text-secondary)]"
                   onPress={closeModal}
                   isDisabled={saving}
                 >
