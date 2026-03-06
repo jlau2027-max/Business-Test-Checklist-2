@@ -1,7 +1,6 @@
 import { useState, useEffect, useCallback } from "react";
 import {
   Box,
-  Button,
   Group,
   Paper,
   Text,
@@ -18,6 +17,7 @@ import {
   ScrollArea,
   Table,
 } from "@mantine/core";
+import { Button, Spinner } from "@heroui/react";
 import { useAuth } from "../AuthContext.jsx";
 import {
   fetchFlashcardTopics,
@@ -203,11 +203,16 @@ function TopicModal({ opened, onClose, topic, onSave }) {
             }}
           />
           <Group justify="flex-end" gap="sm" mt="xs">
-            <Button variant="subtle" color="gray" radius="md" onClick={onClose} disabled={saving}>
+            <Button variant="ghost" className="rounded-md text-[#8B8B9E]" onPress={onClose} isDisabled={saving}>
               Cancel
             </Button>
-            <Button type="submit" color="violet" radius="md" loading={saving}>
-              {isEdit ? "Save Changes" : "Create Topic"}
+            <Button type="submit" className="rounded-md bg-[#7C6FFF] text-white border-none" isPending={saving}>
+              {({isPending}) => (
+                <>
+                  {isPending && <Spinner color="current" size="sm" />}
+                  {isPending ? "Saving..." : (isEdit ? "Save Changes" : "Create Topic")}
+                </>
+              )}
             </Button>
           </Group>
         </Stack>
@@ -314,11 +319,16 @@ function CardModal({ opened, onClose, card, topicId, onSave }) {
             styles={inputStyles}
           />
           <Group justify="flex-end" gap="sm" mt="xs">
-            <Button variant="subtle" color="gray" radius="md" onClick={onClose} disabled={saving}>
+            <Button variant="ghost" className="rounded-md text-[#8B8B9E]" onPress={onClose} isDisabled={saving}>
               Cancel
             </Button>
-            <Button type="submit" color="violet" radius="md" loading={saving}>
-              {isEdit ? "Save Changes" : "Create Card"}
+            <Button type="submit" className="rounded-md bg-[#7C6FFF] text-white border-none" isPending={saving}>
+              {({isPending}) => (
+                <>
+                  {isPending && <Spinner color="current" size="sm" />}
+                  {isPending ? "Saving..." : (isEdit ? "Save Changes" : "Create Card")}
+                </>
+              )}
             </Button>
           </Group>
         </Stack>
@@ -550,17 +560,14 @@ export default function FlashcardAdmin() {
             </Text>
             {canEditContent && (
               <Button
-                size="xs"
-                variant="light"
-                color="violet"
-                radius="md"
-                leftSection={<IconPlus />}
-                onClick={() => {
+                size="sm"
+                className="rounded-md bg-[#7C6FFF22] text-[#A78BFA] border-none"
+                onPress={() => {
                   setEditingTopic(null);
                   setTopicModalOpen(true);
                 }}
               >
-                Add Topic
+                <IconPlus /> Add Topic
               </Button>
             )}
           </Group>
@@ -695,17 +702,14 @@ export default function FlashcardAdmin() {
             </Text>
             {canEditContent && selectedTopic && (
               <Button
-                size="xs"
-                variant="light"
-                color="violet"
-                radius="md"
-                leftSection={<IconPlus />}
-                onClick={() => {
+                size="sm"
+                className="rounded-md bg-[#7C6FFF22] text-[#A78BFA] border-none"
+                onPress={() => {
                   setEditingCard(null);
                   setCardModalOpen(true);
                 }}
               >
-                Add Card
+                <IconPlus /> Add Card
               </Button>
             )}
           </Group>
@@ -734,17 +738,14 @@ export default function FlashcardAdmin() {
                 </Text>
                 {canEditContent && (
                   <Button
-                    size="xs"
-                    variant="light"
-                    color="violet"
-                    radius="md"
-                    leftSection={<IconPlus />}
-                    onClick={() => {
+                    size="sm"
+                    className="rounded-md bg-[#7C6FFF22] text-[#A78BFA] border-none"
+                    onPress={() => {
                       setEditingCard(null);
                       setCardModalOpen(true);
                     }}
                   >
-                    Add First Card
+                    <IconPlus /> Add First Card
                   </Button>
                 )}
               </Stack>

@@ -1,4 +1,5 @@
-import { Box, Button, Text } from "@mantine/core";
+import { Box, Text } from "@mantine/core";
+import { Button } from "@heroui/react";
 import { useAuth } from "./AuthContext.jsx";
 
 const SUBJECT_COLORS = {
@@ -53,29 +54,28 @@ export default function Sidebar({ activeSubject, sidebarOpen, onClose }) {
         {items.map(s => {
           const active = activeSubject === s.subject;
           const color = SUBJECT_COLORS[s.subject] || "#7C6FFF";
-          return (
+          const btn = (
             <Button
               key={s.label}
-              component={active ? "button" : "a"}
-              href={active ? undefined : s.href}
-              radius="md"
-              ff="'JetBrains Mono', monospace"
-              fw={600}
-              onClick={onClose}
+              onPress={onClose}
+              className="rounded-md font-semibold text-sm w-full justify-start"
               style={{
                 height: 44,
-                justifyContent: "flex-start",
                 paddingLeft: 14,
-                fontSize: 14,
+                fontFamily: "'JetBrains Mono', monospace",
                 backgroundColor: active ? color : "transparent",
                 color: active ? "#fff" : "#8B8B9E",
                 border: active ? "none" : "1px solid transparent",
                 boxShadow: active ? `0 0 12px ${color}33` : "none",
-                textDecoration: "none",
               }}
             >
               {s.label}
             </Button>
+          );
+          return active ? btn : (
+            <a key={s.label} href={s.href} style={{ textDecoration: "none" }}>
+              {btn}
+            </a>
           );
         })}
 

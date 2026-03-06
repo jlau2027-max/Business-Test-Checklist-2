@@ -1,8 +1,8 @@
 import { useState, useEffect } from "react";
 import {
-  Badge, Text, Group, Paper, Progress,
-  Button, Box, Stack, Table, Modal, TextInput, Select,
+  Badge, Text, Group, Paper, Progress, Box, Stack, Table, Modal, TextInput, Select,
 } from "@mantine/core";
+import { Button } from "@heroui/react";
 import { useDisclosure } from "@mantine/hooks";
 import { useAuth } from "../AuthContext.jsx";
 import {
@@ -87,22 +87,7 @@ function UserDetail({ uid, displayName, onBack }) {
   return (
     <Stack gap="xl">
       <Group gap="sm">
-        <Button
-          onClick={onBack}
-          radius="md"
-          style={{
-            backgroundColor: "transparent",
-            color: "#8B8B9E",
-            border: "1px solid #252533",
-            padding: "4px 12px",
-            minWidth: "auto",
-            height: 32,
-            fontSize: 12,
-            fontFamily: "'JetBrains Mono', monospace",
-          }}
-        >
-          ← All Users
-        </Button>
+        <Button variant="outline" onPress={onBack} className="rounded-md border-[#252533] text-[#8B8B9E] bg-transparent min-w-[auto] h-8 px-3 text-xs" style={{ fontFamily: "'JetBrains Mono', monospace" }}>← All Users</Button>
         <Text fz="lg" fw={700} c="#F0EEE8">{displayName}</Text>
       </Group>
 
@@ -542,98 +527,18 @@ export default function UsersAdmin() {
                           {canBanUnban(role) && (
                             <>
                               {(u.accountStatus || "active") !== "banned" ? (
-                                <Button
-                                  size="compact-xs"
-                                  radius="md"
-                                  onClick={(e) => {
-                                    e.stopPropagation();
-                                    handleBan(u.uid);
-                                  }}
-                                  style={{
-                                    backgroundColor: "#F8717122",
-                                    color: "#F87171",
-                                    border: "none",
-                                    fontFamily: "'JetBrains Mono', monospace",
-                                    fontSize: 10,
-                                  }}
-                                >
-                                  Ban
-                                </Button>
+                                <Button size="sm" className="rounded-md" onPress={(e) => { e.stopPropagation(); handleBan(u.uid); }} style={{backgroundColor: "#F8717122", color: "#F87171", border: "none", fontFamily: "'JetBrains Mono', monospace", fontSize: 10,}}>Ban</Button>
                               ) : (
-                                <Button
-                                  size="compact-xs"
-                                  radius="md"
-                                  onClick={(e) => {
-                                    e.stopPropagation();
-                                    handleUnban(u.uid);
-                                  }}
-                                  style={{
-                                    backgroundColor: "#34D39922",
-                                    color: "#34D399",
-                                    border: "none",
-                                    fontFamily: "'JetBrains Mono', monospace",
-                                    fontSize: 10,
-                                  }}
-                                >
-                                  Unban
-                                </Button>
+                                <Button size="sm" className="rounded-md" onPress={(e) => { e.stopPropagation(); handleUnban(u.uid); }} style={{backgroundColor: "#34D39922", color: "#34D399", border: "none", fontFamily: "'JetBrains Mono', monospace", fontSize: 10,}}>Unban</Button>
                               )}
-                              <Button
-                                size="compact-xs"
-                                radius="md"
-                                onClick={(e) => {
-                                  e.stopPropagation();
-                                  handleForceSignOut(u.uid);
-                                }}
-                                style={{
-                                  backgroundColor: "#FBBF2422",
-                                  color: "#FBBF24",
-                                  border: "none",
-                                  fontFamily: "'JetBrains Mono', monospace",
-                                  fontSize: 10,
-                                }}
-                              >
-                                Sign Out
-                              </Button>
+                              <Button size="sm" className="rounded-md" onPress={(e) => { e.stopPropagation(); handleForceSignOut(u.uid); }} style={{backgroundColor: "#FBBF2422", color: "#FBBF24", border: "none", fontFamily: "'JetBrains Mono', monospace", fontSize: 10,}}>Sign Out</Button>
                             </>
                           )}
                           {canEdit(role) && (
-                            <Button
-                              size="compact-xs"
-                              radius="md"
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                openEditFn(u);
-                              }}
-                              style={{
-                                backgroundColor: "#7C6FFF22",
-                                color: "#7C6FFF",
-                                border: "none",
-                                fontFamily: "'JetBrains Mono', monospace",
-                                fontSize: 10,
-                              }}
-                            >
-                              Edit
-                            </Button>
+                            <Button size="sm" className="rounded-md" onPress={(e) => { e.stopPropagation(); openEditFn(u); }} style={{backgroundColor: "#7C6FFF22", color: "#7C6FFF", border: "none", fontFamily: "'JetBrains Mono', monospace", fontSize: 10,}}>Edit</Button>
                           )}
                           {canChangeRole(role) && (
-                            <Button
-                              size="compact-xs"
-                              radius="md"
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                openRoleChange(u);
-                              }}
-                              style={{
-                                backgroundColor: "#FB923C22",
-                                color: "#FB923C",
-                                border: "none",
-                                fontFamily: "'JetBrains Mono', monospace",
-                                fontSize: 10,
-                              }}
-                            >
-                              Role
-                            </Button>
+                            <Button size="sm" className="rounded-md" onPress={(e) => { e.stopPropagation(); openRoleChange(u); }} style={{backgroundColor: "#FB923C22", color: "#FB923C", border: "none", fontFamily: "'JetBrains Mono', monospace", fontSize: 10,}}>Role</Button>
                           )}
                           {role === "viewer" && (
                             <Text fz={10} c="#55556A" ff="'JetBrains Mono', monospace">View only</Text>
@@ -692,31 +597,8 @@ export default function UsersAdmin() {
             }}
           />
           <Group justify="flex-end" gap="sm" mt="md">
-            <Button
-              radius="md"
-              onClick={closeEditModal}
-              style={{
-                backgroundColor: "transparent",
-                color: "#8B8B9E",
-                border: "1px solid #252533",
-                fontFamily: "'JetBrains Mono', monospace",
-                fontSize: 12,
-              }}
-            >
-              Cancel
-            </Button>
-            <Button
-              radius="md"
-              onClick={handleEditSubmit}
-              style={{
-                backgroundColor: "#7C6FFF",
-                color: "#F0EEE8",
-                border: "none",
-                fontFamily: "'JetBrains Mono', monospace",
-                fontSize: 12,
-              }}
-            >
-              Save Changes
+            <Button variant="outline" className="rounded-md border-[#252533] text-[#8B8B9E] bg-transparent" onPress={closeEditModal} style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 12 }}>Cancel</Button>
+            <Button className="rounded-md bg-[#7C6FFF] text-[#F0EEE8] border-none" onPress={handleEditSubmit} style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 12 }}>Save Changes
             </Button>
           </Group>
         </Stack>
@@ -751,23 +633,8 @@ export default function UsersAdmin() {
             }}
           />
           <Group justify="flex-end" gap="sm" mt="md">
-            <Button
-              radius="md"
-              onClick={closeRoleModal}
-              style={{
-                backgroundColor: "transparent",
-                color: "#8B8B9E",
-                border: "1px solid #252533",
-                fontFamily: "'JetBrains Mono', monospace",
-                fontSize: 12,
-              }}
-            >
-              Cancel
-            </Button>
-            <Button
-              radius="md"
-              onClick={handleRoleSubmit}
-              disabled={!selectedRole}
+            <Button variant="outline" className="rounded-md border-[#252533] text-[#8B8B9E] bg-transparent" onPress={closeRoleModal} style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 12 }}>Cancel</Button>
+            <Button className="rounded-md border-none" onPress={handleRoleSubmit} isDisabled={!selectedRole}
               style={{
                 backgroundColor: selectedRole ? "#FB923C" : "#252533",
                 color: selectedRole ? "#F0EEE8" : "#55556A",

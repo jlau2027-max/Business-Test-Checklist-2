@@ -1,5 +1,6 @@
 import { useState } from 'react';
-import { Paper, Text, Textarea, Button, Progress, Alert, Box } from '@mantine/core';
+import { Paper, Text, Progress, Alert, Box } from '@mantine/core';
+import { Button, TextArea, Spinner } from '@heroui/react';
 
 export default function ShortAnswerQuestion({
   question,
@@ -53,44 +54,36 @@ export default function ShortAnswerQuestion({
     <Paper bg="#12121A" radius="lg" p="lg" style={{ border: '1px solid #252533' }}>
       <Text fw={600} fz="md" c="#F0EEE8" mb="md">{question}</Text>
 
-      <Textarea
+      <TextArea
         value={studentAnswer}
-        onChange={(e) => setStudentAnswer(e.currentTarget.value)}
+        onChange={(e) => setStudentAnswer(e.target.value)}
         placeholder="Type your answer here..."
         disabled={submitted}
-        minRows={5}
-        radius="md"
-        styles={{
-          input: {
-            backgroundColor: '#1A1A24',
-            borderColor: '#252533',
-            color: '#F0EEE8',
-            '&:focus': { borderColor: '#7C6FFF' },
-            '&::placeholder': { color: '#55556A' },
-          },
-        }}
+        rows={5}
+        fullWidth
+        className="rounded-md bg-[#1A1A24] border border-[#252533] text-[#F0EEE8] text-sm leading-relaxed placeholder:text-[#55556A] focus:border-[#7C6FFF] p-3"
+        style={{ fontFamily: "'Inter', sans-serif", resize: "vertical" }}
       />
 
       {!submitted ? (
         <Button
-          onClick={handleSubmitAnswer}
-          disabled={loading || !studentAnswer.trim()}
+          onPress={handleSubmitAnswer}
+          isDisabled={loading || !studentAnswer.trim()}
           fullWidth
-          radius="md"
-          mt="md"
-          loading={loading}
-          loaderProps={{ type: 'dots' }}
-          style={{
-            background: studentAnswer.trim() ? 'linear-gradient(135deg, #7C6FFF, #A78BFA)' : '#1E1E2A',
-            border: 'none',
-            boxShadow: studentAnswer.trim() ? '0 4px 16px #7C6FFF30' : 'none',
-          }}
-          styles={{ root: { '&:disabled': { backgroundColor: '#1E1E2A', color: '#55556A' } } }}
+          isPending={loading}
+          className={`rounded-md mt-4 font-semibold border-none ${
+            studentAnswer.trim()
+              ? 'bg-gradient-to-br from-[#7C6FFF] to-[#A78BFA] text-white shadow-[0_4px_16px_#7C6FFF30]'
+              : 'bg-[#1E1E2A] text-[#55556A] shadow-none'
+          }`}
         >
-          Submit Answer
+          {({isPending}) => <>
+            {isPending && <Spinner color="current" size="sm" />}
+            {isPending ? "Grading..." : "Submit Answer"}
+          </>}
         </Button>
       ) : (
-        <Button variant="subtle" color="gray" mt="md" onClick={reset}>
+        <Button variant="ghost" className="mt-4 text-[#8B8B9E]" onPress={reset}>
           Try Again
         </Button>
       )}

@@ -5,7 +5,6 @@ import {
   Group,
   Stack,
   Text,
-  Button,
   TextInput,
   Textarea,
   Modal,
@@ -20,6 +19,7 @@ import {
   Box,
   ScrollArea,
 } from "@mantine/core";
+import { Button, Spinner } from "@heroui/react";
 // Inline SVG icons (avoids @tabler/icons-react dependency)
 const IconPlus = ({ size = 16 }) => (
   <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round"><path d="M12 5v14M5 12h14" /></svg>
@@ -49,11 +49,9 @@ import {
 import CategorySelect from "./components/CategorySelect.jsx";
 import DifficultyBadge from "./components/DifficultyBadge.jsx";
 import ConfirmDeleteModal from "./components/ConfirmDeleteModal.jsx";
-
 // ---------------------------------------------------------------------------
 // Constants
 // ---------------------------------------------------------------------------
-
 const CATEGORY_COLORS = {
   "Costs & Revenue": "#7C6FFF",
   "Cash Flow": "#38BDF8",
@@ -66,21 +64,17 @@ const CATEGORY_COLORS = {
   "BMT Tools": "#F472B6",
   "Sources of Finance": "#FB923C",
 };
-
 const OPTION_LETTERS = ["A", "B", "C", "D"];
-
 const DIFFICULTY_FILTER_OPTIONS = [
   { value: "all", label: "All" },
   { value: "SL", label: "SL" },
   { value: "HL", label: "HL" },
 ];
-
 const DIFFICULTY_FORM_OPTIONS = [
   { value: "SL", label: "SL" },
   { value: "HL", label: "HL" },
   { value: "SL/HL", label: "SL/HL" },
 ];
-
 const EMPTY_FORM = {
   category: "",
   difficulty: "SL",
@@ -92,17 +86,14 @@ const EMPTY_FORM = {
   correct_option: "0",
   explanation: "",
 };
-
 // ---------------------------------------------------------------------------
 // Styles
 // ---------------------------------------------------------------------------
-
 const modalStyles = {
   header: { backgroundColor: "#12121A", borderBottom: "1px solid #252533" },
   body: { backgroundColor: "#12121A" },
   title: { color: "#F0EEE8", fontWeight: 700 },
 };
-
 const inputStyles = {
   input: {
     backgroundColor: "#1A1A24",
@@ -111,41 +102,32 @@ const inputStyles = {
   },
   label: { color: "#8B8B9E", fontWeight: 500, marginBottom: 4 },
 };
-
 const textareaStyles = {
   ...inputStyles,
   input: { ...inputStyles.input, minHeight: 80 },
 };
-
 // ---------------------------------------------------------------------------
 // Helpers
 // ---------------------------------------------------------------------------
-
 function truncate(str, max = 80) {
   if (!str) return "";
   return str.length > max ? str.slice(0, max) + "..." : str;
 }
-
 function getCategoryColor(category) {
   return CATEGORY_COLORS[category] || "#8B8B9E";
 }
-
 // ---------------------------------------------------------------------------
 // McqAdmin Component
 // ---------------------------------------------------------------------------
-
 export default function McqAdmin() {
   const { canEditContent, canDeleteContent } = useAuth();
-
   // ---- Data state ----
   const [questions, setQuestions] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-
   // ---- Filter state ----
   const [filterCategory, setFilterCategory] = useState(null);
   const [filterDifficulty, setFilterDifficulty] = useState("all");
-
   // ---- Modal state ----
   const [modalOpened, setModalOpened] = useState(false);
   const [editingQuestion, setEditingQuestion] = useState(null);
@@ -153,11 +135,9 @@ export default function McqAdmin() {
   const [saving, setSaving] = useState(false);
   const [formError, setFormError] = useState(null);
   const [successMsg, setSuccessMsg] = useState(null);
-
   // ---- Delete state ----
   const [deleteTarget, setDeleteTarget] = useState(null);
   const [deleting, setDeleting] = useState(false);
-
   // ---- Load questions ----
   const loadQuestions = useCallback(async () => {
     setLoading(true);
@@ -174,30 +154,25 @@ export default function McqAdmin() {
       setLoading(false);
     }
   }, [filterCategory, filterDifficulty]);
-
   useEffect(() => {
     loadQuestions();
   }, [loadQuestions]);
-
   // ---- Clear success message after a delay ----
   useEffect(() => {
     if (!successMsg) return;
     const t = setTimeout(() => setSuccessMsg(null), 3500);
     return () => clearTimeout(t);
   }, [successMsg]);
-
   // ---- Form helpers ----
   function updateField(field, value) {
     setForm((prev) => ({ ...prev, [field]: value }));
   }
-
   function openCreateModal() {
     setEditingQuestion(null);
     setForm(EMPTY_FORM);
     setFormError(null);
     setModalOpened(true);
   }
-
   function openEditModal(question) {
     setEditingQuestion(question);
     setForm({
@@ -214,13 +189,11 @@ export default function McqAdmin() {
     setFormError(null);
     setModalOpened(true);
   }
-
   function closeModal() {
     setModalOpened(false);
     setEditingQuestion(null);
     setFormError(null);
   }
-
   // ---- Validation ----
   function validate() {
     if (!form.category) return "Category is required.";
@@ -231,7 +204,6 @@ export default function McqAdmin() {
     if (!form.option_d.trim()) return "Option D is required.";
     return null;
   }
-
   // ---- Save (create/update) ----
   async function handleSave() {
     const validationError = validate();
@@ -239,7 +211,6 @@ export default function McqAdmin() {
       setFormError(validationError);
       return;
     }
-
     setSaving(true);
     setFormError(null);
     try {
@@ -254,7 +225,6 @@ export default function McqAdmin() {
         correct_option: parseInt(form.correct_option, 10),
         explanation: form.explanation.trim(),
       };
-
       if (editingQuestion) {
         await updateMcqQuestion(editingQuestion.id, payload);
         setSuccessMsg("Question updated successfully.");
@@ -262,7 +232,6 @@ export default function McqAdmin() {
         await createMcqQuestion(payload);
         setSuccessMsg("Question created successfully.");
       }
-
       closeModal();
       await loadQuestions();
     } catch (err) {
@@ -271,7 +240,6 @@ export default function McqAdmin() {
       setSaving(false);
     }
   }
-
   // ---- Delete ----
   async function handleDelete() {
     if (!deleteTarget) return;
@@ -288,7 +256,6 @@ export default function McqAdmin() {
       setDeleting(false);
     }
   }
-
   // ---- Render ----
   return (
     <Container size="lg" py="xl">
@@ -299,17 +266,9 @@ export default function McqAdmin() {
             MCQ Questions
           </Text>
           {canEditContent && (
-            <Button
-              leftSection={<IconPlus size={16} />}
-              color="violet"
-              radius="md"
-              onClick={openCreateModal}
-            >
-              Add Question
-            </Button>
+            <Button className="rounded-md bg-[#7C6FFF] text-white border-none" onPress={openCreateModal}><IconPlus size={16} /> Add Question</Button>
           )}
         </Group>
-
         {/* Success alert */}
         {successMsg && (
           <Alert
@@ -323,7 +282,6 @@ export default function McqAdmin() {
             {successMsg}
           </Alert>
         )}
-
         {/* Error alert */}
         {error && (
           <Alert
@@ -337,7 +295,6 @@ export default function McqAdmin() {
             {error}
           </Alert>
         )}
-
         {/* Filters */}
         <Paper
           bg="#12121A"
@@ -377,7 +334,6 @@ export default function McqAdmin() {
             </Text>
           </Group>
         </Paper>
-
         {/* Questions table */}
         <Paper
           bg="#12121A"
@@ -515,7 +471,6 @@ export default function McqAdmin() {
           )}
         </Paper>
       </Stack>
-
       {/* ---- Create / Edit Modal ---- */}
       <Modal
         opened={modalOpened}
@@ -537,7 +492,6 @@ export default function McqAdmin() {
               {formError}
             </Alert>
           )}
-
           {/* Category & Difficulty */}
           <Group grow gap="md">
             <CategorySelect
@@ -563,7 +517,6 @@ export default function McqAdmin() {
               />
             </Stack>
           </Group>
-
           {/* Question text */}
           <Textarea
             label="Question"
@@ -576,7 +529,6 @@ export default function McqAdmin() {
             radius="md"
             styles={textareaStyles}
           />
-
           {/* Options */}
           <Stack gap="sm">
             <Text fz="sm" fw={500} c="#8B8B9E">
@@ -601,7 +553,6 @@ export default function McqAdmin() {
               />
             ))}
           </Stack>
-
           {/* Correct answer */}
           <Radio.Group
             label="Correct Answer"
@@ -624,7 +575,6 @@ export default function McqAdmin() {
               ))}
             </Group>
           </Radio.Group>
-
           {/* Explanation */}
           <Textarea
             label="Explanation (shown when incorrect)"
@@ -639,30 +589,13 @@ export default function McqAdmin() {
             radius="md"
             styles={textareaStyles}
           />
-
           {/* Actions */}
           <Group justify="flex-end" gap="sm" mt="sm">
-            <Button
-              variant="subtle"
-              color="gray"
-              radius="md"
-              onClick={closeModal}
-              disabled={saving}
-            >
-              Cancel
-            </Button>
-            <Button
-              color="violet"
-              radius="md"
-              onClick={handleSave}
-              loading={saving}
-            >
-              {editingQuestion ? "Save Changes" : "Create Question"}
-            </Button>
+            <Button variant="ghost" className="rounded-md text-[#8B8B9E]" onPress={closeModal} isDisabled={saving}>Cancel</Button>
+            <Button className="rounded-md bg-[#7C6FFF] text-white border-none" onPress={handleSave} isPending={saving}>{({isPending}) => <>{isPending && <Spinner color="current" size="sm" />}{isPending ? "Saving..." : (editingQuestion ? "Save Changes" : "Create Question")}</>}</Button>
           </Group>
         </Stack>
       </Modal>
-
       {/* ---- Delete Confirmation Modal ---- */}
       <ConfirmDeleteModal
         opened={!!deleteTarget}

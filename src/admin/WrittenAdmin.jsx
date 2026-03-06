@@ -3,7 +3,6 @@ import {
   Stack,
   Group,
   Text,
-  Button,
   Paper,
   Badge,
   Table,
@@ -19,6 +18,7 @@ import {
   Tooltip,
   Box,
 } from "@mantine/core";
+import { Button, Spinner } from "@heroui/react";
 import { useAuth } from "../AuthContext.jsx";
 import {
   fetchWrittenQuestions,
@@ -327,18 +327,7 @@ export default function WrittenAdmin() {
           </Group>
 
           {canEditContent && (
-            <Button
-              onClick={openCreate}
-              radius="md"
-              size="sm"
-              style={{
-                background: "linear-gradient(135deg, #7C6FFF, #A78BFA)",
-                border: "none",
-                boxShadow: "0 4px 16px #7C6FFF30",
-              }}
-            >
-              + Add Question
-            </Button>
+            <Button onPress={openCreate} size="sm" className="rounded-md border-none font-semibold bg-gradient-to-br from-[#7C6FFF] to-[#A78BFA] text-white shadow-[0_4px_16px_#7C6FFF30]">+ Add Question</Button>
           )}
         </Group>
       </Paper>
@@ -609,27 +598,8 @@ export default function WrittenAdmin() {
 
           {/* Actions */}
           <Group justify="flex-end" gap="sm" mt="xs">
-            <Button
-              variant="subtle"
-              color="gray"
-              radius="md"
-              onClick={closeModal}
-              disabled={saving}
-            >
-              Cancel
-            </Button>
-            <Button
-              radius="md"
-              loading={saving}
-              onClick={handleSave}
-              style={{
-                background: "linear-gradient(135deg, #7C6FFF, #A78BFA)",
-                border: "none",
-                boxShadow: "0 4px 16px #7C6FFF30",
-              }}
-            >
-              {editing ? "Save Changes" : "Create Question"}
-            </Button>
+            <Button variant="ghost" className="rounded-md text-[#8B8B9E]" onPress={closeModal} isDisabled={saving}>Cancel</Button>
+            <Button className="rounded-md border-none font-semibold bg-gradient-to-br from-[#7C6FFF] to-[#A78BFA] text-white shadow-[0_4px_16px_#7C6FFF30]" onPress={handleSave} isPending={saving}>{({isPending}) => <>{isPending && <Spinner color="current" size="sm" />}{isPending ? "Saving..." : (editing ? "Save Changes" : "Create Question")}</>}</Button>
           </Group>
         </Stack>
       </Modal>
