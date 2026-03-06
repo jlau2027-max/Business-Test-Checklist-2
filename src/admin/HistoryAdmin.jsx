@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from "react";
-import { Button, Spinner, Modal, TextField, Input, Label, TextArea, NumberField, Table, Tabs, Tooltip, Skeleton, Alert } from "@heroui/react";
+import { Button, Spinner, Modal, TextField, Input, Label, TextArea, NumberField, Table, Tabs, Tooltip, Skeleton, Alert, CloseButton } from "@heroui/react";
 // Inline SVG icons (avoids @tabler/icons-react dependency)
 const IconPlus = ({ size = 16 }) => (
   <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round"><path d="M12 5v14M5 12h14" /></svg>
@@ -234,7 +234,7 @@ export default function HistoryAdmin() {
             <Alert.Content className="flex-1">
               <Alert.Description>{successMsg}</Alert.Description>
             </Alert.Content>
-            <button onClick={() => setSuccessMsg(null)} className="text-[#8B8B9E] hover:text-white">&#10005;</button>
+            <CloseButton onPress={() => setSuccessMsg(null)} className="text-[#8B8B9E] hover:text-white" />
           </Alert>
         )}
 
@@ -245,7 +245,7 @@ export default function HistoryAdmin() {
             <Alert.Content className="flex-1">
               <Alert.Description>{error}</Alert.Description>
             </Alert.Content>
-            <button onClick={() => setError(null)} className="text-[#8B8B9E] hover:text-white">&#10005;</button>
+            <CloseButton onPress={() => setError(null)} className="text-[#8B8B9E] hover:text-white" />
           </Alert>
         )}
 

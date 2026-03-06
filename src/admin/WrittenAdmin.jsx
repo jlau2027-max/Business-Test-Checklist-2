@@ -14,6 +14,7 @@ import {
   Tabs,
   Tooltip,
   Alert,
+  CloseButton,
 } from "@heroui/react";
 import { useAuth } from "../AuthContext.jsx";
 import {
@@ -366,12 +367,7 @@ export default function WrittenAdmin() {
           <Alert.Content className="flex-1">
             <Alert.Description>{error}</Alert.Description>
           </Alert.Content>
-          <button
-            onClick={() => setError(null)}
-            className="text-[#8B8B9E] hover:text-white"
-          >
-            ✕
-          </button>
+          <CloseButton onPress={() => setError(null)} className="text-[#8B8B9E] hover:text-white" />
         </Alert>
       )}
 

@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Button, TextArea, Spinner } from "@heroui/react";
+import { Button, TextArea, Spinner, Skeleton } from "@heroui/react";
 import { fetchWrittenQuestions } from "./api/contentApi.js";
 import LoginButton from "./LoginButton.jsx";
 import Sidebar from "./Sidebar.jsx";
@@ -479,12 +479,12 @@ Recently, NHD has been considering investing in new automated bottling machines 
               ? Array.from({ length: 6 }).map((_, i) => (
                   <div key={i} className="bg-[#12121A] rounded-lg p-4 mb-3" style={{ border: "1px solid #252533" }}>
                     <div className="flex items-center gap-2 mb-2">
-                      <div className="h-6 w-[50px] rounded-md bg-[#252533] animate-pulse" />
-                      <div className="h-5 w-[70px] rounded-md bg-[#252533] animate-pulse" />
+                      <Skeleton className="h-6 w-[50px] rounded-md" />
+                      <Skeleton className="h-5 w-[70px] rounded-md" />
                     </div>
-                    <div className="h-4 rounded-sm bg-[#252533] animate-pulse mb-1" />
-                    <div className="h-4 rounded-sm bg-[#252533] animate-pulse mb-4" style={{ width: "80%" }} />
-                    <div className="h-[120px] rounded-md bg-[#252533] animate-pulse" />
+                    <Skeleton className="h-4 rounded-sm mb-1" />
+                    <Skeleton className="h-4 rounded-sm mb-4 w-[80%]" />
+                    <Skeleton className="h-[120px] rounded-md" />
                   </div>
                 ))
               : SPECIMEN_QUESTIONS.map((q) => (

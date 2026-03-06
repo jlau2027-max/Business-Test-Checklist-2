@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from "react";
-import { Button, Spinner, Modal, TextField, Input, Label, TextArea, Tooltip, Skeleton, Alert } from "@heroui/react";
+import { Button, Spinner, Modal, TextField, Input, Label, TextArea, Tooltip, Skeleton, Alert, CloseButton, Disclosure } from "@heroui/react";
 // Inline SVG icons (avoids @tabler/icons-react dependency)
 const IconPlus = ({ size = 16 }) => (
   <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round"><path d="M12 5v14M5 12h14" /></svg>
@@ -325,7 +325,7 @@ export default function ChecklistAdmin() {
             <Alert.Content className="flex-1">
               <Alert.Description>{successMsg}</Alert.Description>
             </Alert.Content>
-            <button onClick={() => setSuccessMsg(null)} className="text-[#8B8B9E] ml-2">&#10005;</button>
+            <CloseButton onPress={() => setSuccessMsg(null)} className="text-[#8B8B9E] ml-2" />
           </Alert>
         )}
 
@@ -336,7 +336,7 @@ export default function ChecklistAdmin() {
             <Alert.Content className="flex-1">
               <Alert.Description>{error}</Alert.Description>
             </Alert.Content>
-            <button onClick={() => setError(null)} className="text-[#8B8B9E] ml-2">&#10005;</button>
+            <CloseButton onPress={() => setError(null)} className="text-[#8B8B9E] ml-2" />
           </Alert>
         )}
 
@@ -365,57 +365,56 @@ export default function ChecklistAdmin() {
               const items = section.items || [];
 
               return (
-                <div
+                <Disclosure
                   key={section.id}
+                  isExpanded={isExpanded}
+                  onExpandedChange={() => toggleSection(section.id)}
                   className="bg-[#12121A] rounded-lg border border-[#252533] overflow-hidden"
                 >
                   {/* Section header row */}
-                  <button
-                    onClick={() => toggleSection(section.id)}
-                    className="flex items-center w-full px-4 py-3 gap-3 bg-transparent border-none cursor-pointer text-left"
-                  >
-                    {isExpanded ? (
-                      <IconChevronDown size={16} color="#8B8B9E" />
-                    ) : (
-                      <IconChevronRight size={16} color="#8B8B9E" />
-                    )}
-                    <div
-                      className="w-2.5 h-2.5 rounded-full shrink-0"
-                      style={{ backgroundColor: section.color || "#8B8B9E" }}
-                    />
-                    <span className="text-sm font-semibold text-[#F0EEE8] flex-1">
-                      {section.title}
-                    </span>
-                    <span className="text-xs px-2 py-0.5 rounded bg-[#252533] text-[#8B8B9E]">
-                      {items.length} item{items.length !== 1 ? "s" : ""}
-                    </span>
-                    {(canEditContent || canDeleteContent) && (
-                      <div className="flex items-center gap-1">
-                        {canEditContent && (
-                          <Tooltip delay={0}>
-                            <Button isIconOnly size="sm" variant="ghost" className="text-[#A78BFA]" onPress={(e) => { e.stopPropagation?.(); openEditSectionModal(section); }}>
-                              <IconPencil size={15} />
-                            </Button>
-                            <Tooltip.Content><p>Edit Section</p></Tooltip.Content>
-                          </Tooltip>
-                        )}
-                        {canDeleteContent && (
-                          <Tooltip delay={0}>
-                            <Button isIconOnly size="sm" variant="ghost" className="text-red-400" onPress={(e) => { e.stopPropagation?.(); openDeleteSection(section); }}>
-                              <IconTrash size={15} />
-                            </Button>
-                            <Tooltip.Content><p>Delete Section</p></Tooltip.Content>
-                          </Tooltip>
-                        )}
-                      </div>
-                    )}
-                  </button>
+                  <Disclosure.Heading>
+                    <Disclosure.Trigger className="flex items-center w-full px-4 py-3 gap-3 bg-transparent border-none cursor-pointer text-left">
+                      {isExpanded ? (
+                        <IconChevronDown size={16} color="#8B8B9E" />
+                      ) : (
+                        <IconChevronRight size={16} color="#8B8B9E" />
+                      )}
+                      <div
+                        className="w-2.5 h-2.5 rounded-full shrink-0"
+                        style={{ backgroundColor: section.color || "#8B8B9E" }}
+                      />
+                      <span className="text-sm font-semibold text-[#F0EEE8] flex-1">
+                        {section.title}
+                      </span>
+                      <span className="text-xs px-2 py-0.5 rounded bg-[#252533] text-[#8B8B9E]">
+                        {items.length} item{items.length !== 1 ? "s" : ""}
+                      </span>
+                      {(canEditContent || canDeleteContent) && (
+                        <div className="flex items-center gap-1" onClick={(e) => e.stopPropagation()}>
+                          {canEditContent && (
+                            <Tooltip delay={0}>
+                              <Button isIconOnly size="sm" variant="ghost" className="text-[#A78BFA]" onPress={() => openEditSectionModal(section)}>
+                                <IconPencil size={15} />
+                              </Button>
+                              <Tooltip.Content><p>Edit Section</p></Tooltip.Content>
+                            </Tooltip>
+                          )}
+                          {canDeleteContent && (
+                            <Tooltip delay={0}>
+                              <Button isIconOnly size="sm" variant="ghost" className="text-red-400" onPress={() => openDeleteSection(section)}>
+                                <IconTrash size={15} />
+                              </Button>
+                              <Tooltip.Content><p>Delete Section</p></Tooltip.Content>
+                            </Tooltip>
+                          )}
+                        </div>
+                      )}
+                    </Disclosure.Trigger>
+                  </Disclosure.Heading>
 
                   {/* Expanded items */}
-                  {isExpanded && (
-                    <div
-                      className="border-t border-[#252533] bg-[#0E0E16]"
-                    >
+                  <Disclosure.Content>
+                    <Disclosure.Body className="border-t border-[#252533] bg-[#0E0E16]">
                       {items.length === 0 ? (
                         <span className="text-sm text-[#8B8B9E] p-4 block text-center">
                           No items in this section.
@@ -463,9 +462,9 @@ export default function ChecklistAdmin() {
                           <Button size="sm" className="rounded-md bg-[#7C6FFF22] text-[#A78BFA] border-none" onPress={() => openCreateItemModal(section.id)}><IconPlus size={14} /> Add Item</Button>
                         </div>
                       )}
-                    </div>
-                  )}
-                </div>
+                    </Disclosure.Body>
+                  </Disclosure.Content>
+                </Disclosure>
               );
             })}
           </div>

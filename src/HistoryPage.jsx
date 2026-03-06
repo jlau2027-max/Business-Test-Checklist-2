@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Button, TextArea, Spinner } from "@heroui/react";
+import { Button, TextArea, Spinner, Skeleton } from "@heroui/react";
 import { fetchHistoryQuestions } from "./api/contentApi.js";
 import LoginButton from "./LoginButton.jsx";
 import Sidebar from "./Sidebar.jsx";
@@ -1099,17 +1099,17 @@ export default function HistoryPage() {
           {loading
             ? Array.from({ length: 4 }).map((_, i) => (
                 <div key={i} className="mb-6">
-                  <div className="h-3.5 w-[200px] rounded-sm bg-[#252533] animate-pulse mb-4" />
+                  <Skeleton className="h-3.5 w-[200px] rounded-sm mb-4" />
                   <div className="flex flex-col gap-4">
                     {Array.from({ length: 2 }).map((_, j) => (
                       <div key={j} className="bg-[#12121A] rounded-lg p-4 mb-3" style={{ border: "1px solid #252533" }}>
                         <div className="flex items-center gap-2 mb-2">
-                          <div className="h-6 w-[40px] rounded-md bg-[#252533] animate-pulse" />
-                          <div className="h-5 w-[70px] rounded-md bg-[#252533] animate-pulse" />
+                          <Skeleton className="h-6 w-[40px] rounded-md" />
+                          <Skeleton className="h-5 w-[70px] rounded-md" />
                         </div>
-                        <div className="h-4 rounded-sm bg-[#252533] animate-pulse mb-1" />
-                        <div className="h-4 rounded-sm bg-[#252533] animate-pulse mb-4" style={{ width: "80%" }} />
-                        <div className="h-[160px] rounded-md bg-[#252533] animate-pulse" />
+                        <Skeleton className="h-4 rounded-sm mb-1" />
+                        <Skeleton className="h-4 rounded-sm mb-4 w-[80%]" />
+                        <Skeleton className="h-[160px] rounded-md" />
                       </div>
                     ))}
                   </div>

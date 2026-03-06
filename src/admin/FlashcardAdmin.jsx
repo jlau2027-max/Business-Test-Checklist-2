@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from "react";
-import { Button, Spinner, Modal, TextField, Input, Label, TextArea, Table, Tooltip, Skeleton, Alert } from "@heroui/react";
+import { Button, Spinner, Modal, TextField, Input, Label, TextArea, Table, Tooltip, Skeleton, Alert, CloseButton } from "@heroui/react";
 import { useAuth } from "../AuthContext.jsx";
 import {
   fetchFlashcardTopics,
@@ -50,7 +50,7 @@ function Toast({ message, type, onClose }) {
       <Alert.Content className="flex-1">
         <Alert.Description className="text-[#F0EEE8]">{message}</Alert.Description>
       </Alert.Content>
-      <button onClick={onClose} className="text-[#8B8B9E] ml-2 hover:text-white">✕</button>
+      <CloseButton onPress={onClose} className="text-[#8B8B9E] ml-2 hover:text-white" />
     </Alert>
   );
 }

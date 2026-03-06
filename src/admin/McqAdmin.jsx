@@ -14,6 +14,7 @@ import {
   Tooltip,
   Skeleton,
   Alert,
+  CloseButton,
 } from "@heroui/react";
 // Inline SVG icons (avoids @tabler/icons-react dependency)
 const IconPlus = ({ size = 16 }) => (
@@ -251,7 +252,7 @@ export default function McqAdmin() {
             <Alert.Content className="flex-1">
               <Alert.Description>{successMsg}</Alert.Description>
             </Alert.Content>
-            <button onClick={() => setSuccessMsg(null)} className="text-[#8B8B9E] hover:text-white">&#10005;</button>
+            <CloseButton onPress={() => setSuccessMsg(null)} className="text-[#8B8B9E] hover:text-white" />
           </Alert>
         )}
         {/* Error alert */}
@@ -261,7 +262,7 @@ export default function McqAdmin() {
             <Alert.Content className="flex-1">
               <Alert.Description>{error}</Alert.Description>
             </Alert.Content>
-            <button onClick={() => setError(null)} className="text-[#8B8B9E] hover:text-white">&#10005;</button>
+            <CloseButton onPress={() => setError(null)} className="text-[#8B8B9E] hover:text-white" />
           </Alert>
         )}
         {/* Filters */}
