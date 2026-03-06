@@ -261,7 +261,7 @@ function SpecimenQuestion({ q }) {
           isPending={grading}
           onPress={handleSolve}
           isDisabled={!answer.trim()}
-          className="rounded-full bg-[#2DD4BF22] text-[#2DD4BF] border border-[#2DD4BF44]"
+          className="rounded-full bg-[#2DD4BF] text-white"
           style={{ fontFamily: "'JetBrains Mono', monospace" }}
         >
           {({isPending}) => <>
@@ -274,7 +274,7 @@ function SpecimenQuestion({ q }) {
           size="sm"
           variant="ghost"
           onPress={() => setRevealed((r) => !r)}
-          className={`rounded-full ${revealed ? "text-[#8B8B9E]" : "bg-[#8B5CF622] text-[#8B5CF6] border border-[#8B5CF644]"}`}
+          className={`rounded-full ${revealed ? "text-[#8B8B9E]" : "bg-[#8B5CF6] text-white"}`}
           style={{ fontFamily: "'JetBrains Mono', monospace" }}
         >
           {revealed ? "Hide Markscheme" : "Show Markscheme"}

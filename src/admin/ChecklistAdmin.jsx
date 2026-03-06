@@ -459,7 +459,7 @@ export default function ChecklistAdmin() {
                       {/* Add Item button */}
                       {canEditContent && (
                         <div className="p-4">
-                          <Button size="sm" className="rounded-full bg-[#7C6FFF22] text-[#A78BFA] border-none" onPress={() => openCreateItemModal(section.id)}><IconPlus size={14} /> Add Item</Button>
+                          <Button size="sm" className="rounded-full bg-[#7C6FFF] text-white border-none" onPress={() => openCreateItemModal(section.id)}><IconPlus size={14} /> Add Item</Button>
                         </div>
                       )}
                     </Disclosure.Body>

@@ -808,7 +808,7 @@ function HistoryQuestion({ q, levelDescriptors, prefix }) {
           isPending={grading}
           onPress={handleSolve}
           isDisabled={!answer.trim()}
-          className="rounded-full bg-[#F8717122] text-[#F87171] border border-[#F8717144]"
+          className="rounded-full bg-[#F87171] text-white"
           style={{ fontFamily: "'JetBrains Mono', monospace" }}
         >
           {({isPending}) => <>
@@ -821,7 +821,7 @@ function HistoryQuestion({ q, levelDescriptors, prefix }) {
           size="sm"
           variant="ghost"
           onPress={() => setRevealed((r) => !r)}
-          className={`rounded-full ${revealed ? "text-[#8B8B9E]" : "bg-[#8B5CF622] text-[#8B5CF6] border border-[#8B5CF644]"}`}
+          className={`rounded-full ${revealed ? "text-[#8B8B9E]" : "bg-[#8B5CF6] text-white"}`}
           style={{ fontFamily: "'JetBrains Mono', monospace" }}
         >
           {revealed ? "Hide Markscheme" : "Show Markscheme"}
@@ -831,7 +831,7 @@ function HistoryQuestion({ q, levelDescriptors, prefix }) {
           size="sm"
           variant="ghost"
           onPress={() => setLevelsRevealed((r) => !r)}
-          className={`rounded-full ${levelsRevealed ? "text-[#8B8B9E]" : "bg-[#FBBF2422] text-[#FBBF24] border border-[#FBBF2444]"}`}
+          className={`rounded-full ${levelsRevealed ? "text-[#8B8B9E]" : "bg-[#FBBF24] text-black"}`}
           style={{ fontFamily: "'JetBrains Mono', monospace" }}
         >
           {levelsRevealed ? "Hide Levels" : "Level Descriptors"}

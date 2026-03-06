@@ -766,9 +766,9 @@ function WrittenPracticeItem({q, displayNum}) {
             }
             onPress={()=>setRevealed(r=>!r)}
             style={revealed ? { fontFamily: "'JetBrains Mono', monospace" } : {
-              backgroundColor: color + "22",
-              color: color,
-              border: `1px solid ${color}44`,
+              backgroundColor: color,
+              color: "#fff",
+              border: "none",
               fontFamily: "'JetBrains Mono', monospace",
             }}
           >

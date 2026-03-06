@@ -492,7 +492,7 @@ export default function FlashcardAdmin() {
             {canEditContent && (
               <Button
                 size="sm"
-                className="rounded-full bg-[#7C6FFF22] text-[#A78BFA] border-none"
+                className="rounded-full bg-[#7C6FFF] text-white border-none"
                 onPress={() => {
                   setEditingTopic(null);
                   setTopicModalOpen(true);
@@ -605,7 +605,7 @@ export default function FlashcardAdmin() {
             {canEditContent && selectedTopic && (
               <Button
                 size="sm"
-                className="rounded-full bg-[#7C6FFF22] text-[#A78BFA] border-none"
+                className="rounded-full bg-[#7C6FFF] text-white border-none"
                 onPress={() => {
                   setEditingCard(null);
                   setCardModalOpen(true);
@@ -641,7 +641,7 @@ export default function FlashcardAdmin() {
                 {canEditContent && (
                   <Button
                     size="sm"
-                    className="rounded-full bg-[#7C6FFF22] text-[#A78BFA] border-none"
+                    className="rounded-full bg-[#7C6FFF] text-white border-none"
                     onPress={() => {
                       setEditingCard(null);
                       setCardModalOpen(true);
