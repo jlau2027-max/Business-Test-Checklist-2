@@ -103,7 +103,7 @@ export default function DashboardPage() {
               isIconOnly
               variant="outline"
               onPress={() => setSidebarOpen(o => !o)}
-              className="rounded-md bg-transparent text-[#8B8B9E] border-[#252533] min-w-[auto] h-8 px-[10px]"
+              className="rounded-full bg-transparent text-[#8B8B9E] border-[#252533] min-w-[auto] h-8 px-[10px]"
               style={{
                 position: "absolute",
                 left: 0,
@@ -155,7 +155,7 @@ export default function DashboardPage() {
               <Button
                 render={(props) => <button {...props} />}
                 size="md"
-                className="rounded-md bg-[#7C6FFF] text-white border-none font-semibold"
+                className="rounded-full bg-[#7C6FFF] text-white border-none font-semibold"
               >
                 Sign In
               </Button>
@@ -172,7 +172,7 @@ export default function DashboardPage() {
               Start answering questions on the Revision Hub to see your analytics here.
             </span>
             <a href="/business/checklist" style={{ textDecoration: "none" }}>
-              <Button className="rounded-md bg-[#7C6FFF] text-white border-none font-semibold">
+              <Button className="rounded-full bg-[#7C6FFF] text-white border-none font-semibold">
                 Go to Revision Hub
               </Button>
             </a>
@@ -259,7 +259,7 @@ export default function DashboardPage() {
                 </span>
                 <div className="flex flex-col gap-2">
                   {wrongAnswers.slice(0, 20).map((a, i) => (
-                    <div key={a.id || i} className="bg-[#1A1A24] rounded-md p-2" style={{ border: "1px solid #252533" }}>
+                    <div key={a.id || i} className="bg-[#1A1A24] rounded-2xl p-2" style={{ border: "1px solid #252533" }}>
                       <div className="flex gap-2 flex-wrap mb-1">
                         <span
                           className="text-xs px-1.5 py-0.5 rounded"

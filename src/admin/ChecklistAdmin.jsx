@@ -314,7 +314,7 @@ export default function ChecklistAdmin() {
             Checklist
           </span>
           {canEditContent && (
-            <Button className="rounded-md bg-[#7C6FFF] text-white border-none" onPress={openCreateSectionModal}><IconPlus size={16} /> Add Section</Button>
+            <Button className="rounded-full bg-[#7C6FFF] text-white border-none" onPress={openCreateSectionModal}><IconPlus size={16} /> Add Section</Button>
           )}
         </div>
 
@@ -459,7 +459,7 @@ export default function ChecklistAdmin() {
                       {/* Add Item button */}
                       {canEditContent && (
                         <div className="p-4">
-                          <Button size="sm" className="rounded-md bg-[#7C6FFF22] text-[#A78BFA] border-none" onPress={() => openCreateItemModal(section.id)}><IconPlus size={14} /> Add Item</Button>
+                          <Button size="sm" className="rounded-full bg-[#7C6FFF22] text-[#A78BFA] border-none" onPress={() => openCreateItemModal(section.id)}><IconPlus size={14} /> Add Item</Button>
                         </div>
                       )}
                     </Disclosure.Body>
@@ -492,28 +492,28 @@ export default function ChecklistAdmin() {
 
                 <TextField className="w-full" name="title" onChange={(val) => updateSectionField("title", val)}>
                   <Label className="text-[#8B8B9E] text-[11px] tracking-wider mb-1" style={{ fontFamily: "'JetBrains Mono', monospace" }}>Title</Label>
-                  <Input value={sectionForm.title} placeholder="Enter section title..." className="bg-[#1A1A24] border border-[#252533] text-[#F0EEE8] rounded-md" style={{ fontFamily: "'JetBrains Mono', monospace" }} />
+                  <Input value={sectionForm.title} placeholder="Enter section title..." className="bg-[#1A1A24] border border-[#252533] text-[#F0EEE8] rounded-full" style={{ fontFamily: "'JetBrains Mono', monospace" }} />
                 </TextField>
 
                 <div className="flex items-end gap-3">
                   <TextField className="flex-1" name="color" onChange={(val) => updateSectionField("color", val)}>
                     <Label className="text-[#8B8B9E] text-[11px] tracking-wider mb-1" style={{ fontFamily: "'JetBrains Mono', monospace" }}>Color (hex)</Label>
-                    <Input value={sectionForm.color} placeholder="#7C6FFF" className="bg-[#1A1A24] border border-[#252533] text-[#F0EEE8] rounded-md" style={{ fontFamily: "'JetBrains Mono', monospace" }} />
+                    <Input value={sectionForm.color} placeholder="#7C6FFF" className="bg-[#1A1A24] border border-[#252533] text-[#F0EEE8] rounded-full" style={{ fontFamily: "'JetBrains Mono', monospace" }} />
                   </TextField>
                   <div className="w-9 h-9 rounded-lg border border-[#252533] shrink-0" style={{ backgroundColor: sectionForm.color || "#8B8B9E" }} />
                 </div>
 
                 <TextField className="w-full" name="sort_order" onChange={(val) => updateSectionField("sort_order", val)}>
                   <Label className="text-[#8B8B9E] text-[11px] tracking-wider mb-1" style={{ fontFamily: "'JetBrains Mono', monospace" }}>Sort Order</Label>
-                  <Input type="number" value={String(sectionForm.sort_order)} placeholder="0" className="bg-[#1A1A24] border border-[#252533] text-[#F0EEE8] rounded-md" style={{ fontFamily: "'JetBrains Mono', monospace" }} />
+                  <Input type="number" value={String(sectionForm.sort_order)} placeholder="0" className="bg-[#1A1A24] border border-[#252533] text-[#F0EEE8] rounded-full" style={{ fontFamily: "'JetBrains Mono', monospace" }} />
                 </TextField>
               </div>
             </Modal.Body>
             <Modal.Footer>
               {/* Actions */}
               <div className="flex items-center justify-end gap-2 mt-2">
-                <Button variant="ghost" className="rounded-md text-[#8B8B9E]" onPress={closeSectionModal} isDisabled={savingSection}>Cancel</Button>
-                <Button className="rounded-md bg-[#7C6FFF] text-white border-none" onPress={handleSaveSection} isPending={savingSection}>{({isPending}) => <>{isPending && <Spinner color="current" size="sm" />}{isPending ? "Saving..." : (editingSection ? "Save Changes" : "Create Section")}</>}</Button>
+                <Button variant="ghost" className="rounded-full text-[#8B8B9E]" onPress={closeSectionModal} isDisabled={savingSection}>Cancel</Button>
+                <Button className="rounded-full bg-[#7C6FFF] text-white border-none" onPress={handleSaveSection} isPending={savingSection}>{({isPending}) => <>{isPending && <Spinner color="current" size="sm" />}{isPending ? "Saving..." : (editingSection ? "Save Changes" : "Create Section")}</>}</Button>
               </div>
             </Modal.Footer>
           </Modal.Dialog>
@@ -541,20 +541,20 @@ export default function ChecklistAdmin() {
 
                 <div>
                   <label className="text-[#8B8B9E] text-xs font-medium mb-1 block" style={{ fontFamily: "'JetBrains Mono', monospace" }}>Text</label>
-                  <TextArea value={itemForm.text} onChange={(e) => updateItemField("text", e.target.value)} placeholder="Enter checklist item text..." className="w-full bg-[#1A1A24] border border-[#252533] text-[#F0EEE8] rounded-md min-h-[80px]" style={{ fontFamily: "'JetBrains Mono', monospace" }} />
+                  <TextArea value={itemForm.text} onChange={(e) => updateItemField("text", e.target.value)} placeholder="Enter checklist item text..." className="w-full bg-[#1A1A24] border border-[#252533] text-[#F0EEE8] rounded-2xl min-h-[80px]" style={{ fontFamily: "'JetBrains Mono', monospace" }} />
                 </div>
 
                 <TextField className="w-full" name="sort_order" onChange={(val) => updateItemField("sort_order", val)}>
                   <Label className="text-[#8B8B9E] text-[11px] tracking-wider mb-1" style={{ fontFamily: "'JetBrains Mono', monospace" }}>Sort Order</Label>
-                  <Input type="number" value={String(itemForm.sort_order)} placeholder="0" className="bg-[#1A1A24] border border-[#252533] text-[#F0EEE8] rounded-md" style={{ fontFamily: "'JetBrains Mono', monospace" }} />
+                  <Input type="number" value={String(itemForm.sort_order)} placeholder="0" className="bg-[#1A1A24] border border-[#252533] text-[#F0EEE8] rounded-full" style={{ fontFamily: "'JetBrains Mono', monospace" }} />
                 </TextField>
               </div>
             </Modal.Body>
             <Modal.Footer>
               {/* Actions */}
               <div className="flex items-center justify-end gap-2 mt-2">
-                <Button variant="ghost" className="rounded-md text-[#8B8B9E]" onPress={closeItemModal} isDisabled={savingItem}>Cancel</Button>
-                <Button className="rounded-md bg-[#7C6FFF] text-white border-none" onPress={handleSaveItem} isPending={savingItem}>{({isPending}) => <>{isPending && <Spinner color="current" size="sm" />}{isPending ? "Saving..." : (editingItem ? "Save Changes" : "Create Item")}</>}</Button>
+                <Button variant="ghost" className="rounded-full text-[#8B8B9E]" onPress={closeItemModal} isDisabled={savingItem}>Cancel</Button>
+                <Button className="rounded-full bg-[#7C6FFF] text-white border-none" onPress={handleSaveItem} isPending={savingItem}>{({isPending}) => <>{isPending && <Spinner color="current" size="sm" />}{isPending ? "Saving..." : (editingItem ? "Save Changes" : "Create Item")}</>}</Button>
               </div>
             </Modal.Footer>
           </Modal.Dialog>

@@ -22,8 +22,8 @@ export default function ConfirmDeleteModal({ opened, onClose, onConfirm, title, 
             </p>
           </Modal.Body>
           <Modal.Footer>
-            <Button variant="ghost" className="rounded-md text-[#8B8B9E]" onPress={onClose} isDisabled={loading}>Cancel</Button>
-            <Button variant="danger" className="rounded-md" onPress={onConfirm} isPending={loading}>
+            <Button variant="ghost" className="rounded-full text-[#8B8B9E]" onPress={onClose} isDisabled={loading}>Cancel</Button>
+            <Button variant="danger" className="rounded-full" onPress={onConfirm} isPending={loading}>
               {({isPending}) => <>
                 {isPending && <Spinner color="current" size="sm" />}
                 {isPending ? "Deleting..." : "Delete"}

@@ -84,7 +84,7 @@ function UserDetail({ uid, displayName, onBack }) {
   return (
     <div className="flex flex-col gap-8">
       <div className="flex items-center gap-2">
-        <Button variant="outline" onPress={onBack} className="rounded-md border-[#252533] text-[#8B8B9E] bg-transparent min-w-[auto] h-8 px-3 text-xs" style={{ fontFamily: "'JetBrains Mono', monospace" }}>← All Users</Button>
+        <Button variant="outline" onPress={onBack} className="rounded-full border-[#252533] text-[#8B8B9E] bg-transparent min-w-[auto] h-8 px-3 text-xs" style={{ fontFamily: "'JetBrains Mono', monospace" }}>← All Users</Button>
         <span className="text-lg font-bold text-[#F0EEE8]">{displayName}</span>
       </div>
 
@@ -175,7 +175,7 @@ function UserDetail({ uid, displayName, onBack }) {
               </span>
               <div className="flex flex-col gap-2">
                 {wrongAnswers.slice(0, 20).map((a, i) => (
-                  <div key={a.id || i} className="bg-[#1A1A24] rounded-md p-3 border border-[#252533]">
+                  <div key={a.id || i} className="bg-[#1A1A24] rounded-2xl p-3 border border-[#252533]">
                     <div className="flex items-center gap-2 mb-1 flex-wrap">
                       <span
                         className="text-xs px-1.5 py-0.5 rounded"
@@ -518,18 +518,18 @@ export default function UsersAdmin() {
                               {canBanUnban(role) && (
                                 <>
                                   {(u.accountStatus || "active") !== "banned" ? (
-                                    <Button size="sm" className="rounded-md" onPress={() => handleBan(u.uid)} style={{backgroundColor: "#F8717122", color: "#F87171", border: "none", fontFamily: "'JetBrains Mono', monospace", fontSize: 10,}}>Ban</Button>
+                                    <Button size="sm" className="rounded-full" onPress={() => handleBan(u.uid)} style={{backgroundColor: "#F8717122", color: "#F87171", border: "none", fontFamily: "'JetBrains Mono', monospace", fontSize: 10,}}>Ban</Button>
                                   ) : (
-                                    <Button size="sm" className="rounded-md" onPress={() => handleUnban(u.uid)} style={{backgroundColor: "#34D39922", color: "#34D399", border: "none", fontFamily: "'JetBrains Mono', monospace", fontSize: 10,}}>Unban</Button>
+                                    <Button size="sm" className="rounded-full" onPress={() => handleUnban(u.uid)} style={{backgroundColor: "#34D39922", color: "#34D399", border: "none", fontFamily: "'JetBrains Mono', monospace", fontSize: 10,}}>Unban</Button>
                                   )}
-                                  <Button size="sm" className="rounded-md" onPress={() => handleForceSignOut(u.uid)} style={{backgroundColor: "#FBBF2422", color: "#FBBF24", border: "none", fontFamily: "'JetBrains Mono', monospace", fontSize: 10,}}>Sign Out</Button>
+                                  <Button size="sm" className="rounded-full" onPress={() => handleForceSignOut(u.uid)} style={{backgroundColor: "#FBBF2422", color: "#FBBF24", border: "none", fontFamily: "'JetBrains Mono', monospace", fontSize: 10,}}>Sign Out</Button>
                                 </>
                               )}
                               {canEdit(role) && (
-                                <Button size="sm" className="rounded-md" onPress={() => openEditFn(u)} style={{backgroundColor: "#7C6FFF22", color: "#7C6FFF", border: "none", fontFamily: "'JetBrains Mono', monospace", fontSize: 10,}}>Edit</Button>
+                                <Button size="sm" className="rounded-full" onPress={() => openEditFn(u)} style={{backgroundColor: "#7C6FFF22", color: "#7C6FFF", border: "none", fontFamily: "'JetBrains Mono', monospace", fontSize: 10,}}>Edit</Button>
                               )}
                               {canChangeRole(role) && (
-                                <Button size="sm" className="rounded-md" onPress={() => openRoleChange(u)} style={{backgroundColor: "#FB923C22", color: "#FB923C", border: "none", fontFamily: "'JetBrains Mono', monospace", fontSize: 10,}}>Role</Button>
+                                <Button size="sm" className="rounded-full" onPress={() => openRoleChange(u)} style={{backgroundColor: "#FB923C22", color: "#FB923C", border: "none", fontFamily: "'JetBrains Mono', monospace", fontSize: 10,}}>Role</Button>
                               )}
                               {role === "viewer" && (
                                 <span className="text-[10px] text-[#55556A]" style={{ fontFamily: "'JetBrains Mono', monospace" }}>View only</span>
@@ -566,21 +566,21 @@ export default function UsersAdmin() {
               <div className="flex flex-col gap-4">
                 <TextField className="w-full" name="firstName" onChange={(val) => setEditForm((f) => ({ ...f, firstName: val }))}>
                   <Label className="text-[#8B8B9E] text-[11px] tracking-wider mb-1" style={{ fontFamily: "'JetBrains Mono', monospace" }}>First Name</Label>
-                  <Input value={editForm.firstName} className="bg-[#1A1A24] border border-[#252533] text-[#F0EEE8] rounded-md" style={{ fontFamily: "'JetBrains Mono', monospace" }} />
+                  <Input value={editForm.firstName} className="bg-[#1A1A24] border border-[#252533] text-[#F0EEE8] rounded-full" style={{ fontFamily: "'JetBrains Mono', monospace" }} />
                 </TextField>
                 <TextField className="w-full" name="lastName" onChange={(val) => setEditForm((f) => ({ ...f, lastName: val }))}>
                   <Label className="text-[#8B8B9E] text-[11px] tracking-wider mb-1" style={{ fontFamily: "'JetBrains Mono', monospace" }}>Last Name</Label>
-                  <Input value={editForm.lastName} className="bg-[#1A1A24] border border-[#252533] text-[#F0EEE8] rounded-md" style={{ fontFamily: "'JetBrains Mono', monospace" }} />
+                  <Input value={editForm.lastName} className="bg-[#1A1A24] border border-[#252533] text-[#F0EEE8] rounded-full" style={{ fontFamily: "'JetBrains Mono', monospace" }} />
                 </TextField>
                 <TextField className="w-full" name="username" onChange={(val) => setEditForm((f) => ({ ...f, username: val }))}>
                   <Label className="text-[#8B8B9E] text-[11px] tracking-wider mb-1" style={{ fontFamily: "'JetBrains Mono', monospace" }}>Username</Label>
-                  <Input value={editForm.username} className="bg-[#1A1A24] border border-[#252533] text-[#F0EEE8] rounded-md" style={{ fontFamily: "'JetBrains Mono', monospace" }} />
+                  <Input value={editForm.username} className="bg-[#1A1A24] border border-[#252533] text-[#F0EEE8] rounded-full" style={{ fontFamily: "'JetBrains Mono', monospace" }} />
                 </TextField>
               </div>
             </Modal.Body>
             <Modal.Footer>
-              <Button variant="outline" className="rounded-md border-[#252533] text-[#8B8B9E] bg-transparent" onPress={() => setEditModalOpened(false)} style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 12 }}>Cancel</Button>
-              <Button className="rounded-md bg-[#7C6FFF] text-[#F0EEE8] border-none" onPress={handleEditSubmit} style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 12 }}>Save Changes</Button>
+              <Button variant="outline" className="rounded-full border-[#252533] text-[#8B8B9E] bg-transparent" onPress={() => setEditModalOpened(false)} style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 12 }}>Cancel</Button>
+              <Button className="rounded-full bg-[#7C6FFF] text-[#F0EEE8] border-none" onPress={handleEditSubmit} style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 12 }}>Save Changes</Button>
             </Modal.Footer>
           </Modal.Dialog>
         </Modal.Container>
@@ -609,7 +609,7 @@ export default function UsersAdmin() {
                 onChange={(val) => setSelectedRole(val)}
               >
                 <Label className="text-[#8B8B9E] text-[11px] tracking-wider mb-1" style={{ fontFamily: "'JetBrains Mono', monospace" }}>Select Role</Label>
-                <Select.Trigger className="bg-[#1A1A24] border border-[#252533] text-[#F0EEE8] rounded-md" style={{ fontFamily: "'JetBrains Mono', monospace" }}>
+                <Select.Trigger className="bg-[#1A1A24] border border-[#252533] text-[#F0EEE8] rounded-full" style={{ fontFamily: "'JetBrains Mono', monospace" }}>
                   <Select.Value />
                   <Select.Indicator />
                 </Select.Trigger>
@@ -626,8 +626,8 @@ export default function UsersAdmin() {
               </Select>
             </Modal.Body>
             <Modal.Footer>
-              <Button variant="outline" className="rounded-md border-[#252533] text-[#8B8B9E] bg-transparent" onPress={() => setRoleModalOpened(false)} style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 12 }}>Cancel</Button>
-              <Button className="rounded-md border-none" onPress={handleRoleSubmit} isDisabled={!selectedRole}
+              <Button variant="outline" className="rounded-full border-[#252533] text-[#8B8B9E] bg-transparent" onPress={() => setRoleModalOpened(false)} style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 12 }}>Cancel</Button>
+              <Button className="rounded-full border-none" onPress={handleRoleSubmit} isDisabled={!selectedRole}
                 style={{
                   backgroundColor: selectedRole ? "#FB923C" : "#252533",
                   color: selectedRole ? "#F0EEE8" : "#55556A",

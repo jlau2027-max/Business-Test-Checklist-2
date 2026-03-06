@@ -15,7 +15,7 @@ export default function AdminGuard({ children }) {
             <span className="text-xl font-bold text-[#F0EEE8]">Sign In Required</span>
             <span className="text-sm text-[#8B8B9E]">You need to sign in to access the admin panel.</span>
             <a href="/business/checklist" style={{ textDecoration: "none" }}>
-              <Button className="rounded-md bg-[#7C6FFF22] text-[#A78BFA] border-none">Go Home</Button>
+              <Button className="rounded-full bg-[#7C6FFF22] text-[#A78BFA] border-none">Go Home</Button>
             </a>
           </div>
         </div>
@@ -32,7 +32,7 @@ export default function AdminGuard({ children }) {
             <span className="text-xl font-bold text-[#F0EEE8]">Access Denied</span>
             <span className="text-sm text-[#8B8B9E]">You don't have permission to access the admin panel.</span>
             <a href="/business/checklist" style={{ textDecoration: "none" }}>
-              <Button className="rounded-md bg-[#7C6FFF22] text-[#A78BFA] border-none">Go Home</Button>
+              <Button className="rounded-full bg-[#7C6FFF22] text-[#A78BFA] border-none">Go Home</Button>
             </a>
           </div>
         </div>

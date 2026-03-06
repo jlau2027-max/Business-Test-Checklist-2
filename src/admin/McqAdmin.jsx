@@ -242,7 +242,7 @@ export default function McqAdmin() {
             MCQ Questions
           </span>
           {canEditContent && (
-            <Button className="rounded-md bg-[#7C6FFF] text-white border-none" onPress={openCreateModal}><IconPlus size={16} /> Add Question</Button>
+            <Button className="rounded-full bg-[#7C6FFF] text-white border-none" onPress={openCreateModal}><IconPlus size={16} /> Add Question</Button>
           )}
         </div>
         {/* Success alert */}
@@ -284,9 +284,9 @@ export default function McqAdmin() {
                 <Tabs.ListContainer>
                   <Tabs.List aria-label="Difficulty filter" className="bg-[#1A1A24] rounded-lg p-0.5">
                     {DIFFICULTY_FILTER_OPTIONS.map(opt => (
-                      <Tabs.Tab key={opt.value} id={opt.value} className="text-[#8B8B9E] text-sm px-3.5 py-1.5 data-[selected=true]:text-white rounded-md">
+                      <Tabs.Tab key={opt.value} id={opt.value} className="text-[#8B8B9E] text-sm px-3.5 py-1.5 data-[selected=true]:text-white rounded-full">
                         {opt.label}
-                        <Tabs.Indicator className="bg-[#7C6FFF] rounded-md" />
+                        <Tabs.Indicator className="bg-[#7C6FFF] rounded-full" />
                       </Tabs.Tab>
                     ))}
                   </Tabs.List>
@@ -421,9 +421,9 @@ export default function McqAdmin() {
                       <Tabs.ListContainer>
                         <Tabs.List aria-label="Difficulty selection" className="bg-[#1A1A24] rounded-lg p-0.5 w-full">
                           {DIFFICULTY_FORM_OPTIONS.map(opt => (
-                            <Tabs.Tab key={opt.value} id={opt.value} className="text-[#8B8B9E] text-sm px-3.5 py-1.5 data-[selected=true]:text-white rounded-md flex-1 text-center">
+                            <Tabs.Tab key={opt.value} id={opt.value} className="text-[#8B8B9E] text-sm px-3.5 py-1.5 data-[selected=true]:text-white rounded-full flex-1 text-center">
                               {opt.label}
-                              <Tabs.Indicator className="bg-[#7C6FFF] rounded-md" />
+                              <Tabs.Indicator className="bg-[#7C6FFF] rounded-full" />
                             </Tabs.Tab>
                           ))}
                         </Tabs.List>
@@ -438,7 +438,7 @@ export default function McqAdmin() {
                     value={form.question_text}
                     onChange={(e) => updateField("question_text", e.target.value)}
                     placeholder="Enter the question text..."
-                    className="w-full bg-[#1A1A24] border border-[#252533] text-[#F0EEE8] rounded-md min-h-[80px]"
+                    className="w-full bg-[#1A1A24] border border-[#252533] text-[#F0EEE8] rounded-2xl min-h-[80px]"
                     rows={3}
                   />
                 </div>
@@ -453,7 +453,7 @@ export default function McqAdmin() {
                       <Input
                         value={form[`option_${letter}`]}
                         placeholder={`Enter option ${OPTION_LETTERS[idx]}...`}
-                        className="bg-[#1A1A24] border border-[#252533] text-[#F0EEE8] rounded-md"
+                        className="bg-[#1A1A24] border border-[#252533] text-[#F0EEE8] rounded-full"
                       />
                     </TextField>
                   ))}
@@ -481,15 +481,15 @@ export default function McqAdmin() {
                     value={form.explanation}
                     onChange={(e) => updateField("explanation", e.target.value)}
                     placeholder="Explain why the correct answer is right..."
-                    className="w-full bg-[#1A1A24] border border-[#252533] text-[#F0EEE8] rounded-md min-h-[60px]"
+                    className="w-full bg-[#1A1A24] border border-[#252533] text-[#F0EEE8] rounded-2xl min-h-[60px]"
                     rows={2}
                   />
                 </div>
               </div>
             </Modal.Body>
             <Modal.Footer>
-              <Button variant="ghost" className="rounded-md text-[#8B8B9E]" onPress={closeModal} isDisabled={saving}>Cancel</Button>
-              <Button className="rounded-md bg-[#7C6FFF] text-white border-none" onPress={handleSave} isPending={saving}>{({isPending}) => <>{isPending && <Spinner color="current" size="sm" />}{isPending ? "Saving..." : (editingQuestion ? "Save Changes" : "Create Question")}</>}</Button>
+              <Button variant="ghost" className="rounded-full text-[#8B8B9E]" onPress={closeModal} isDisabled={saving}>Cancel</Button>
+              <Button className="rounded-full bg-[#7C6FFF] text-white border-none" onPress={handleSave} isPending={saving}>{({isPending}) => <>{isPending && <Spinner color="current" size="sm" />}{isPending ? "Saving..." : (editingQuestion ? "Save Changes" : "Create Question")}</>}</Button>
             </Modal.Footer>
           </Modal.Dialog>
         </Modal.Container>

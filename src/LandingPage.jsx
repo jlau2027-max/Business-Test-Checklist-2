@@ -47,7 +47,7 @@ export default function LandingPage() {
               <Button
                 render={(props) => <button {...props} />}
                 size="md"
-                className="rounded-md bg-[#7C6FFF] text-white border-none text-[15px] font-semibold"
+                className="rounded-full bg-[#7C6FFF] text-white border-none text-[15px] font-semibold"
                 style={{ fontFamily: "'Inter', sans-serif" }}
               >
                 Sign In
@@ -58,7 +58,7 @@ export default function LandingPage() {
                 render={(props) => <button {...props} />}
                 size="md"
                 variant="outline"
-                className="rounded-md bg-transparent text-[#A78BFA] border border-[#252533] text-[15px] font-semibold"
+                className="rounded-full bg-transparent text-[#A78BFA] border border-[#252533] text-[15px] font-semibold"
                 style={{ fontFamily: "'Inter', sans-serif" }}
               >
                 Sign Up

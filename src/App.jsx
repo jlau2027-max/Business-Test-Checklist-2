@@ -351,7 +351,7 @@ function ChecklistView() {
           const sectionChecked = section.items.filter((_,i)=>checked[`${section.id}-${i}`]).length;
           const allDone = sectionChecked===section.items.length;
           return (
-            <Accordion.Item key={section.id} id={section.id} className="bg-[#12121A] rounded-md border border-[#252533]" style={{borderLeft: `4px solid ${section.color}`}}>
+            <Accordion.Item key={section.id} id={section.id} className="bg-[#12121A] rounded-2xl">
               <Accordion.Heading>
                 <Accordion.Trigger className="w-full flex items-center gap-2 px-5 py-3.5 hover:bg-[#1A1A24] transition-colors">
                   <span className="text-xs px-1.5 py-0.5 rounded font-bold" style={{backgroundColor: section.color + "22", color: section.color, fontFamily: "'JetBrains Mono', monospace"}}>{sectionChecked}/{section.items.length}</span>
@@ -362,7 +362,7 @@ function ChecklistView() {
                 </Accordion.Trigger>
               </Accordion.Heading>
               <Accordion.Panel>
-                <Accordion.Body className="px-5 pb-4 pt-1 border-t border-[#252533]">
+                <Accordion.Body className="px-5 pb-4 pt-1">
                   <div className="flex flex-col gap-1">
                     {section.items.map((item,i) => {
                       const key = `${section.id}-${i}`;
@@ -497,7 +497,7 @@ function FlashcardsView() {
           size="md"
           isDisabled={cardIdx===0}
           onPress={()=>setCardIdx(i=>Math.max(0,i-1))}
-          className="rounded-md bg-[#1A1A24] border border-[#252533] text-[#8B8B9E] disabled:bg-[#12121A] disabled:border-[#1E1E2A]"
+          className="rounded-full bg-[#1A1A24] border border-[#252533] text-[#8B8B9E] disabled:bg-[#12121A] disabled:border-[#1E1E2A]"
           style={{flex:1}}
         >
           Previous
@@ -506,7 +506,7 @@ function FlashcardsView() {
           size="md"
           isDisabled={cardIdx===currentCat.cards.length-1}
           onPress={()=>setCardIdx(i=>Math.min(currentCat.cards.length-1,i+1))}
-          className="rounded-md border-none text-white"
+          className="rounded-full border-none text-white"
           style={{
             flex:1,
             background: cardIdx===currentCat.cards.length-1 ? "#1E1E2A" : currentCat.color,
@@ -555,7 +555,7 @@ function MCQItem({q, displayNum}) {
               <Radio
                 key={i}
                 value={String(i)}
-                className="p-2 rounded-md m-0 hover:border-opacity-60"
+                className="p-2 rounded-full m-0 hover:border-opacity-60"
                 style={{
                   background:bg, border:`1.5px solid ${border}`,
                   cursor:confirmed?"default":"pointer", transition:"all 0.2s",
@@ -587,7 +587,7 @@ function MCQItem({q, displayNum}) {
             fullWidth
             isDisabled={selected===null}
             onPress={()=>{if(selected!==null){setConfirmed(true);recordAttempt({userAnswer:selected,isCorrect:selected===q.answer});}}}
-            className="rounded-md mt-1 font-semibold border-none"
+            className="rounded-full mt-1 font-semibold border-none"
             style={{
               background: selected!==null ? color : "#1E1E2A",
               color: selected===null ? "#55556A" : "#fff",
@@ -596,7 +596,7 @@ function MCQItem({q, displayNum}) {
             Check Answer
           </Button>
         ) : (
-          <Alert status={selected===q.answer ? "success" : "danger"} className="mt-1 rounded-md" style={{backgroundColor: (selected===q.answer ? "#34D399" : "#F87171") + "11", border: `1px solid ${selected===q.answer ? "#34D399" : "#F87171"}44`}}>
+          <Alert status={selected===q.answer ? "success" : "danger"} className="mt-1 rounded-2xl" style={{backgroundColor: (selected===q.answer ? "#34D399" : "#F87171") + "11", border: `1px solid ${selected===q.answer ? "#34D399" : "#F87171"}44`}}>
             <Alert.Indicator />
             <Alert.Content>
               <Alert.Title style={{fontFamily: "'JetBrains Mono', monospace", fontSize: 12}}>{selected===q.answer ? "Correct!" : "Incorrect"}</Alert.Title>
@@ -736,14 +736,14 @@ function WrittenPracticeItem({q, displayNum}) {
           rows={5}
           disabled={grading}
           fullWidth
-          className="rounded-md bg-[#12121A] border border-[#252533] text-[#F0EEE8] text-sm leading-relaxed placeholder:text-[#55556A] p-3 mb-2"
+          className="rounded-2xl bg-[#12121A] border border-[#252533] text-[#F0EEE8] text-sm leading-relaxed placeholder:text-[#55556A] p-3 mb-2"
           style={{ fontFamily: "'Inter', sans-serif", resize: "vertical" }}
         />
 
         <div className="flex items-center gap-2">
           <Button
             size="sm"
-            className="rounded-md border-none font-semibold"
+            className="rounded-full border-none font-semibold"
             onPress={handleSolve}
             isPending={grading}
             isDisabled={!answer.trim() || grading}
@@ -761,8 +761,8 @@ function WrittenPracticeItem({q, displayNum}) {
             size="sm"
             variant="ghost"
             className={revealed
-              ? "rounded-md text-[#8B8B9E]"
-              : "rounded-md"
+              ? "rounded-full text-[#8B8B9E]"
+              : "rounded-full"
             }
             onPress={()=>setRevealed(r=>!r)}
             style={revealed ? { fontFamily: "'JetBrains Mono', monospace" } : {
@@ -778,7 +778,7 @@ function WrittenPracticeItem({q, displayNum}) {
             <Button
               size="sm"
               variant="ghost"
-              className="rounded-md text-[#8B8B9E]"
+              className="rounded-full text-[#8B8B9E]"
               style={{ fontFamily: "'JetBrains Mono', monospace" }}
               onPress={()=>{ setAnswer(""); setGradeResult(null); saveLS(`written_ans_${q.id}`, ""); saveLS(`written_grade_${q.id}`, null); }}
             >
@@ -789,7 +789,7 @@ function WrittenPracticeItem({q, displayNum}) {
 
         {/* AI Grade Result */}
         {gradeResult && (
-          <Alert status={gradeResult.score == null ? "warning" : scorePct >= 0.75 ? "success" : scorePct >= 0.4 ? "warning" : "danger"} className="mt-4 rounded-md" style={{backgroundColor: (gradeResult.score == null ? "#8B8B9E" : scoreColor) + "11", border: `1px solid ${gradeResult.score == null ? "#8B8B9E" : scoreColor}44`}}>
+          <Alert status={gradeResult.score == null ? "warning" : scorePct >= 0.75 ? "success" : scorePct >= 0.4 ? "warning" : "danger"} className="mt-4 rounded-2xl" style={{backgroundColor: (gradeResult.score == null ? "#8B8B9E" : scoreColor) + "11", border: `1px solid ${gradeResult.score == null ? "#8B8B9E" : scoreColor}44`}}>
             <Alert.Indicator />
             <Alert.Content>
               <Alert.Title style={{fontFamily: "'JetBrains Mono', monospace", fontSize: 12}}>{gradeResult.score != null ? `AI Score: ${gradeResult.score}/${gradeResult.maxMarks || q.marks}` : "Grading Error"}</Alert.Title>
@@ -841,7 +841,7 @@ function WrittenPracticeView() {
       {/* Mode selector — Short Answer / 10 Marker / Specimen (link) */}
       <div className="flex gap-2.5 mb-6">
         <Button
-          className="rounded-md font-bold"
+          className="rounded-full font-bold"
           onPress={()=>{ setMode("short"); setFilterCat("All"); }}
           style={{
             flex: 1,
@@ -858,7 +858,7 @@ function WrittenPracticeView() {
           Short Answer
         </Button>
         <Button
-          className="rounded-md font-bold"
+          className="rounded-full font-bold"
           onPress={()=>setMode("10mark")}
           style={{
             flex: 1,
@@ -877,7 +877,7 @@ function WrittenPracticeView() {
         <a href="/business/specimen" style={{ flex: 1, textDecoration: "none" }}>
           <Button
             fullWidth
-            className="rounded-md font-bold"
+            className="rounded-full font-bold"
             style={{
               height: 48,
               backgroundColor: "#1A1A24",
@@ -981,7 +981,7 @@ export default function App({ initialTab = "checklist" }) {
               isIconOnly
               variant="outline"
               onPress={() => setSidebarOpen(o => !o)}
-              className="rounded-md border-[#252533] text-[#8B8B9E] bg-transparent min-w-[auto] h-8 px-2.5"
+              className="rounded-full border-[#252533] text-[#8B8B9E] bg-transparent min-w-[auto] h-8 px-2.5"
               style={{
                 position: "absolute",
                 left: 0,
@@ -1001,9 +1001,6 @@ export default function App({ initialTab = "checklist" }) {
             <LoginButton />
           </div>
           <h1 className="text-center font-extrabold text-[22px] sm:text-[30px] text-[#F0EEE8]" style={{letterSpacing: -0.5}}>Finance Unit — Revision Hub</h1>
-          <span className="text-center block text-xs text-[#55556A] mb-2">
-            Units 3.1–3.9 · 5.5 Breakeven · BMT Tools · {content.mcqQuestions.length} MCQs · {content.writtenQuestions.length} Written · {content.written10MarkQuestions.length} Extended
-          </span>
 
           <Tabs variant="secondary" selectedKey={tab}>
             <Tabs.ListContainer>

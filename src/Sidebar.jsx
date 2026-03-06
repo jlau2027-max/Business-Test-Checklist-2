@@ -57,7 +57,7 @@ export default function Sidebar({ activeSubject, sidebarOpen, onClose }) {
             <Button
               key={s.label}
               onPress={onClose}
-              className="rounded-md font-semibold text-sm w-full justify-start"
+              className="rounded-full font-semibold text-sm w-full justify-start"
               style={{
                 height: 44,
                 paddingLeft: 14,

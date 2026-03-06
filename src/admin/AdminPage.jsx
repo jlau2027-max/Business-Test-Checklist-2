@@ -55,17 +55,17 @@ export default function AdminPage() {
           >
             <Tabs.ListContainer>
               <Tabs.List aria-label="Admin sections" className="bg-[#12121A] border border-[#252533] rounded-lg p-1">
-                <Tabs.Tab id="business" className="font-semibold text-sm font-mono text-[#8B8B9E] data-[selected=true]:text-white rounded-md px-4 py-2">
+                <Tabs.Tab id="business" className="font-semibold text-sm font-mono text-[#8B8B9E] data-[selected=true]:text-white rounded-full px-4 py-2">
                   Business
-                  <Tabs.Indicator className="bg-[#7C6FFF] rounded-md" />
+                  <Tabs.Indicator className="bg-[#7C6FFF] rounded-full" />
                 </Tabs.Tab>
-                <Tabs.Tab id="history" className="font-semibold text-sm font-mono text-[#8B8B9E] data-[selected=true]:text-white rounded-md px-4 py-2">
+                <Tabs.Tab id="history" className="font-semibold text-sm font-mono text-[#8B8B9E] data-[selected=true]:text-white rounded-full px-4 py-2">
                   History
-                  <Tabs.Indicator className="bg-[#F87171] rounded-md" />
+                  <Tabs.Indicator className="bg-[#F87171] rounded-full" />
                 </Tabs.Tab>
-                <Tabs.Tab id="users" className="font-semibold text-sm font-mono text-[#8B8B9E] data-[selected=true]:text-white rounded-md px-4 py-2">
+                <Tabs.Tab id="users" className="font-semibold text-sm font-mono text-[#8B8B9E] data-[selected=true]:text-white rounded-full px-4 py-2">
                   Users
-                  <Tabs.Indicator className="bg-[#38BDF8] rounded-md" />
+                  <Tabs.Indicator className="bg-[#38BDF8] rounded-full" />
                 </Tabs.Tab>
               </Tabs.List>
             </Tabs.ListContainer>

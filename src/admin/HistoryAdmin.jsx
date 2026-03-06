@@ -223,7 +223,7 @@ export default function HistoryAdmin() {
             History Questions
           </span>
           {canEditContent && (
-            <Button className="rounded-md bg-[#7C6FFF] text-white border-none" onPress={openCreateModal}><IconPlus size={16} /> Add Question</Button>
+            <Button className="rounded-full bg-[#7C6FFF] text-white border-none" onPress={openCreateModal}><IconPlus size={16} /> Add Question</Button>
           )}
         </div>
 
@@ -260,9 +260,9 @@ export default function HistoryAdmin() {
                 <Tabs.ListContainer>
                   <Tabs.List aria-label="Paper filter" className="bg-[#1A1A24] rounded-lg p-0.5">
                     {PAPER_FILTER_OPTIONS.map(opt => (
-                      <Tabs.Tab key={opt.value} id={opt.value} className="text-[#8B8B9E] text-sm px-3.5 py-1.5 data-[selected=true]:text-white rounded-md">
+                      <Tabs.Tab key={opt.value} id={opt.value} className="text-[#8B8B9E] text-sm px-3.5 py-1.5 data-[selected=true]:text-white rounded-full">
                         {opt.label}
-                        <Tabs.Indicator className="bg-[#7C6FFF] rounded-md" />
+                        <Tabs.Indicator className="bg-[#7C6FFF] rounded-full" />
                       </Tabs.Tab>
                     ))}
                   </Tabs.List>
@@ -398,9 +398,9 @@ export default function HistoryAdmin() {
                       <Tabs.ListContainer>
                         <Tabs.List aria-label="Paper" className="bg-[#1A1A24] rounded-lg p-0.5 w-full">
                           {PAPER_FORM_OPTIONS.map(opt => (
-                            <Tabs.Tab key={opt.value} id={opt.value} className="text-[#8B8B9E] text-sm px-3.5 py-1.5 data-[selected=true]:text-white rounded-md flex-1">
+                            <Tabs.Tab key={opt.value} id={opt.value} className="text-[#8B8B9E] text-sm px-3.5 py-1.5 data-[selected=true]:text-white rounded-full flex-1">
                               {opt.label}
-                              <Tabs.Indicator className="bg-[#7C6FFF] rounded-md" />
+                              <Tabs.Indicator className="bg-[#7C6FFF] rounded-full" />
                             </Tabs.Tab>
                           ))}
                         </Tabs.List>
@@ -411,7 +411,7 @@ export default function HistoryAdmin() {
                     <Label className="text-[#8B8B9E] text-[11px] tracking-wider mb-1" style={{ fontFamily: "'JetBrains Mono', monospace" }}>Question Number</Label>
                     <NumberField.Group>
                       <NumberField.DecrementButton />
-                      <NumberField.Input className="bg-[#1A1A24] border border-[#252533] text-[#F0EEE8] rounded-md" />
+                      <NumberField.Input className="bg-[#1A1A24] border border-[#252533] text-[#F0EEE8] rounded-full" />
                       <NumberField.IncrementButton />
                     </NumberField.Group>
                   </NumberField>
@@ -420,13 +420,13 @@ export default function HistoryAdmin() {
                 {/* Topic */}
                 <TextField className="w-full" name="topic" onChange={(val) => updateField("topic", val)}>
                   <Label className="text-[#8B8B9E] text-[11px] tracking-wider mb-1">Topic</Label>
-                  <Input value={form.topic} placeholder="Enter the topic name..." className="bg-[#1A1A24] border border-[#252533] text-[#F0EEE8] rounded-md" />
+                  <Input value={form.topic} placeholder="Enter the topic name..." className="bg-[#1A1A24] border border-[#252533] text-[#F0EEE8] rounded-full" />
                 </TextField>
 
                 {/* Question text */}
                 <div>
                   <label className="text-[#8B8B9E] text-xs font-medium mb-1 block">Question</label>
-                  <TextArea value={form.question_text} onChange={(e) => updateField("question_text", e.target.value)} placeholder="Enter the question text..." className="w-full bg-[#1A1A24] border border-[#252533] text-[#F0EEE8] rounded-md min-h-[80px]" rows={3} />
+                  <TextArea value={form.question_text} onChange={(e) => updateField("question_text", e.target.value)} placeholder="Enter the question text..." className="w-full bg-[#1A1A24] border border-[#252533] text-[#F0EEE8] rounded-2xl min-h-[80px]" rows={3} />
                 </div>
 
                 {/* Marks */}
@@ -434,7 +434,7 @@ export default function HistoryAdmin() {
                   <Label className="text-[#8B8B9E] text-[11px] tracking-wider mb-1" style={{ fontFamily: "'JetBrains Mono', monospace" }}>Marks</Label>
                   <NumberField.Group>
                     <NumberField.DecrementButton />
-                    <NumberField.Input className="bg-[#1A1A24] border border-[#252533] text-[#F0EEE8] rounded-md" />
+                    <NumberField.Input className="bg-[#1A1A24] border border-[#252533] text-[#F0EEE8] rounded-full" />
                     <NumberField.IncrementButton />
                   </NumberField.Group>
                 </NumberField>
@@ -442,15 +442,15 @@ export default function HistoryAdmin() {
                 {/* Mark Scheme */}
                 <div>
                   <label className="text-[#8B8B9E] text-xs font-medium mb-1 block">Mark Scheme</label>
-                  <TextArea value={form.mark_scheme} onChange={(e) => updateField("mark_scheme", e.target.value)} placeholder="Enter the mark scheme..." className="w-full bg-[#1A1A24] border border-[#252533] text-[#F0EEE8] rounded-md min-h-[120px]" rows={4} />
+                  <TextArea value={form.mark_scheme} onChange={(e) => updateField("mark_scheme", e.target.value)} placeholder="Enter the mark scheme..." className="w-full bg-[#1A1A24] border border-[#252533] text-[#F0EEE8] rounded-2xl min-h-[120px]" rows={4} />
                 </div>
               </div>
             </Modal.Body>
             <Modal.Footer>
               {/* Actions */}
               <div className="flex items-center justify-end gap-2 mt-2">
-                <Button variant="ghost" className="rounded-md text-[#8B8B9E]" onPress={closeModal} isDisabled={saving}>Cancel</Button>
-                <Button className="rounded-md bg-[#7C6FFF] text-white border-none" onPress={handleSave} isPending={saving}>{({isPending}) => <>{isPending && <Spinner color="current" size="sm" />}{isPending ? "Saving..." : (editingQuestion ? "Save Changes" : "Create Question")}</>}</Button>
+                <Button variant="ghost" className="rounded-full text-[#8B8B9E]" onPress={closeModal} isDisabled={saving}>Cancel</Button>
+                <Button className="rounded-full bg-[#7C6FFF] text-white border-none" onPress={handleSave} isPending={saving}>{({isPending}) => <>{isPending && <Spinner color="current" size="sm" />}{isPending ? "Saving..." : (editingQuestion ? "Save Changes" : "Create Question")}</>}</Button>
               </div>
             </Modal.Footer>
           </Modal.Dialog>

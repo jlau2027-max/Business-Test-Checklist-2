@@ -131,29 +131,29 @@ function TopicModal({ opened, onClose, topic, onSave }) {
                 )}
                 <TextField className="w-full" name="label" onChange={(val) => setLabel(val)}>
                   <Label className="text-[#8B8B9E] text-[11px] tracking-wider mb-1" style={{ fontFamily: "'JetBrains Mono', monospace" }}>Label</Label>
-                  <Input value={label} placeholder="e.g. Ratio Analysis" className="bg-[#1A1A24] border border-[#252533] text-[#F0EEE8] rounded-md" style={{ fontFamily: "'JetBrains Mono', monospace" }} />
+                  <Input value={label} placeholder="e.g. Ratio Analysis" className="bg-[#1A1A24] border border-[#252533] text-[#F0EEE8] rounded-full" style={{ fontFamily: "'JetBrains Mono', monospace" }} />
                 </TextField>
                 <TextField className="w-full" name="id" isReadOnly={isEdit} onChange={(val) => { if (!isEdit) setId(val); }}>
                   <Label className="text-[#8B8B9E] text-[11px] tracking-wider mb-1" style={{ fontFamily: "'JetBrains Mono', monospace" }}>ID</Label>
                   <Input
                     value={id}
                     placeholder="Auto-generated from label"
-                    className={`bg-[#1A1A24] border border-[#252533] text-[#F0EEE8] rounded-md ${isEdit ? "opacity-50 cursor-not-allowed" : ""}`}
+                    className={`bg-[#1A1A24] border border-[#252533] text-[#F0EEE8] rounded-full ${isEdit ? "opacity-50 cursor-not-allowed" : ""}`}
                     style={{ fontFamily: "'JetBrains Mono', monospace" }}
                   />
                 </TextField>
                 <div className="flex items-end gap-3">
                   <TextField className="flex-1" name="color" onChange={setColor}>
                     <Label className="text-[#8B8B9E] text-[11px] tracking-wider mb-1" style={{ fontFamily: "'JetBrains Mono', monospace" }}>Color</Label>
-                    <Input value={color} placeholder="#7C6FFF" className="bg-[#1A1A24] border border-[#252533] text-[#F0EEE8] rounded-md" style={{ fontFamily: "'JetBrains Mono', monospace" }} />
+                    <Input value={color} placeholder="#7C6FFF" className="bg-[#1A1A24] border border-[#252533] text-[#F0EEE8] rounded-full" style={{ fontFamily: "'JetBrains Mono', monospace" }} />
                   </TextField>
                   <div className="w-9 h-9 rounded-lg border border-[#252533] shrink-0" style={{ backgroundColor: color || "#8B8B9E" }} />
                 </div>
                 <div className="flex items-center justify-end gap-2 mt-1">
-                  <Button variant="ghost" className="rounded-md text-[#8B8B9E]" onPress={onClose} isDisabled={saving}>
+                  <Button variant="ghost" className="rounded-full text-[#8B8B9E]" onPress={onClose} isDisabled={saving}>
                     Cancel
                   </Button>
-                  <Button type="submit" className="rounded-md bg-[#7C6FFF] text-white border-none" isPending={saving}>
+                  <Button type="submit" className="rounded-full bg-[#7C6FFF] text-white border-none" isPending={saving}>
                     {({isPending}) => (
                       <>
                         {isPending && <Spinner color="current" size="sm" />}
@@ -245,7 +245,7 @@ function CardModal({ opened, onClose, card, topicId, onSave }) {
                 )}
                 <TextField className="w-full" name="term" onChange={(val) => setTerm(val)}>
                   <Label className="text-[#8B8B9E] text-[11px] tracking-wider mb-1" style={{ fontFamily: "'JetBrains Mono', monospace" }}>Term</Label>
-                  <Input value={term} placeholder="e.g. Net Present Value" className="bg-[#1A1A24] border border-[#252533] text-[#F0EEE8] rounded-md" style={{ fontFamily: "'JetBrains Mono', monospace" }} />
+                  <Input value={term} placeholder="e.g. Net Present Value" className="bg-[#1A1A24] border border-[#252533] text-[#F0EEE8] rounded-full" style={{ fontFamily: "'JetBrains Mono', monospace" }} />
                 </TextField>
                 <div>
                   <label className="text-[#8B8B9E] text-xs font-medium mb-1 block" style={{ fontFamily: "'JetBrains Mono', monospace" }}>Definition</label>
@@ -253,19 +253,19 @@ function CardModal({ opened, onClose, card, topicId, onSave }) {
                     value={definition}
                     onChange={(e) => setDefinition(e.target.value)}
                     placeholder="Enter the definition..."
-                    className="w-full bg-[#1A1A24] border border-[#252533] text-[#F0EEE8] rounded-md min-h-[80px]"
+                    className="w-full bg-[#1A1A24] border border-[#252533] text-[#F0EEE8] rounded-2xl min-h-[80px]"
                     rows={3}
                   />
                 </div>
                 <TextField className="w-full" name="formula" onChange={(val) => setFormula(val)}>
                   <Label className="text-[#8B8B9E] text-[11px] tracking-wider mb-1" style={{ fontFamily: "'JetBrains Mono', monospace" }}>Formula (optional)</Label>
-                  <Input value={formula} placeholder="e.g. NPV = Sum of PV of cash flows - initial investment" className="bg-[#1A1A24] border border-[#252533] text-[#F0EEE8] rounded-md" style={{ fontFamily: "'JetBrains Mono', monospace" }} />
+                  <Input value={formula} placeholder="e.g. NPV = Sum of PV of cash flows - initial investment" className="bg-[#1A1A24] border border-[#252533] text-[#F0EEE8] rounded-full" style={{ fontFamily: "'JetBrains Mono', monospace" }} />
                 </TextField>
                 <div className="flex items-center justify-end gap-2 mt-1">
-                  <Button variant="ghost" className="rounded-md text-[#8B8B9E]" onPress={onClose} isDisabled={saving}>
+                  <Button variant="ghost" className="rounded-full text-[#8B8B9E]" onPress={onClose} isDisabled={saving}>
                     Cancel
                   </Button>
-                  <Button type="submit" className="rounded-md bg-[#7C6FFF] text-white border-none" isPending={saving}>
+                  <Button type="submit" className="rounded-full bg-[#7C6FFF] text-white border-none" isPending={saving}>
                     {({isPending}) => (
                       <>
                         {isPending && <Spinner color="current" size="sm" />}
@@ -492,7 +492,7 @@ export default function FlashcardAdmin() {
             {canEditContent && (
               <Button
                 size="sm"
-                className="rounded-md bg-[#7C6FFF22] text-[#A78BFA] border-none"
+                className="rounded-full bg-[#7C6FFF22] text-[#A78BFA] border-none"
                 onPress={() => {
                   setEditingTopic(null);
                   setTopicModalOpen(true);
@@ -605,7 +605,7 @@ export default function FlashcardAdmin() {
             {canEditContent && selectedTopic && (
               <Button
                 size="sm"
-                className="rounded-md bg-[#7C6FFF22] text-[#A78BFA] border-none"
+                className="rounded-full bg-[#7C6FFF22] text-[#A78BFA] border-none"
                 onPress={() => {
                   setEditingCard(null);
                   setCardModalOpen(true);
@@ -641,7 +641,7 @@ export default function FlashcardAdmin() {
                 {canEditContent && (
                   <Button
                     size="sm"
-                    className="rounded-md bg-[#7C6FFF22] text-[#A78BFA] border-none"
+                    className="rounded-full bg-[#7C6FFF22] text-[#A78BFA] border-none"
                     onPress={() => {
                       setEditingCard(null);
                       setCardModalOpen(true);

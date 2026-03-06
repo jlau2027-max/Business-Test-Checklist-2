@@ -27,7 +27,7 @@ export default function CategorySelect({ value, onChange, categories, label, ...
       <Label className="text-[#8B8B9E] text-[11px] tracking-wider mb-1" style={{ fontFamily: "'JetBrains Mono', monospace" }}>
         {label || "Category"}
       </Label>
-      <Select.Trigger className="bg-[#1A1A24] border border-[#252533] text-[#F0EEE8] rounded-md" style={{ fontFamily: "'JetBrains Mono', monospace" }}>
+      <Select.Trigger className="bg-[#1A1A24] border border-[#252533] text-[#F0EEE8] rounded-full" style={{ fontFamily: "'JetBrains Mono', monospace" }}>
         <Select.Value />
         <Select.Indicator />
       </Select.Trigger>

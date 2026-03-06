@@ -12,7 +12,7 @@ export default function LoginButton() {
             render={(props) => <button {...props} />}
             size="sm"
             variant="outline"
-            className="rounded-md border-[#252533] text-[#8B8B9E] text-[13px] font-semibold px-3 min-w-[auto] h-8 bg-transparent"
+            className="rounded-full border-[#252533] text-[#8B8B9E] text-[13px] font-semibold px-3 min-w-[auto] h-8 bg-transparent"
             style={{
               position: "absolute",
               right: 0,

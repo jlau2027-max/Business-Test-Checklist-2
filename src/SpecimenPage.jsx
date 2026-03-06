@@ -225,13 +225,13 @@ function SpecimenQuestion({ q }) {
       {/* Question header */}
       <div className="flex items-start gap-2 mb-2" style={{ flexWrap: "nowrap" }}>
         <span
-          className="text-sm px-2 py-1 rounded-md font-bold"
+          className="text-sm px-2 py-1 rounded-full font-bold"
           style={{ backgroundColor: "#2DD4BF18", color: "#2DD4BF", border: "none", flexShrink: 0, fontFamily: "'JetBrains Mono', monospace" }}
         >
           {q.label}
         </span>
         <span
-          className="text-xs px-1.5 py-0.5 rounded-md font-semibold"
+          className="text-xs px-1.5 py-0.5 rounded-full font-semibold"
           style={{ backgroundColor: "#8B5CF618", color: "#8B5CF6", border: "none", flexShrink: 0, fontFamily: "'JetBrains Mono', monospace" }}
         >
           {q.marks} mark{q.marks !== 1 ? "s" : ""}
@@ -250,7 +250,7 @@ function SpecimenQuestion({ q }) {
         placeholder="Type your answer here..."
         rows={minRows}
         fullWidth
-        className="rounded-md mb-2 bg-[#09090F] border border-[#252533] text-[#F0EEE8] text-sm leading-[1.7] placeholder:text-[#55556A] focus:border-[#7C6FFF] p-3"
+        className="rounded-2xl mb-2 bg-[#09090F] border border-[#252533] text-[#F0EEE8] text-sm leading-[1.7] placeholder:text-[#55556A] focus:border-[#7C6FFF] p-3"
         style={{ fontFamily: "'Inter', sans-serif", resize: "vertical" }}
       />
 
@@ -261,7 +261,7 @@ function SpecimenQuestion({ q }) {
           isPending={grading}
           onPress={handleSolve}
           isDisabled={!answer.trim()}
-          className="rounded-md bg-[#2DD4BF22] text-[#2DD4BF] border border-[#2DD4BF44]"
+          className="rounded-full bg-[#2DD4BF22] text-[#2DD4BF] border border-[#2DD4BF44]"
           style={{ fontFamily: "'JetBrains Mono', monospace" }}
         >
           {({isPending}) => <>
@@ -274,7 +274,7 @@ function SpecimenQuestion({ q }) {
           size="sm"
           variant="ghost"
           onPress={() => setRevealed((r) => !r)}
-          className={`rounded-md ${revealed ? "text-[#8B8B9E]" : "bg-[#8B5CF622] text-[#8B5CF6] border border-[#8B5CF644]"}`}
+          className={`rounded-full ${revealed ? "text-[#8B8B9E]" : "bg-[#8B5CF622] text-[#8B5CF6] border border-[#8B5CF644]"}`}
           style={{ fontFamily: "'JetBrains Mono', monospace" }}
         >
           {revealed ? "Hide Markscheme" : "Show Markscheme"}
@@ -285,7 +285,7 @@ function SpecimenQuestion({ q }) {
             size="sm"
             variant="ghost"
             onPress={handleClear}
-            className="rounded-md text-[#8B8B9E]"
+            className="rounded-full text-[#8B8B9E]"
             style={{ fontFamily: "'JetBrains Mono', monospace" }}
           >
             Clear
@@ -299,11 +299,11 @@ function SpecimenQuestion({ q }) {
 
       {/* AI Grade Result */}
       {gradeResult && (
-        <div className="bg-[#1A1A24] rounded-md p-3 mt-3" style={{ border: "1px solid #252533" }}>
+        <div className="bg-[#1A1A24] rounded-2xl p-3 mt-3" style={{ border: "1px solid #252533" }}>
           {gradeResult.score !== null && (
             <div className="flex items-center mb-1">
               <span
-                className="text-sm px-2 py-1 rounded-md font-bold"
+                className="text-sm px-2 py-1 rounded-full font-bold"
                 style={{
                   backgroundColor: gradeResult.score >= gradeResult.maxMarks * 0.7 ? "#34D39922" : gradeResult.score >= gradeResult.maxMarks * 0.4 ? "#FBBF2422" : "#EF444422",
                   color: gradeResult.score >= gradeResult.maxMarks * 0.7 ? "#34D399" : gradeResult.score >= gradeResult.maxMarks * 0.4 ? "#FBBF24" : "#EF4444",
@@ -391,7 +391,7 @@ export default function SpecimenPage() {
               isIconOnly
               variant="outline"
               onPress={() => setSidebarOpen(o => !o)}
-              className="rounded-md bg-transparent text-[#8B8B9E] border-[#252533] min-w-[auto] h-8 px-[10px]"
+              className="rounded-full bg-transparent text-[#8B8B9E] border-[#252533] min-w-[auto] h-8 px-[10px]"
               style={{
                 position: "absolute",
                 left: 0,

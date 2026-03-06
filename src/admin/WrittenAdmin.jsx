@@ -295,10 +295,10 @@ export default function WrittenAdmin() {
               <Tabs.Tab
                 key={opt.value}
                 id={opt.value}
-                className="text-[#8B8B9E] text-sm font-medium px-4 py-2 data-[selected=true]:text-white rounded-md"
+                className="text-[#8B8B9E] text-sm font-medium px-4 py-2 data-[selected=true]:text-white rounded-full"
               >
                 {opt.label}
-                <Tabs.Indicator className="bg-[#7C6FFF] rounded-md" />
+                <Tabs.Indicator className="bg-[#7C6FFF] rounded-full" />
               </Tabs.Tab>
             ))}
           </Tabs.List>
@@ -323,7 +323,7 @@ export default function WrittenAdmin() {
               selectedKey={filterDifficulty}
               onSelectionChange={setFilterDifficulty}
             >
-              <Select.Trigger className="bg-[#1A1A24] border border-[#252533] text-[#F0EEE8] rounded-md text-sm">
+              <Select.Trigger className="bg-[#1A1A24] border border-[#252533] text-[#F0EEE8] rounded-full text-sm">
                 <Select.Value />
                 <Select.Indicator />
               </Select.Trigger>
@@ -349,7 +349,7 @@ export default function WrittenAdmin() {
             <Button
               onPress={openCreate}
               size="sm"
-              className="rounded-md border-none font-semibold bg-gradient-to-br from-[#7C6FFF] to-[#A78BFA] text-white shadow-[0_4px_16px_#7C6FFF30]"
+              className="rounded-full border-none font-semibold bg-gradient-to-br from-[#7C6FFF] to-[#A78BFA] text-white shadow-[0_4px_16px_#7C6FFF30]"
             >
               + Add Question
             </Button>
@@ -561,10 +561,10 @@ export default function WrittenAdmin() {
                           <Tabs.Tab
                             key={opt.value}
                             id={opt.value}
-                            className="text-[#8B8B9E] text-sm font-medium px-4 py-2 data-[selected=true]:text-white rounded-md flex-1 text-center"
+                            className="text-[#8B8B9E] text-sm font-medium px-4 py-2 data-[selected=true]:text-white rounded-full flex-1 text-center"
                           >
                             {opt.label}
-                            <Tabs.Indicator className="bg-[#7C6FFF] rounded-md" />
+                            <Tabs.Indicator className="bg-[#7C6FFF] rounded-full" />
                           </Tabs.Tab>
                         ))}
                       </Tabs.List>
@@ -597,10 +597,10 @@ export default function WrittenAdmin() {
                           <Tabs.Tab
                             key={opt.value}
                             id={opt.value}
-                            className="text-[#8B8B9E] text-sm font-medium px-4 py-2 data-[selected=true]:text-white rounded-md flex-1 text-center"
+                            className="text-[#8B8B9E] text-sm font-medium px-4 py-2 data-[selected=true]:text-white rounded-full flex-1 text-center"
                           >
                             {opt.label}
-                            <Tabs.Indicator className="bg-[#7C6FFF] rounded-md" />
+                            <Tabs.Indicator className="bg-[#7C6FFF] rounded-full" />
                           </Tabs.Tab>
                         ))}
                       </Tabs.List>
@@ -625,7 +625,7 @@ export default function WrittenAdmin() {
                     </Label>
                     <NumberField.Group>
                       <NumberField.DecrementButton />
-                      <NumberField.Input className="bg-[#1A1A24] border border-[#252533] text-[#F0EEE8] rounded-md" />
+                      <NumberField.Input className="bg-[#1A1A24] border border-[#252533] text-[#F0EEE8] rounded-full" />
                       <NumberField.IncrementButton />
                     </NumberField.Group>
                   </NumberField>
@@ -645,7 +645,7 @@ export default function WrittenAdmin() {
                           ? 'e.g. "(a)", "(b)(i)"'
                           : "Optional"
                       }
-                      className="bg-[#1A1A24] border border-[#252533] text-[#F0EEE8] rounded-md"
+                      className="bg-[#1A1A24] border border-[#252533] text-[#F0EEE8] rounded-full"
                     />
                   </TextField>
                 </div>
@@ -659,7 +659,7 @@ export default function WrittenAdmin() {
                     value={formQuestion}
                     onChange={(e) => setFormQuestion(e.target.value)}
                     placeholder="Enter the question text..."
-                    className="w-full bg-[#1A1A24] border border-[#252533] text-[#F0EEE8] rounded-md min-h-[80px]"
+                    className="w-full bg-[#1A1A24] border border-[#252533] text-[#F0EEE8] rounded-2xl min-h-[80px]"
                     rows={3}
                   />
                 </div>
@@ -673,7 +673,7 @@ export default function WrittenAdmin() {
                     value={formMarkScheme}
                     onChange={(e) => setFormMarkScheme(e.target.value)}
                     placeholder="Enter the mark scheme or model answer..."
-                    className="w-full bg-[#1A1A24] border border-[#252533] text-[#F0EEE8] rounded-md min-h-[160px]"
+                    className="w-full bg-[#1A1A24] border border-[#252533] text-[#F0EEE8] rounded-2xl min-h-[160px]"
                     rows={6}
                   />
                   <span className="text-xs text-[#55556A] mt-1 block">
@@ -700,14 +700,14 @@ export default function WrittenAdmin() {
               <div className="flex items-center justify-end gap-2">
                 <Button
                   variant="ghost"
-                  className="rounded-md text-[#8B8B9E]"
+                  className="rounded-full text-[#8B8B9E]"
                   onPress={closeModal}
                   isDisabled={saving}
                 >
                   Cancel
                 </Button>
                 <Button
-                  className="rounded-md border-none font-semibold bg-gradient-to-br from-[#7C6FFF] to-[#A78BFA] text-white shadow-[0_4px_16px_#7C6FFF30]"
+                  className="rounded-full border-none font-semibold bg-gradient-to-br from-[#7C6FFF] to-[#A78BFA] text-white shadow-[0_4px_16px_#7C6FFF30]"
                   onPress={handleSave}
                   isPending={saving}
                 >

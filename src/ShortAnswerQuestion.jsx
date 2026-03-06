@@ -61,7 +61,7 @@ export default function ShortAnswerQuestion({
         disabled={submitted}
         rows={5}
         fullWidth
-        className="rounded-md bg-[#1A1A24] border border-[#252533] text-[#F0EEE8] text-sm leading-relaxed placeholder:text-[#55556A] focus:border-[#7C6FFF] p-3"
+        className="rounded-2xl bg-[#1A1A24] border border-[#252533] text-[#F0EEE8] text-sm leading-relaxed placeholder:text-[#55556A] focus:border-[#7C6FFF] p-3"
         style={{ fontFamily: "'Inter', sans-serif", resize: "vertical" }}
       />
 
@@ -71,7 +71,7 @@ export default function ShortAnswerQuestion({
           isDisabled={loading || !studentAnswer.trim()}
           fullWidth
           isPending={loading}
-          className={`rounded-md mt-4 font-semibold border-none ${
+          className={`rounded-full mt-4 font-semibold border-none ${
             studentAnswer.trim()
               ? 'bg-gradient-to-br from-[#7C6FFF] to-[#A78BFA] text-white shadow-[0_4px_16px_#7C6FFF30]'
               : 'bg-[#1E1E2A] text-[#55556A] shadow-none'
@@ -90,7 +90,7 @@ export default function ShortAnswerQuestion({
 
       {grade !== null && (
         <div
-          className="rounded-md mt-4 p-4"
+          className="rounded-2xl mt-4 p-4"
           style={{
             backgroundColor: scoreColor + '11',
             border: `1px solid ${scoreColor}44`,
