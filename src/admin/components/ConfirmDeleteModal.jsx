@@ -1,4 +1,5 @@
-import { Modal, Text, Group, Button, Stack } from "@mantine/core";
+import { Modal, Text, Group, Stack } from "@mantine/core";
+import { Button, Spinner } from "@heroui/react";
 
 export default function ConfirmDeleteModal({ opened, onClose, onConfirm, title, message, loading }) {
   return (
@@ -19,11 +20,12 @@ export default function ConfirmDeleteModal({ opened, onClose, onConfirm, title, 
           {message || "Are you sure you want to delete this item? This action cannot be undone."}
         </Text>
         <Group justify="flex-end" gap="sm">
-          <Button variant="subtle" color="gray" radius="md" onClick={onClose} disabled={loading}>
-            Cancel
-          </Button>
-          <Button color="red" radius="md" onClick={onConfirm} loading={loading}>
-            Delete
+          <Button variant="ghost" className="rounded-md text-[#8B8B9E]" onPress={onClose} isDisabled={loading}>Cancel</Button>
+          <Button variant="danger" className="rounded-md" onPress={onConfirm} isPending={loading}>
+            {({isPending}) => <>
+              {isPending && <Spinner color="current" size="sm" />}
+              {isPending ? "Deleting..." : "Delete"}
+            </>}
           </Button>
         </Group>
       </Stack>

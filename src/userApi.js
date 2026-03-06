@@ -1,5 +1,25 @@
 const WORKER_URL = "https://ib-grading-hollen.c9tggsfst9.workers.dev";
 
+// ─── Authenticated fetch for admin endpoints ────────────────────────────────
+async function adminFetch(path, method = "GET", body = undefined) {
+  const token = await window.Clerk?.session?.getToken();
+  if (!token) throw new Error("Not authenticated - no Clerk session token available");
+  const headers = {
+    Authorization: `Bearer ${token}`,
+    "Content-Type": "application/json",
+  };
+  const res = await fetch(`${WORKER_URL}${path}`, {
+    method,
+    headers,
+    body: body !== undefined ? JSON.stringify(body) : undefined,
+  });
+  if (!res.ok) {
+    const text = await res.text().catch(() => res.statusText);
+    throw new Error(`Admin API error ${res.status}: ${text}`);
+  }
+  return res.json();
+}
+
 // ─── Save a single attempt ─────────────────────────────────────────────────
 export async function saveAttempt(uid, attemptData, userInfo = {}) {
   const res = await fetch(`${WORKER_URL}/api/attempts/${uid}`, {
@@ -17,75 +37,37 @@ export async function saveAttempt(uid, attemptData, userInfo = {}) {
 
 // ─── Admin: get all users' stats ────────────────────────────────────────────
 export async function getAllUsersStats() {
-  const res = await fetch(`${WORKER_URL}/api/admin/users`);
-  if (!res.ok) throw new Error("Failed to fetch admin data");
-  return await res.json();
+  return adminFetch("/api/admin/users");
 }
 
 // ─── Admin: update user account status ──────────────────────────────────────
 export async function updateUserStatus(uid, status) {
-  const res = await fetch(`${WORKER_URL}/api/admin/users/status`, {
-    method: "PUT",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ uid, status }),
-  });
-  if (!res.ok) throw new Error("Failed to update user status");
-  return await res.json();
+  return adminFetch("/api/admin/users/status", "PUT", { uid, status });
 }
 
 // ─── Admin: ban user via Clerk ──────────────────────────────────────────────
 export async function banUser(uid) {
-  const res = await fetch(`${WORKER_URL}/api/admin/users/ban`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ uid }),
-  });
-  if (!res.ok) throw new Error("Failed to ban user");
-  return await res.json();
+  return adminFetch("/api/admin/users/ban", "POST", { uid });
 }
 
 // ─── Admin: unban user via Clerk ────────────────────────────────────────────
 export async function unbanUser(uid) {
-  const res = await fetch(`${WORKER_URL}/api/admin/users/unban`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ uid }),
-  });
-  if (!res.ok) throw new Error("Failed to unban user");
-  return await res.json();
+  return adminFetch("/api/admin/users/unban", "POST", { uid });
 }
 
 // ─── Admin: force sign out via Clerk ────────────────────────────────────────
 export async function forceSignOut(uid) {
-  const res = await fetch(`${WORKER_URL}/api/admin/users/signout`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ uid }),
-  });
-  if (!res.ok) throw new Error("Failed to sign out user");
-  return await res.json();
+  return adminFetch("/api/admin/users/signout", "POST", { uid });
 }
 
 // ─── Admin: edit user profile via Clerk ─────────────────────────────────────
 export async function editUserProfile(uid, { firstName, lastName, username }) {
-  const res = await fetch(`${WORKER_URL}/api/admin/users/profile`, {
-    method: "PATCH",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ uid, firstName, lastName, username }),
-  });
-  if (!res.ok) throw new Error("Failed to edit profile");
-  return await res.json();
+  return adminFetch("/api/admin/users/profile", "PATCH", { uid, firstName, lastName, username });
 }
 
 // ─── Admin: change user role via Clerk ──────────────────────────────────────
 export async function changeUserRole(uid, role) {
-  const res = await fetch(`${WORKER_URL}/api/admin/users/role`, {
-    method: "PUT",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ uid, role }),
-  });
-  if (!res.ok) throw new Error("Failed to change role");
-  return await res.json();
+  return adminFetch("/api/admin/users/role", "PUT", { uid, role });
 }
 
 // ─── Get all attempts for a user ────────────────────────────────────────────

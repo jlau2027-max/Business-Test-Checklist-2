@@ -2,9 +2,10 @@ import { useState, useEffect, createContext, useContext } from "react";
 import { Analytics } from "@vercel/analytics/react";
 import {
   Container, Badge, Text, Group, Paper, Progress,
-  Accordion, Checkbox, Button, Collapse,
-  Alert, Box, Stack, Textarea, useMantineTheme,
+  Accordion, Checkbox, Collapse,
+  Alert, Box, Stack, useMantineTheme,
 } from "@mantine/core";
+import { Button, TextArea, Spinner } from "@heroui/react";
 import LoginButton from "./LoginButton.jsx";
 import Sidebar from "./Sidebar.jsx";
 import { useAuth } from "./AuthContext.jsx";
@@ -489,12 +490,11 @@ function FlashcardsView() {
         {flashcardCategories.map(cat=>(
           <Button
             key={cat.id}
-            size="xs"
-            radius="xl"
-            variant={activeCat===cat.id ? "filled" : "subtle"}
-            ff="'JetBrains Mono', monospace"
-            onClick={()=>{ setActiveCat(cat.id); saveLS("fc_cat", cat.id); setCardIdx(0); }}
+            size="sm"
+            onPress={()=>{ setActiveCat(cat.id); saveLS("fc_cat", cat.id); setCardIdx(0); }}
+            className="rounded-full text-xs"
             style={{
+              fontFamily: "'JetBrains Mono', monospace",
               backgroundColor: activeCat===cat.id ? cat.color : "#1A1A24",
               color: activeCat===cat.id ? "#fff" : "#8B8B9E",
               border: `1px solid ${activeCat===cat.id ? cat.color : "#252533"}`,
@@ -519,24 +519,21 @@ function FlashcardsView() {
       {/* Navigation */}
       <Group grow gap="sm" mt="md">
         <Button
-          variant="subtle"
-          color="gray"
+          variant="ghost"
           size="md"
-          radius="md"
-          disabled={cardIdx===0}
-          onClick={()=>setCardIdx(i=>Math.max(0,i-1))}
-          styles={{ root: { backgroundColor: "#1A1A24", border: "1px solid #252533", "&:disabled": { backgroundColor: "#12121A", borderColor: "#1E1E2A" } } }}
+          isDisabled={cardIdx===0}
+          onPress={()=>setCardIdx(i=>Math.max(0,i-1))}
+          className="rounded-md bg-[#1A1A24] border border-[#252533] text-[#8B8B9E] disabled:bg-[#12121A] disabled:border-[#1E1E2A]"
         >
           Previous
         </Button>
         <Button
           size="md"
-          radius="md"
-          disabled={cardIdx===currentCat.cards.length-1}
-          onClick={()=>setCardIdx(i=>Math.min(currentCat.cards.length-1,i+1))}
+          isDisabled={cardIdx===currentCat.cards.length-1}
+          onPress={()=>setCardIdx(i=>Math.min(currentCat.cards.length-1,i+1))}
+          className="rounded-md border-none text-white"
           style={{
             background: cardIdx===currentCat.cards.length-1 ? "#1E1E2A" : currentCat.color,
-            border: "none",
           }}
         >
           Next
@@ -603,16 +600,14 @@ function MCQItem({q, displayNum}) {
         })}
         {!confirmed ? (
           <Button
-            mt={4}
             fullWidth
-            radius="md"
-            disabled={selected===null}
-            onClick={()=>{if(selected!==null){setConfirmed(true);recordAttempt({userAnswer:selected,isCorrect:selected===q.answer});}}}
+            isDisabled={selected===null}
+            onPress={()=>{if(selected!==null){setConfirmed(true);recordAttempt({userAnswer:selected,isCorrect:selected===q.answer});}}}
+            className="rounded-md mt-1 font-semibold border-none"
             style={{
               background: selected!==null ? color : "#1E1E2A",
-              border: "none",
+              color: selected===null ? "#55556A" : "#fff",
             }}
-            styles={{ root: { "&:disabled": { backgroundColor: "#1E1E2A", color: "#55556A" } } }}
           >
             Check Answer
           </Button>
@@ -629,7 +624,7 @@ function MCQItem({q, displayNum}) {
             }}
           >
             <Text fz="sm" c="#8B8B9E" lh={1.6}>{q.explanation}</Text>
-            <Button variant="subtle" size="xs" color="gray" mt="sm" onClick={()=>{setSelected(null);setConfirmed(false);resetTimer();}}>Try Again</Button>
+            <Button variant="ghost" size="sm" className="mt-2 text-[#8B8B9E]" onPress={()=>{setSelected(null);setConfirmed(false);resetTimer();}}>Try Again</Button>
           </Alert>
         )}
       </Stack>
@@ -659,15 +654,15 @@ function PracticeView() {
           return (
             <Button
               key={cat}
-              size="xs"
-              radius="xl"
-              ff="'JetBrains Mono', monospace"
-              onClick={()=>setFilterCat(cat)}
+              size="sm"
+              className="rounded-full"
+              onPress={()=>setFilterCat(cat)}
               style={{
                 backgroundColor: active ? c : "#1A1A24",
                 color: active ? "#fff" : "#8B8B9E",
                 border: `1px solid ${active ? c : "#252533"}`,
                 boxShadow: "none",
+                fontFamily: "'JetBrains Mono', monospace",
               }}
             >
               {cat}
@@ -754,54 +749,47 @@ function WrittenPracticeItem({q, displayNum}) {
       </div>
 
       <div style={{padding:"12px 20px 16px"}}>
-        <Textarea
+        <TextArea
           value={answer}
-          onChange={(e) => setAnswer(e.currentTarget.value)}
+          onChange={(e) => setAnswer(e.target.value)}
           placeholder="Type your answer here..."
-          minRows={5}
-          radius="md"
-          mb="sm"
+          rows={5}
           disabled={grading}
-          styles={{
-            input: {
-              backgroundColor: "#12121A",
-              borderColor: "#252533",
-              color: "#F0EEE8",
-              fontSize: 14,
-              lineHeight: 1.6,
-              "&:focus": { borderColor: color },
-              "&::placeholder": { color: "#55556A" },
-            },
-          }}
+          fullWidth
+          className="rounded-md bg-[#12121A] border border-[#252533] text-[#F0EEE8] text-sm leading-relaxed placeholder:text-[#55556A] p-3 mb-2"
+          style={{ fontFamily: "'Inter', sans-serif", resize: "vertical" }}
         />
 
         <Group gap="sm">
           <Button
             size="sm"
-            radius="md"
-            ff="'JetBrains Mono', monospace"
-            onClick={handleSolve}
-            loading={grading}
-            disabled={!answer.trim() || grading}
-            loaderProps={{ type: "dots" }}
+            className="rounded-md border-none font-semibold"
+            onPress={handleSolve}
+            isPending={grading}
+            isDisabled={!answer.trim() || grading}
             style={{
               background: answer.trim() && !grading ? "#7C6FFF" : "#1E1E2A",
-              border: "none",
+              fontFamily: "'JetBrains Mono', monospace",
             }}
           >
-            Solve
+            {({isPending}) => <>
+              {isPending && <Spinner color="current" size="sm" />}
+              {isPending ? "Grading..." : "Solve"}
+            </>}
           </Button>
           <Button
             size="sm"
-            radius="md"
-            variant={revealed ? "subtle" : "light"}
-            color={revealed ? "gray" : undefined}
-            ff="'JetBrains Mono', monospace"
-            onClick={()=>setRevealed(r=>!r)}
-            style={revealed ? {} : {
+            variant="ghost"
+            className={revealed
+              ? "rounded-md text-[#8B8B9E]"
+              : "rounded-md"
+            }
+            onPress={()=>setRevealed(r=>!r)}
+            style={revealed ? { fontFamily: "'JetBrains Mono', monospace" } : {
               backgroundColor: color + "22",
               color: color,
               border: `1px solid ${color}44`,
+              fontFamily: "'JetBrains Mono', monospace",
             }}
           >
             {revealed ? "Hide Markscheme" : "Show Markscheme"}
@@ -809,11 +797,10 @@ function WrittenPracticeItem({q, displayNum}) {
           {answer.trim() && !grading && (
             <Button
               size="sm"
-              radius="md"
-              variant="subtle"
-              color="gray"
-              ff="'JetBrains Mono', monospace"
-              onClick={()=>{ setAnswer(""); setGradeResult(null); saveLS(`written_ans_${q.id}`, ""); saveLS(`written_grade_${q.id}`, null); }}
+              variant="ghost"
+              className="rounded-md text-[#8B8B9E]"
+              style={{ fontFamily: "'JetBrains Mono', monospace" }}
+              onPress={()=>{ setAnswer(""); setGradeResult(null); saveLS(`written_ans_${q.id}`, ""); saveLS(`written_grade_${q.id}`, null); }}
             >
               Clear
             </Button>
@@ -891,10 +878,8 @@ function WrittenPracticeView() {
       {/* Mode selector — Short Answer / 10 Marker / Specimen (link) */}
       <Group gap={10} mb="lg">
         <Button
-          radius="md"
-          ff="'JetBrains Mono', monospace"
-          fw={700}
-          onClick={()=>{ setMode("short"); setFilterCat("All"); }}
+          className="rounded-md font-bold"
+          onPress={()=>{ setMode("short"); setFilterCat("All"); }}
           style={{
             flex: 1,
             height: 48,
@@ -904,15 +889,14 @@ function WrittenPracticeView() {
             fontSize: 15,
             lineHeight: 1,
             boxShadow: mode === "short" ? "0 0 16px #7C6FFF33" : "none",
+            fontFamily: "'JetBrains Mono', monospace",
           }}
         >
           Short Answer
         </Button>
         <Button
-          radius="md"
-          ff="'JetBrains Mono', monospace"
-          fw={700}
-          onClick={()=>setMode("10mark")}
+          className="rounded-md font-bold"
+          onPress={()=>setMode("10mark")}
           style={{
             flex: 1,
             height: 48,
@@ -922,29 +906,28 @@ function WrittenPracticeView() {
             fontSize: 15,
             lineHeight: 1,
             boxShadow: mode === "10mark" ? "0 0 16px #F8717133" : "none",
+            fontFamily: "'JetBrains Mono', monospace",
           }}
         >
           10 Marker
         </Button>
-        <Button
-          component="a"
-          href="/business/specimen"
-          radius="md"
-          ff="'JetBrains Mono', monospace"
-          fw={700}
-          style={{
-            flex: 1,
-            height: 48,
-            backgroundColor: "#1A1A24",
-            color: "#2DD4BF",
-            border: "2px solid #2DD4BF",
-            fontSize: 15,
-            lineHeight: 1,
-            textDecoration: "none",
-          }}
-        >
-          Specimen →
-        </Button>
+        <a href="/business/specimen" style={{ flex: 1, textDecoration: "none" }}>
+          <Button
+            fullWidth
+            className="rounded-md font-bold"
+            style={{
+              height: 48,
+              backgroundColor: "#1A1A24",
+              color: "#2DD4BF",
+              border: "2px solid #2DD4BF",
+              fontSize: 15,
+              lineHeight: 1,
+              fontFamily: "'JetBrains Mono', monospace",
+            }}
+          >
+            Specimen →
+          </Button>
+        </a>
       </Group>
 
       {/* Category filter — only for short answer mode */}
@@ -956,15 +939,15 @@ function WrittenPracticeView() {
             return (
               <Button
                 key={cat}
-                size="xs"
-                radius="xl"
-                ff="'JetBrains Mono', monospace"
-                onClick={()=>setFilterCat(cat)}
+                size="sm"
+                className="rounded-full"
+                onPress={()=>setFilterCat(cat)}
                 style={{
                   backgroundColor: active ? c : "#1A1A24",
                   color: active ? "#fff" : "#8B8B9E",
                   border: `1px solid ${active ? c : "#252533"}`,
                   boxShadow: "none",
+                  fontFamily: "'JetBrains Mono', monospace",
                 }}
               >
                 {cat}
@@ -1032,19 +1015,15 @@ export default function App({ initialTab = "checklist" }) {
           <Group justify="center" mb={4} style={{ position: "relative" }}>
             {/* Sidebar toggle */}
             <Button
-              onClick={() => setSidebarOpen(o => !o)}
-              radius="md"
+              isIconOnly
+              variant="outline"
+              onPress={() => setSidebarOpen(o => !o)}
+              className="rounded-md border-[#252533] text-[#8B8B9E] bg-transparent min-w-[auto] h-8 px-2.5"
               style={{
                 position: "absolute",
                 left: 0,
                 top: "50%",
                 transform: "translateY(-50%)",
-                backgroundColor: "transparent",
-                color: "#8B8B9E",
-                border: "1px solid #252533",
-                padding: "4px 10px",
-                minWidth: "auto",
-                height: 32,
               }}
             >
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
@@ -1084,29 +1063,34 @@ export default function App({ initialTab = "checklist" }) {
               { value: "practice", label: "Multi-Choice", href: "/business/multi-choice" },
               { value: "written", label: "Written", href: "/business/written" },
             ].map(t => (
-              <Button
+              <a
                 key={t.value}
-                component="a"
                 href={t.href}
-                radius={0}
-                fw={600}
-                ff="'Inter', sans-serif"
                 style={{
-                  fontSize: 13,
-                  padding: "10px 4px 12px",
-                  backgroundColor: "transparent",
-                  color: tab === t.value ? "#F0EEE8" : "#55556A",
-                  borderBottom: tab === t.value ? "3px solid #7C6FFF" : "3px solid transparent",
-                  borderTop: "none",
-                  borderLeft: "none",
-                  borderRight: "none",
-                  borderRadius: 0,
-                  transition: "all 0.2s",
+                  flex: 1,
                   textDecoration: "none",
                 }}
               >
-                {t.label}
-              </Button>
+                <Button
+                  fullWidth
+                  className="rounded-none font-semibold"
+                  style={{
+                    fontSize: 13,
+                    padding: "10px 4px 12px",
+                    backgroundColor: "transparent",
+                    color: tab === t.value ? "#F0EEE8" : "#55556A",
+                    borderBottom: tab === t.value ? "3px solid #7C6FFF" : "3px solid transparent",
+                    borderTop: "none",
+                    borderLeft: "none",
+                    borderRight: "none",
+                    borderRadius: 0,
+                    transition: "all 0.2s",
+                    fontFamily: "'Inter', sans-serif",
+                  }}
+                >
+                  {t.label}
+                </Button>
+              </a>
             ))}
           </Group>
         </Container>

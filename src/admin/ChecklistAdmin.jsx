@@ -5,7 +5,6 @@ import {
   Group,
   Stack,
   Text,
-  Button,
   TextInput,
   Textarea,
   Modal,
@@ -18,6 +17,7 @@ import {
   Collapse,
   UnstyledButton,
 } from "@mantine/core";
+import { Button, Spinner } from "@heroui/react";
 // Inline SVG icons (avoids @tabler/icons-react dependency)
 const IconPlus = ({ size = 16 }) => (
   <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round"><path d="M12 5v14M5 12h14" /></svg>
@@ -356,14 +356,7 @@ export default function ChecklistAdmin() {
             Checklist
           </Text>
           {canEditContent && (
-            <Button
-              leftSection={<IconPlus size={16} />}
-              color="violet"
-              radius="md"
-              onClick={openCreateSectionModal}
-            >
-              Add Section
-            </Button>
+            <Button className="rounded-md bg-[#7C6FFF] text-white border-none" onPress={openCreateSectionModal}><IconPlus size={16} /> Add Section</Button>
           )}
         </Group>
 
@@ -588,16 +581,7 @@ export default function ChecklistAdmin() {
                       {/* Add Item button */}
                       {canEditContent && (
                         <Box p="md">
-                          <Button
-                            variant="light"
-                            color="violet"
-                            radius="md"
-                            size="xs"
-                            leftSection={<IconPlus size={14} />}
-                            onClick={() => openCreateItemModal(section.id)}
-                          >
-                            Add Item
-                          </Button>
+                          <Button size="sm" className="rounded-md bg-[#7C6FFF22] text-[#A78BFA] border-none" onPress={() => openCreateItemModal(section.id)}><IconPlus size={14} /> Add Item</Button>
                         </Box>
                       )}
                     </Box>
@@ -682,23 +666,8 @@ export default function ChecklistAdmin() {
 
           {/* Actions */}
           <Group justify="flex-end" gap="sm" mt="sm">
-            <Button
-              variant="subtle"
-              color="gray"
-              radius="md"
-              onClick={closeSectionModal}
-              disabled={savingSection}
-            >
-              Cancel
-            </Button>
-            <Button
-              color="violet"
-              radius="md"
-              onClick={handleSaveSection}
-              loading={savingSection}
-            >
-              {editingSection ? "Save Changes" : "Create Section"}
-            </Button>
+            <Button variant="ghost" className="rounded-md text-[#8B8B9E]" onPress={closeSectionModal} isDisabled={savingSection}>Cancel</Button>
+            <Button className="rounded-md bg-[#7C6FFF] text-white border-none" onPress={handleSaveSection} isPending={savingSection}>{({isPending}) => <>{isPending && <Spinner color="current" size="sm" />}{isPending ? "Saving..." : (editingSection ? "Save Changes" : "Create Section")}</>}</Button>
           </Group>
         </Stack>
       </Modal>
@@ -753,23 +722,8 @@ export default function ChecklistAdmin() {
 
           {/* Actions */}
           <Group justify="flex-end" gap="sm" mt="sm">
-            <Button
-              variant="subtle"
-              color="gray"
-              radius="md"
-              onClick={closeItemModal}
-              disabled={savingItem}
-            >
-              Cancel
-            </Button>
-            <Button
-              color="violet"
-              radius="md"
-              onClick={handleSaveItem}
-              loading={savingItem}
-            >
-              {editingItem ? "Save Changes" : "Create Item"}
-            </Button>
+            <Button variant="ghost" className="rounded-md text-[#8B8B9E]" onPress={closeItemModal} isDisabled={savingItem}>Cancel</Button>
+            <Button className="rounded-md bg-[#7C6FFF] text-white border-none" onPress={handleSaveItem} isPending={savingItem}>{({isPending}) => <>{isPending && <Spinner color="current" size="sm" />}{isPending ? "Saving..." : (editingItem ? "Save Changes" : "Create Item")}</>}</Button>
           </Group>
         </Stack>
       </Modal>

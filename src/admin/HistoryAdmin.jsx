@@ -5,7 +5,6 @@ import {
   Group,
   Stack,
   Text,
-  Button,
   TextInput,
   Textarea,
   Modal,
@@ -20,6 +19,7 @@ import {
   ScrollArea,
   NumberInput,
 } from "@mantine/core";
+import { Button, Spinner } from "@heroui/react";
 // Inline SVG icons (avoids @tabler/icons-react dependency)
 const IconPlus = ({ size = 16 }) => (
   <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round"><path d="M12 5v14M5 12h14" /></svg>
@@ -272,14 +272,7 @@ export default function HistoryAdmin() {
             History Questions
           </Text>
           {canEditContent && (
-            <Button
-              leftSection={<IconPlus size={16} />}
-              color="violet"
-              radius="md"
-              onClick={openCreateModal}
-            >
-              Add Question
-            </Button>
+            <Button className="rounded-md bg-[#7C6FFF] text-white border-none" onPress={openCreateModal}><IconPlus size={16} /> Add Question</Button>
           )}
         </Group>
 
@@ -582,23 +575,8 @@ export default function HistoryAdmin() {
 
           {/* Actions */}
           <Group justify="flex-end" gap="sm" mt="sm">
-            <Button
-              variant="subtle"
-              color="gray"
-              radius="md"
-              onClick={closeModal}
-              disabled={saving}
-            >
-              Cancel
-            </Button>
-            <Button
-              color="violet"
-              radius="md"
-              onClick={handleSave}
-              loading={saving}
-            >
-              {editingQuestion ? "Save Changes" : "Create Question"}
-            </Button>
+            <Button variant="ghost" className="rounded-md text-[#8B8B9E]" onPress={closeModal} isDisabled={saving}>Cancel</Button>
+            <Button className="rounded-md bg-[#7C6FFF] text-white border-none" onPress={handleSave} isPending={saving}>{({isPending}) => <>{isPending && <Spinner color="current" size="sm" />}{isPending ? "Saving..." : (editingQuestion ? "Save Changes" : "Create Question")}</>}</Button>
           </Group>
         </Stack>
       </Modal>

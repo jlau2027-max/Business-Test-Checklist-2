@@ -1,4 +1,5 @@
-import { Box, Container, Text, Group, Paper, Button, Badge } from "@mantine/core";
+import { Box, Container, Text, Group, Paper, Badge } from "@mantine/core";
+import { Button } from "@heroui/react";
 import { Show, SignInButton, SignUpButton } from "@clerk/react";
 import LoginButton from "./LoginButton.jsx";
 
@@ -52,33 +53,21 @@ export default function LandingPage() {
           <Group justify="center" gap="sm" mb={48}>
             <SignInButton mode="modal">
               <Button
-                radius="md"
+                render={(props) => <button {...props} />}
                 size="md"
-                ff="'Inter', sans-serif"
-                fw={600}
-                style={{
-                  backgroundColor: "#7C6FFF",
-                  color: "#fff",
-                  border: "none",
-                  fontSize: 15,
-                }}
+                className="rounded-md bg-[#7C6FFF] text-white border-none text-[15px] font-semibold"
+                style={{ fontFamily: "'Inter', sans-serif" }}
               >
                 Sign In
               </Button>
             </SignInButton>
             <SignUpButton mode="modal">
               <Button
-                radius="md"
+                render={(props) => <button {...props} />}
                 size="md"
                 variant="outline"
-                ff="'Inter', sans-serif"
-                fw={600}
-                style={{
-                  backgroundColor: "transparent",
-                  color: "#A78BFA",
-                  border: "1px solid #252533",
-                  fontSize: 15,
-                }}
+                className="rounded-md bg-transparent text-[#A78BFA] border border-[#252533] text-[15px] font-semibold"
+                style={{ fontFamily: "'Inter', sans-serif" }}
               >
                 Sign Up
               </Button>

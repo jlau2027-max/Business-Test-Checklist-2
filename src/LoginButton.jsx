@@ -1,4 +1,4 @@
-import { Button } from "@mantine/core";
+import { Button } from "@heroui/react";
 import { Show, SignInButton, UserButton } from "@clerk/react";
 import { useAuth } from "./AuthContext.jsx";
 
@@ -9,21 +9,16 @@ export default function LoginButton() {
       <Show when="signed-out">
         <SignInButton mode="modal">
           <Button
-            radius="md"
+            render={(props) => <button {...props} />}
+            size="sm"
+            variant="outline"
+            className="rounded-md border-[#252533] text-[#8B8B9E] text-[13px] font-semibold px-3 min-w-[auto] h-8 bg-transparent"
             style={{
               position: "absolute",
               right: 0,
               top: "50%",
               transform: "translateY(-50%)",
-              backgroundColor: "transparent",
-              color: "#8B8B9E",
-              border: "1px solid #252533",
-              padding: "4px 12px",
-              minWidth: "auto",
-              height: 32,
-              fontSize: 13,
               fontFamily: "'Inter', sans-serif",
-              fontWeight: 600,
             }}
           >
             Sign In

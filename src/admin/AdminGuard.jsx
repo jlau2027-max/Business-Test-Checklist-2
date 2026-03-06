@@ -1,4 +1,5 @@
-import { Container, Text, Button, Paper, Stack } from "@mantine/core";
+import { Container, Text, Paper, Stack } from "@mantine/core";
+import { Button } from "@heroui/react";
 import { useAuth } from "../AuthContext.jsx";
 
 export default function AdminGuard({ children }) {
@@ -14,9 +15,9 @@ export default function AdminGuard({ children }) {
             <Text fz={48}>🔒</Text>
             <Text fz="xl" fw={700} c="#F0EEE8">Sign In Required</Text>
             <Text fz="sm" c="#8B8B9E">You need to sign in to access the admin panel.</Text>
-            <Button component="a" href="/business/checklist" variant="light" color="violet" radius="md">
-              Go Home
-            </Button>
+            <a href="/business/checklist" style={{ textDecoration: "none" }}>
+              <Button className="rounded-md bg-[#7C6FFF22] text-[#A78BFA] border-none">Go Home</Button>
+            </a>
           </Stack>
         </Paper>
       </Container>
@@ -31,9 +32,9 @@ export default function AdminGuard({ children }) {
             <Text fz={48}>🚫</Text>
             <Text fz="xl" fw={700} c="#F0EEE8">Access Denied</Text>
             <Text fz="sm" c="#8B8B9E">You don't have permission to access the admin panel.</Text>
-            <Button component="a" href="/business/checklist" variant="light" color="violet" radius="md">
-              Go Home
-            </Button>
+            <a href="/business/checklist" style={{ textDecoration: "none" }}>
+              <Button className="rounded-md bg-[#7C6FFF22] text-[#A78BFA] border-none">Go Home</Button>
+            </a>
           </Stack>
         </Paper>
       </Container>

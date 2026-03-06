@@ -540,8 +540,13 @@ async function verifySignature(token, parts, jwk, payload) {
 }
 
 function getUserRole(payload) {
-  return payload?.publicMetadata?.role || payload?.public_metadata?.role || null;
+  return payload?.publicMetadata?.role || payload?.public_metadata?.role
+    || payload?.metadata?.role || null;
 }
+
+// Cache role lookups per user for 5 minutes (avoids hitting Clerk API on every request)
+const roleCache = new Map();
+const ROLE_CACHE_TTL = 300_000; // 5 minutes
 
 async function requireAuth(request, env, allowedRoles) {
   const result = await verifyClerkJwt(request, env);
@@ -549,7 +554,29 @@ async function requireAuth(request, env, allowedRoles) {
     return { response: json({ error: result.error }, result.status) };
   }
 
-  const role = getUserRole(result.payload);
+  let role = getUserRole(result.payload);
+
+  // Clerk JWTs don't include publicMetadata by default — fall back to
+  // Clerk Backend API to look up the user's role when not in the token
+  if (!role && env.CLERK_SECRET_KEY && result.payload.sub) {
+    const uid = result.payload.sub;
+    const cached = roleCache.get(uid);
+    const now = Date.now();
+
+    if (cached && now - cached.at < ROLE_CACHE_TTL) {
+      role = cached.role;
+    } else {
+      try {
+        const user = await clerkAPI(env, "GET", `/users/${uid}`);
+        role = user?.public_metadata?.role || null;
+        roleCache.set(uid, { role, at: now });
+      } catch (_) {
+        // API lookup failed — use stale cache if available
+        if (cached) role = cached.role;
+      }
+    }
+  }
+
   if (!role || !allowedRoles.includes(role)) {
     return { response: json({ error: "Forbidden: insufficient role" }, 403) };
   }
@@ -643,7 +670,13 @@ function slugify(text) {
     .replace(/^-|-$/g, "");
 }
 
+const ALLOWED_TABLES = [
+  "flashcard_topics", "flashcards", "mcq_questions", "written_questions",
+  "history_questions", "checklist_sections", "checklist_items", "category_colors",
+];
+
 async function getNextId(env, table, prefix) {
+  if (!ALLOWED_TABLES.includes(table)) throw new Error(`Invalid table: ${table}`);
   const row = await env.CONTENT_DB.prepare(
     `SELECT id FROM ${table} ORDER BY id DESC LIMIT 1`
   ).first();
@@ -653,7 +686,11 @@ async function getNextId(env, table, prefix) {
   return `${prefix}${num}`;
 }
 
+const ALLOWED_WHERE_CLAUSES = ["", "topic_id = ?", "section_id = ?"];
+
 async function getNextSortOrder(env, table, whereClause = "", bindings = []) {
+  if (!ALLOWED_TABLES.includes(table)) throw new Error(`Invalid table: ${table}`);
+  if (!ALLOWED_WHERE_CLAUSES.includes(whereClause)) throw new Error(`Invalid where clause: ${whereClause}`);
   const sql = `SELECT MAX(sort_order) as max_sort FROM ${table}${whereClause ? " WHERE " + whereClause : ""}`;
   const row = await env.CONTENT_DB.prepare(sql).bind(...bindings).first();
   return (row?.max_sort ?? -1) + 1;
@@ -671,16 +708,18 @@ async function handleAdminFlashcardTopicsPost(request, env) {
   return json({ ok: true, id }, 201);
 }
 
+const FIELDS_FLASHCARD_TOPICS = ["label", "color", "sort_order"];
+
 async function handleAdminFlashcardTopicsPut(id, request, env) {
   const body = await request.json();
   const fields = [];
   const values = [];
   for (const [key, val] of Object.entries(body)) {
-    if (key === "id") continue;
+    if (!FIELDS_FLASHCARD_TOPICS.includes(key)) continue;
     fields.push(`${key} = ?`);
     values.push(val);
   }
-  if (fields.length === 0) return json({ error: "No fields to update" }, 400);
+  if (fields.length === 0) return json({ error: "No valid fields to update" }, 400);
   values.push(id);
   await env.CONTENT_DB.prepare(
     `UPDATE flashcard_topics SET ${fields.join(", ")} WHERE id = ?`
@@ -697,24 +736,25 @@ async function handleAdminFlashcardTopicsDelete(id, env) {
 
 async function handleAdminFlashcardsPost(request, env) {
   const body = await request.json();
-  const id = body.id || crypto.randomUUID();
   const sort_order = body.sort_order ?? await getNextSortOrder(env, "flashcards", "topic_id = ?", [body.topic_id]);
-  await env.CONTENT_DB.prepare(
-    `INSERT INTO flashcards (id, topic_id, term, definition, formula, sort_order) VALUES (?, ?, ?, ?, ?, ?)`
-  ).bind(id, body.topic_id, body.term, body.definition, body.formula || null, sort_order).run();
-  return json({ ok: true, id }, 201);
+  const result = await env.CONTENT_DB.prepare(
+    `INSERT INTO flashcards (topic_id, term, definition, formula, sort_order) VALUES (?, ?, ?, ?, ?)`
+  ).bind(body.topic_id, body.term, body.definition, body.formula || null, sort_order).run();
+  return json({ ok: true, id: result.meta.last_row_id }, 201);
 }
+
+const FIELDS_FLASHCARDS = ["topic_id", "term", "definition", "formula", "sort_order"];
 
 async function handleAdminFlashcardsPut(id, request, env) {
   const body = await request.json();
   const fields = [];
   const values = [];
   for (const [key, val] of Object.entries(body)) {
-    if (key === "id") continue;
+    if (!FIELDS_FLASHCARDS.includes(key)) continue;
     fields.push(`${key} = ?`);
     values.push(val);
   }
-  if (fields.length === 0) return json({ error: "No fields to update" }, 400);
+  if (fields.length === 0) return json({ error: "No valid fields to update" }, 400);
   values.push(id);
   await env.CONTENT_DB.prepare(
     `UPDATE flashcards SET ${fields.join(", ")} WHERE id = ?`
@@ -744,16 +784,18 @@ async function handleAdminMcqPost(request, env) {
   return json({ ok: true, id }, 201);
 }
 
+const FIELDS_MCQ = ["category", "difficulty", "question_text", "option_a", "option_b", "option_c", "option_d", "correct_option", "explanation", "sort_order"];
+
 async function handleAdminMcqPut(id, request, env) {
   const body = await request.json();
   const fields = [];
   const values = [];
   for (const [key, val] of Object.entries(body)) {
-    if (key === "id") continue;
+    if (!FIELDS_MCQ.includes(key)) continue;
     fields.push(`${key} = ?`);
     values.push(val);
   }
-  if (fields.length === 0) return json({ error: "No fields to update" }, 400);
+  if (fields.length === 0) return json({ error: "No valid fields to update" }, 400);
   values.push(id);
   await env.CONTENT_DB.prepare(
     `UPDATE mcq_questions SET ${fields.join(", ")} WHERE id = ?`
@@ -783,16 +825,18 @@ async function handleAdminWrittenPost(request, env) {
   return json({ ok: true, id }, 201);
 }
 
+const FIELDS_WRITTEN = ["category", "difficulty", "question_type", "marks", "question_text", "mark_scheme", "label", "sort_order"];
+
 async function handleAdminWrittenPut(id, request, env) {
   const body = await request.json();
   const fields = [];
   const values = [];
   for (const [key, val] of Object.entries(body)) {
-    if (key === "id") continue;
+    if (!FIELDS_WRITTEN.includes(key)) continue;
     fields.push(`${key} = ?`);
     values.push(val);
   }
-  if (fields.length === 0) return json({ error: "No fields to update" }, 400);
+  if (fields.length === 0) return json({ error: "No valid fields to update" }, 400);
   values.push(id);
   await env.CONTENT_DB.prepare(
     `UPDATE written_questions SET ${fields.join(", ")} WHERE id = ?`
@@ -822,16 +866,18 @@ async function handleAdminHistoryPost(request, env) {
   return json({ ok: true, id }, 201);
 }
 
+const FIELDS_HISTORY = ["paper", "topic", "question_number", "question_text", "marks", "mark_scheme", "sort_order"];
+
 async function handleAdminHistoryPut(id, request, env) {
   const body = await request.json();
   const fields = [];
   const values = [];
   for (const [key, val] of Object.entries(body)) {
-    if (key === "id") continue;
+    if (!FIELDS_HISTORY.includes(key)) continue;
     fields.push(`${key} = ?`);
     values.push(val);
   }
-  if (fields.length === 0) return json({ error: "No fields to update" }, 400);
+  if (fields.length === 0) return json({ error: "No valid fields to update" }, 400);
   values.push(id);
   await env.CONTENT_DB.prepare(
     `UPDATE history_questions SET ${fields.join(", ")} WHERE id = ?`
@@ -848,7 +894,7 @@ async function handleAdminHistoryDelete(id, env) {
 
 async function handleAdminChecklistSectionsPost(request, env) {
   const body = await request.json();
-  const id = body.id || crypto.randomUUID();
+  const id = body.id || slugify(body.title || "section");
   const sort_order = body.sort_order ?? await getNextSortOrder(env, "checklist_sections");
   await env.CONTENT_DB.prepare(
     `INSERT INTO checklist_sections (id, title, color, sort_order) VALUES (?, ?, ?, ?)`
@@ -856,16 +902,18 @@ async function handleAdminChecklistSectionsPost(request, env) {
   return json({ ok: true, id }, 201);
 }
 
+const FIELDS_CHECKLIST_SECTIONS = ["title", "color", "sort_order"];
+
 async function handleAdminChecklistSectionsPut(id, request, env) {
   const body = await request.json();
   const fields = [];
   const values = [];
   for (const [key, val] of Object.entries(body)) {
-    if (key === "id") continue;
+    if (!FIELDS_CHECKLIST_SECTIONS.includes(key)) continue;
     fields.push(`${key} = ?`);
     values.push(val);
   }
-  if (fields.length === 0) return json({ error: "No fields to update" }, 400);
+  if (fields.length === 0) return json({ error: "No valid fields to update" }, 400);
   values.push(id);
   await env.CONTENT_DB.prepare(
     `UPDATE checklist_sections SET ${fields.join(", ")} WHERE id = ?`
@@ -882,24 +930,25 @@ async function handleAdminChecklistSectionsDelete(id, env) {
 
 async function handleAdminChecklistItemsPost(request, env) {
   const body = await request.json();
-  const id = body.id || crypto.randomUUID();
   const sort_order = body.sort_order ?? await getNextSortOrder(env, "checklist_items", "section_id = ?", [body.section_id]);
-  await env.CONTENT_DB.prepare(
-    `INSERT INTO checklist_items (id, section_id, text, sort_order) VALUES (?, ?, ?, ?)`
-  ).bind(id, body.section_id, body.text, sort_order).run();
-  return json({ ok: true, id }, 201);
+  const result = await env.CONTENT_DB.prepare(
+    `INSERT INTO checklist_items (section_id, text, sort_order) VALUES (?, ?, ?)`
+  ).bind(body.section_id, body.text, sort_order).run();
+  return json({ ok: true, id: result.meta.last_row_id }, 201);
 }
+
+const FIELDS_CHECKLIST_ITEMS = ["section_id", "text", "sort_order"];
 
 async function handleAdminChecklistItemsPut(id, request, env) {
   const body = await request.json();
   const fields = [];
   const values = [];
   for (const [key, val] of Object.entries(body)) {
-    if (key === "id") continue;
+    if (!FIELDS_CHECKLIST_ITEMS.includes(key)) continue;
     fields.push(`${key} = ?`);
     values.push(val);
   }
-  if (fields.length === 0) return json({ error: "No fields to update" }, 400);
+  if (fields.length === 0) return json({ error: "No valid fields to update" }, 400);
   values.push(id);
   await env.CONTENT_DB.prepare(
     `UPDATE checklist_items SET ${fields.join(", ")} WHERE id = ?`
@@ -977,36 +1026,50 @@ export default {
 
     // Admin: GET /api/admin/users
     if (path === "/api/admin/users" && request.method === "GET") {
+      const auth = await requireAuth(request, env, ADMIN_ROLES);
+      if (auth.response) return auth.response;
       return handleAdminUsers(env);
     }
 
     // Admin: PUT /api/admin/users/status
     if (path === "/api/admin/users/status" && request.method === "PUT") {
+      const auth = await requireAuth(request, env, ADMIN_ROLES);
+      if (auth.response) return auth.response;
       return handleAdminUpdateStatus(request, env);
     }
 
     // Admin: POST /api/admin/users/ban
     if (path === "/api/admin/users/ban" && request.method === "POST") {
+      const auth = await requireAuth(request, env, DELETE_ROLES);
+      if (auth.response) return auth.response;
       return handleAdminBanUser(request, env);
     }
 
     // Admin: POST /api/admin/users/unban
     if (path === "/api/admin/users/unban" && request.method === "POST") {
+      const auth = await requireAuth(request, env, DELETE_ROLES);
+      if (auth.response) return auth.response;
       return handleAdminUnbanUser(request, env);
     }
 
     // Admin: POST /api/admin/users/signout
     if (path === "/api/admin/users/signout" && request.method === "POST") {
+      const auth = await requireAuth(request, env, DELETE_ROLES);
+      if (auth.response) return auth.response;
       return handleAdminSignOut(request, env);
     }
 
     // Admin: PATCH /api/admin/users/profile
     if (path === "/api/admin/users/profile" && request.method === "PATCH") {
+      const auth = await requireAuth(request, env, EDIT_ROLES);
+      if (auth.response) return auth.response;
       return handleAdminEditProfile(request, env);
     }
 
     // Admin: PUT /api/admin/users/role
     if (path === "/api/admin/users/role" && request.method === "PUT") {
+      const auth = await requireAuth(request, env, DELETE_ROLES);
+      if (auth.response) return auth.response;
       return handleAdminChangeRole(request, env);
     }
 

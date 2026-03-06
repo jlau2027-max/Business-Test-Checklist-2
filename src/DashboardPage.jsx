@@ -1,8 +1,9 @@
 import { useState, useEffect } from "react";
 import {
   Container, Badge, Text, Group, Paper, Progress,
-  Button, Box, Stack, Alert,
+  Box, Stack, Alert,
 } from "@mantine/core";
+import { Button } from "@heroui/react";
 import { SignInButton } from "@clerk/react";
 import { useAuth } from "./AuthContext.jsx";
 import LoginButton from "./LoginButton.jsx";
@@ -12,7 +13,7 @@ import {
   computeCategoryStats,
   computeOverallStats,
   getWrongAnswers,
-} from "./firestoreService.js";
+} from "./userApi.js";
 
 const CAT_COLORS = {
   "Costs & Revenue": "#7C6FFF",
@@ -102,19 +103,15 @@ export default function DashboardPage() {
         <Container size="lg" py="sm">
           <Group justify="center" mb={4} style={{ position: "relative" }}>
             <Button
-              onClick={() => setSidebarOpen(o => !o)}
-              radius="md"
+              isIconOnly
+              variant="outline"
+              onPress={() => setSidebarOpen(o => !o)}
+              className="rounded-md bg-transparent text-[#8B8B9E] border-[#252533] min-w-[auto] h-8 px-[10px]"
               style={{
                 position: "absolute",
                 left: 0,
                 top: "50%",
                 transform: "translateY(-50%)",
-                backgroundColor: "transparent",
-                color: "#8B8B9E",
-                border: "1px solid #252533",
-                padding: "4px 10px",
-                minWidth: "auto",
-                height: 32,
               }}
             >
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
@@ -160,9 +157,9 @@ export default function DashboardPage() {
             </Text>
             <SignInButton mode="modal">
               <Button
-                radius="md"
+                render={(props) => <button {...props} />}
                 size="md"
-                style={{ backgroundColor: "#7C6FFF" }}
+                className="rounded-md bg-[#7C6FFF] text-white border-none font-semibold"
               >
                 Sign In
               </Button>
@@ -178,9 +175,11 @@ export default function DashboardPage() {
             <Text fz="sm" c="#8B8B9E" mb="lg">
               Start answering questions on the Revision Hub to see your analytics here.
             </Text>
-            <Button component="a" href="/business/checklist" radius="md" style={{ backgroundColor: "#7C6FFF" }}>
-              Go to Revision Hub
-            </Button>
+            <a href="/business/checklist" style={{ textDecoration: "none" }}>
+              <Button className="rounded-md bg-[#7C6FFF] text-white border-none font-semibold">
+                Go to Revision Hub
+              </Button>
+            </a>
           </Paper>
         ) : (
           <Stack gap="xl">

@@ -1,6 +1,6 @@
 import { useRef, useEffect, useCallback } from "react";
 import { useAuth } from "./AuthContext.jsx";
-import { saveAttempt } from "./firestoreService.js";
+import { saveAttempt } from "./userApi.js";
 
 export function useAttemptTracker(questionId, questionType, category, subject = "business", difficulty = null) {
   const { user } = useAuth();

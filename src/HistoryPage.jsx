@@ -1,7 +1,8 @@
 import { useState, useEffect } from "react";
 import {
-  Container, Badge, Text, Group, Paper, Button, Box, Textarea, Collapse, Stack, Skeleton,
+  Container, Badge, Text, Group, Paper, Box, Collapse, Stack, Skeleton,
 } from "@mantine/core";
+import { Button, TextArea, Spinner } from "@heroui/react";
 import { fetchHistoryQuestions } from "./api/contentApi.js";
 import LoginButton from "./LoginButton.jsx";
 import Sidebar from "./Sidebar.jsx";
@@ -799,80 +800,48 @@ function HistoryQuestion({ q, levelDescriptors, prefix }) {
       </Text>
 
       {/* Answer textarea */}
-      <Textarea
+      <TextArea
         value={answer}
-        onChange={(e) => setAnswer(e.currentTarget.value)}
+        onChange={(e) => setAnswer(e.target.value)}
         placeholder="Type your essay answer here..."
-        minRows={16}
-        autosize
-        radius="md"
-        mb="sm"
-        styles={{
-          input: {
-            backgroundColor: "#09090F",
-            borderColor: "#252533",
-            color: "#F0EEE8",
-            fontSize: 14,
-            lineHeight: 1.7,
-            fontFamily: "'Inter', sans-serif",
-          },
-        }}
+        rows={16}
+        fullWidth
+        className="rounded-md mb-2 bg-[#09090F] border border-[#252533] text-[#F0EEE8] text-sm leading-[1.7] placeholder:text-[#55556A] focus:border-[#F87171] p-3"
+        style={{ fontFamily: "'Inter', sans-serif", resize: "vertical" }}
       />
 
       {/* Action buttons */}
       <Group gap="sm" wrap="wrap">
         <Button
           size="sm"
-          radius="md"
-          ff="'JetBrains Mono', monospace"
-          loading={grading}
-          onClick={handleSolve}
-          disabled={!answer.trim()}
-          style={{
-            backgroundColor: "#F8717122",
-            color: "#F87171",
-            border: "1px solid #F8717144",
-          }}
+          isPending={grading}
+          onPress={handleSolve}
+          isDisabled={!answer.trim()}
+          className="rounded-md bg-[#F8717122] text-[#F87171] border border-[#F8717144]"
+          style={{ fontFamily: "'JetBrains Mono', monospace" }}
         >
-          {grading ? "Grading..." : "Solve"}
+          {({isPending}) => <>
+            {isPending && <Spinner color="current" size="sm" />}
+            {isPending ? "Grading..." : "Solve"}
+          </>}
         </Button>
 
         <Button
           size="sm"
-          radius="md"
-          variant={revealed ? "subtle" : "light"}
-          color={revealed ? "gray" : undefined}
-          ff="'JetBrains Mono', monospace"
-          onClick={() => setRevealed((r) => !r)}
-          style={
-            revealed
-              ? {}
-              : {
-                  backgroundColor: "#8B5CF622",
-                  color: "#8B5CF6",
-                  border: "1px solid #8B5CF644",
-                }
-          }
+          variant="ghost"
+          onPress={() => setRevealed((r) => !r)}
+          className={`rounded-md ${revealed ? "text-[#8B8B9E]" : "bg-[#8B5CF622] text-[#8B5CF6] border border-[#8B5CF644]"}`}
+          style={{ fontFamily: "'JetBrains Mono', monospace" }}
         >
           {revealed ? "Hide Markscheme" : "Show Markscheme"}
         </Button>
 
         <Button
           size="sm"
-          radius="md"
-          variant={levelsRevealed ? "subtle" : "light"}
-          color={levelsRevealed ? "gray" : undefined}
-          ff="'JetBrains Mono', monospace"
-          onClick={() => setLevelsRevealed((r) => !r)}
-          style={
-            levelsRevealed
-              ? {}
-              : {
-                  backgroundColor: "#FBBF2422",
-                  color: "#FBBF24",
-                  border: "1px solid #FBBF2444",
-                }
-          }
+          variant="ghost"
+          onPress={() => setLevelsRevealed((r) => !r)}
+          className={`rounded-md ${levelsRevealed ? "text-[#8B8B9E]" : "bg-[#FBBF2422] text-[#FBBF24] border border-[#FBBF2444]"}`}
+          style={{ fontFamily: "'JetBrains Mono', monospace" }}
         >
           {levelsRevealed ? "Hide Levels" : "Level Descriptors"}
         </Button>
@@ -880,11 +849,10 @@ function HistoryQuestion({ q, levelDescriptors, prefix }) {
         {(answer.trim() || gradeResult) && (
           <Button
             size="sm"
-            radius="md"
-            variant="subtle"
-            color="gray"
-            ff="'JetBrains Mono', monospace"
-            onClick={handleClear}
+            variant="ghost"
+            onPress={handleClear}
+            className="rounded-md text-[#8B8B9E]"
+            style={{ fontFamily: "'JetBrains Mono', monospace" }}
           >
             Clear
           </Button>
@@ -1040,19 +1008,15 @@ export default function HistoryPage() {
           <Group justify="center" mb={4} style={{ position: "relative" }}>
             {/* Sidebar toggle */}
             <Button
-              onClick={() => setSidebarOpen(o => !o)}
-              radius="md"
+              isIconOnly
+              variant="outline"
+              onPress={() => setSidebarOpen(o => !o)}
+              className="rounded-md bg-transparent text-[#8B8B9E] border-[#252533] min-w-[auto] h-8 px-[10px]"
               style={{
                 position: "absolute",
                 left: 0,
                 top: "50%",
                 transform: "translateY(-50%)",
-                backgroundColor: "transparent",
-                color: "#8B8B9E",
-                border: "1px solid #252533",
-                padding: "4px 10px",
-                minWidth: "auto",
-                height: 32,
               }}
             >
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
@@ -1097,15 +1061,13 @@ export default function HistoryPage() {
               <Button
                 key={t.key}
                 size="sm"
-                radius="md"
-                ff="'JetBrains Mono', monospace"
-                fw={600}
-                onClick={() => setPaper(t.key)}
+                onPress={() => setPaper(t.key)}
+                className="rounded-md font-semibold text-[13px]"
                 style={{
+                  fontFamily: "'JetBrains Mono', monospace",
                   backgroundColor: paper === t.key ? "#F0EEE8" : "transparent",
                   color: paper === t.key ? "#09090F" : "#55556A",
                   border: paper === t.key ? "none" : "1px solid #252533",
-                  fontSize: 13,
                   height: 34,
                   paddingLeft: 16,
                   paddingRight: 16,
