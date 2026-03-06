@@ -469,18 +469,19 @@ export default function UsersAdmin() {
                     u.accountStatus === "banned" ? "#F87171" :
                     u.accountStatus === "admin_deleted" ? "#F87171" : "#FBBF24";
 
+                  const selectUser = () => setSelectedUser(u);
                   return (
-                    <Table.Tr key={u.uid} onClick={() => setSelectedUser(u)}>
-                      <Table.Td>
+                    <Table.Tr key={u.uid}>
+                      <Table.Td onClick={selectUser}>
                         <Text fw={600} c="#F0EEE8" fz={13}>{u.displayName || "Student"}</Text>
                       </Table.Td>
-                      <Table.Td>
+                      <Table.Td onClick={selectUser}>
                         <Text c="#8B8B9E" fz={12} ff="'JetBrains Mono', monospace">{u.username || "---"}</Text>
                       </Table.Td>
-                      <Table.Td>
+                      <Table.Td onClick={selectUser}>
                         <Text c="#8B8B9E" fz={12} truncate>{u.email || "—"}</Text>
                       </Table.Td>
-                      <Table.Td>
+                      <Table.Td onClick={selectUser}>
                         <Badge
                           size="xs"
                           ff="'JetBrains Mono', monospace"
@@ -493,10 +494,10 @@ export default function UsersAdmin() {
                           {u.accountStatus || "active"}
                         </Badge>
                       </Table.Td>
-                      <Table.Td style={{ textAlign: "right" }}>
+                      <Table.Td onClick={selectUser} style={{ textAlign: "right" }}>
                         <Text ff="'JetBrains Mono', monospace" fz={13}>{u.totalAttempts}</Text>
                       </Table.Td>
-                      <Table.Td style={{ textAlign: "right" }}>
+                      <Table.Td onClick={selectUser} style={{ textAlign: "right" }}>
                         <Text
                           ff="'JetBrains Mono', monospace"
                           fz={13}
@@ -505,7 +506,7 @@ export default function UsersAdmin() {
                           {mcqAcc != null ? `${mcqAcc}%` : "—"}
                         </Text>
                       </Table.Td>
-                      <Table.Td style={{ textAlign: "right" }}>
+                      <Table.Td onClick={selectUser} style={{ textAlign: "right" }}>
                         <Text
                           ff="'JetBrains Mono', monospace"
                           fz={13}
@@ -514,31 +515,31 @@ export default function UsersAdmin() {
                           {writtenAvg != null ? `${writtenAvg}%` : "—"}
                         </Text>
                       </Table.Td>
-                      <Table.Td style={{ textAlign: "right" }}>
+                      <Table.Td onClick={selectUser} style={{ textAlign: "right" }}>
                         <Text ff="'JetBrains Mono', monospace" fz={12} c="#8B8B9E">
                           {formatTime(u.totalTimeMs)}
                         </Text>
                       </Table.Td>
-                      <Table.Td style={{ textAlign: "right" }}>
+                      <Table.Td onClick={selectUser} style={{ textAlign: "right" }}>
                         <Text ff="'JetBrains Mono', monospace" fz={12} c="#8B8B9E">{lastActive}</Text>
                       </Table.Td>
-                      <Table.Td onClick={(e) => e.stopPropagation()}>
+                      <Table.Td>
                         <Group gap={4} wrap="nowrap">
                           {canBanUnban(role) && (
                             <>
                               {(u.accountStatus || "active") !== "banned" ? (
-                                <Button size="sm" className="rounded-md" onPress={(e) => { e.stopPropagation(); handleBan(u.uid); }} style={{backgroundColor: "#F8717122", color: "#F87171", border: "none", fontFamily: "'JetBrains Mono', monospace", fontSize: 10,}}>Ban</Button>
+                                <Button size="sm" className="rounded-md" onPress={() => handleBan(u.uid)} style={{backgroundColor: "#F8717122", color: "#F87171", border: "none", fontFamily: "'JetBrains Mono', monospace", fontSize: 10,}}>Ban</Button>
                               ) : (
-                                <Button size="sm" className="rounded-md" onPress={(e) => { e.stopPropagation(); handleUnban(u.uid); }} style={{backgroundColor: "#34D39922", color: "#34D399", border: "none", fontFamily: "'JetBrains Mono', monospace", fontSize: 10,}}>Unban</Button>
+                                <Button size="sm" className="rounded-md" onPress={() => handleUnban(u.uid)} style={{backgroundColor: "#34D39922", color: "#34D399", border: "none", fontFamily: "'JetBrains Mono', monospace", fontSize: 10,}}>Unban</Button>
                               )}
-                              <Button size="sm" className="rounded-md" onPress={(e) => { e.stopPropagation(); handleForceSignOut(u.uid); }} style={{backgroundColor: "#FBBF2422", color: "#FBBF24", border: "none", fontFamily: "'JetBrains Mono', monospace", fontSize: 10,}}>Sign Out</Button>
+                              <Button size="sm" className="rounded-md" onPress={() => handleForceSignOut(u.uid)} style={{backgroundColor: "#FBBF2422", color: "#FBBF24", border: "none", fontFamily: "'JetBrains Mono', monospace", fontSize: 10,}}>Sign Out</Button>
                             </>
                           )}
                           {canEdit(role) && (
-                            <Button size="sm" className="rounded-md" onPress={(e) => { e.stopPropagation(); openEditFn(u); }} style={{backgroundColor: "#7C6FFF22", color: "#7C6FFF", border: "none", fontFamily: "'JetBrains Mono', monospace", fontSize: 10,}}>Edit</Button>
+                            <Button size="sm" className="rounded-md" onPress={() => openEditFn(u)} style={{backgroundColor: "#7C6FFF22", color: "#7C6FFF", border: "none", fontFamily: "'JetBrains Mono', monospace", fontSize: 10,}}>Edit</Button>
                           )}
                           {canChangeRole(role) && (
-                            <Button size="sm" className="rounded-md" onPress={(e) => { e.stopPropagation(); openRoleChange(u); }} style={{backgroundColor: "#FB923C22", color: "#FB923C", border: "none", fontFamily: "'JetBrains Mono', monospace", fontSize: 10,}}>Role</Button>
+                            <Button size="sm" className="rounded-md" onPress={() => openRoleChange(u)} style={{backgroundColor: "#FB923C22", color: "#FB923C", border: "none", fontFamily: "'JetBrains Mono', monospace", fontSize: 10,}}>Role</Button>
                           )}
                           {role === "viewer" && (
                             <Text fz={10} c="#55556A" ff="'JetBrains Mono', monospace">View only</Text>
