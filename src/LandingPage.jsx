@@ -1,7 +1,7 @@
 import { Button } from "@heroui/react";
 import { Show, SignInButton, SignUpButton } from "@clerk/react";
 import LoginButton from "./LoginButton.jsx";
-import AnimatedShinyButton from "./components/AnimatedShinyButton.jsx";
+import ElectricBorder from "./components/ElectricBorder.jsx";
 
 export default function LandingPage() {
   return (
@@ -73,38 +73,70 @@ export default function LandingPage() {
         </Show>
 
         {/* Subject buttons */}
-        <div className="flex flex-col sm:flex-row gap-5 w-full" style={{ maxWidth: 480 }}>
-          <AnimatedShinyButton
-            url="/business/checklist"
-            className="flex-1"
-            shimmerColor="var(--accent-glow)"
-            style={{ width: "100%" }}
-          >
-            <span className="flex flex-col items-center gap-1">
-              <span className="text-lg font-bold text-[var(--text-primary)]" style={{ letterSpacing: -0.5 }}>
-                Business
-              </span>
-              <span className="text-[11px] text-[var(--text-muted)] font-medium uppercase" style={{ letterSpacing: 1 }}>
-                Finance Unit
-              </span>
-            </span>
-          </AnimatedShinyButton>
+        <div className="flex flex-col sm:flex-row gap-8 w-full" style={{ maxWidth: 520 }}>
+          <a href="/business/checklist" className="flex-1" style={{ textDecoration: "none" }}>
+            <ElectricBorder
+              color="#7BA3B5"
+              speed={1}
+              chaos={0.12}
+              borderRadius={16}
+              style={{ borderRadius: 16, cursor: "pointer" }}
+            >
+              <div
+                style={{
+                  padding: "28px 24px",
+                  background: "var(--bg-card)",
+                  borderRadius: 16,
+                  textAlign: "center",
+                }}
+              >
+                <span
+                  className="block font-bold text-[var(--text-primary)]"
+                  style={{ fontSize: 20, letterSpacing: -0.5, marginBottom: 4 }}
+                >
+                  Business
+                </span>
+                <span
+                  className="block text-[var(--text-muted)]"
+                  style={{ fontSize: 11, fontWeight: 500, textTransform: "uppercase", letterSpacing: 1 }}
+                >
+                  Finance Unit
+                </span>
+              </div>
+            </ElectricBorder>
+          </a>
 
-          <AnimatedShinyButton
-            url="/history/specimen"
-            className="flex-1"
-            shimmerColor="var(--accent-tertiary-soft)"
-            style={{ width: "100%" }}
-          >
-            <span className="flex flex-col items-center gap-1">
-              <span className="text-lg font-bold text-[var(--text-primary)]" style={{ letterSpacing: -0.5 }}>
-                History
-              </span>
-              <span className="text-[11px] text-[var(--text-muted)] font-medium uppercase" style={{ letterSpacing: 1 }}>
-                Paper 2 & 3
-              </span>
-            </span>
-          </AnimatedShinyButton>
+          <a href="/history/specimen" className="flex-1" style={{ textDecoration: "none" }}>
+            <ElectricBorder
+              color="#D4A572"
+              speed={1}
+              chaos={0.12}
+              borderRadius={16}
+              style={{ borderRadius: 16, cursor: "pointer" }}
+            >
+              <div
+                style={{
+                  padding: "28px 24px",
+                  background: "var(--bg-card)",
+                  borderRadius: 16,
+                  textAlign: "center",
+                }}
+              >
+                <span
+                  className="block font-bold text-[var(--text-primary)]"
+                  style={{ fontSize: 20, letterSpacing: -0.5, marginBottom: 4 }}
+                >
+                  History
+                </span>
+                <span
+                  className="block text-[var(--text-muted)]"
+                  style={{ fontSize: 11, fontWeight: 500, textTransform: "uppercase", letterSpacing: 1 }}
+                >
+                  Paper 2 & 3
+                </span>
+              </div>
+            </ElectricBorder>
+          </a>
         </div>
       </div>
     </div>
