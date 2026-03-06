@@ -1,8 +1,8 @@
 import { useState, useEffect } from "react";
 import {
-  Badge, Text, Group, Paper, Progress, Box, Stack, Table, Modal, TextInput, Select,
+  Badge, Text, Group, Paper, Progress, Box, Stack, Modal, TextInput, Select,
 } from "@mantine/core";
-import { Button } from "@heroui/react";
+import { Button, Table } from "@heroui/react";
 import { useDisclosure } from "@mantine/hooks";
 import { useAuth } from "../AuthContext.jsx";
 import {
@@ -435,121 +435,116 @@ export default function UsersAdmin() {
           {usersData.length === 0 ? (
             <Text ta="center" c="#55556A" py="md">No users found.</Text>
           ) : (
-            <Table
-              highlightOnHover
-              styles={{
-                table: { color: "#F0EEE8" },
-                tr: { cursor: "pointer", borderBottom: "1px solid #1A1A24" },
-                th: { color: "#55556A", fontSize: 11, fontFamily: "'JetBrains Mono', monospace", letterSpacing: 1, borderBottom: "1px solid #252533", padding: "8px 12px" },
-                td: { fontSize: 13, padding: "10px 12px", borderBottom: "1px solid #1A1A24" },
-              }}
-            >
-              <Table.Thead>
-                <Table.Tr>
-                  <Table.Th>NAME</Table.Th>
-                  <Table.Th>USERNAME</Table.Th>
-                  <Table.Th>EMAIL</Table.Th>
-                  <Table.Th>STATUS</Table.Th>
-                  <Table.Th style={{ textAlign: "right" }}>ATTEMPTS</Table.Th>
-                  <Table.Th style={{ textAlign: "right" }}>MCQ %</Table.Th>
-                  <Table.Th style={{ textAlign: "right" }}>WRITTEN %</Table.Th>
-                  <Table.Th style={{ textAlign: "right" }}>TIME</Table.Th>
-                  <Table.Th style={{ textAlign: "right" }}>LAST ACTIVE</Table.Th>
-                  <Table.Th>ACTIONS</Table.Th>
-                </Table.Tr>
-              </Table.Thead>
-              <Table.Tbody>
-                {usersData.map((u) => {
-                  const mcqAcc = u.mcqTotal > 0 ? Math.round((u.mcqCorrect / u.mcqTotal) * 100) : null;
-                  const writtenAvg = u.writtenMax > 0 ? Math.round((u.writtenScore / u.writtenMax) * 100) : null;
-                  const lastActive = u.lastActive ? new Date(u.lastActive).toLocaleDateString() : "—";
+            <Table>
+              <Table.ScrollContainer>
+                <Table.Content aria-label="All users" className="min-w-[1100px]" style={{ borderCollapse: "collapse" }}>
+                  <Table.Header>
+                    <Table.Column isRowHeader className="text-[#55556A] text-[11px] tracking-wider" style={{ fontFamily: "'JetBrains Mono', monospace", padding: "8px 12px", borderBottom: "1px solid #252533", background: "transparent" }}>NAME</Table.Column>
+                    <Table.Column className="text-[#55556A] text-[11px] tracking-wider" style={{ fontFamily: "'JetBrains Mono', monospace", padding: "8px 12px", borderBottom: "1px solid #252533", background: "transparent" }}>USERNAME</Table.Column>
+                    <Table.Column className="text-[#55556A] text-[11px] tracking-wider" style={{ fontFamily: "'JetBrains Mono', monospace", padding: "8px 12px", borderBottom: "1px solid #252533", background: "transparent" }}>EMAIL</Table.Column>
+                    <Table.Column className="text-[#55556A] text-[11px] tracking-wider" style={{ fontFamily: "'JetBrains Mono', monospace", padding: "8px 12px", borderBottom: "1px solid #252533", background: "transparent" }}>STATUS</Table.Column>
+                    <Table.Column className="text-[#55556A] text-[11px] tracking-wider text-right" style={{ fontFamily: "'JetBrains Mono', monospace", padding: "8px 12px", borderBottom: "1px solid #252533", background: "transparent" }}>ATTEMPTS</Table.Column>
+                    <Table.Column className="text-[#55556A] text-[11px] tracking-wider text-right" style={{ fontFamily: "'JetBrains Mono', monospace", padding: "8px 12px", borderBottom: "1px solid #252533", background: "transparent" }}>MCQ %</Table.Column>
+                    <Table.Column className="text-[#55556A] text-[11px] tracking-wider text-right" style={{ fontFamily: "'JetBrains Mono', monospace", padding: "8px 12px", borderBottom: "1px solid #252533", background: "transparent" }}>WRITTEN %</Table.Column>
+                    <Table.Column className="text-[#55556A] text-[11px] tracking-wider text-right" style={{ fontFamily: "'JetBrains Mono', monospace", padding: "8px 12px", borderBottom: "1px solid #252533", background: "transparent" }}>TIME</Table.Column>
+                    <Table.Column className="text-[#55556A] text-[11px] tracking-wider text-right" style={{ fontFamily: "'JetBrains Mono', monospace", padding: "8px 12px", borderBottom: "1px solid #252533", background: "transparent" }}>LAST ACTIVE</Table.Column>
+                    <Table.Column className="text-[#55556A] text-[11px] tracking-wider" style={{ fontFamily: "'JetBrains Mono', monospace", padding: "8px 12px", borderBottom: "1px solid #252533", background: "transparent" }}>ACTIONS</Table.Column>
+                  </Table.Header>
+                  <Table.Body>
+                    {usersData.map((u) => {
+                      const mcqAcc = u.mcqTotal > 0 ? Math.round((u.mcqCorrect / u.mcqTotal) * 100) : null;
+                      const writtenAvg = u.writtenMax > 0 ? Math.round((u.writtenScore / u.writtenMax) * 100) : null;
+                      const lastActive = u.lastActive ? new Date(u.lastActive).toLocaleDateString() : "—";
 
-                  const statusColor =
-                    (u.accountStatus || "active") === "active" ? "#34D399" :
-                    u.accountStatus === "banned" ? "#F87171" :
-                    u.accountStatus === "admin_deleted" ? "#F87171" : "#FBBF24";
+                      const statusColor =
+                        (u.accountStatus || "active") === "active" ? "#34D399" :
+                        u.accountStatus === "banned" ? "#F87171" :
+                        u.accountStatus === "admin_deleted" ? "#F87171" : "#FBBF24";
 
-                  const selectUser = () => setSelectedUser(u);
-                  return (
-                    <Table.Tr key={u.uid}>
-                      <Table.Td onClick={selectUser}>
-                        <Text fw={600} c="#F0EEE8" fz={13}>{u.displayName || "Student"}</Text>
-                      </Table.Td>
-                      <Table.Td onClick={selectUser}>
-                        <Text c="#8B8B9E" fz={12} ff="'JetBrains Mono', monospace">{u.username || "---"}</Text>
-                      </Table.Td>
-                      <Table.Td onClick={selectUser}>
-                        <Text c="#8B8B9E" fz={12} truncate>{u.email || "—"}</Text>
-                      </Table.Td>
-                      <Table.Td onClick={selectUser}>
-                        <Badge
-                          size="xs"
-                          ff="'JetBrains Mono', monospace"
-                          style={{
-                            backgroundColor: statusColor + "22",
-                            color: statusColor,
-                            border: "none",
-                          }}
-                        >
-                          {u.accountStatus || "active"}
-                        </Badge>
-                      </Table.Td>
-                      <Table.Td onClick={selectUser} style={{ textAlign: "right" }}>
-                        <Text ff="'JetBrains Mono', monospace" fz={13}>{u.totalAttempts}</Text>
-                      </Table.Td>
-                      <Table.Td onClick={selectUser} style={{ textAlign: "right" }}>
-                        <Text
-                          ff="'JetBrains Mono', monospace"
-                          fz={13}
-                          c={mcqAcc == null ? "#55556A" : mcqAcc >= 75 ? "#34D399" : mcqAcc >= 40 ? "#FBBF24" : "#F87171"}
-                        >
-                          {mcqAcc != null ? `${mcqAcc}%` : "—"}
-                        </Text>
-                      </Table.Td>
-                      <Table.Td onClick={selectUser} style={{ textAlign: "right" }}>
-                        <Text
-                          ff="'JetBrains Mono', monospace"
-                          fz={13}
-                          c={writtenAvg == null ? "#55556A" : writtenAvg >= 75 ? "#34D399" : writtenAvg >= 40 ? "#FBBF24" : "#F87171"}
-                        >
-                          {writtenAvg != null ? `${writtenAvg}%` : "—"}
-                        </Text>
-                      </Table.Td>
-                      <Table.Td onClick={selectUser} style={{ textAlign: "right" }}>
-                        <Text ff="'JetBrains Mono', monospace" fz={12} c="#8B8B9E">
-                          {formatTime(u.totalTimeMs)}
-                        </Text>
-                      </Table.Td>
-                      <Table.Td onClick={selectUser} style={{ textAlign: "right" }}>
-                        <Text ff="'JetBrains Mono', monospace" fz={12} c="#8B8B9E">{lastActive}</Text>
-                      </Table.Td>
-                      <Table.Td>
-                        <Group gap={4} wrap="nowrap">
-                          {canBanUnban(role) && (
-                            <>
-                              {(u.accountStatus || "active") !== "banned" ? (
-                                <Button size="sm" className="rounded-md" onPress={() => handleBan(u.uid)} style={{backgroundColor: "#F8717122", color: "#F87171", border: "none", fontFamily: "'JetBrains Mono', monospace", fontSize: 10,}}>Ban</Button>
-                              ) : (
-                                <Button size="sm" className="rounded-md" onPress={() => handleUnban(u.uid)} style={{backgroundColor: "#34D39922", color: "#34D399", border: "none", fontFamily: "'JetBrains Mono', monospace", fontSize: 10,}}>Unban</Button>
+                      const cellStyle = { padding: "10px 12px", borderBottom: "1px solid #1A1A24", cursor: "pointer" };
+                      const selectUser = () => setSelectedUser(u);
+                      return (
+                        <Table.Row key={u.uid} className="hover:bg-[#1A1A24] transition-colors">
+                          <Table.Cell style={cellStyle} onClick={selectUser}>
+                            <Text fw={600} c="#F0EEE8" fz={13}>{u.displayName || "Student"}</Text>
+                          </Table.Cell>
+                          <Table.Cell style={cellStyle} onClick={selectUser}>
+                            <Text c="#8B8B9E" fz={12} ff="'JetBrains Mono', monospace">{u.username || "---"}</Text>
+                          </Table.Cell>
+                          <Table.Cell style={cellStyle} onClick={selectUser}>
+                            <Text c="#8B8B9E" fz={12} truncate>{u.email || "—"}</Text>
+                          </Table.Cell>
+                          <Table.Cell style={cellStyle} onClick={selectUser}>
+                            <Badge
+                              size="xs"
+                              ff="'JetBrains Mono', monospace"
+                              style={{
+                                backgroundColor: statusColor + "22",
+                                color: statusColor,
+                                border: "none",
+                              }}
+                            >
+                              {u.accountStatus || "active"}
+                            </Badge>
+                          </Table.Cell>
+                          <Table.Cell style={{ ...cellStyle, textAlign: "right" }} onClick={selectUser}>
+                            <Text ff="'JetBrains Mono', monospace" fz={13}>{u.totalAttempts}</Text>
+                          </Table.Cell>
+                          <Table.Cell style={{ ...cellStyle, textAlign: "right" }} onClick={selectUser}>
+                            <Text
+                              ff="'JetBrains Mono', monospace"
+                              fz={13}
+                              c={mcqAcc == null ? "#55556A" : mcqAcc >= 75 ? "#34D399" : mcqAcc >= 40 ? "#FBBF24" : "#F87171"}
+                            >
+                              {mcqAcc != null ? `${mcqAcc}%` : "—"}
+                            </Text>
+                          </Table.Cell>
+                          <Table.Cell style={{ ...cellStyle, textAlign: "right" }} onClick={selectUser}>
+                            <Text
+                              ff="'JetBrains Mono', monospace"
+                              fz={13}
+                              c={writtenAvg == null ? "#55556A" : writtenAvg >= 75 ? "#34D399" : writtenAvg >= 40 ? "#FBBF24" : "#F87171"}
+                            >
+                              {writtenAvg != null ? `${writtenAvg}%` : "—"}
+                            </Text>
+                          </Table.Cell>
+                          <Table.Cell style={{ ...cellStyle, textAlign: "right" }} onClick={selectUser}>
+                            <Text ff="'JetBrains Mono', monospace" fz={12} c="#8B8B9E">
+                              {formatTime(u.totalTimeMs)}
+                            </Text>
+                          </Table.Cell>
+                          <Table.Cell style={{ ...cellStyle, textAlign: "right" }} onClick={selectUser}>
+                            <Text ff="'JetBrains Mono', monospace" fz={12} c="#8B8B9E">{lastActive}</Text>
+                          </Table.Cell>
+                          <Table.Cell style={{ padding: "10px 12px", borderBottom: "1px solid #1A1A24" }}>
+                            <div className="flex gap-1 flex-nowrap">
+                              {canBanUnban(role) && (
+                                <>
+                                  {(u.accountStatus || "active") !== "banned" ? (
+                                    <Button size="sm" className="rounded-md" onPress={() => handleBan(u.uid)} style={{backgroundColor: "#F8717122", color: "#F87171", border: "none", fontFamily: "'JetBrains Mono', monospace", fontSize: 10,}}>Ban</Button>
+                                  ) : (
+                                    <Button size="sm" className="rounded-md" onPress={() => handleUnban(u.uid)} style={{backgroundColor: "#34D39922", color: "#34D399", border: "none", fontFamily: "'JetBrains Mono', monospace", fontSize: 10,}}>Unban</Button>
+                                  )}
+                                  <Button size="sm" className="rounded-md" onPress={() => handleForceSignOut(u.uid)} style={{backgroundColor: "#FBBF2422", color: "#FBBF24", border: "none", fontFamily: "'JetBrains Mono', monospace", fontSize: 10,}}>Sign Out</Button>
+                                </>
                               )}
-                              <Button size="sm" className="rounded-md" onPress={() => handleForceSignOut(u.uid)} style={{backgroundColor: "#FBBF2422", color: "#FBBF24", border: "none", fontFamily: "'JetBrains Mono', monospace", fontSize: 10,}}>Sign Out</Button>
-                            </>
-                          )}
-                          {canEdit(role) && (
-                            <Button size="sm" className="rounded-md" onPress={() => openEditFn(u)} style={{backgroundColor: "#7C6FFF22", color: "#7C6FFF", border: "none", fontFamily: "'JetBrains Mono', monospace", fontSize: 10,}}>Edit</Button>
-                          )}
-                          {canChangeRole(role) && (
-                            <Button size="sm" className="rounded-md" onPress={() => openRoleChange(u)} style={{backgroundColor: "#FB923C22", color: "#FB923C", border: "none", fontFamily: "'JetBrains Mono', monospace", fontSize: 10,}}>Role</Button>
-                          )}
-                          {role === "viewer" && (
-                            <Text fz={10} c="#55556A" ff="'JetBrains Mono', monospace">View only</Text>
-                          )}
-                        </Group>
-                      </Table.Td>
-                    </Table.Tr>
-                  );
-                })}
-              </Table.Tbody>
+                              {canEdit(role) && (
+                                <Button size="sm" className="rounded-md" onPress={() => openEditFn(u)} style={{backgroundColor: "#7C6FFF22", color: "#7C6FFF", border: "none", fontFamily: "'JetBrains Mono', monospace", fontSize: 10,}}>Edit</Button>
+                              )}
+                              {canChangeRole(role) && (
+                                <Button size="sm" className="rounded-md" onPress={() => openRoleChange(u)} style={{backgroundColor: "#FB923C22", color: "#FB923C", border: "none", fontFamily: "'JetBrains Mono', monospace", fontSize: 10,}}>Role</Button>
+                              )}
+                              {role === "viewer" && (
+                                <Text fz={10} c="#55556A" ff="'JetBrains Mono', monospace">View only</Text>
+                              )}
+                            </div>
+                          </Table.Cell>
+                        </Table.Row>
+                      );
+                    })}
+                  </Table.Body>
+                </Table.Content>
+              </Table.ScrollContainer>
             </Table>
           )}
         </Paper>

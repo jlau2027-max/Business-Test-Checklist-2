@@ -894,7 +894,7 @@ async function handleAdminHistoryDelete(id, env) {
 
 async function handleAdminChecklistSectionsPost(request, env) {
   const body = await request.json();
-  const id = body.id || crypto.randomUUID();
+  const id = body.id || slugify(body.title || "section");
   const sort_order = body.sort_order ?? await getNextSortOrder(env, "checklist_sections");
   await env.CONTENT_DB.prepare(
     `INSERT INTO checklist_sections (id, title, color, sort_order) VALUES (?, ?, ?, ?)`
