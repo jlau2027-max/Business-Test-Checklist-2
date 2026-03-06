@@ -1,6 +1,7 @@
 import { Button } from "@heroui/react";
 import { Show, SignInButton, SignUpButton } from "@clerk/react";
 import LoginButton from "./LoginButton.jsx";
+import AnimatedShinyButton from "./components/AnimatedShinyButton.jsx";
 
 export default function LandingPage() {
   return (
@@ -29,20 +30,20 @@ export default function LandingPage() {
       </div>
 
       {/* Hero */}
-      <div className="max-w-xl mx-auto px-4" style={{ paddingTop: 80, paddingBottom: 80 }}>
+      <div className="max-w-xl mx-auto px-4 flex flex-col items-center" style={{ paddingTop: 100, paddingBottom: 100 }}>
         <span
           className="text-center block font-extrabold text-[var(--text-primary)] mb-1"
           style={{ fontSize: "clamp(28px, 5vw, 40px)", letterSpacing: -1 }}
         >
           IB Revision Hub
         </span>
-        <span className="text-center block text-base text-[var(--text-secondary)] mx-auto" style={{ marginBottom: 40, maxWidth: 420 }}>
+        <span className="text-center block text-base text-[var(--text-secondary)] mx-auto" style={{ marginBottom: 24, maxWidth: 420 }}>
           Flashcards, MCQs, written practice with AI grading, and more — built for IB students.
         </span>
 
         {/* Auth prompt for signed-out users */}
         <Show when="signed-out">
-          <div className="flex items-center justify-center gap-2" style={{ marginBottom: 48 }}>
+          <div className="flex items-center justify-center gap-2" style={{ marginBottom: 56 }}>
             <SignInButton mode="modal">
               <Button
                 render={(props) => <button {...props} />}
@@ -68,62 +69,42 @@ export default function LandingPage() {
         </Show>
 
         <Show when="signed-in">
-          <div style={{ marginBottom: 48 }} />
+          <div style={{ marginBottom: 56 }} />
         </Show>
 
-        {/* Subject cards */}
-        <div className="flex gap-4 grow">
-          <a
-            href="/business/checklist"
-            className="bg-[var(--bg-card)] rounded-lg p-6 flex-1"
-            style={{
-              border: "1px solid var(--border)",
-              textDecoration: "none",
-              cursor: "pointer",
-              transition: "border-color 0.2s, box-shadow 0.2s",
-            }}
-            onMouseEnter={e => { e.currentTarget.style.borderColor = "var(--accent)"; e.currentTarget.style.boxShadow = "0 0 20px var(--accent-soft)"; }}
-            onMouseLeave={e => { e.currentTarget.style.borderColor = "var(--border)"; e.currentTarget.style.boxShadow = "none"; }}
+        {/* Subject buttons */}
+        <div className="flex flex-col sm:flex-row gap-5 w-full" style={{ maxWidth: 480 }}>
+          <AnimatedShinyButton
+            url="/business/checklist"
+            className="flex-1"
+            shimmerColor="var(--accent-glow)"
+            style={{ width: "100%" }}
           >
-            <span
-              className="text-xs px-1.5 py-0.5 rounded-full mb-2 inline-block"
-              style={{ backgroundColor: "var(--accent-soft)", color: "var(--accent)", border: "none", fontFamily: "'JSans', sans-serif" }}
-            >
-              HL
+            <span className="flex flex-col items-center gap-1">
+              <span className="text-lg font-bold text-[var(--text-primary)]" style={{ letterSpacing: -0.5 }}>
+                Business
+              </span>
+              <span className="text-[11px] text-[var(--text-muted)] font-medium uppercase" style={{ letterSpacing: 1 }}>
+                Finance Unit
+              </span>
             </span>
-            <span className="font-bold text-lg text-[var(--text-primary)] block" style={{ marginBottom: 4 }}>
-              Business Management
-            </span>
-            <span className="text-sm text-[var(--text-secondary)]" style={{ lineHeight: 1.5 }}>
-              Finance unit — checklist, flashcards, MCQs, written practice & specimen papers
-            </span>
-          </a>
+          </AnimatedShinyButton>
 
-          <a
-            href="/history/specimen"
-            className="bg-[var(--bg-card)] rounded-lg p-6 flex-1"
-            style={{
-              border: "1px solid var(--border)",
-              textDecoration: "none",
-              cursor: "pointer",
-              transition: "border-color 0.2s, box-shadow 0.2s",
-            }}
-            onMouseEnter={e => { e.currentTarget.style.borderColor = "var(--color-danger)"; e.currentTarget.style.boxShadow = "0 0 20px var(--color-danger-soft)"; }}
-            onMouseLeave={e => { e.currentTarget.style.borderColor = "var(--border)"; e.currentTarget.style.boxShadow = "none"; }}
+          <AnimatedShinyButton
+            url="/history/specimen"
+            className="flex-1"
+            shimmerColor="var(--accent-tertiary-soft)"
+            style={{ width: "100%" }}
           >
-            <span
-              className="text-xs px-1.5 py-0.5 rounded-full mb-2 inline-block"
-              style={{ backgroundColor: "var(--color-danger-soft)", color: "var(--color-danger)", border: "none", fontFamily: "'JSans', sans-serif" }}
-            >
-              HL / SL
+            <span className="flex flex-col items-center gap-1">
+              <span className="text-lg font-bold text-[var(--text-primary)]" style={{ letterSpacing: -0.5 }}>
+                History
+              </span>
+              <span className="text-[11px] text-[var(--text-muted)] font-medium uppercase" style={{ letterSpacing: 1 }}>
+                Paper 2 & 3
+              </span>
             </span>
-            <span className="font-bold text-lg text-[var(--text-primary)] block" style={{ marginBottom: 4 }}>
-              History
-            </span>
-            <span className="text-sm text-[var(--text-secondary)]" style={{ lineHeight: 1.5 }}>
-              Paper 2 & Paper 3 specimen questions with AI-powered grading
-            </span>
-          </a>
+          </AnimatedShinyButton>
         </div>
       </div>
     </div>
