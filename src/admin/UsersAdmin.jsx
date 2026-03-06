@@ -143,12 +143,12 @@ function UserDetail({ uid, displayName, onBack }) {
                         </div>
                         <div className="flex items-center gap-2">
                           {cat.mcqAccuracy != null && (
-                            <span className="text-xs px-1.5 py-0.5 rounded" style={{ backgroundColor: color + "22", color, fontFamily: "'JetBrains Mono', monospace" }}>
+                            <span className="text-xs px-1.5 py-0.5 rounded-full" style={{ backgroundColor: color + "22", color, fontFamily: "'JetBrains Mono', monospace" }}>
                               MCQ: {cat.mcqAccuracy}%
                             </span>
                           )}
                           {cat.writtenAvg != null && (
-                            <span className="text-xs px-1.5 py-0.5 rounded" style={{ backgroundColor: color + "22", color, fontFamily: "'JetBrains Mono', monospace" }}>
+                            <span className="text-xs px-1.5 py-0.5 rounded-full" style={{ backgroundColor: color + "22", color, fontFamily: "'JetBrains Mono', monospace" }}>
                               Written: {cat.writtenAvg}%
                             </span>
                           )}
@@ -178,7 +178,7 @@ function UserDetail({ uid, displayName, onBack }) {
                   <div key={a.id || i} className="bg-[#1A1A24] rounded-2xl p-3 border border-[#252533]">
                     <div className="flex items-center gap-2 mb-1 flex-wrap">
                       <span
-                        className="text-xs px-1.5 py-0.5 rounded"
+                        className="text-xs px-1.5 py-0.5 rounded-full"
                         style={{
                           backgroundColor: a.isCorrect === false ? "#F8717122" : "#FBBF2422",
                           color: a.isCorrect === false ? "#F87171" : "#FBBF24",
@@ -188,7 +188,7 @@ function UserDetail({ uid, displayName, onBack }) {
                         {a.questionType === "mcq" ? "MCQ — Wrong" : `${a.score}/${a.maxMarks}`}
                       </span>
                       <span
-                        className="text-xs px-1.5 py-0.5 rounded"
+                        className="text-xs px-1.5 py-0.5 rounded-full"
                         style={{
                           backgroundColor: (CAT_COLORS[a.category] || "#7C6FFF") + "22",
                           color: CAT_COLORS[a.category] || "#7C6FFF",
@@ -224,7 +224,7 @@ function UserDetail({ uid, displayName, onBack }) {
                       style={{ backgroundColor: isGood ? "#34D399" : "#F87171" }}
                     />
                     <span
-                      className="text-xs px-1.5 py-0.5 rounded shrink-0"
+                      className="text-xs px-1.5 py-0.5 rounded-fullshrink-0"
                       style={{ backgroundColor: color + "22", color, fontFamily: "'JetBrains Mono', monospace" }}
                     >
                       {a.questionType.toUpperCase()}
@@ -470,7 +470,7 @@ export default function UsersAdmin() {
                           </Table.Cell>
                           <Table.Cell style={cellStyle} onClick={selectUser}>
                             <span
-                              className="text-xs px-1.5 py-0.5 rounded"
+                              className="text-xs px-1.5 py-0.5 rounded-full"
                               style={{
                                 backgroundColor: statusColor + "22",
                                 color: statusColor,

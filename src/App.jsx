@@ -1,6 +1,6 @@
 import { useState, useEffect, createContext, useContext } from "react";
 import { Analytics } from "@vercel/analytics/react";
-import { Button, TextArea, Spinner, Alert, Checkbox, Tabs, RadioGroup, Radio, Accordion } from "@heroui/react";
+import { Button, TextArea, Spinner, Alert, Checkbox, Tabs, RadioGroup, Radio, Accordion, Surface } from "@heroui/react";
 import ProgressBar from "./components/ProgressBar.jsx";
 import LoginButton from "./LoginButton.jsx";
 import Sidebar from "./Sidebar.jsx";
@@ -327,7 +327,7 @@ function ChecklistView() {
   return (
     <div style={{maxWidth:1060,margin:"0 auto",padding:"0 0 40px"}}>
       {/* Progress card */}
-      <div className="bg-[#12121A] rounded-lg p-6 mb-6 border border-[#252533]" style={{boxShadow: "0 2px 8px rgba(0,0,0,0.2)"}}>
+      <Surface className="rounded-3xl p-6 mb-6">
         <div className="flex items-center justify-between mb-1">
           <span className="text-sm text-[#8B8B9E]" style={{fontFamily:"'JetBrains Mono', monospace"}}>Overall Progress</span>
           <span className="text-2xl font-extrabold" style={{color: progColor}}>{progress}%</span>
@@ -335,9 +335,9 @@ function ChecklistView() {
         <ProgressBar value={progress} color={progColor} animated />
         <div className="flex items-center justify-between mt-3">
           <span className="text-xs text-[#55556A]">{checkedCount} of {totalItems} topics covered</span>
-          <span className="text-xs px-1.5 py-0.5 rounded" style={{fontFamily:"'JetBrains Mono', monospace", backgroundColor:"#34D39922", color:"#34D399"}}>auto-saved</span>
+          <span className="text-xs px-2 py-0.5 rounded-full" style={{fontFamily:"'JetBrains Mono', monospace", backgroundColor:"#34D39922", color:"#34D399"}}>auto-saved</span>
         </div>
-      </div>
+      </Surface>
 
       {/* Sections */}
       <Accordion
@@ -351,10 +351,10 @@ function ChecklistView() {
           const sectionChecked = section.items.filter((_,i)=>checked[`${section.id}-${i}`]).length;
           const allDone = sectionChecked===section.items.length;
           return (
-            <Accordion.Item key={section.id} id={section.id} className="bg-[#12121A] rounded-2xl">
+            <Accordion.Item key={section.id} id={section.id} className="bg-[#12121A] rounded-2xl overflow-hidden">
               <Accordion.Heading>
                 <Accordion.Trigger className="w-full flex items-center gap-2 px-5 py-3.5 hover:bg-[#1A1A24] transition-colors">
-                  <span className="text-xs px-1.5 py-0.5 rounded font-bold" style={{backgroundColor: section.color + "22", color: section.color, fontFamily: "'JetBrains Mono', monospace"}}>{sectionChecked}/{section.items.length}</span>
+                  <span className="text-xs px-2 py-0.5 rounded-full font-bold" style={{backgroundColor: section.color + "22", color: section.color, fontFamily: "'JetBrains Mono', monospace"}}>{sectionChecked}/{section.items.length}</span>
                   <span className="text-sm font-semibold" style={{color: allDone ? section.color : "#F0EEE8"}}>{allDone && "✓ "}{section.title}</span>
                   <Accordion.Indicator className="ml-auto shrink-0 text-[#55556A]">
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polyline points="6 9 12 15 18 9"/></svg>
@@ -527,12 +527,12 @@ function MCQItem({q, displayNum}) {
   const color=catColors[q.cat]||"#7C6FFF";
   const { recordAttempt, resetTimer } = useAttemptTracker(q.id, "mcq", q.cat, "business", q.difficulty);
   return (
-    <div className="bg-[#1A1A24] rounded-lg mb-2 border border-[#252533]" style={{ overflow:"hidden", transition:"all 0.2s" }}>
+    <Surface variant="secondary" className="rounded-2xl mb-2 overflow-hidden" style={{ transition:"all 0.2s" }}>
       <div style={{borderLeft:`4px solid ${color}`,padding:"18px 20px"}}>
         <div className="flex gap-2 mb-2 flex-wrap">
-          <span className="text-xs px-1.5 py-0.5 rounded" style={{fontFamily:"'JetBrains Mono', monospace",backgroundColor:color,color:"#fff"}}>MCQ</span>
-          <span className="text-xs px-1.5 py-0.5 rounded" style={{fontFamily:"'JetBrains Mono', monospace",backgroundColor:color+"22",color:color}}>{ q.cat}</span>
-          <span className="text-xs px-1.5 py-0.5 rounded" style={{fontFamily:"'JetBrains Mono', monospace",backgroundColor:"#1E1E2A",color:"#8B8B9E"}}>{q.difficulty}</span>
+          <span className="text-xs px-2 py-0.5 rounded-full" style={{fontFamily:"'JetBrains Mono', monospace",backgroundColor:color,color:"#fff"}}>MCQ</span>
+          <span className="text-xs px-2 py-0.5 rounded-full" style={{fontFamily:"'JetBrains Mono', monospace",backgroundColor:color+"22",color:color}}>{ q.cat}</span>
+          <span className="text-xs px-2 py-0.5 rounded-full" style={{fontFamily:"'JetBrains Mono', monospace",backgroundColor:"#1E1E2A",color:"#8B8B9E"}}>{q.difficulty}</span>
         </div>
         <span className="block text-[15px] text-[#F0EEE8] font-semibold" style={{lineHeight:1.6}}>Q{displayNum}. {q.q}</span>
       </div>
@@ -567,7 +567,7 @@ function MCQItem({q, displayNum}) {
                 <Radio.Content>
                   <div className="flex items-center gap-2 flex-nowrap">
                     <div style={{
-                      width:28,height:28,borderRadius:6,flexShrink:0,
+                      width:28,height:28,borderRadius:'50%',flexShrink:0,
                       background:confirmed&&isCorrect?"#34D399":confirmed&&isSelected&&!isCorrect?"#F87171":isSelected?color:"#252533",
                       display:"flex",alignItems:"center",justifyContent:"center",
                     }}>
@@ -608,7 +608,7 @@ function MCQItem({q, displayNum}) {
           </Alert>
         )}
       </div>
-    </div>
+    </Surface>
   );
 }
 
@@ -718,12 +718,12 @@ function WrittenPracticeItem({q, displayNum}) {
     : "#8B8B9E";
 
   return (
-    <div className="bg-[#1A1A24] rounded-lg mb-4 border border-[#252533]" style={{overflow:"hidden"}}>
+    <Surface variant="secondary" className="rounded-2xl mb-4 overflow-hidden">
       <div style={{borderLeft:`4px solid ${color}`, padding:"18px 20px"}}>
         <div className="flex gap-2 mb-2 flex-wrap">
-          <span className="text-xs px-1.5 py-0.5 rounded" style={{fontFamily:"'JetBrains Mono', monospace",backgroundColor:color+"22", color}}>{q.cat}</span>
-          <span className="text-xs px-1.5 py-0.5 rounded" style={{fontFamily:"'JetBrains Mono', monospace",backgroundColor:"#1E1E2A", color:"#8B8B9E"}}>{q.difficulty}</span>
-          <span className="text-xs px-1.5 py-0.5 rounded ml-auto" style={{fontFamily:"'JetBrains Mono', monospace",backgroundColor:"#2A2800", color:"#FBBF24", border:"1px solid #5A4A00"}}>[ {q.marks} marks ]</span>
+          <span className="text-xs px-2 py-0.5 rounded-full" style={{fontFamily:"'JetBrains Mono', monospace",backgroundColor:color+"22", color}}>{q.cat}</span>
+          <span className="text-xs px-2 py-0.5 rounded-full" style={{fontFamily:"'JetBrains Mono', monospace",backgroundColor:"#1E1E2A", color:"#8B8B9E"}}>{q.difficulty}</span>
+          <span className="text-xs px-2 py-0.5 rounded-full ml-auto" style={{fontFamily:"'JetBrains Mono', monospace",backgroundColor:"#2A2800", color:"#FBBF24", border:"1px solid #5A4A00"}}>[ {q.marks} marks ]</span>
         </div>
         <span className="block text-[15px] text-[#F0EEE8] font-semibold" style={{lineHeight:1.6, whiteSpace:"pre-line"}}>Q{displayNum}. {q.q}</span>
       </div>
@@ -808,7 +808,7 @@ function WrittenPracticeItem({q, displayNum}) {
           </div>
         )}
       </div>
-    </div>
+    </Surface>
   );
 }
 
@@ -831,12 +831,12 @@ function WrittenPracticeView() {
 
   return (
     <div style={{maxWidth:1060, margin:"0 auto", padding:"0 0 40px"}}>
-      <div className="bg-[#12121A] rounded-lg p-5 mb-6 border border-[#252533]">
+      <Surface className="rounded-3xl p-5 mb-6">
         <span className="block text-sm text-[#F0EEE8] font-semibold mb-1">Written Practice</span>
         <span className="block text-xs text-[#8B8B9E]" style={{lineHeight:1.5}}>
           Answer each question in the text box, then reveal the markscheme to compare.
         </span>
-      </div>
+      </Surface>
 
       {/* Mode selector — Short Answer / 10 Marker / Specimen (link) */}
       <div className="flex gap-2.5 mb-6">
@@ -995,7 +995,7 @@ export default function App({ initialTab = "checklist" }) {
                 <line x1="3" y1="18" x2="21" y2="18"/>
               </svg>
             </Button>
-            <span className="text-xs px-2 py-1 rounded uppercase font-bold tracking-widest" style={{fontFamily: "'JetBrains Mono', monospace", backgroundColor: "#7C6FFF18", color: "#A78BFA"}}>
+            <span className="text-xs px-2.5 py-1 rounded-full uppercase font-bold tracking-widest" style={{fontFamily: "'JetBrains Mono', monospace", backgroundColor: "#7C6FFF18", color: "#A78BFA"}}>
               IB HL Business Management
             </span>
             <LoginButton />

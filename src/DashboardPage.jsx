@@ -118,7 +118,7 @@ export default function DashboardPage() {
               </svg>
             </Button>
             <span
-              className="text-xs px-2 py-0.5 rounded uppercase font-bold"
+              className="text-xs px-2 py-0.5 rounded-fulluppercase font-bold"
               style={{ letterSpacing: 2, backgroundColor: "#7C6FFF18", color: "#A78BFA", border: "none", fontFamily: "'JetBrains Mono', monospace" }}
             >
               Analytics
@@ -227,12 +227,12 @@ export default function DashboardPage() {
                           </div>
                           <div className="flex items-center gap-1">
                             {cat.mcqAccuracy != null && (
-                              <span className="text-xs px-1.5 py-0.5 rounded" style={{ backgroundColor: color + "22", color, border: "none", fontFamily: "'JetBrains Mono', monospace" }}>
+                              <span className="text-xs px-1.5 py-0.5 rounded-full" style={{ backgroundColor: color + "22", color, border: "none", fontFamily: "'JetBrains Mono', monospace" }}>
                                 MCQ: {cat.mcqAccuracy}%
                               </span>
                             )}
                             {cat.writtenAvg != null && (
-                              <span className="text-xs px-1.5 py-0.5 rounded" style={{ backgroundColor: color + "22", color, border: "none", fontFamily: "'JetBrains Mono', monospace" }}>
+                              <span className="text-xs px-1.5 py-0.5 rounded-full" style={{ backgroundColor: color + "22", color, border: "none", fontFamily: "'JetBrains Mono', monospace" }}>
                                 Written: {cat.writtenAvg}%
                               </span>
                             )}
@@ -262,7 +262,7 @@ export default function DashboardPage() {
                     <div key={a.id || i} className="bg-[#1A1A24] rounded-2xl p-2" style={{ border: "1px solid #252533" }}>
                       <div className="flex gap-2 flex-wrap mb-1">
                         <span
-                          className="text-xs px-1.5 py-0.5 rounded"
+                          className="text-xs px-1.5 py-0.5 rounded-full"
                           style={{
                             backgroundColor: a.isCorrect === false ? "#F8717122" : "#FBBF2422",
                             color: a.isCorrect === false ? "#F87171" : "#FBBF24",
@@ -273,7 +273,7 @@ export default function DashboardPage() {
                           {a.questionType === "mcq" ? "MCQ — Wrong" : `${a.score}/${a.maxMarks}`}
                         </span>
                         <span
-                          className="text-xs px-1.5 py-0.5 rounded"
+                          className="text-xs px-1.5 py-0.5 rounded-full"
                           style={{
                             backgroundColor: (CAT_COLORS[a.category] || "#7C6FFF") + "22",
                             color: CAT_COLORS[a.category] || "#7C6FFF",
@@ -317,7 +317,7 @@ export default function DashboardPage() {
                         backgroundColor: isGood ? "#34D399" : "#F87171",
                         flexShrink: 0,
                       }} />
-                      <span className="text-xs px-1.5 py-0.5 rounded" style={{ backgroundColor: color + "22", color, border: "none", fontFamily: "'JetBrains Mono', monospace", flexShrink: 0 }}>
+                      <span className="text-xs px-1.5 py-0.5 rounded-full" style={{ backgroundColor: color + "22", color, border: "none", fontFamily: "'JetBrains Mono', monospace", flexShrink: 0 }}>
                         {a.questionType.toUpperCase()}
                       </span>
                       <span className="text-[#8B8B9E] truncate" style={{ fontSize: 12, flex: 1 }}>

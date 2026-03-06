@@ -386,7 +386,7 @@ export default function ChecklistAdmin() {
                       <span className="text-sm font-semibold text-[#F0EEE8] flex-1">
                         {section.title}
                       </span>
-                      <span className="text-xs px-2 py-0.5 rounded bg-[#252533] text-[#8B8B9E]">
+                      <span className="text-xs px-2 py-0.5 rounded-fullbg-[#252533] text-[#8B8B9E]">
                         {items.length} item{items.length !== 1 ? "s" : ""}
                       </span>
                       {(canEditContent || canDeleteContent) && (

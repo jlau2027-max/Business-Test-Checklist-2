@@ -18,7 +18,7 @@ export default function LandingPage() {
         <div className="max-w-4xl mx-auto py-2 px-4">
           <div className="flex items-center justify-center" style={{ position: "relative" }}>
             <span
-              className="text-xs px-2 py-0.5 rounded uppercase font-bold"
+              className="text-xs px-2 py-0.5 rounded-fulluppercase font-bold"
               style={{ letterSpacing: 2, backgroundColor: "#7C6FFF18", color: "#A78BFA", border: "none", fontFamily: "'JetBrains Mono', monospace" }}
             >
               IB Revision Hub
@@ -86,7 +86,7 @@ export default function LandingPage() {
             onMouseLeave={e => { e.currentTarget.style.borderColor = "#252533"; e.currentTarget.style.boxShadow = "none"; }}
           >
             <span
-              className="text-xs px-1.5 py-0.5 rounded mb-2 inline-block"
+              className="text-xs px-1.5 py-0.5 rounded-fullmb-2 inline-block"
               style={{ backgroundColor: "#7C6FFF18", color: "#A78BFA", border: "none", fontFamily: "'JetBrains Mono', monospace" }}
             >
               HL
@@ -112,7 +112,7 @@ export default function LandingPage() {
             onMouseLeave={e => { e.currentTarget.style.borderColor = "#252533"; e.currentTarget.style.boxShadow = "none"; }}
           >
             <span
-              className="text-xs px-1.5 py-0.5 rounded mb-2 inline-block"
+              className="text-xs px-1.5 py-0.5 rounded-fullmb-2 inline-block"
               style={{ backgroundColor: "#F8717118", color: "#F87171", border: "none", fontFamily: "'JetBrains Mono', monospace" }}
             >
               HL / SL

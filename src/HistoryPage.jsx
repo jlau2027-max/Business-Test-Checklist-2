@@ -849,7 +849,7 @@ function HistoryQuestion({ q, levelDescriptors, prefix }) {
           </Button>
         )}
 
-        <span className="text-xs px-1.5 py-0.5 rounded ml-auto" style={{ backgroundColor: "rgba(248,113,113,0.1)", color: "#F87171", fontFamily: "'JetBrains Mono', monospace" }}>
+        <span className="text-xs px-1.5 py-0.5 rounded-fullml-auto" style={{ backgroundColor: "rgba(248,113,113,0.1)", color: "#F87171", fontFamily: "'JetBrains Mono', monospace" }}>
           auto-saved
         </span>
       </div>
@@ -1015,7 +1015,7 @@ export default function HistoryPage() {
               </svg>
             </Button>
             <span
-              className="text-xs px-2 py-0.5 rounded uppercase font-bold"
+              className="text-xs px-2 py-0.5 rounded-fulluppercase font-bold"
               style={{ letterSpacing: 2, backgroundColor: "#F8717118", color: "#F87171", border: "none", fontFamily: "'JetBrains Mono', monospace" }}
             >
               IB HL History
@@ -1078,17 +1078,17 @@ export default function HistoryPage() {
                 : "Answer three questions. Each question is worth 15 marks. The maximum mark for this paper is 45. 2 hours 30 minutes. HL only. Type your essay answers below \u2014 everything auto-saves. Use \"Solve\" for AI grading, \"Show Markscheme\" for the rubric, and \"Level Descriptors\" for the marking bands."}
             </span>
             <div className="flex items-center gap-1 mt-2">
-              <span className="text-xs px-1.5 py-0.5 rounded" style={{ backgroundColor: "rgba(248,113,113,0.1)", color: "#F87171", fontFamily: "'JetBrains Mono', monospace" }}>
+              <span className="text-xs px-1.5 py-0.5 rounded-full" style={{ backgroundColor: "rgba(248,113,113,0.1)", color: "#F87171", fontFamily: "'JetBrains Mono', monospace" }}>
                 {questions.length} questions
               </span>
-              <span className="text-xs px-1.5 py-0.5 rounded" style={{ backgroundColor: "rgba(139,92,246,0.1)", color: "#8B5CF6", fontFamily: "'JetBrains Mono', monospace" }}>
+              <span className="text-xs px-1.5 py-0.5 rounded-full" style={{ backgroundColor: "rgba(139,92,246,0.1)", color: "#8B5CF6", fontFamily: "'JetBrains Mono', monospace" }}>
                 {topics.length} topics
               </span>
-              <span className="text-xs px-1.5 py-0.5 rounded" style={{ backgroundColor: "rgba(251,191,36,0.1)", color: "#FBBF24", fontFamily: "'JetBrains Mono', monospace" }}>
+              <span className="text-xs px-1.5 py-0.5 rounded-full" style={{ backgroundColor: "rgba(251,191,36,0.1)", color: "#FBBF24", fontFamily: "'JetBrains Mono', monospace" }}>
                 15 marks each
               </span>
               {paper === "paper3" && (
-                <span className="text-xs px-1.5 py-0.5 rounded" style={{ backgroundColor: "rgba(34,211,238,0.1)", color: "#22D3EE", fontFamily: "'JetBrains Mono', monospace" }}>
+                <span className="text-xs px-1.5 py-0.5 rounded-full" style={{ backgroundColor: "rgba(34,211,238,0.1)", color: "#22D3EE", fontFamily: "'JetBrains Mono', monospace" }}>
                   HL only
                 </span>
               )}

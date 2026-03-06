@@ -311,7 +311,7 @@ export default function HistoryAdmin() {
                         return (
                           <Table.Row key={q.id} className="hover:bg-[#16161F] border-b border-[#1E1E2A]">
                             <Table.Cell className="p-3.5">
-                              <span className="text-xs px-2 py-0.5 rounded text-white" style={{ backgroundColor: badgeConfig.color === "blue" ? "#3b82f6" : badgeConfig.color === "orange" ? "#f97316" : "#6b7280" }}>
+                              <span className="text-xs px-2 py-0.5 rounded-fulltext-white" style={{ backgroundColor: badgeConfig.color === "blue" ? "#3b82f6" : badgeConfig.color === "orange" ? "#f97316" : "#6b7280" }}>
                                 {badgeConfig.label}
                               </span>
                             </Table.Cell>

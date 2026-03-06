@@ -292,7 +292,7 @@ function SpecimenQuestion({ q }) {
           </Button>
         )}
 
-        <span className="text-xs px-1.5 py-0.5 rounded ml-auto" style={{ backgroundColor: "rgba(45,212,191,0.1)", color: "#2DD4BF", fontFamily: "'JetBrains Mono', monospace" }}>
+        <span className="text-xs px-1.5 py-0.5 rounded-fullml-auto" style={{ backgroundColor: "rgba(45,212,191,0.1)", color: "#2DD4BF", fontFamily: "'JetBrains Mono', monospace" }}>
           auto-saved
         </span>
       </div>
@@ -406,7 +406,7 @@ export default function SpecimenPage() {
               </svg>
             </Button>
             <span
-              className="text-xs px-2 py-0.5 rounded uppercase font-bold"
+              className="text-xs px-2 py-0.5 rounded-fulluppercase font-bold"
               style={{ letterSpacing: 2, backgroundColor: "#2DD4BF18", color: "#2DD4BF", border: "none", fontFamily: "'JetBrains Mono', monospace" }}
             >
               IB HL Business Management
@@ -449,10 +449,10 @@ export default function SpecimenPage() {
               below — everything auto-saves. Use "Solve" for AI grading and "Show Markscheme" to reveal the rubric.
             </span>
             <div className="flex items-center gap-1 mt-2">
-              <span className="text-xs px-1.5 py-0.5 rounded" style={{ backgroundColor: "rgba(45,212,191,0.1)", color: "#2DD4BF", fontFamily: "'JetBrains Mono', monospace" }}>
+              <span className="text-xs px-1.5 py-0.5 rounded-full" style={{ backgroundColor: "rgba(45,212,191,0.1)", color: "#2DD4BF", fontFamily: "'JetBrains Mono', monospace" }}>
                 {SPECIMEN_QUESTIONS.length} questions
               </span>
-              <span className="text-xs px-1.5 py-0.5 rounded" style={{ backgroundColor: "rgba(139,92,246,0.1)", color: "#8B5CF6", fontFamily: "'JetBrains Mono', monospace" }}>
+              <span className="text-xs px-1.5 py-0.5 rounded-full" style={{ backgroundColor: "rgba(139,92,246,0.1)", color: "#8B5CF6", fontFamily: "'JetBrains Mono', monospace" }}>
                 {totalMarks} marks
               </span>
             </div>
