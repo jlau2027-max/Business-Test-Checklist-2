@@ -40,7 +40,7 @@ import ConfirmDeleteModal from "./components/ConfirmDeleteModal.jsx";
 
 const EMPTY_SECTION_FORM = {
   title: "",
-  color: "#7C6FFF",
+  color: "var(--accent)",
   sort_order: 0,
 };
 
@@ -137,7 +137,7 @@ export default function ChecklistAdmin() {
     setEditingSection(section);
     setSectionForm({
       title: section.title || "",
-      color: section.color || "#7C6FFF",
+      color: section.color || "var(--accent)",
       sort_order: section.sort_order ?? 0,
     });
     setSectionFormError(null);
@@ -314,7 +314,7 @@ export default function ChecklistAdmin() {
             Checklist
           </span>
           {canEditContent && (
-            <Button className="rounded-full bg-[#7C6FFF] text-white border-none" onPress={openCreateSectionModal}><IconPlus size={16} /> Add Section</Button>
+            <Button className="rounded-full bg-[var(--accent)] text-white border-none" onPress={openCreateSectionModal}><IconPlus size={16} /> Add Section</Button>
           )}
         </div>
 
@@ -393,7 +393,7 @@ export default function ChecklistAdmin() {
                         <div className="flex items-center gap-1" onClick={(e) => e.stopPropagation()}>
                           {canEditContent && (
                             <Tooltip delay={0}>
-                              <Button isIconOnly size="sm" variant="ghost" className="text-[#A78BFA]" onPress={() => openEditSectionModal(section)}>
+                              <Button isIconOnly size="sm" variant="ghost" className="text-[var(--accent)]" onPress={() => openEditSectionModal(section)}>
                                 <IconPencil size={15} />
                               </Button>
                               <Tooltip.Content><p>Edit Section</p></Tooltip.Content>
@@ -414,7 +414,7 @@ export default function ChecklistAdmin() {
 
                   {/* Expanded items */}
                   <Disclosure.Content>
-                    <Disclosure.Body className="border-t border-[var(--border)] bg-[#0E0E16]">
+                    <Disclosure.Body className="border-t border-[var(--border)] bg-[var(--bg-base)]">
                       {items.length === 0 ? (
                         <span className="text-sm text-[var(--text-secondary)] p-4 block text-center">
                           No items in this section.
@@ -435,7 +435,7 @@ export default function ChecklistAdmin() {
                                 <div className="flex items-center gap-1 shrink-0">
                                   {canEditContent && (
                                     <Tooltip delay={0}>
-                                      <Button isIconOnly size="sm" variant="ghost" className="text-[#A78BFA]" onPress={() => openEditItemModal(item)}>
+                                      <Button isIconOnly size="sm" variant="ghost" className="text-[var(--accent)]" onPress={() => openEditItemModal(item)}>
                                         <IconPencil size={15} />
                                       </Button>
                                       <Tooltip.Content><p>Edit Item</p></Tooltip.Content>
@@ -459,7 +459,7 @@ export default function ChecklistAdmin() {
                       {/* Add Item button */}
                       {canEditContent && (
                         <div className="p-4">
-                          <Button size="sm" className="rounded-full bg-[#7C6FFF] text-white border-none" onPress={() => openCreateItemModal(section.id)}><IconPlus size={14} /> Add Item</Button>
+                          <Button size="sm" className="rounded-full bg-[var(--accent)] text-white border-none" onPress={() => openCreateItemModal(section.id)}><IconPlus size={14} /> Add Item</Button>
                         </div>
                       )}
                     </Disclosure.Body>
@@ -498,7 +498,7 @@ export default function ChecklistAdmin() {
                 <div className="flex items-end gap-3">
                   <TextField className="flex-1" name="color" onChange={(val) => updateSectionField("color", val)}>
                     <Label className="text-[var(--text-secondary)] text-[11px] tracking-wider mb-1" style={{ fontFamily: "'JSans', sans-serif" }}>Color (hex)</Label>
-                    <Input value={sectionForm.color} placeholder="#7C6FFF" className="bg-[var(--bg-input)] border border-[var(--border)] text-[var(--text-primary)] rounded-full" style={{ fontFamily: "'JSans', sans-serif" }} />
+                    <Input value={sectionForm.color} placeholder="var(--accent)" className="bg-[var(--bg-input)] border border-[var(--border)] text-[var(--text-primary)] rounded-full" style={{ fontFamily: "'JSans', sans-serif" }} />
                   </TextField>
                   <div className="w-9 h-9 rounded-lg border border-[var(--border)] shrink-0" style={{ backgroundColor: sectionForm.color || "var(--text-secondary)" }} />
                 </div>
@@ -513,7 +513,7 @@ export default function ChecklistAdmin() {
               {/* Actions */}
               <div className="flex items-center justify-end gap-2 mt-2">
                 <Button variant="ghost" className="rounded-full text-[var(--text-secondary)]" onPress={closeSectionModal} isDisabled={savingSection}>Cancel</Button>
-                <Button className="rounded-full bg-[#7C6FFF] text-white border-none" onPress={handleSaveSection} isPending={savingSection}>{({isPending}) => <>{isPending && <Spinner color="current" size="sm" />}{isPending ? "Saving..." : (editingSection ? "Save Changes" : "Create Section")}</>}</Button>
+                <Button className="rounded-full bg-[var(--accent)] text-white border-none" onPress={handleSaveSection} isPending={savingSection}>{({isPending}) => <>{isPending && <Spinner color="current" size="sm" />}{isPending ? "Saving..." : (editingSection ? "Save Changes" : "Create Section")}</>}</Button>
               </div>
             </Modal.Footer>
           </Modal.Dialog>
@@ -554,7 +554,7 @@ export default function ChecklistAdmin() {
               {/* Actions */}
               <div className="flex items-center justify-end gap-2 mt-2">
                 <Button variant="ghost" className="rounded-full text-[var(--text-secondary)]" onPress={closeItemModal} isDisabled={savingItem}>Cancel</Button>
-                <Button className="rounded-full bg-[#7C6FFF] text-white border-none" onPress={handleSaveItem} isPending={savingItem}>{({isPending}) => <>{isPending && <Spinner color="current" size="sm" />}{isPending ? "Saving..." : (editingItem ? "Save Changes" : "Create Item")}</>}</Button>
+                <Button className="rounded-full bg-[var(--accent)] text-white border-none" onPress={handleSaveItem} isPending={savingItem}>{({isPending}) => <>{isPending && <Spinner color="current" size="sm" />}{isPending ? "Saving..." : (editingItem ? "Save Changes" : "Create Item")}</>}</Button>
               </div>
             </Modal.Footer>
           </Modal.Dialog>

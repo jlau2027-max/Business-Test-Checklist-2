@@ -18,7 +18,7 @@ import ConfirmDeleteModal from "./components/ConfirmDeleteModal.jsx";
 // ---------------------------------------------------------------------------
 const TEXT_COLOR = "var(--text-primary)";
 const MUTED = "var(--text-secondary)";
-const DEFAULT_COLOR = "#7C6FFF";
+const DEFAULT_COLOR = "var(--accent)";
 
 // ---------------------------------------------------------------------------
 // Helpers
@@ -44,7 +44,7 @@ function Toast({ message, type, onClose }) {
   return (
     <Alert
       status={type === "error" ? "danger" : "success"}
-      className={type === "error" ? "bg-[#2A1215] border border-[#5C2020]" : "bg-[#122A1A] border border-[#1A4028]"}
+      className={type === "error" ? "bg-[var(--color-danger-soft)] border border-[var(--color-danger)]" : "bg-[var(--color-success-soft)] border border-[var(--color-success)]"}
     >
       <Alert.Indicator />
       <Alert.Content className="flex-1">
@@ -122,7 +122,7 @@ function TopicModal({ opened, onClose, topic, onSave }) {
             <form onSubmit={handleSubmit}>
               <div className="flex flex-col gap-4">
                 {error && (
-                  <Alert status="danger" className="bg-[#2A1215] border border-[#5C2020]">
+                  <Alert status="danger" className="bg-[var(--color-danger-soft)] border border-[var(--color-danger)]">
                     <Alert.Indicator />
                     <Alert.Content>
                       <Alert.Description className="text-[var(--text-primary)]">{error}</Alert.Description>
@@ -145,7 +145,7 @@ function TopicModal({ opened, onClose, topic, onSave }) {
                 <div className="flex items-end gap-3">
                   <TextField className="flex-1" name="color" onChange={setColor}>
                     <Label className="text-[var(--text-secondary)] text-[11px] tracking-wider mb-1" style={{ fontFamily: "'JSans', sans-serif" }}>Color</Label>
-                    <Input value={color} placeholder="#7C6FFF" className="bg-[var(--bg-input)] border border-[var(--border)] text-[var(--text-primary)] rounded-full" style={{ fontFamily: "'JSans', sans-serif" }} />
+                    <Input value={color} placeholder="var(--accent)" className="bg-[var(--bg-input)] border border-[var(--border)] text-[var(--text-primary)] rounded-full" style={{ fontFamily: "'JSans', sans-serif" }} />
                   </TextField>
                   <div className="w-9 h-9 rounded-lg border border-[var(--border)] shrink-0" style={{ backgroundColor: color || "var(--text-secondary)" }} />
                 </div>
@@ -153,7 +153,7 @@ function TopicModal({ opened, onClose, topic, onSave }) {
                   <Button variant="ghost" className="rounded-full text-[var(--text-secondary)]" onPress={onClose} isDisabled={saving}>
                     Cancel
                   </Button>
-                  <Button type="submit" className="rounded-full bg-[#7C6FFF] text-white border-none" isPending={saving}>
+                  <Button type="submit" className="rounded-full bg-[var(--accent)] text-white border-none" isPending={saving}>
                     {({isPending}) => (
                       <>
                         {isPending && <Spinner color="current" size="sm" />}
@@ -236,7 +236,7 @@ function CardModal({ opened, onClose, card, topicId, onSave }) {
             <form onSubmit={handleSubmit}>
               <div className="flex flex-col gap-4">
                 {error && (
-                  <Alert status="danger" className="bg-[#2A1215] border border-[#5C2020]">
+                  <Alert status="danger" className="bg-[var(--color-danger-soft)] border border-[var(--color-danger)]">
                     <Alert.Indicator />
                     <Alert.Content>
                       <Alert.Description className="text-[var(--text-primary)]">{error}</Alert.Description>
@@ -265,7 +265,7 @@ function CardModal({ opened, onClose, card, topicId, onSave }) {
                   <Button variant="ghost" className="rounded-full text-[var(--text-secondary)]" onPress={onClose} isDisabled={saving}>
                     Cancel
                   </Button>
-                  <Button type="submit" className="rounded-full bg-[#7C6FFF] text-white border-none" isPending={saving}>
+                  <Button type="submit" className="rounded-full bg-[var(--accent)] text-white border-none" isPending={saving}>
                     {({isPending}) => (
                       <>
                         {isPending && <Spinner color="current" size="sm" />}
@@ -492,7 +492,7 @@ export default function FlashcardAdmin() {
             {canEditContent && (
               <Button
                 size="sm"
-                className="rounded-full bg-[#7C6FFF] text-white border-none"
+                className="rounded-full bg-[var(--accent)] text-white border-none"
                 onPress={() => {
                   setEditingTopic(null);
                   setTopicModalOpen(true);
@@ -520,7 +520,7 @@ export default function FlashcardAdmin() {
                   return (
                     <div
                       key={topic.id}
-                      className={`px-3 py-2.5 rounded-lg cursor-pointer transition-colors ${isSelected ? "bg-[#1E1E30] border border-[#7C6FFF44]" : "border border-transparent hover:bg-[#16161F]"}`}
+                      className={`px-3 py-2.5 rounded-lg cursor-pointer transition-colors ${isSelected ? "bg-[var(--bg-elevated)] border border-[var(--accent-glow)]" : "border border-transparent hover:bg-[var(--bg-input)]"}`}
                       onClick={() => setSelectedTopicId(topic.id)}
                     >
                       <div className="flex items-center justify-between flex-nowrap gap-1">
@@ -605,7 +605,7 @@ export default function FlashcardAdmin() {
             {canEditContent && selectedTopic && (
               <Button
                 size="sm"
-                className="rounded-full bg-[#7C6FFF] text-white border-none"
+                className="rounded-full bg-[var(--accent)] text-white border-none"
                 onPress={() => {
                   setEditingCard(null);
                   setCardModalOpen(true);
@@ -641,7 +641,7 @@ export default function FlashcardAdmin() {
                 {canEditContent && (
                   <Button
                     size="sm"
-                    className="rounded-full bg-[#7C6FFF] text-white border-none"
+                    className="rounded-full bg-[var(--accent)] text-white border-none"
                     onPress={() => {
                       setEditingCard(null);
                       setCardModalOpen(true);
@@ -664,7 +664,7 @@ export default function FlashcardAdmin() {
                       </Table.Header>
                       <Table.Body>
                         {cards.map((card) => (
-                          <Table.Row key={card.id} className="hover:bg-[#16161F] border-b border-[var(--border)]/15">
+                          <Table.Row key={card.id} className="hover:bg-[var(--bg-input)] border-b border-[var(--border)]/15">
                             <Table.Cell className="text-[var(--text-primary)] text-sm font-medium whitespace-nowrap">
                               {card.term}
                             </Table.Cell>
@@ -675,7 +675,7 @@ export default function FlashcardAdmin() {
                             </Table.Cell>
                             <Table.Cell>
                               {card.formula ? (
-                                <span className="text-xs text-[#A78BFA]" style={{ fontFamily: "'JSans', sans-serif" }}>
+                                <span className="text-xs text-[var(--accent)]" style={{ fontFamily: "'JSans', sans-serif" }}>
                                   {truncate(card.formula, 60)}
                                 </span>
                               ) : (

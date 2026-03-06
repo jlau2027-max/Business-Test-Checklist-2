@@ -49,16 +49,16 @@ import ConfirmDeleteModal from "./components/ConfirmDeleteModal.jsx";
 // Constants
 // ---------------------------------------------------------------------------
 const CATEGORY_COLORS = {
-  "Costs & Revenue": "#7C6FFF",
-  "Cash Flow": "#38BDF8",
-  "Final Accounts": "#34D399",
-  "Ratio Analysis": "#FBBF24",
-  "Ratio Analysis (HL)": "#FBBF24",
-  "Investment Appraisal": "#A78BFA",
-  "Budgets & Variance": "#F87171",
-  "Breakeven": "#2DD4BF",
-  "BMT Tools": "#F472B6",
-  "Sources of Finance": "#FB923C",
+  "Costs & Revenue": "var(--cat-costs)",
+  "Cash Flow": "var(--cat-cashflow)",
+  "Final Accounts": "var(--cat-accounts)",
+  "Ratio Analysis": "var(--cat-ratios)",
+  "Ratio Analysis (HL)": "var(--cat-ratios)",
+  "Investment Appraisal": "var(--cat-investment)",
+  "Budgets & Variance": "var(--cat-budgets)",
+  "Breakeven": "var(--cat-breakeven)",
+  "BMT Tools": "var(--cat-bmt)",
+  "Sources of Finance": "var(--accent-tertiary)",
 };
 const OPTION_LETTERS = ["A", "B", "C", "D"];
 const DIFFICULTY_FILTER_OPTIONS = [
@@ -242,7 +242,7 @@ export default function McqAdmin() {
             MCQ Questions
           </span>
           {canEditContent && (
-            <Button className="rounded-full bg-[#7C6FFF] text-white border-none" onPress={openCreateModal}><IconPlus size={16} /> Add Question</Button>
+            <Button className="rounded-full bg-[var(--accent)] text-white border-none" onPress={openCreateModal}><IconPlus size={16} /> Add Question</Button>
           )}
         </div>
         {/* Success alert */}
@@ -286,7 +286,7 @@ export default function McqAdmin() {
                     {DIFFICULTY_FILTER_OPTIONS.map(opt => (
                       <Tabs.Tab key={opt.value} id={opt.value} className="text-[var(--text-secondary)] text-sm px-3.5 py-1.5 data-[selected=true]:text-white rounded-full">
                         {opt.label}
-                        <Tabs.Indicator className="bg-[#7C6FFF] rounded-full" />
+                        <Tabs.Indicator className="bg-[var(--accent)] rounded-full" />
                       </Tabs.Tab>
                     ))}
                   </Tabs.List>
@@ -318,7 +318,7 @@ export default function McqAdmin() {
               <Table className="w-full">
                 <Table.ScrollContainer>
                   <Table.Content>
-                    <Table.Header className="bg-[#0E0E16]">
+                    <Table.Header className="bg-[var(--bg-base)]">
                       <Table.Column className="text-[var(--text-secondary)] text-xs font-semibold uppercase tracking-wider p-3.5" style={{ width: 140 }}>Category</Table.Column>
                       <Table.Column className="text-[var(--text-secondary)] text-xs font-semibold uppercase tracking-wider p-3.5" style={{ width: 80 }}>Difficulty</Table.Column>
                       <Table.Column className="text-[var(--text-secondary)] text-xs font-semibold uppercase tracking-wider p-3.5">Question</Table.Column>
@@ -329,7 +329,7 @@ export default function McqAdmin() {
                     </Table.Header>
                     <Table.Body>
                       {questions.map((q) => (
-                        <Table.Row key={q.id} className="hover:bg-[#16161F] border-b border-[var(--bg-elevated)]">
+                        <Table.Row key={q.id} className="hover:bg-[var(--bg-input)] border-b border-[var(--bg-elevated)]">
                           <Table.Cell className="p-3.5 text-sm">
                             <div className="flex items-center gap-1.5 flex-nowrap">
                               <div
@@ -360,7 +360,7 @@ export default function McqAdmin() {
                               <div className="flex items-center gap-1 justify-end flex-nowrap">
                                 {canEditContent && (
                                   <Tooltip delay={0}>
-                                    <Button isIconOnly size="sm" variant="ghost" className="text-[#A78BFA]" onPress={() => openEditModal(q)}>
+                                    <Button isIconOnly size="sm" variant="ghost" className="text-[var(--accent)]" onPress={() => openEditModal(q)}>
                                       <IconPencil size={15} />
                                     </Button>
                                     <Tooltip.Content><p>Edit</p></Tooltip.Content>
@@ -368,7 +368,7 @@ export default function McqAdmin() {
                                 )}
                                 {canDeleteContent && (
                                   <Tooltip delay={0}>
-                                    <Button isIconOnly size="sm" variant="ghost" className="text-[#F87171]" onPress={() => setDeleteTarget(q)}>
+                                    <Button isIconOnly size="sm" variant="ghost" className="text-[var(--color-danger)]" onPress={() => setDeleteTarget(q)}>
                                       <IconTrash size={15} />
                                     </Button>
                                     <Tooltip.Content><p>Delete</p></Tooltip.Content>
@@ -423,7 +423,7 @@ export default function McqAdmin() {
                           {DIFFICULTY_FORM_OPTIONS.map(opt => (
                             <Tabs.Tab key={opt.value} id={opt.value} className="text-[var(--text-secondary)] text-sm px-3.5 py-1.5 data-[selected=true]:text-white rounded-full flex-1 text-center">
                               {opt.label}
-                              <Tabs.Indicator className="bg-[#7C6FFF] rounded-full" />
+                              <Tabs.Indicator className="bg-[var(--accent)] rounded-full" />
                             </Tabs.Tab>
                           ))}
                         </Tabs.List>
@@ -489,7 +489,7 @@ export default function McqAdmin() {
             </Modal.Body>
             <Modal.Footer>
               <Button variant="ghost" className="rounded-full text-[var(--text-secondary)]" onPress={closeModal} isDisabled={saving}>Cancel</Button>
-              <Button className="rounded-full bg-[#7C6FFF] text-white border-none" onPress={handleSave} isPending={saving}>{({isPending}) => <>{isPending && <Spinner color="current" size="sm" />}{isPending ? "Saving..." : (editingQuestion ? "Save Changes" : "Create Question")}</>}</Button>
+              <Button className="rounded-full bg-[var(--accent)] text-white border-none" onPress={handleSave} isPending={saving}>{({isPending}) => <>{isPending && <Spinner color="current" size="sm" />}{isPending ? "Saving..." : (editingQuestion ? "Save Changes" : "Create Question")}</>}</Button>
             </Modal.Footer>
           </Modal.Dialog>
         </Modal.Container>

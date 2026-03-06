@@ -298,7 +298,7 @@ export default function WrittenAdmin() {
                 className="text-[var(--text-secondary)] text-sm font-medium px-4 py-2 data-[selected=true]:text-white rounded-full"
               >
                 {opt.label}
-                <Tabs.Indicator className="bg-[#7C6FFF] rounded-full" />
+                <Tabs.Indicator className="bg-[var(--accent)] rounded-full" />
               </Tabs.Tab>
             ))}
           </Tabs.List>
@@ -349,7 +349,7 @@ export default function WrittenAdmin() {
             <Button
               onPress={openCreate}
               size="sm"
-              className="rounded-full border-none font-semibold bg-gradient-to-br from-[#7C6FFF] to-[#A78BFA] text-white shadow-[0_4px_16px_#7C6FFF30]"
+              className="rounded-full border-none font-semibold bg-gradient-to-br from-[var(--accent)] to-[var(--accent-secondary)] text-white shadow-[0_4px_16px_var(--accent-glow)]"
             >
               + Add Question
             </Button>
@@ -361,7 +361,7 @@ export default function WrittenAdmin() {
       {error && (
         <Alert
           status="danger"
-          className="bg-[#F8717111] border border-[#F8717144]"
+          className="bg-[var(--color-danger-soft)] border border-[var(--color-danger)]"
         >
           <Alert.Indicator />
           <Alert.Content className="flex-1">
@@ -429,10 +429,10 @@ export default function WrittenAdmin() {
                   {questions.map((q) => (
                     <Table.Row
                       key={q.id}
-                      className="hover:bg-[#1A1A2A] border-b border-[var(--bg-input)]"
+                      className="hover:bg-[var(--bg-input)] border-b border-[var(--bg-input)]"
                     >
                       <Table.Cell className="px-4 py-2">
-                        <span className="text-xs px-2 py-0.5 rounded-full bg-[#7C6FFF22] text-[#A78BFA]">
+                        <span className="text-xs px-2 py-0.5 rounded-full bg-[var(--accent-soft)] text-[var(--accent)]">
                           {q.category || "-"}
                         </span>
                       </Table.Cell>
@@ -471,7 +471,7 @@ export default function WrittenAdmin() {
                                 isIconOnly
                                 size="sm"
                                 variant="ghost"
-                                className="text-[#A78BFA]"
+                                className="text-[var(--accent)]"
                                 onPress={() => openEdit(q)}
                               >
                                 <EditIcon />
@@ -486,7 +486,7 @@ export default function WrittenAdmin() {
                                   isIconOnly
                                   size="sm"
                                   variant="ghost"
-                                  className="text-[#F87171]"
+                                  className="text-[var(--color-danger)]"
                                   onPress={() => setDeleteTarget(q)}
                                 >
                                   <TrashIcon />
@@ -564,7 +564,7 @@ export default function WrittenAdmin() {
                             className="text-[var(--text-secondary)] text-sm font-medium px-4 py-2 data-[selected=true]:text-white rounded-full flex-1 text-center"
                           >
                             {opt.label}
-                            <Tabs.Indicator className="bg-[#7C6FFF] rounded-full" />
+                            <Tabs.Indicator className="bg-[var(--accent)] rounded-full" />
                           </Tabs.Tab>
                         ))}
                       </Tabs.List>
@@ -600,7 +600,7 @@ export default function WrittenAdmin() {
                             className="text-[var(--text-secondary)] text-sm font-medium px-4 py-2 data-[selected=true]:text-white rounded-full flex-1 text-center"
                           >
                             {opt.label}
-                            <Tabs.Indicator className="bg-[#7C6FFF] rounded-full" />
+                            <Tabs.Indicator className="bg-[var(--accent)] rounded-full" />
                           </Tabs.Tab>
                         ))}
                       </Tabs.List>
@@ -686,7 +686,7 @@ export default function WrittenAdmin() {
                 {formError && (
                   <Alert
                     status="danger"
-                    className="bg-[#F8717111] border border-[#F8717144]"
+                    className="bg-[var(--color-danger-soft)] border border-[var(--color-danger)]"
                   >
                     <Alert.Indicator />
                     <Alert.Content className="flex-1">
@@ -707,7 +707,7 @@ export default function WrittenAdmin() {
                   Cancel
                 </Button>
                 <Button
-                  className="rounded-full border-none font-semibold bg-gradient-to-br from-[#7C6FFF] to-[#A78BFA] text-white shadow-[0_4px_16px_#7C6FFF30]"
+                  className="rounded-full border-none font-semibold bg-gradient-to-br from-[var(--accent)] to-[var(--accent-secondary)] text-white shadow-[0_4px_16px_var(--accent-glow)]"
                   onPress={handleSave}
                   isPending={saving}
                 >

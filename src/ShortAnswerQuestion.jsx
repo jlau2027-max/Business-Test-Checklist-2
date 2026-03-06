@@ -48,7 +48,7 @@ export default function ShortAnswerQuestion({
     setSubmitted(false);
   };
 
-  const scoreColor = grade >= 4 ? '#34D399' : grade >= 2 ? '#FBBF24' : '#F87171';
+  const scoreColor = grade >= 4 ? 'var(--color-success)' : grade >= 2 ? 'var(--color-warning)' : 'var(--color-danger)';
 
   return (
     <div className="bg-[var(--bg-card)] rounded-lg p-4" style={{ border: '1px solid var(--border)' }}>
@@ -61,7 +61,7 @@ export default function ShortAnswerQuestion({
         disabled={submitted}
         rows={5}
         fullWidth
-        className="rounded-2xl bg-[var(--bg-input)] border border-[var(--border)] text-[var(--text-primary)] text-sm leading-relaxed placeholder:text-[var(--text-muted)] focus:border-[#7C6FFF] p-3"
+        className="rounded-2xl bg-[var(--bg-input)] border border-[var(--border)] text-[var(--text-primary)] text-sm leading-relaxed placeholder:text-[var(--text-muted)] focus:border-[var(--accent)] p-3"
         style={{ fontFamily: "'JSans', sans-serif", resize: "vertical" }}
       />
 
@@ -73,7 +73,7 @@ export default function ShortAnswerQuestion({
           isPending={loading}
           className={`rounded-full mt-4 font-semibold border-none ${
             studentAnswer.trim()
-              ? 'bg-gradient-to-br from-[#7C6FFF] to-[#A78BFA] text-white shadow-[0_4px_16px_#7C6FFF30]'
+              ? 'bg-gradient-to-br from-[var(--accent)] to-[var(--accent-secondary)] text-white shadow-[0_4px_16px_var(--accent-glow)]'
               : 'bg-[var(--bg-elevated)] text-[var(--text-muted)] shadow-none'
           }`}
         >

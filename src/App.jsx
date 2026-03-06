@@ -23,25 +23,25 @@ function saveLS(key, value) {
 // CHECKLIST DATA
 // ─────────────────────────────────────────────────────────────────────────────
 const CHECKLIST_SECTIONS = [
-  { id: "sources", title: "3.1 – Sources of Finance", color: "#FB923C", items: ["Difference between internal & external sources of finance","Short, medium & long-term finance — matched to purpose","Equity vs debt financing (pros & cons)","Why a business chooses one source over another","Retained profit, share capital, debentures, venture capital (HL)","Loan capital vs overdraft vs trade credit"] },
-  { id: "costs", title: "3.2 – Costs & Revenues", color: "#7C6FFF", items: ["Fixed, variable, semi-variable, direct & indirect costs","Total Revenue and Average Revenue","Contribution per unit = Selling Price – Variable Cost","Total Contribution = Contribution per unit × Quantity","Total Costs = Fixed Costs + Total Variable Costs","Profit = Total Revenue – Total Costs","Difference between profit and cash flow"] },
-  { id: "cashflow", title: "3.3 – Cash Flow", color: "#38BDF8", items: ["Construct and interpret a cash flow forecast","Net Cash Flow = Cash Inflows – Cash Outflows","Closing Balance = Opening Balance + Net Cash Flow","Causes of cash flow problems","Solutions: overdraft, debt factoring, sale of assets, better credit control","Difference between cash flow and profit (common exam trap!)"] },
-  { id: "accounts", title: "3.4 – Final Accounts", color: "#34D399", items: ["Income Statement layout: Revenue → Gross Profit → Net Profit","Balance Sheet structure: Assets = Equity + Liabilities","Current vs non-current assets and liabilities","Straight-line depreciation = (Cost – Residual Value) ÷ Useful Life (HL)","Reducing balance depreciation = Net Book Value × Rate % (HL)","Intangible assets: goodwill, patents, brand value (HL)"] },
-  { id: "ratios", title: "3.5 – Profitability & Liquidity Ratios", color: "#FBBF24", items: ["Gross Profit Margin = (Gross Profit ÷ Revenue) × 100 ✦ IN BOOKLET","Net Profit Margin = (Net Profit ÷ Revenue) × 100 ✦ IN BOOKLET","ROCE = (Net Profit ÷ Capital Employed) × 100 ✦ IN BOOKLET","Current Ratio = Current Assets ÷ Current Liabilities (ideal ~2:1) ✦ IN BOOKLET","Acid Test = (CA – Inventory) ÷ CL (ideal ~1:1) ✦ IN BOOKLET","Interpret ratios in context — not just calculate them!"] },
-  { id: "efficiency", title: "3.6 – Efficiency Ratios (HL Only)", color: "#F87171", items: ["Stock Turnover (times) = Cost of Sales ÷ Average Stock ✦ IN BOOKLET","Stock Turnover (days) = (Average Stock ÷ Cost of Sales) × 365 ✦ IN BOOKLET","Average Stock = (Opening Stock + Closing Stock) ÷ 2 ✦ IN BOOKLET","Debtor Days = (Debtors ÷ Revenue) × 365 ✦ IN BOOKLET","Creditor Days = (Creditors ÷ Cost of Sales) × 365 ✦ IN BOOKLET","Gearing = (Non-current Liabilities ÷ Capital Employed) × 100 ✦ IN BOOKLET","High vs low gearing — implications for risk and investment"] },
-  { id: "investment", title: "3.7 – Investment Appraisal", color: "#A78BFA", items: ["Payback Period — calculate and interpret","ARR = (Total Returns – Capital Cost) ÷ Years ÷ Capital Cost × 100 ✦ IN BOOKLET","NPV = Sum of discounted cash flows – Initial Investment ✦ IN BOOKLET (HL)","Discount factors/tables are provided in exam","Compare methods: qualitative vs quantitative factors","Limitations of each investment appraisal method"] },
-  { id: "budgets", title: "3.8 – Budgets & Variance Analysis", color: "#38BDF8", items: ["Variance = Actual – Budgeted ✦ MEMORISE","Favourable variance: better than expected","Adverse variance: worse than expected","For costs: Actual < Budgeted = Favourable","For revenue: Actual > Budgeted = Favourable","Zero-based vs incremental budgeting (pros & cons)","Limitations of budgets"] },
-  { id: "breakeven", title: "5.5 – Breakeven Analysis", color: "#2DD4BF", items: ["Breakeven Output = Fixed Costs ÷ Contribution per unit ✦ MEMORISE","Margin of Safety = Actual Output – Breakeven Output ✦ MEMORISE","Target Profit Output = (FC + Target Profit) ÷ Contribution ✦ MEMORISE","Draw and interpret breakeven charts","Limitations of breakeven analysis","How changes in price/costs affect the breakeven point"] },
-  { id: "bmt", title: "BMT Tools", color: "#F472B6", items: ["Business Plan — components, purpose, link to securing finance","Ansoff Matrix — 4 strategies, risk levels, finance implications","STEEPLE — apply each factor to a business scenario","Force Field Analysis — driving vs restraining forces (Lewin)","Apply BMT tools to justify business decisions in context"] },
-  { id: "formulas", title: "Formulas to MEMORISE (Not in Booklet)", color: "#F87171", items: ["Contribution per unit = Selling Price – Variable Cost per unit","Total Contribution = Contribution per unit × Quantity","Total Costs = Fixed Costs + Total Variable Costs","Profit = Total Revenue – Total Costs","Breakeven Output = Fixed Costs ÷ Contribution per unit","Margin of Safety = Actual Output – Breakeven Output","Target Profit Output = (FC + Target Profit) ÷ Contribution per unit","Straight-line depreciation = (Cost – Residual Value) ÷ Useful Life","Reducing balance = Net Book Value × Depreciation Rate %","Net Cash Flow = Cash Inflows – Cash Outflows","Closing Balance = Opening Balance + Net Cash Flow","Variance = Actual – Budgeted"] },
-  { id: "examtips", title: "Exam Technique", color: "#7C6FFF", items: ["Define key terms at the start of longer answers","Always use the business context given — never answer generically","For evaluate/justify: give both sides then make a justified conclusion","Show ALL working in calculations — method marks are available","Interpret ratios — don't just calculate, explain what it means","Link answers back to the specific business in the question"] },
+  { id: "sources", title: "3.1 – Sources of Finance", color: "var(--accent-tertiary)", items: ["Difference between internal & external sources of finance","Short, medium & long-term finance — matched to purpose","Equity vs debt financing (pros & cons)","Why a business chooses one source over another","Retained profit, share capital, debentures, venture capital (HL)","Loan capital vs overdraft vs trade credit"] },
+  { id: "costs", title: "3.2 – Costs & Revenues", color: "var(--cat-costs)", items: ["Fixed, variable, semi-variable, direct & indirect costs","Total Revenue and Average Revenue","Contribution per unit = Selling Price – Variable Cost","Total Contribution = Contribution per unit × Quantity","Total Costs = Fixed Costs + Total Variable Costs","Profit = Total Revenue – Total Costs","Difference between profit and cash flow"] },
+  { id: "cashflow", title: "3.3 – Cash Flow", color: "var(--cat-cashflow)", items: ["Construct and interpret a cash flow forecast","Net Cash Flow = Cash Inflows – Cash Outflows","Closing Balance = Opening Balance + Net Cash Flow","Causes of cash flow problems","Solutions: overdraft, debt factoring, sale of assets, better credit control","Difference between cash flow and profit (common exam trap!)"] },
+  { id: "accounts", title: "3.4 – Final Accounts", color: "var(--cat-accounts)", items: ["Income Statement layout: Revenue → Gross Profit → Net Profit","Balance Sheet structure: Assets = Equity + Liabilities","Current vs non-current assets and liabilities","Straight-line depreciation = (Cost – Residual Value) ÷ Useful Life (HL)","Reducing balance depreciation = Net Book Value × Rate % (HL)","Intangible assets: goodwill, patents, brand value (HL)"] },
+  { id: "ratios", title: "3.5 – Profitability & Liquidity Ratios", color: "var(--cat-ratios)", items: ["Gross Profit Margin = (Gross Profit ÷ Revenue) × 100 ✦ IN BOOKLET","Net Profit Margin = (Net Profit ÷ Revenue) × 100 ✦ IN BOOKLET","ROCE = (Net Profit ÷ Capital Employed) × 100 ✦ IN BOOKLET","Current Ratio = Current Assets ÷ Current Liabilities (ideal ~2:1) ✦ IN BOOKLET","Acid Test = (CA – Inventory) ÷ CL (ideal ~1:1) ✦ IN BOOKLET","Interpret ratios in context — not just calculate them!"] },
+  { id: "efficiency", title: "3.6 – Efficiency Ratios (HL Only)", color: "var(--cat-budgets)", items: ["Stock Turnover (times) = Cost of Sales ÷ Average Stock ✦ IN BOOKLET","Stock Turnover (days) = (Average Stock ÷ Cost of Sales) × 365 ✦ IN BOOKLET","Average Stock = (Opening Stock + Closing Stock) ÷ 2 ✦ IN BOOKLET","Debtor Days = (Debtors ÷ Revenue) × 365 ✦ IN BOOKLET","Creditor Days = (Creditors ÷ Cost of Sales) × 365 ✦ IN BOOKLET","Gearing = (Non-current Liabilities ÷ Capital Employed) × 100 ✦ IN BOOKLET","High vs low gearing — implications for risk and investment"] },
+  { id: "investment", title: "3.7 – Investment Appraisal", color: "var(--cat-investment)", items: ["Payback Period — calculate and interpret","ARR = (Total Returns – Capital Cost) ÷ Years ÷ Capital Cost × 100 ✦ IN BOOKLET","NPV = Sum of discounted cash flows – Initial Investment ✦ IN BOOKLET (HL)","Discount factors/tables are provided in exam","Compare methods: qualitative vs quantitative factors","Limitations of each investment appraisal method"] },
+  { id: "budgets", title: "3.8 – Budgets & Variance Analysis", color: "var(--cat-cashflow)", items: ["Variance = Actual – Budgeted ✦ MEMORISE","Favourable variance: better than expected","Adverse variance: worse than expected","For costs: Actual < Budgeted = Favourable","For revenue: Actual > Budgeted = Favourable","Zero-based vs incremental budgeting (pros & cons)","Limitations of budgets"] },
+  { id: "breakeven", title: "5.5 – Breakeven Analysis", color: "var(--cat-breakeven)", items: ["Breakeven Output = Fixed Costs ÷ Contribution per unit ✦ MEMORISE","Margin of Safety = Actual Output – Breakeven Output ✦ MEMORISE","Target Profit Output = (FC + Target Profit) ÷ Contribution ✦ MEMORISE","Draw and interpret breakeven charts","Limitations of breakeven analysis","How changes in price/costs affect the breakeven point"] },
+  { id: "bmt", title: "BMT Tools", color: "var(--cat-bmt)", items: ["Business Plan — components, purpose, link to securing finance","Ansoff Matrix — 4 strategies, risk levels, finance implications","STEEPLE — apply each factor to a business scenario","Force Field Analysis — driving vs restraining forces (Lewin)","Apply BMT tools to justify business decisions in context"] },
+  { id: "formulas", title: "Formulas to MEMORISE (Not in Booklet)", color: "var(--cat-budgets)", items: ["Contribution per unit = Selling Price – Variable Cost per unit","Total Contribution = Contribution per unit × Quantity","Total Costs = Fixed Costs + Total Variable Costs","Profit = Total Revenue – Total Costs","Breakeven Output = Fixed Costs ÷ Contribution per unit","Margin of Safety = Actual Output – Breakeven Output","Target Profit Output = (FC + Target Profit) ÷ Contribution per unit","Straight-line depreciation = (Cost – Residual Value) ÷ Useful Life","Reducing balance = Net Book Value × Depreciation Rate %","Net Cash Flow = Cash Inflows – Cash Outflows","Closing Balance = Opening Balance + Net Cash Flow","Variance = Actual – Budgeted"] },
+  { id: "examtips", title: "Exam Technique", color: "var(--cat-costs)", items: ["Define key terms at the start of longer answers","Always use the business context given — never answer generically","For evaluate/justify: give both sides then make a justified conclusion","Show ALL working in calculations — method marks are available","Interpret ratios — don't just calculate, explain what it means","Link answers back to the specific business in the question"] },
 ];
 
 // ─────────────────────────────────────────────────────────────────────────────
 // FLASHCARD DATA
 // ─────────────────────────────────────────────────────────────────────────────
 const FLASHCARD_CATEGORIES = [
-  { id: "costs-revenue", label: "Costs & Revenue", color: "#7C6FFF", cards: [
+  { id: "costs-revenue", label: "Costs & Revenue", color: "var(--cat-costs)", cards: [
     { term: "Fixed Costs", def: "Costs that do not change with the level of output, e.g., loan repayments and management salaries.", formula: null },
     { term: "Variable Costs", def: "Costs that change with the level of output — they rise when output or sales increase, e.g., raw materials and packaging costs.", formula: null },
     { term: "Total Costs (TC)", def: "The aggregate amount of money spent on the output of a business.", formula: "TC = TFC + TVC" },
@@ -53,7 +53,7 @@ const FLASHCARD_CATEGORIES = [
     { term: "Indirect Costs (Overheads)", def: "Costs not easily identifiable with the sale or output of a specific good, service, or business operation.", formula: null },
     { term: "Cost of Sales (COS)", def: "The direct costs of production.", formula: "COS = Opening stock + Purchases − Closing stock" },
   ]},
-  { id: "cashflow", label: "Cash Flow", color: "#38BDF8", cards: [
+  { id: "cashflow", label: "Cash Flow", color: "var(--cat-cashflow)", cards: [
     { term: "Net Cash Flow", def: "The numerical difference between an organisation's total cash inflows and its total cash outflows, per time period.", formula: "Net cash flow = Cash inflows − Cash outflows" },
     { term: "Opening Balance", def: "The value of cash held by a business at the start of a trading period.", formula: "Opening balance = Closing balance of previous period" },
     { term: "Closing Balance", def: "The value of cash held by a business at the end of a trading period.", formula: "Closing balance = Opening balance + Net cash flow" },
@@ -61,7 +61,7 @@ const FLASHCARD_CATEGORIES = [
     { term: "Debt Factoring", def: "Selling outstanding invoices to a third party at a discount in exchange for immediate cash — one of the fastest solutions to cash flow problems.", formula: null },
     { term: "Cumulative Net Cash Flow", def: "The sum of an investment project's net cash flows for a particular year plus all previous years.", formula: "Cumulative NCF = NCF in previous year(s) + NCF of current year" },
   ]},
-  { id: "final-accounts", label: "Final Accounts", color: "#34D399", cards: [
+  { id: "final-accounts", label: "Final Accounts", color: "var(--cat-accounts)", cards: [
     { term: "Gross Profit", def: "The profit from a firm's everyday trading activities.", formula: "Gross profit = Sales revenue − Cost of Sales" },
     { term: "Gross Profit Margin (GPM)", def: "A profitability ratio measuring gross profit as a percentage of sales revenue. ✦ IN BOOKLET", formula: "GPM = (Gross profit / Sales revenue) × 100" },
     { term: "Profit Margin", def: "A profitability ratio measuring a firm's overall profit as a percentage of sales revenue. ✦ IN BOOKLET", formula: "= (Profit before interest and tax / Sales revenue) × 100" },
@@ -73,7 +73,7 @@ const FLASHCARD_CATEGORIES = [
     { term: "Capital Employed", def: "The value of funds used to operate the business and generate a financial return. ✦ IN BOOKLET", formula: "= Non-current liabilities + Equity" },
     { term: "Equity", def: "The value of the owners' stake in the business.", formula: "= Share capital + Retained earnings" },
   ]},
-  { id: "ratios", label: "Ratio Analysis", color: "#FBBF24", cards: [
+  { id: "ratios", label: "Ratio Analysis", color: "var(--cat-ratios)", cards: [
     { term: "ROCE", def: "Measures a firm's efficiency and profitability in relation to its capital employed. ✦ IN BOOKLET", formula: "ROCE = (Profit before interest and tax / Capital employed) × 100" },
     { term: "Current Ratio", def: "Measures ability to meet short-term debts. Ideal ~2:1. ✦ IN BOOKLET", formula: "= Current assets / Current liabilities" },
     { term: "Acid Test Ratio", def: "Measures ability to pay short-term debts WITHOUT selling stock. Ideal ~1:1. ✦ IN BOOKLET", formula: "= (Current assets − Stock) / Current liabilities" },
@@ -84,12 +84,12 @@ const FLASHCARD_CATEGORIES = [
     { term: "Gearing Ratio — HL", def: "The proportion of capital employed funded by external debt. Above 50% = high gearing = higher financial risk. ✦ IN BOOKLET", formula: "= (Non-current liabilities / Capital employed) × 100" },
     { term: "Average Stock", def: "Used in efficiency ratio calculations. ✦ IN BOOKLET", formula: "= (Opening stock + Closing stock) / 2" },
   ]},
-  { id: "investment", label: "Investment Appraisal", color: "#A78BFA", cards: [
+  { id: "investment", label: "Investment Appraisal", color: "var(--cat-investment)", cards: [
     { term: "Payback Period (PBP)", def: "The time taken to recover the initial investment from the net cash flows generated.", formula: "= Investment cost / Contribution per month (if even flows)" },
     { term: "Average Rate of Return (ARR)", def: "Average annual profit as a percentage of the initial investment. ✦ IN BOOKLET", formula: "ARR = [(Total returns − Capital cost) ÷ Years] / Capital cost × 100" },
     { term: "Net Present Value (NPV) — HL", def: "Calculates the real value of an investment by discounting future cash flows. A positive NPV means the project adds value. ✦ IN BOOKLET", formula: "NPV = Sum of present values − Cost of investment" },
   ]},
-  { id: "budgets", label: "Budgets & Variance", color: "#F87171", cards: [
+  { id: "budgets", label: "Budgets & Variance", color: "var(--cat-budgets)", cards: [
     { term: "Variance", def: "A discrepancy between the planned (budgeted) item and the actual amount.", formula: "Variance = Actual value − Budgeted value" },
     { term: "Favourable Variance", def: "Profits are higher than expected — due to lower costs and/or higher revenues than budgeted.", formula: null },
     { term: "Adverse Variance", def: "Profits are lower than expected — due to higher costs and/or lower revenues than budgeted.", formula: null },
@@ -97,14 +97,14 @@ const FLASHCARD_CATEGORIES = [
     { term: "Variance Rule — Costs", def: "For COSTS: Actual < Budgeted = FAVOURABLE (spent less than planned).", formula: null },
     { term: "Variance Rule — Revenue", def: "For REVENUE: Actual > Budgeted = FAVOURABLE (earned more than planned).", formula: null },
   ]},
-  { id: "breakeven", label: "Breakeven", color: "#2DD4BF", cards: [
+  { id: "breakeven", label: "Breakeven", color: "var(--cat-breakeven)", cards: [
     { term: "Break-Even Quantity (BEQ)", def: "The quantity of sales required for a firm to reach break-even (cover all costs).", formula: "BEQ = Total fixed costs / Contribution per unit" },
     { term: "Margin of Safety", def: "The amount by which actual output exceeds the break-even quantity.", formula: "= Actual output − Break-even quantity" },
     { term: "Target Profit Quantity", def: "The output needed to achieve a specific profit target.", formula: "= (Fixed costs + Target profit) / Contribution per unit" },
     { term: "Target Price", def: "The price needed to break-even given current costs.", formula: "= AFC + AVC" },
     { term: "Break-Even Analysis", def: "A tool to determine the level of sales needed to cover all costs. Limitations: assumes constant price/costs, ignores quality, and is static.", formula: null },
   ]},
-  { id: "sources", label: "Sources of Finance", color: "#FB923C", cards: [
+  { id: "sources", label: "Sources of Finance", color: "var(--accent-tertiary)", cards: [
     { term: "Internal Sources of Finance", def: "Finance from within the organisation — retained profit, sale of assets, owner's savings.", formula: null },
     { term: "External Sources of Finance", def: "Finance from outside the organisation — banks, investors, government, crowdfunding.", formula: null },
     { term: "Share Capital", def: "Finance raised through issuing shares on a stock exchange. Also known as equity capital.", formula: null },
@@ -114,7 +114,7 @@ const FLASHCARD_CATEGORIES = [
     { term: "Crowdfunding", def: "Raising finance by getting small amounts from a large number of people, often via online platforms.", formula: null },
     { term: "Business Angels", def: "Wealthy private individuals who invest their own money in high-growth potential ventures.", formula: null },
   ]},
-  { id: "bmt", label: "BMT Tools", color: "#F472B6", cards: [
+  { id: "bmt", label: "BMT Tools", color: "var(--cat-bmt)", cards: [
     { term: "Ansoff Matrix", def: "Four growth strategies: Market Penetration (existing/existing), Market Development (existing product/new market), Product Development (new product/existing market), Diversification (new/new — highest risk).", formula: null },
     { term: "STEEPLE", def: "Framework examining external macro factors: Social, Technological, Economic, Environmental, Political, Legal, Ethical.", formula: null },
     { term: "Force Field Analysis", def: "Lewin's tool mapping driving forces (for change) vs restraining forces (against change). Change succeeds when driving forces outweigh restraining forces.", formula: null },
@@ -233,10 +233,10 @@ const WRITTEN_10_MARK_QUESTIONS = [
 ];
 
 const CAT_COLORS = {
-  "Costs & Revenue":"#7C6FFF","Cash Flow":"#38BDF8","Final Accounts":"#34D399",
-  "Ratio Analysis":"#FBBF24","Ratio Analysis (HL)":"#FBBF24","Investment Appraisal":"#A78BFA",
-  "Budgets & Variance":"#F87171","Breakeven":"#2DD4BF","BMT Tools":"#F472B6",
-  "Sources of Finance":"#FB923C"
+  "Costs & Revenue":"var(--cat-costs)","Cash Flow":"var(--cat-cashflow)","Final Accounts":"var(--cat-accounts)",
+  "Ratio Analysis":"var(--cat-ratios)","Ratio Analysis (HL)":"var(--cat-ratios)","Investment Appraisal":"var(--cat-investment)",
+  "Budgets & Variance":"var(--cat-budgets)","Breakeven":"var(--cat-breakeven)","BMT Tools":"var(--cat-bmt)",
+  "Sources of Finance":"var(--accent-tertiary)"
 };
 
 const ALL_CATS = ["All", ...Array.from(new Set(MCQ_QUESTIONS.map(q=>q.cat)))];
@@ -322,7 +322,7 @@ function ChecklistView() {
   const totalItems = checklistSections.reduce((s,sec)=>s+sec.items.length,0);
   const checkedCount = Object.values(checked).filter(Boolean).length;
   const progress = Math.round((checkedCount/totalItems)*100);
-  const progColor = progress<30?"#F87171":progress<70?"#FBBF24":"#34D399";
+  const progColor = progress<30?"var(--color-danger)":progress<70?"var(--color-warning)":"var(--color-success)";
 
   return (
     <div style={{maxWidth:1060,margin:"0 auto",padding:"0 0 40px"}}>
@@ -335,7 +335,7 @@ function ChecklistView() {
         <ProgressBar value={progress} color={progColor} animated />
         <div className="flex items-center justify-between mt-3">
           <span className="text-xs text-[var(--text-muted)]">{checkedCount} of {totalItems} topics covered</span>
-          <span className="text-xs px-2 py-0.5 rounded-full" style={{fontFamily:"'JSans', sans-serif", backgroundColor:"#34D39922", color:"#34D399"}}>auto-saved</span>
+          <span className="text-xs px-2 py-0.5 rounded-full" style={{fontFamily:"'JSans', sans-serif", backgroundColor:"var(--color-success-soft)", color:"var(--color-success)"}}>auto-saved</span>
         </div>
       </Surface>
 
@@ -385,7 +385,7 @@ function ChecklistView() {
                             <Checkbox.Indicator />
                           </Checkbox.Control>
                           <Checkbox.Content>
-                            <span className="text-sm leading-relaxed cursor-pointer" style={{color: isChecked ? "var(--text-muted)" : isImportant ? "#FBBF24" : "var(--text-body)", textDecoration: isChecked ? "line-through" : "none"}}>{item}</span>
+                            <span className="text-sm leading-relaxed cursor-pointer" style={{color: isChecked ? "var(--text-muted)" : isImportant ? "var(--color-warning)" : "var(--text-body)", textDecoration: isChecked ? "line-through" : "none"}}>{item}</span>
                           </Checkbox.Content>
                         </Checkbox>
                       );
@@ -400,7 +400,7 @@ function ChecklistView() {
 
       <span className="text-center block text-xs text-[var(--text-muted)] mt-6">
         Click any item to mark it as revised ·{" "}
-        <span className="text-[#7C6FFF] cursor-pointer" onClick={()=>{ setChecked({}); saveLS("checklist_checked", {}); }}>Reset all</span>
+        <span className="text-[var(--accent)] cursor-pointer" onClick={()=>{ setChecked({}); saveLS("checklist_checked", {}); }}>Reset all</span>
       </span>
     </div>
   );
@@ -441,7 +441,7 @@ function FlashCard({card, catColor}) {
           {card.formula && (
             <div className="mt-2 p-2" style={{ background: "var(--bg-base)", borderRadius: 8, borderLeft: `3px solid ${catColor}` }}>
               <span className="block text-[10px] text-current mb-1" style={{fontFamily:"'JSans', sans-serif", letterSpacing:1, color:catColor}}>FORMULA</span>
-              <span className="block text-[12px] text-[#A9E6FF]" style={{fontFamily:"'JSans', sans-serif"}}>{card.formula}</span>
+              <span className="block text-[12px] text-[var(--accent)]" style={{fontFamily:"'JSans', sans-serif"}}>{card.formula}</span>
             </div>
           )}
         </div>
@@ -524,7 +524,7 @@ function MCQItem({q, displayNum}) {
   const { catColors } = useContent();
   const [selected,setSelected]=useState(null);
   const [confirmed,setConfirmed]=useState(false);
-  const color=catColors[q.cat]||"#7C6FFF";
+  const color=catColors[q.cat]||"var(--accent)";
   const { recordAttempt, resetTimer } = useAttemptTracker(q.id, "mcq", q.cat, "business", q.difficulty);
   return (
     <Surface variant="secondary" className="rounded-2xl mb-2 overflow-hidden" style={{ transition:"all 0.2s" }}>
@@ -548,8 +548,8 @@ function MCQItem({q, displayNum}) {
             const isCorrect=i===q.answer;
             let bg="var(--bg-card)",border="var(--border)",tc="var(--text-body)";
             if(confirmed){
-              if(isCorrect){bg="#34D399"+"22";border="#34D399";tc="#6EE7B7";}
-              else if(isSelected&&!isCorrect){bg="#F87171"+"22";border="#F87171";tc="#FCA5A5";}
+              if(isCorrect){bg="var(--color-success-soft)";border="var(--color-success)";tc="var(--color-success)";}
+              else if(isSelected&&!isCorrect){bg="var(--color-danger-soft)";border="var(--color-danger)";tc="var(--color-danger)";}
             } else if(isSelected){bg=color+"22";border=color;tc="var(--text-primary)";}
             return (
               <Radio
@@ -568,7 +568,7 @@ function MCQItem({q, displayNum}) {
                   <div className="flex items-center gap-2 flex-nowrap">
                     <div style={{
                       width:28,height:28,borderRadius:'50%',flexShrink:0,
-                      background:confirmed&&isCorrect?"#34D399":confirmed&&isSelected&&!isCorrect?"#F87171":isSelected?color:"var(--border)",
+                      background:confirmed&&isCorrect?"var(--color-success)":confirmed&&isSelected&&!isCorrect?"var(--color-danger)":isSelected?color:"var(--border)",
                       display:"flex",alignItems:"center",justifyContent:"center",
                     }}>
                       <span className="text-[11px] text-white font-bold" style={{fontFamily:"'JSans', sans-serif"}}>
@@ -596,7 +596,7 @@ function MCQItem({q, displayNum}) {
             Check Answer
           </Button>
         ) : (
-          <Alert status={selected===q.answer ? "success" : "danger"} className="mt-1 rounded-2xl" style={{backgroundColor: (selected===q.answer ? "#34D399" : "#F87171") + "11", border: `1px solid ${selected===q.answer ? "#34D399" : "#F87171"}44`}}>
+          <Alert status={selected===q.answer ? "success" : "danger"} className="mt-1 rounded-2xl" style={{backgroundColor: (selected===q.answer ? "var(--color-success)" : "var(--color-danger)") + "11", border: `1px solid ${selected===q.answer ? "var(--color-success)" : "var(--color-danger)"}44`}}>
             <Alert.Indicator />
             <Alert.Content>
               <Alert.Title style={{fontFamily: "'JSans', sans-serif", fontSize: 12}}>{selected===q.answer ? "Correct!" : "Incorrect"}</Alert.Title>
@@ -629,7 +629,7 @@ function PracticeView() {
       {/* Category filter */}
       <div className="flex gap-2 mb-6 flex-wrap">
         {allCats.map(cat => {
-          const c = catColors[cat] || "#7C6FFF";
+          const c = catColors[cat] || "var(--accent)";
           const active = filterCat === cat;
           return (
             <Button
@@ -677,7 +677,7 @@ function WrittenPracticeItem({q, displayNum}) {
   const [revealed, setRevealed] = useState(false);
   const [grading, setGrading] = useState(false);
   const [gradeResult, setGradeResult] = useState(() => loadLS(`written_grade_${q.id}`, null));
-  const color = catColors[q.cat] || "#7C6FFF";
+  const color = catColors[q.cat] || "var(--accent)";
   const { recordAttempt } = useAttemptTracker(q.id, "written", q.cat, "business", q.difficulty);
 
   useEffect(() => { saveLS(`written_ans_${q.id}`, answer); }, [answer, q.id]);
@@ -714,7 +714,7 @@ function WrittenPracticeItem({q, displayNum}) {
 
   const scorePct = gradeResult?.score != null ? gradeResult.score / (gradeResult.maxMarks || q.marks) : 0;
   const scoreColor = gradeResult?.score != null
-    ? scorePct >= 0.75 ? "#34D399" : scorePct >= 0.4 ? "#FBBF24" : "#F87171"
+    ? scorePct >= 0.75 ? "var(--color-success)" : scorePct >= 0.4 ? "var(--color-warning)" : "var(--color-danger)"
     : "var(--text-secondary)";
 
   return (
@@ -723,7 +723,7 @@ function WrittenPracticeItem({q, displayNum}) {
         <div className="flex gap-2 mb-2 flex-wrap">
           <span className="text-xs px-2 py-0.5 rounded-full" style={{fontFamily:"'JSans', sans-serif",backgroundColor:color+"22", color}}>{q.cat}</span>
           <span className="text-xs px-2 py-0.5 rounded-full" style={{fontFamily:"'JSans', sans-serif",backgroundColor:"var(--bg-elevated)", color:"var(--text-secondary)"}}>{q.difficulty}</span>
-          <span className="text-xs px-2 py-0.5 rounded-full ml-auto" style={{fontFamily:"'JSans', sans-serif",backgroundColor:"#2A2800", color:"#FBBF24", border:"1px solid #5A4A00"}}>[ {q.marks} marks ]</span>
+          <span className="text-xs px-2 py-0.5 rounded-full ml-auto" style={{fontFamily:"'JSans', sans-serif",backgroundColor:"var(--color-warning-soft)", color:"var(--color-warning)", border:"1px solid var(--color-warning)"}}>[ {q.marks} marks ]</span>
         </div>
         <span className="block text-[15px] text-[var(--text-primary)] font-semibold" style={{lineHeight:1.6, whiteSpace:"pre-line"}}>Q{displayNum}. {q.q}</span>
       </div>
@@ -748,7 +748,7 @@ function WrittenPracticeItem({q, displayNum}) {
             isPending={grading}
             isDisabled={!answer.trim() || grading}
             style={{
-              background: answer.trim() && !grading ? "#7C6FFF" : "var(--bg-elevated)",
+              background: answer.trim() && !grading ? "var(--accent)" : "var(--bg-elevated)",
               fontFamily: "'JSans', sans-serif",
             }}
           >
@@ -803,8 +803,8 @@ function WrittenPracticeItem({q, displayNum}) {
 
         {revealed && (
           <div className="mt-4 pt-4 border-t border-[var(--border)]">
-            <span className="block text-[11px] text-[#34D399] mb-2" style={{fontFamily:"'JSans', sans-serif", letterSpacing:1}}>MARKSCHEME</span>
-            <span className="block text-[13px] text-[#B0ADA6]" style={{lineHeight:1.7, whiteSpace:"pre-line"}}>{q.modelAnswer}</span>
+            <span className="block text-[11px] text-[var(--color-success)] mb-2" style={{fontFamily:"'JSans', sans-serif", letterSpacing:1}}>MARKSCHEME</span>
+            <span className="block text-[13px] text-[var(--text-secondary)]" style={{lineHeight:1.7, whiteSpace:"pre-line"}}>{q.modelAnswer}</span>
           </div>
         )}
       </div>
@@ -846,12 +846,12 @@ function WrittenPracticeView() {
           style={{
             flex: 1,
             height: 48,
-            backgroundColor: mode === "short" ? "#7C6FFF" : "var(--bg-input)",
+            backgroundColor: mode === "short" ? "var(--accent)" : "var(--bg-input)",
             color: mode === "short" ? "#fff" : "var(--text-secondary)",
-            border: `2px solid ${mode === "short" ? "#7C6FFF" : "var(--border)"}`,
+            border: `2px solid ${mode === "short" ? "var(--accent)" : "var(--border)"}`,
             fontSize: 15,
             lineHeight: 1,
-            boxShadow: mode === "short" ? "0 0 16px #7C6FFF33" : "none",
+            boxShadow: mode === "short" ? "0 0 16px var(--accent-glow)" : "none",
             fontFamily: "'JSans', sans-serif",
           }}
         >
@@ -863,12 +863,12 @@ function WrittenPracticeView() {
           style={{
             flex: 1,
             height: 48,
-            backgroundColor: mode === "10mark" ? "#F87171" : "var(--bg-input)",
+            backgroundColor: mode === "10mark" ? "var(--color-danger)" : "var(--bg-input)",
             color: mode === "10mark" ? "#fff" : "var(--text-secondary)",
-            border: `2px solid ${mode === "10mark" ? "#F87171" : "var(--border)"}`,
+            border: `2px solid ${mode === "10mark" ? "var(--color-danger)" : "var(--border)"}`,
             fontSize: 15,
             lineHeight: 1,
-            boxShadow: mode === "10mark" ? "0 0 16px #F8717133" : "none",
+            boxShadow: mode === "10mark" ? "0 0 16px var(--color-danger-soft)" : "none",
             fontFamily: "'JSans', sans-serif",
           }}
         >
@@ -881,8 +881,8 @@ function WrittenPracticeView() {
             style={{
               height: 48,
               backgroundColor: "var(--bg-input)",
-              color: "#2DD4BF",
-              border: "2px solid #2DD4BF",
+              color: "var(--cat-breakeven)",
+              border: "2px solid var(--accent-secondary)",
               fontSize: 15,
               lineHeight: 1,
               fontFamily: "'JSans', sans-serif",
@@ -897,7 +897,7 @@ function WrittenPracticeView() {
       {mode === "short" && (
         <div className="flex gap-2 mb-6 flex-wrap">
           {writtenCats.map(cat => {
-            const c = catColors[cat] || "#7C6FFF";
+            const c = catColors[cat] || "var(--accent)";
             const active = filterCat === cat;
             return (
               <Button
@@ -995,7 +995,7 @@ export default function App({ initialTab = "checklist" }) {
                 <line x1="3" y1="18" x2="21" y2="18"/>
               </svg>
             </Button>
-            <span className="text-xs px-2.5 py-1 rounded-full uppercase font-bold tracking-widest" style={{fontFamily: "'JSans', sans-serif", backgroundColor: "#7C6FFF18", color: "#A78BFA"}}>
+            <span className="text-xs px-2.5 py-1 rounded-full uppercase font-bold tracking-widest" style={{fontFamily: "'JSans', sans-serif", backgroundColor: "var(--accent-soft)", color: "var(--cat-investment)"}}>
               IB HL Business Management
             </span>
             <LoginButton />
@@ -1017,7 +1017,7 @@ export default function App({ initialTab = "checklist" }) {
                     style={{fontFamily: "'JSans', sans-serif"}}
                   >
                     {t.label}
-                    <Tabs.Indicator className="bg-[#7C6FFF]" />
+                    <Tabs.Indicator className="bg-[var(--accent)]" />
                   </Tabs.Tab>
                 ))}
               </Tabs.List>
@@ -1047,7 +1047,7 @@ export default function App({ initialTab = "checklist" }) {
           width: 48,
           height: 48,
           borderRadius: "50%",
-          backgroundColor: "#7C6FFF",
+          backgroundColor: "var(--accent)",
           display: "flex",
           alignItems: "center",
           justifyContent: "center",

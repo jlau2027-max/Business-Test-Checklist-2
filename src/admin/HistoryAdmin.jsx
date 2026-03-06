@@ -223,7 +223,7 @@ export default function HistoryAdmin() {
             History Questions
           </span>
           {canEditContent && (
-            <Button className="rounded-full bg-[#7C6FFF] text-white border-none" onPress={openCreateModal}><IconPlus size={16} /> Add Question</Button>
+            <Button className="rounded-full bg-[var(--accent)] text-white border-none" onPress={openCreateModal}><IconPlus size={16} /> Add Question</Button>
           )}
         </div>
 
@@ -262,7 +262,7 @@ export default function HistoryAdmin() {
                     {PAPER_FILTER_OPTIONS.map(opt => (
                       <Tabs.Tab key={opt.value} id={opt.value} className="text-[var(--text-secondary)] text-sm px-3.5 py-1.5 data-[selected=true]:text-white rounded-full">
                         {opt.label}
-                        <Tabs.Indicator className="bg-[#7C6FFF] rounded-full" />
+                        <Tabs.Indicator className="bg-[var(--accent)] rounded-full" />
                       </Tabs.Tab>
                     ))}
                   </Tabs.List>
@@ -295,7 +295,7 @@ export default function HistoryAdmin() {
               <Table className="w-full">
                 <Table.ScrollContainer>
                   <Table.Content>
-                    <Table.Header className="bg-[#0E0E16]">
+                    <Table.Header className="bg-[var(--bg-base)]">
                       <Table.Column className="text-[var(--text-secondary)] text-xs font-semibold uppercase tracking-wider p-3.5 border-b border-[var(--border)]" style={{ width: 70 }}>Paper</Table.Column>
                       <Table.Column className="text-[var(--text-secondary)] text-xs font-semibold uppercase tracking-wider p-3.5 border-b border-[var(--border)]" style={{ width: 160 }}>Topic</Table.Column>
                       <Table.Column className="text-[var(--text-secondary)] text-xs font-semibold uppercase tracking-wider p-3.5 border-b border-[var(--border)]" style={{ width: 50 }}>Q#</Table.Column>
@@ -309,9 +309,9 @@ export default function HistoryAdmin() {
                       {questions.map((q) => {
                         const badgeConfig = PAPER_BADGE_CONFIG[q.paper] || { label: q.paper, color: "gray" };
                         return (
-                          <Table.Row key={q.id} className="hover:bg-[#16161F] border-b border-[var(--bg-elevated)]">
+                          <Table.Row key={q.id} className="hover:bg-[var(--bg-input)] border-b border-[var(--bg-elevated)]">
                             <Table.Cell className="p-3.5">
-                              <span className="text-xs px-2 py-0.5 rounded-full text-white" style={{ backgroundColor: badgeConfig.color === "blue" ? "#3b82f6" : badgeConfig.color === "orange" ? "#f97316" : "#6b7280" }}>
+                              <span className="text-xs px-2 py-0.5 rounded-full text-white" style={{ backgroundColor: badgeConfig.color === "blue" ? "var(--accent)" : badgeConfig.color === "orange" ? "var(--accent-tertiary)" : "var(--text-muted)" }}>
                                 {badgeConfig.label}
                               </span>
                             </Table.Cell>
@@ -340,7 +340,7 @@ export default function HistoryAdmin() {
                                 <div className="flex items-center gap-1 justify-end flex-nowrap">
                                   {canEditContent && (
                                     <Tooltip delay={0}>
-                                      <Button isIconOnly size="sm" variant="ghost" className="text-[#A78BFA]" onPress={() => openEditModal(q)}>
+                                      <Button isIconOnly size="sm" variant="ghost" className="text-[var(--accent)]" onPress={() => openEditModal(q)}>
                                         <IconPencil size={15} />
                                       </Button>
                                       <Tooltip.Content><p>Edit</p></Tooltip.Content>
@@ -400,7 +400,7 @@ export default function HistoryAdmin() {
                           {PAPER_FORM_OPTIONS.map(opt => (
                             <Tabs.Tab key={opt.value} id={opt.value} className="text-[var(--text-secondary)] text-sm px-3.5 py-1.5 data-[selected=true]:text-white rounded-full flex-1">
                               {opt.label}
-                              <Tabs.Indicator className="bg-[#7C6FFF] rounded-full" />
+                              <Tabs.Indicator className="bg-[var(--accent)] rounded-full" />
                             </Tabs.Tab>
                           ))}
                         </Tabs.List>
@@ -450,7 +450,7 @@ export default function HistoryAdmin() {
               {/* Actions */}
               <div className="flex items-center justify-end gap-2 mt-2">
                 <Button variant="ghost" className="rounded-full text-[var(--text-secondary)]" onPress={closeModal} isDisabled={saving}>Cancel</Button>
-                <Button className="rounded-full bg-[#7C6FFF] text-white border-none" onPress={handleSave} isPending={saving}>{({isPending}) => <>{isPending && <Spinner color="current" size="sm" />}{isPending ? "Saving..." : (editingQuestion ? "Save Changes" : "Create Question")}</>}</Button>
+                <Button className="rounded-full bg-[var(--accent)] text-white border-none" onPress={handleSave} isPending={saving}>{({isPending}) => <>{isPending && <Spinner color="current" size="sm" />}{isPending ? "Saving..." : (editingQuestion ? "Save Changes" : "Create Question")}</>}</Button>
               </div>
             </Modal.Footer>
           </Modal.Dialog>

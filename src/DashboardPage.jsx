@@ -13,17 +13,17 @@ import {
 } from "./userApi.js";
 
 const CAT_COLORS = {
-  "Costs & Revenue": "#7C6FFF",
-  "Cash Flow": "#38BDF8",
-  "Final Accounts": "#34D399",
-  "Ratio Analysis": "#FBBF24",
-  "Ratio Analysis (HL)": "#FBBF24",
-  "Investment Appraisal": "#A78BFA",
-  "Budgets & Variance": "#F87171",
-  "Breakeven": "#2DD4BF",
-  "BMT Tools": "#F472B6",
-  "Sources of Finance": "#FB923C",
-  "Specimen Exam": "#2DD4BF",
+  "Costs & Revenue": "var(--cat-costs)",
+  "Cash Flow": "var(--cat-cashflow)",
+  "Final Accounts": "var(--cat-accounts)",
+  "Ratio Analysis": "var(--cat-ratios)",
+  "Ratio Analysis (HL)": "var(--cat-ratios)",
+  "Investment Appraisal": "var(--cat-investment)",
+  "Budgets & Variance": "var(--cat-budgets)",
+  "Breakeven": "var(--cat-breakeven)",
+  "BMT Tools": "var(--cat-bmt)",
+  "Sources of Finance": "var(--accent-tertiary)",
+  "Specimen Exam": "var(--cat-breakeven)",
   "Migrated": "var(--text-secondary)",
 };
 
@@ -38,7 +38,7 @@ function formatTime(ms) {
   return `${hours}h ${minutes % 60}m`;
 }
 
-function StatCard({ label, value, sub, color = "#7C6FFF" }) {
+function StatCard({ label, value, sub, color = "var(--accent)" }) {
   return (
     <Surface className="rounded-2xl p-4" style={{ flex: 1, minWidth: 160 }}>
       <span className="block text-[var(--text-muted)] mb-1" style={{ fontSize: 11, fontFamily: "'JSans', sans-serif", letterSpacing: 1 }}>
@@ -119,7 +119,7 @@ export default function DashboardPage() {
             </Button>
             <span
               className="text-xs px-2 py-0.5 rounded-full uppercase font-bold"
-              style={{ letterSpacing: 2, backgroundColor: "#7C6FFF18", color: "#A78BFA", border: "none", fontFamily: "'JSans', sans-serif" }}
+              style={{ letterSpacing: 2, backgroundColor: "var(--accent-soft)", color: "var(--accent)", border: "none", fontFamily: "'JSans', sans-serif" }}
             >
               Analytics
             </span>
@@ -155,7 +155,7 @@ export default function DashboardPage() {
               <Button
                 render={(props) => <button {...props} />}
                 size="md"
-                className="rounded-full bg-[#7C6FFF] text-white border-none font-semibold"
+                className="rounded-full bg-[var(--accent)] text-white border-none font-semibold"
               >
                 Sign In
               </Button>
@@ -172,7 +172,7 @@ export default function DashboardPage() {
               Start answering questions on the Revision Hub to see your analytics here.
             </span>
             <a href="/business/checklist" style={{ textDecoration: "none" }}>
-              <Button className="rounded-full bg-[#7C6FFF] text-white border-none font-semibold">
+              <Button className="rounded-full bg-[var(--accent)] text-white border-none font-semibold">
                 Go to Revision Hub
               </Button>
             </a>
@@ -191,19 +191,19 @@ export default function DashboardPage() {
                 label="MCQ ACCURACY"
                 value={overall.mcqAccuracy != null ? `${overall.mcqAccuracy}%` : "—"}
                 sub={overall.mcqTotal > 0 ? `${overall.mcqTotal} questions` : "No MCQs yet"}
-                color={overall.mcqAccuracy >= 75 ? "#34D399" : overall.mcqAccuracy >= 40 ? "#FBBF24" : "#F87171"}
+                color={overall.mcqAccuracy >= 75 ? "var(--color-success)" : overall.mcqAccuracy >= 40 ? "var(--color-warning)" : "var(--color-danger)"}
               />
               <StatCard
                 label="WRITTEN AVG"
                 value={overall.writtenAvg != null ? `${overall.writtenAvg}%` : "—"}
                 sub={overall.totalAttempts - overall.mcqTotal > 0 ? `${overall.totalAttempts - overall.mcqTotal} answers` : "No written yet"}
-                color={overall.writtenAvg >= 75 ? "#34D399" : overall.writtenAvg >= 40 ? "#FBBF24" : "#F87171"}
+                color={overall.writtenAvg >= 75 ? "var(--color-success)" : overall.writtenAvg >= 40 ? "var(--color-warning)" : "var(--color-danger)"}
               />
               <StatCard
                 label="TOTAL TIME"
                 value={formatTime(overall.totalTimeMs)}
                 sub="across all questions"
-                color="#A78BFA"
+                color="var(--accent)"
               />
             </div>
 
@@ -216,7 +216,7 @@ export default function DashboardPage() {
                 {categoryStats
                   .sort((a, b) => b.totalAttempts - a.totalAttempts)
                   .map((cat) => {
-                    const color = CAT_COLORS[cat.category] || "#7C6FFF";
+                    const color = CAT_COLORS[cat.category] || "var(--accent)";
                     const pct = cat.mcqAccuracy ?? cat.writtenAvg ?? 0;
                     return (
                       <div key={cat.category}>
@@ -243,7 +243,7 @@ export default function DashboardPage() {
                         </div>
                         <ProgressBar
                           value={pct}
-                          color={pct >= 75 ? "#34D399" : pct >= 40 ? "#FBBF24" : "#F87171"}
+                          color={pct >= 75 ? "var(--color-success)" : pct >= 40 ? "var(--color-warning)" : "var(--color-danger)"}
                         />
                       </div>
                     );
@@ -264,8 +264,8 @@ export default function DashboardPage() {
                         <span
                           className="text-xs px-1.5 py-0.5 rounded-full"
                           style={{
-                            backgroundColor: a.isCorrect === false ? "#F8717122" : "#FBBF2422",
-                            color: a.isCorrect === false ? "#F87171" : "#FBBF24",
+                            backgroundColor: a.isCorrect === false ? "var(--color-danger-soft)" : "var(--color-warning-soft)",
+                            color: a.isCorrect === false ? "var(--color-danger)" : "var(--color-warning)",
                             border: "none",
                             fontFamily: "'JSans', sans-serif",
                           }}
@@ -275,8 +275,8 @@ export default function DashboardPage() {
                         <span
                           className="text-xs px-1.5 py-0.5 rounded-full"
                           style={{
-                            backgroundColor: (CAT_COLORS[a.category] || "#7C6FFF") + "22",
-                            color: CAT_COLORS[a.category] || "#7C6FFF",
+                            backgroundColor: (CAT_COLORS[a.category] || "var(--accent)") + "22",
+                            color: CAT_COLORS[a.category] || "var(--accent)",
                             border: "none",
                             fontFamily: "'JSans', sans-serif",
                           }}
@@ -289,7 +289,7 @@ export default function DashboardPage() {
                           </span>
                         )}
                       </div>
-                      <span className="text-[#B0ADA6]" style={{ fontSize: 13, lineHeight: 1.5 }}>
+                      <span className="text-[var(--text-secondary)]" style={{ fontSize: 13, lineHeight: 1.5 }}>
                         {a.questionId}
                       </span>
                     </Surface>
@@ -305,7 +305,7 @@ export default function DashboardPage() {
               </span>
               <div className="flex flex-col gap-1">
                 {attempts.slice(0, 20).map((a, i) => {
-                  const color = CAT_COLORS[a.category] || "#7C6FFF";
+                  const color = CAT_COLORS[a.category] || "var(--accent)";
                   const isGood = a.questionType === "mcq"
                     ? a.isCorrect
                     : a.score != null && a.maxMarks != null && a.score / a.maxMarks >= 0.5;
@@ -314,7 +314,7 @@ export default function DashboardPage() {
                     <div key={a.id || i} className="flex items-center gap-2 py-1" style={{ borderBottom: "1px solid var(--bg-input)" }}>
                       <div style={{
                         width: 8, height: 8, borderRadius: "50%",
-                        backgroundColor: isGood ? "#34D399" : "#F87171",
+                        backgroundColor: isGood ? "var(--color-success)" : "var(--color-danger)",
                         flexShrink: 0,
                       }} />
                       <span className="text-xs px-1.5 py-0.5 rounded-full" style={{ backgroundColor: color + "22", color, border: "none", fontFamily: "'JSans', sans-serif", flexShrink: 0 }}>
@@ -355,7 +355,7 @@ export default function DashboardPage() {
           width: 48,
           height: 48,
           borderRadius: "50%",
-          backgroundColor: "#7C6FFF",
+          backgroundColor: "var(--accent)",
           display: "flex",
           alignItems: "center",
           justifyContent: "center",

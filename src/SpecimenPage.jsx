@@ -226,13 +226,13 @@ function SpecimenQuestion({ q }) {
       <div className="flex items-start gap-2 mb-2" style={{ flexWrap: "nowrap" }}>
         <span
           className="text-sm px-2 py-1 rounded-full font-bold"
-          style={{ backgroundColor: "#2DD4BF18", color: "#2DD4BF", border: "none", flexShrink: 0, fontFamily: "'JSans', sans-serif" }}
+          style={{ backgroundColor: "var(--accent-secondary-soft)", color: "var(--accent-secondary)", border: "none", flexShrink: 0, fontFamily: "'JSans', sans-serif" }}
         >
           {q.label}
         </span>
         <span
           className="text-xs px-1.5 py-0.5 rounded-full font-semibold"
-          style={{ backgroundColor: "#8B5CF618", color: "#8B5CF6", border: "none", flexShrink: 0, fontFamily: "'JSans', sans-serif" }}
+          style={{ backgroundColor: "var(--accent-soft)", color: "var(--accent)", border: "none", flexShrink: 0, fontFamily: "'JSans', sans-serif" }}
         >
           {q.marks} mark{q.marks !== 1 ? "s" : ""}
         </span>
@@ -250,7 +250,7 @@ function SpecimenQuestion({ q }) {
         placeholder="Type your answer here..."
         rows={minRows}
         fullWidth
-        className="rounded-2xl mb-2 bg-[var(--bg-base)] border border-[var(--border)] text-[var(--text-primary)] text-sm leading-[1.7] placeholder:text-[var(--text-muted)] focus:border-[#7C6FFF] p-3"
+        className="rounded-2xl mb-2 bg-[var(--bg-base)] border border-[var(--border)] text-[var(--text-primary)] text-sm leading-[1.7] placeholder:text-[var(--text-muted)] focus:border-[var(--accent)] p-3"
         style={{ fontFamily: "'JSans', sans-serif", resize: "vertical" }}
       />
 
@@ -261,7 +261,7 @@ function SpecimenQuestion({ q }) {
           isPending={grading}
           onPress={handleSolve}
           isDisabled={!answer.trim()}
-          className="rounded-full bg-[#2DD4BF] text-white"
+          className="rounded-full bg-[var(--accent-secondary)] text-white"
           style={{ fontFamily: "'JSans', sans-serif" }}
         >
           {({isPending}) => <>
@@ -274,7 +274,7 @@ function SpecimenQuestion({ q }) {
           size="sm"
           variant="ghost"
           onPress={() => setRevealed((r) => !r)}
-          className={`rounded-full ${revealed ? "text-[var(--text-secondary)]" : "bg-[#8B5CF6] text-white"}`}
+          className={`rounded-full ${revealed ? "text-[var(--text-secondary)]" : "bg-[var(--accent)] text-white"}`}
           style={{ fontFamily: "'JSans', sans-serif" }}
         >
           {revealed ? "Hide Markscheme" : "Show Markscheme"}
@@ -292,7 +292,7 @@ function SpecimenQuestion({ q }) {
           </Button>
         )}
 
-        <span className="text-xs px-1.5 py-0.5 rounded-full ml-auto" style={{ backgroundColor: "rgba(45,212,191,0.1)", color: "#2DD4BF", fontFamily: "'JSans', sans-serif" }}>
+        <span className="text-xs px-1.5 py-0.5 rounded-full ml-auto" style={{ backgroundColor: "rgba(45,212,191,0.1)", color: "var(--accent-secondary)", fontFamily: "'JSans', sans-serif" }}>
           auto-saved
         </span>
       </div>
@@ -305,8 +305,8 @@ function SpecimenQuestion({ q }) {
               <span
                 className="text-sm px-2 py-1 rounded-full font-bold"
                 style={{
-                  backgroundColor: gradeResult.score >= gradeResult.maxMarks * 0.7 ? "#34D39922" : gradeResult.score >= gradeResult.maxMarks * 0.4 ? "#FBBF2422" : "#EF444422",
-                  color: gradeResult.score >= gradeResult.maxMarks * 0.7 ? "#34D399" : gradeResult.score >= gradeResult.maxMarks * 0.4 ? "#FBBF24" : "#EF4444",
+                  backgroundColor: gradeResult.score >= gradeResult.maxMarks * 0.7 ? "var(--color-success-soft)" : gradeResult.score >= gradeResult.maxMarks * 0.4 ? "var(--color-warning-soft)" : "var(--color-danger-soft)",
+                  color: gradeResult.score >= gradeResult.maxMarks * 0.7 ? "var(--color-success)" : gradeResult.score >= gradeResult.maxMarks * 0.4 ? "var(--color-warning)" : "var(--color-danger)",
                   border: "none",
                   fontFamily: "'JSans', sans-serif",
                 }}
@@ -315,7 +315,7 @@ function SpecimenQuestion({ q }) {
               </span>
             </div>
           )}
-          <span className="block text-[#B0ADA6]" style={{ fontSize: 13, lineHeight: 1.7, whiteSpace: "pre-line" }}>
+          <span className="block text-[var(--text-secondary)]" style={{ fontSize: 13, lineHeight: 1.7, whiteSpace: "pre-line" }}>
             {gradeResult.feedback}
           </span>
         </Surface>
@@ -324,10 +324,10 @@ function SpecimenQuestion({ q }) {
       {/* Markscheme reveal */}
       {revealed && (
         <div className="mt-4 pt-4" style={{ borderTop: "1px solid var(--border)" }}>
-          <span className="block text-[#34D399] mb-2" style={{ fontSize: 11, fontFamily: "'JSans', sans-serif", letterSpacing: 1 }}>
+          <span className="block text-[var(--color-success)] mb-2" style={{ fontSize: 11, fontFamily: "'JSans', sans-serif", letterSpacing: 1 }}>
             MARKSCHEME
           </span>
-          <span className="block text-[#B0ADA6]" style={{ fontSize: 13, lineHeight: 1.7, whiteSpace: "pre-line" }}>
+          <span className="block text-[var(--text-secondary)]" style={{ fontSize: 13, lineHeight: 1.7, whiteSpace: "pre-line" }}>
             {q.markscheme}
           </span>
         </div>
@@ -407,7 +407,7 @@ export default function SpecimenPage() {
             </Button>
             <span
               className="text-xs px-2 py-0.5 rounded-full uppercase font-bold"
-              style={{ letterSpacing: 2, backgroundColor: "#2DD4BF18", color: "#2DD4BF", border: "none", fontFamily: "'JSans', sans-serif" }}
+              style={{ letterSpacing: 2, backgroundColor: "var(--accent-secondary-soft)", color: "var(--accent-secondary)", border: "none", fontFamily: "'JSans', sans-serif" }}
             >
               IB HL Business Management
             </span>
@@ -449,24 +449,24 @@ export default function SpecimenPage() {
               below — everything auto-saves. Use "Solve" for AI grading and "Show Markscheme" to reveal the rubric.
             </span>
             <div className="flex items-center gap-1 mt-2">
-              <span className="text-xs px-1.5 py-0.5 rounded-full" style={{ backgroundColor: "rgba(45,212,191,0.1)", color: "#2DD4BF", fontFamily: "'JSans', sans-serif" }}>
+              <span className="text-xs px-1.5 py-0.5 rounded-full" style={{ backgroundColor: "rgba(45,212,191,0.1)", color: "var(--accent-secondary)", fontFamily: "'JSans', sans-serif" }}>
                 {SPECIMEN_QUESTIONS.length} questions
               </span>
-              <span className="text-xs px-1.5 py-0.5 rounded-full" style={{ backgroundColor: "rgba(139,92,246,0.1)", color: "#8B5CF6", fontFamily: "'JSans', sans-serif" }}>
+              <span className="text-xs px-1.5 py-0.5 rounded-full" style={{ backgroundColor: "rgba(139,92,246,0.1)", color: "var(--accent)", fontFamily: "'JSans', sans-serif" }}>
                 {totalMarks} marks
               </span>
             </div>
           </Surface>
 
           {/* Case study context */}
-          <Surface className="rounded-3xl p-4 mb-6" style={{ border: "1px solid #1E3A5F" }}>
-            <span className="block text-[#60A5FA] mb-2" style={{ fontSize: 11, fontFamily: "'JSans', sans-serif", letterSpacing: 1 }}>
+          <Surface className="rounded-3xl p-4 mb-6" style={{ border: "1px solid var(--border)" }}>
+            <span className="block text-[var(--accent)] mb-2" style={{ fontSize: 11, fontFamily: "'JSans', sans-serif", letterSpacing: 1 }}>
               CASE STUDY
             </span>
             <span className="block text-[var(--text-primary)] font-semibold mb-1" style={{ fontSize: 14 }}>
               NorthHaven Dairy (NHD)
             </span>
-            <span className="block text-[#B0ADA6]" style={{ fontSize: 13, lineHeight: 1.7, whiteSpace: "pre-line" }}>
+            <span className="block text-[var(--text-secondary)]" style={{ fontSize: 13, lineHeight: 1.7, whiteSpace: "pre-line" }}>
 {`NorthHaven Dairy (NHD) is a medium-sized private limited company based in rural New Zealand. The company specialises in producing and selling a range of dairy products, including fresh milk, cream, butter, and artisan cheese. NHD sources its milk from a network of local farms and has built a strong reputation for quality and sustainability.
 
 Recently, NHD has been considering investing in new automated bottling machines to increase efficiency and reduce labour costs. The company is evaluating whether to lease or purchase these machines outright.`}
@@ -508,7 +508,7 @@ Recently, NHD has been considering investing in new automated bottling machines 
           width: 48,
           height: 48,
           borderRadius: "50%",
-          backgroundColor: "#7C6FFF",
+          backgroundColor: "var(--accent)",
           display: "flex",
           alignItems: "center",
           justifyContent: "center",

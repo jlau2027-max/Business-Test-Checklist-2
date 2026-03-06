@@ -16,17 +16,17 @@ import {
 } from "../userApi.js";
 
 const CAT_COLORS = {
-  "Costs & Revenue": "#7C6FFF",
-  "Cash Flow": "#38BDF8",
-  "Final Accounts": "#34D399",
-  "Ratio Analysis": "#FBBF24",
-  "Ratio Analysis (HL)": "#FBBF24",
-  "Investment Appraisal": "#A78BFA",
-  "Budgets & Variance": "#F87171",
-  "Breakeven": "#2DD4BF",
-  "BMT Tools": "#F472B6",
-  "Sources of Finance": "#FB923C",
-  "Specimen Exam": "#2DD4BF",
+  "Costs & Revenue": "var(--cat-costs)",
+  "Cash Flow": "var(--cat-cashflow)",
+  "Final Accounts": "var(--cat-accounts)",
+  "Ratio Analysis": "var(--cat-ratios)",
+  "Ratio Analysis (HL)": "var(--cat-ratios)",
+  "Investment Appraisal": "var(--cat-investment)",
+  "Budgets & Variance": "var(--cat-budgets)",
+  "Breakeven": "var(--cat-breakeven)",
+  "BMT Tools": "var(--cat-bmt)",
+  "Sources of Finance": "var(--accent-tertiary)",
+  "Specimen Exam": "var(--cat-breakeven)",
   "Migrated": "var(--text-secondary)",
 };
 
@@ -41,7 +41,7 @@ function formatTime(ms) {
   return `${hours}h ${minutes % 60}m`;
 }
 
-function StatCard({ label, value, sub, color = "#7C6FFF" }) {
+function StatCard({ label, value, sub, color = "var(--accent)" }) {
   return (
     <div className="bg-[var(--bg-card)] rounded-lg p-6 border border-[var(--border)] flex-1 min-w-[160px]">
       <span className="text-[11px] text-[var(--text-muted)] tracking-wider block mb-1" style={{ fontFamily: "'JSans', sans-serif" }}>
@@ -107,19 +107,19 @@ function UserDetail({ uid, displayName, onBack }) {
               label="MCQ ACCURACY"
               value={overall.mcqAccuracy != null ? `${overall.mcqAccuracy}%` : "—"}
               sub={overall.mcqTotal > 0 ? `${overall.mcqTotal} questions` : "No MCQs yet"}
-              color={overall.mcqAccuracy >= 75 ? "#34D399" : overall.mcqAccuracy >= 40 ? "#FBBF24" : "#F87171"}
+              color={overall.mcqAccuracy >= 75 ? "var(--color-success)" : overall.mcqAccuracy >= 40 ? "var(--color-warning)" : "var(--color-danger)"}
             />
             <StatCard
               label="WRITTEN AVG"
               value={overall.writtenAvg != null ? `${overall.writtenAvg}%` : "—"}
               sub={overall.totalAttempts - overall.mcqTotal > 0 ? `${overall.totalAttempts - overall.mcqTotal} answers` : "No written yet"}
-              color={overall.writtenAvg >= 75 ? "#34D399" : overall.writtenAvg >= 40 ? "#FBBF24" : "#F87171"}
+              color={overall.writtenAvg >= 75 ? "var(--color-success)" : overall.writtenAvg >= 40 ? "var(--color-warning)" : "var(--color-danger)"}
             />
             <StatCard
               label="TOTAL TIME"
               value={formatTime(overall.totalTimeMs)}
               sub="across all questions"
-              color="#A78BFA"
+              color="var(--accent)"
             />
           </div>
 
@@ -132,7 +132,7 @@ function UserDetail({ uid, displayName, onBack }) {
               {categoryStats
                 .sort((a, b) => b.totalAttempts - a.totalAttempts)
                 .map((cat) => {
-                  const color = CAT_COLORS[cat.category] || "#7C6FFF";
+                  const color = CAT_COLORS[cat.category] || "var(--accent)";
                   const pct = cat.mcqAccuracy ?? cat.writtenAvg ?? 0;
                   return (
                     <div key={cat.category}>
@@ -159,7 +159,7 @@ function UserDetail({ uid, displayName, onBack }) {
                       </div>
                       <ProgressBar
                         value={pct}
-                        color={pct >= 75 ? "#34D399" : pct >= 40 ? "#FBBF24" : "#F87171"}
+                        color={pct >= 75 ? "var(--color-success)" : pct >= 40 ? "var(--color-warning)" : "var(--color-danger)"}
                       />
                     </div>
                   );
@@ -180,8 +180,8 @@ function UserDetail({ uid, displayName, onBack }) {
                       <span
                         className="text-xs px-1.5 py-0.5 rounded-full"
                         style={{
-                          backgroundColor: a.isCorrect === false ? "#F8717122" : "#FBBF2422",
-                          color: a.isCorrect === false ? "#F87171" : "#FBBF24",
+                          backgroundColor: a.isCorrect === false ? "var(--color-danger-soft)" : "var(--color-warning-soft)",
+                          color: a.isCorrect === false ? "var(--color-danger)" : "var(--color-warning)",
                           fontFamily: "'JSans', sans-serif",
                         }}
                       >
@@ -190,15 +190,15 @@ function UserDetail({ uid, displayName, onBack }) {
                       <span
                         className="text-xs px-1.5 py-0.5 rounded-full"
                         style={{
-                          backgroundColor: (CAT_COLORS[a.category] || "#7C6FFF") + "22",
-                          color: CAT_COLORS[a.category] || "#7C6FFF",
+                          backgroundColor: (CAT_COLORS[a.category] || "var(--accent)") + "22",
+                          color: CAT_COLORS[a.category] || "var(--accent)",
                           fontFamily: "'JSans', sans-serif",
                         }}
                       >
                         {a.category}
                       </span>
                     </div>
-                    <span className="text-[13px] text-[#B0ADA6] leading-relaxed">{a.questionId}</span>
+                    <span className="text-[13px] text-[var(--text-secondary)] leading-relaxed">{a.questionId}</span>
                   </div>
                 ))}
               </div>
@@ -212,7 +212,7 @@ function UserDetail({ uid, displayName, onBack }) {
             </span>
             <div className="flex flex-col gap-1">
               {attempts.slice(0, 20).map((a, i) => {
-                const color = CAT_COLORS[a.category] || "#7C6FFF";
+                const color = CAT_COLORS[a.category] || "var(--accent)";
                 const isGood = a.questionType === "mcq"
                   ? a.isCorrect
                   : a.score != null && a.maxMarks != null && a.score / a.maxMarks >= 0.5;
@@ -221,7 +221,7 @@ function UserDetail({ uid, displayName, onBack }) {
                   <div key={a.id || i} className="flex items-center gap-2 py-1" style={{ borderBottom: "1px solid var(--bg-input)" }}>
                     <div
                       className="w-2 h-2 rounded-full shrink-0"
-                      style={{ backgroundColor: isGood ? "#34D399" : "#F87171" }}
+                      style={{ backgroundColor: isGood ? "var(--color-success)" : "var(--color-danger)" }}
                     />
                     <span
                       className="text-xs px-1.5 py-0.5 rounded-full shrink-0"
@@ -268,10 +268,10 @@ const ROLE_OPTIONS = [
 ];
 
 const ROLE_COLORS = {
-  origin: "#F87171",
-  two: "#FB923C",
-  admin: "#7C6FFF",
-  viewer: "#38BDF8",
+  origin: "var(--color-danger)",
+  two: "var(--accent-tertiary)",
+  admin: "var(--accent)",
+  viewer: "var(--cat-cashflow)",
 };
 
 export default function UsersAdmin() {
@@ -406,18 +406,18 @@ export default function UsersAdmin() {
         {/* Aggregate Stats */}
         <div className="flex flex-wrap gap-4 grow">
           <StatCard label="TOTAL USERS" value={totalUsers} color="var(--text-primary)" />
-          <StatCard label="TOTAL ATTEMPTS" value={totalAttempts} color="#7C6FFF" />
+          <StatCard label="TOTAL ATTEMPTS" value={totalAttempts} color="var(--accent)" />
           <StatCard
             label="OVERALL MCQ"
             value={overallMcqAcc != null ? `${overallMcqAcc}%` : "—"}
             sub={totalMcqTotal > 0 ? `${totalMcqTotal} questions` : ""}
-            color={overallMcqAcc >= 75 ? "#34D399" : overallMcqAcc >= 40 ? "#FBBF24" : "#F87171"}
+            color={overallMcqAcc >= 75 ? "var(--color-success)" : overallMcqAcc >= 40 ? "var(--color-warning)" : "var(--color-danger)"}
           />
           <StatCard
             label="OVERALL WRITTEN"
             value={overallWrittenAvg != null ? `${overallWrittenAvg}%` : "—"}
             sub={totalWrittenMax > 0 ? `${totalAttempts - totalMcqTotal} answers` : ""}
-            color={overallWrittenAvg >= 75 ? "#34D399" : overallWrittenAvg >= 40 ? "#FBBF24" : "#F87171"}
+            color={overallWrittenAvg >= 75 ? "var(--color-success)" : overallWrittenAvg >= 40 ? "var(--color-warning)" : "var(--color-danger)"}
           />
         </div>
 
@@ -451,9 +451,9 @@ export default function UsersAdmin() {
                       const lastActive = u.lastActive ? new Date(u.lastActive).toLocaleDateString() : "—";
 
                       const statusColor =
-                        (u.accountStatus || "active") === "active" ? "#34D399" :
-                        u.accountStatus === "banned" ? "#F87171" :
-                        u.accountStatus === "admin_deleted" ? "#F87171" : "#FBBF24";
+                        (u.accountStatus || "active") === "active" ? "var(--color-success)" :
+                        u.accountStatus === "banned" ? "var(--color-danger)" :
+                        u.accountStatus === "admin_deleted" ? "var(--color-danger)" : "var(--color-warning)";
 
                       const cellStyle = { padding: "10px 12px", borderBottom: "1px solid var(--bg-input)", cursor: "pointer" };
                       const selectUser = () => setSelectedUser(u);
@@ -488,7 +488,7 @@ export default function UsersAdmin() {
                               style={{
                                 fontFamily: "'JSans', sans-serif",
                                 fontSize: 13,
-                                color: mcqAcc == null ? "var(--text-muted)" : mcqAcc >= 75 ? "#34D399" : mcqAcc >= 40 ? "#FBBF24" : "#F87171",
+                                color: mcqAcc == null ? "var(--text-muted)" : mcqAcc >= 75 ? "var(--color-success)" : mcqAcc >= 40 ? "var(--color-warning)" : "var(--color-danger)",
                               }}
                             >
                               {mcqAcc != null ? `${mcqAcc}%` : "—"}
@@ -499,7 +499,7 @@ export default function UsersAdmin() {
                               style={{
                                 fontFamily: "'JSans', sans-serif",
                                 fontSize: 13,
-                                color: writtenAvg == null ? "var(--text-muted)" : writtenAvg >= 75 ? "#34D399" : writtenAvg >= 40 ? "#FBBF24" : "#F87171",
+                                color: writtenAvg == null ? "var(--text-muted)" : writtenAvg >= 75 ? "var(--color-success)" : writtenAvg >= 40 ? "var(--color-warning)" : "var(--color-danger)",
                               }}
                             >
                               {writtenAvg != null ? `${writtenAvg}%` : "—"}
@@ -518,18 +518,18 @@ export default function UsersAdmin() {
                               {canBanUnban(role) && (
                                 <>
                                   {(u.accountStatus || "active") !== "banned" ? (
-                                    <Button size="sm" className="rounded-full" onPress={() => handleBan(u.uid)} style={{backgroundColor: "#F87171", color: "#fff", border: "none", fontFamily: "'JSans', sans-serif", fontSize: 10,}}>Ban</Button>
+                                    <Button size="sm" className="rounded-full" onPress={() => handleBan(u.uid)} style={{backgroundColor: "var(--color-danger)", color: "#fff", border: "none", fontFamily: "'JSans', sans-serif", fontSize: 10,}}>Ban</Button>
                                   ) : (
-                                    <Button size="sm" className="rounded-full" onPress={() => handleUnban(u.uid)} style={{backgroundColor: "#34D399", color: "#fff", border: "none", fontFamily: "'JSans', sans-serif", fontSize: 10,}}>Unban</Button>
+                                    <Button size="sm" className="rounded-full" onPress={() => handleUnban(u.uid)} style={{backgroundColor: "var(--color-success)", color: "#fff", border: "none", fontFamily: "'JSans', sans-serif", fontSize: 10,}}>Unban</Button>
                                   )}
-                                  <Button size="sm" className="rounded-full" onPress={() => handleForceSignOut(u.uid)} style={{backgroundColor: "#FBBF24", color: "#000", border: "none", fontFamily: "'JSans', sans-serif", fontSize: 10,}}>Sign Out</Button>
+                                  <Button size="sm" className="rounded-full" onPress={() => handleForceSignOut(u.uid)} style={{backgroundColor: "var(--color-warning)", color: "#000", border: "none", fontFamily: "'JSans', sans-serif", fontSize: 10,}}>Sign Out</Button>
                                 </>
                               )}
                               {canEdit(role) && (
-                                <Button size="sm" className="rounded-full" onPress={() => openEditFn(u)} style={{backgroundColor: "#7C6FFF", color: "#fff", border: "none", fontFamily: "'JSans', sans-serif", fontSize: 10,}}>Edit</Button>
+                                <Button size="sm" className="rounded-full" onPress={() => openEditFn(u)} style={{backgroundColor: "var(--accent)", color: "#fff", border: "none", fontFamily: "'JSans', sans-serif", fontSize: 10,}}>Edit</Button>
                               )}
                               {canChangeRole(role) && (
-                                <Button size="sm" className="rounded-full" onPress={() => openRoleChange(u)} style={{backgroundColor: "#FB923C", color: "#fff", border: "none", fontFamily: "'JSans', sans-serif", fontSize: 10,}}>Role</Button>
+                                <Button size="sm" className="rounded-full" onPress={() => openRoleChange(u)} style={{backgroundColor: "var(--accent-tertiary)", color: "#fff", border: "none", fontFamily: "'JSans', sans-serif", fontSize: 10,}}>Role</Button>
                               )}
                               {role === "viewer" && (
                                 <span className="text-[10px] text-[var(--text-muted)]" style={{ fontFamily: "'JSans', sans-serif" }}>View only</span>
@@ -580,7 +580,7 @@ export default function UsersAdmin() {
             </Modal.Body>
             <Modal.Footer>
               <Button variant="outline" className="rounded-full border-[var(--border)] text-[var(--text-secondary)] bg-transparent" onPress={() => setEditModalOpened(false)} style={{ fontFamily: "'JSans', sans-serif", fontSize: 12 }}>Cancel</Button>
-              <Button className="rounded-full bg-[#7C6FFF] text-[var(--text-primary)] border-none" onPress={handleEditSubmit} style={{ fontFamily: "'JSans', sans-serif", fontSize: 12 }}>Save Changes</Button>
+              <Button className="rounded-full bg-[var(--accent)] text-[var(--text-primary)] border-none" onPress={handleEditSubmit} style={{ fontFamily: "'JSans', sans-serif", fontSize: 12 }}>Save Changes</Button>
             </Modal.Footer>
           </Modal.Dialog>
         </Modal.Container>
@@ -629,7 +629,7 @@ export default function UsersAdmin() {
               <Button variant="outline" className="rounded-full border-[var(--border)] text-[var(--text-secondary)] bg-transparent" onPress={() => setRoleModalOpened(false)} style={{ fontFamily: "'JSans', sans-serif", fontSize: 12 }}>Cancel</Button>
               <Button className="rounded-full border-none" onPress={handleRoleSubmit} isDisabled={!selectedRole}
                 style={{
-                  backgroundColor: selectedRole ? "#FB923C" : "var(--border)",
+                  backgroundColor: selectedRole ? "var(--accent-tertiary)" : "var(--border)",
                   color: selectedRole ? "var(--text-primary)" : "var(--text-muted)",
                   border: "none",
                   fontFamily: "'JSans', sans-serif",

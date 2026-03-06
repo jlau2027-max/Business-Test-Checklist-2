@@ -59,7 +59,7 @@ createRoot(document.getElementById('root')).render(
       afterSignOutUrl="/"
       appearance={{
         variables: {
-          colorPrimary: "#7C6FFF",
+          colorPrimary: "#5E8A9C",
           colorBackground: "var(--bg-card)",
           colorInputBackground: "var(--bg-input)",
           colorText: "var(--text-primary)",

@@ -2,9 +2,9 @@ import { Button } from "@heroui/react";
 import { useAuth } from "./AuthContext.jsx";
 
 const SUBJECT_COLORS = {
-  business: "#7C6FFF",
-  history: "#F87171",
-  dashboard: "#A78BFA",
+  business: { solid: "var(--accent)", glow: "var(--accent-glow)" },
+  history: { solid: "var(--accent-tertiary)", glow: "var(--accent-tertiary-soft)" },
+  dashboard: { solid: "var(--accent-secondary)", glow: "var(--accent-secondary-soft)" },
 };
 
 export default function Sidebar({ activeSubject, sidebarOpen, onClose }) {
@@ -52,7 +52,7 @@ export default function Sidebar({ activeSubject, sidebarOpen, onClose }) {
         </span>
         {items.map(s => {
           const active = activeSubject === s.subject;
-          const color = SUBJECT_COLORS[s.subject] || "#7C6FFF";
+          const theme = SUBJECT_COLORS[s.subject] || { solid: "var(--accent)", glow: "var(--accent-glow)" };
           const btn = (
             <Button
               key={s.label}
@@ -62,10 +62,10 @@ export default function Sidebar({ activeSubject, sidebarOpen, onClose }) {
                 height: 44,
                 paddingLeft: 14,
                 fontFamily: "'JSans', sans-serif",
-                backgroundColor: active ? color : "transparent",
+                backgroundColor: active ? theme.solid : "transparent",
                 color: active ? "#fff" : "var(--text-secondary)",
                 border: active ? "none" : "1px solid transparent",
-                boxShadow: active ? `0 0 12px ${color}33` : "none",
+                boxShadow: active ? `0 0 12px ${theme.glow}` : "none",
               }}
             >
               {s.label}

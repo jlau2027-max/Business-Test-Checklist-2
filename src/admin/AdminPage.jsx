@@ -36,7 +36,7 @@ export default function AdminPage() {
 
   return (
     <AdminGuard>
-      <div className="min-h-screen" style={{ backgroundColor: "#0A0A12" }}>
+      <div className="min-h-screen" style={{ backgroundColor: "var(--bg-base)" }}>
         <div className="max-w-7xl mx-auto px-4 py-6">
           {/* Header */}
           <div className="flex items-center justify-between mb-6">
@@ -57,15 +57,15 @@ export default function AdminPage() {
               <Tabs.List aria-label="Admin sections" className="bg-[var(--bg-card)] border border-[var(--border)] rounded-lg p-1">
                 <Tabs.Tab id="business" className="font-semibold text-sm font-mono text-[var(--text-secondary)] data-[selected=true]:text-white rounded-full px-4 py-2">
                   Business
-                  <Tabs.Indicator className="bg-[#7C6FFF] rounded-full" />
+                  <Tabs.Indicator className="bg-[var(--accent)] rounded-full" />
                 </Tabs.Tab>
                 <Tabs.Tab id="history" className="font-semibold text-sm font-mono text-[var(--text-secondary)] data-[selected=true]:text-white rounded-full px-4 py-2">
                   History
-                  <Tabs.Indicator className="bg-[#F87171] rounded-full" />
+                  <Tabs.Indicator className="bg-[var(--accent-tertiary)] rounded-full" />
                 </Tabs.Tab>
                 <Tabs.Tab id="users" className="font-semibold text-sm font-mono text-[var(--text-secondary)] data-[selected=true]:text-white rounded-full px-4 py-2">
                   Users
-                  <Tabs.Indicator className="bg-[#38BDF8] rounded-full" />
+                  <Tabs.Indicator className="bg-[var(--accent-secondary)] rounded-full" />
                 </Tabs.Tab>
               </Tabs.List>
             </Tabs.ListContainer>

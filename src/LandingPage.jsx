@@ -19,7 +19,7 @@ export default function LandingPage() {
           <div className="flex items-center justify-center" style={{ position: "relative" }}>
             <span
               className="text-xs px-2 py-0.5 rounded-full uppercase font-bold"
-              style={{ letterSpacing: 2, backgroundColor: "#7C6FFF18", color: "#A78BFA", border: "none", fontFamily: "'JSans', sans-serif" }}
+              style={{ letterSpacing: 2, backgroundColor: "var(--accent-soft)", color: "var(--accent)", border: "none", fontFamily: "'JSans', sans-serif" }}
             >
               IB Revision Hub
             </span>
@@ -47,7 +47,7 @@ export default function LandingPage() {
               <Button
                 render={(props) => <button {...props} />}
                 size="md"
-                className="rounded-full bg-[#7C6FFF] text-white border-none text-[15px] font-semibold"
+                className="rounded-full bg-[var(--accent)] text-white border-none text-[15px] font-semibold"
                 style={{ fontFamily: "'JSans', sans-serif" }}
               >
                 Sign In
@@ -58,7 +58,7 @@ export default function LandingPage() {
                 render={(props) => <button {...props} />}
                 size="md"
                 variant="outline"
-                className="rounded-full bg-transparent text-[#A78BFA] border border-[var(--border)] text-[15px] font-semibold"
+                className="rounded-full bg-transparent text-[var(--accent)] border border-[var(--border)] text-[15px] font-semibold"
                 style={{ fontFamily: "'JSans', sans-serif" }}
               >
                 Sign Up
@@ -82,12 +82,12 @@ export default function LandingPage() {
               cursor: "pointer",
               transition: "border-color 0.2s, box-shadow 0.2s",
             }}
-            onMouseEnter={e => { e.currentTarget.style.borderColor = "#7C6FFF"; e.currentTarget.style.boxShadow = "0 0 20px #7C6FFF22"; }}
+            onMouseEnter={e => { e.currentTarget.style.borderColor = "var(--accent)"; e.currentTarget.style.boxShadow = "0 0 20px var(--accent-soft)"; }}
             onMouseLeave={e => { e.currentTarget.style.borderColor = "var(--border)"; e.currentTarget.style.boxShadow = "none"; }}
           >
             <span
               className="text-xs px-1.5 py-0.5 rounded-full mb-2 inline-block"
-              style={{ backgroundColor: "#7C6FFF18", color: "#A78BFA", border: "none", fontFamily: "'JSans', sans-serif" }}
+              style={{ backgroundColor: "var(--accent-soft)", color: "var(--accent)", border: "none", fontFamily: "'JSans', sans-serif" }}
             >
               HL
             </span>
@@ -108,12 +108,12 @@ export default function LandingPage() {
               cursor: "pointer",
               transition: "border-color 0.2s, box-shadow 0.2s",
             }}
-            onMouseEnter={e => { e.currentTarget.style.borderColor = "#F87171"; e.currentTarget.style.boxShadow = "0 0 20px #F8717122"; }}
+            onMouseEnter={e => { e.currentTarget.style.borderColor = "var(--color-danger)"; e.currentTarget.style.boxShadow = "0 0 20px var(--color-danger-soft)"; }}
             onMouseLeave={e => { e.currentTarget.style.borderColor = "var(--border)"; e.currentTarget.style.boxShadow = "none"; }}
           >
             <span
               className="text-xs px-1.5 py-0.5 rounded-full mb-2 inline-block"
-              style={{ backgroundColor: "#F8717118", color: "#F87171", border: "none", fontFamily: "'JSans', sans-serif" }}
+              style={{ backgroundColor: "var(--color-danger-soft)", color: "var(--color-danger)", border: "none", fontFamily: "'JSans', sans-serif" }}
             >
               HL / SL
             </span>

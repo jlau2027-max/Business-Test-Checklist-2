@@ -1,16 +1,16 @@
 import { Select, ListBox, Label } from "@heroui/react";
 
 const DEFAULT_CATEGORIES = [
-  { value: "Costs & Revenue", color: "#7C6FFF" },
-  { value: "Cash Flow", color: "#38BDF8" },
-  { value: "Final Accounts", color: "#34D399" },
-  { value: "Ratio Analysis", color: "#FBBF24" },
-  { value: "Ratio Analysis (HL)", color: "#FBBF24" },
-  { value: "Investment Appraisal", color: "#A78BFA" },
-  { value: "Budgets & Variance", color: "#F87171" },
-  { value: "Breakeven", color: "#2DD4BF" },
-  { value: "BMT Tools", color: "#F472B6" },
-  { value: "Sources of Finance", color: "#FB923C" },
+  { value: "Costs & Revenue", color: "var(--cat-costs)" },
+  { value: "Cash Flow", color: "var(--cat-cashflow)" },
+  { value: "Final Accounts", color: "var(--cat-accounts)" },
+  { value: "Ratio Analysis", color: "var(--cat-ratios)" },
+  { value: "Ratio Analysis (HL)", color: "var(--cat-ratios)" },
+  { value: "Investment Appraisal", color: "var(--cat-investment)" },
+  { value: "Budgets & Variance", color: "var(--cat-budgets)" },
+  { value: "Breakeven", color: "var(--cat-breakeven)" },
+  { value: "BMT Tools", color: "var(--cat-bmt)" },
+  { value: "Sources of Finance", color: "var(--accent-tertiary)" },
 ];
 
 export default function CategorySelect({ value, onChange, categories, label, ...props }) {
