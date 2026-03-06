@@ -62,7 +62,7 @@ export default function LandingPage() {
         {/* Hero */}
         <div className="max-w-2xl mx-auto px-4 flex flex-col items-center" style={{ paddingTop: 100, paddingBottom: 120 }}>
           {/* ASCII art title */}
-          <div style={{ position: "relative", width: "110%", maxWidth: "900px", height: "clamp(200px, 30vw, 380px)", marginBottom: 8 }}>
+          <div style={{ position: "relative", width: "140%", maxWidth: "1200px", height: "clamp(300px, 45vw, 550px)", marginBottom: 8 }}>
             <ASCIIText
               text="IB Revision Hub"
               enableWaves={false}
