@@ -3,6 +3,7 @@ import { Show, SignInButton, SignUpButton } from "@clerk/react";
 import LoginButton from "./LoginButton.jsx";
 import ElectricBorder from "./components/ElectricBorder.jsx";
 import Grainient from "./components/Grainient.jsx";
+import ASCIIText from "./components/ASCIIText.jsx";
 
 export default function LandingPage() {
   const isDark = document.documentElement.classList.contains("dark");
@@ -50,19 +51,17 @@ export default function LandingPage() {
 
         {/* Hero */}
         <div className="max-w-2xl mx-auto px-4 flex flex-col items-center" style={{ paddingTop: 100, paddingBottom: 120 }}>
-          <h1
-            className="text-center font-black"
-            style={{
-              fontSize: "clamp(48px, 8vw, 80px)",
-              letterSpacing: -2,
-              lineHeight: 0.95,
-              marginBottom: 16,
-              color: "rgba(255,255,255,0.95)",
-              textShadow: "0 2px 40px rgba(0,0,0,0.3)",
-            }}
-          >
-            IB Revision Hub
-          </h1>
+          {/* ASCII art title */}
+          <div style={{ position: "relative", width: "100%", height: "clamp(140px, 22vw, 260px)", marginBottom: 8 }}>
+            <ASCIIText
+              text="IB Rev Hub"
+              enableWaves
+              asciiFontSize={9}
+              textFontSize={200}
+              textColor="#fdf9f3"
+              planeBaseHeight={8}
+            />
+          </div>
           <p
             className="text-center mx-auto"
             style={{
