@@ -544,6 +544,10 @@ function getUserRole(payload) {
     || payload?.metadata?.role || null;
 }
 
+// Cache role lookups per user for 5 minutes (avoids hitting Clerk API on every request)
+const roleCache = new Map();
+const ROLE_CACHE_TTL = 300_000; // 5 minutes
+
 async function requireAuth(request, env, allowedRoles) {
   const result = await verifyClerkJwt(request, env);
   if (result.error) {
@@ -555,11 +559,21 @@ async function requireAuth(request, env, allowedRoles) {
   // Clerk JWTs don't include publicMetadata by default — fall back to
   // Clerk Backend API to look up the user's role when not in the token
   if (!role && env.CLERK_SECRET_KEY && result.payload.sub) {
-    try {
-      const user = await clerkAPI(env, "GET", `/users/${result.payload.sub}`);
-      role = user?.public_metadata?.role || null;
-    } catch (_) {
-      // API lookup failed — proceed without role
+    const uid = result.payload.sub;
+    const cached = roleCache.get(uid);
+    const now = Date.now();
+
+    if (cached && now - cached.at < ROLE_CACHE_TTL) {
+      role = cached.role;
+    } else {
+      try {
+        const user = await clerkAPI(env, "GET", `/users/${uid}`);
+        role = user?.public_metadata?.role || null;
+        roleCache.set(uid, { role, at: now });
+      } catch (_) {
+        // API lookup failed — use stale cache if available
+        if (cached) role = cached.role;
+      }
     }
   }
 
