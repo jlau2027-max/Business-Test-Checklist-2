@@ -1,6 +1,6 @@
 import { useState, useEffect, createContext, useContext } from "react";
 import { Analytics } from "@vercel/analytics/react";
-import { Button, TextArea, Spinner, Alert, Checkbox, Tabs } from "@heroui/react";
+import { Button, TextArea, Spinner, Alert, Checkbox, Tabs, RadioGroup, Radio } from "@heroui/react";
 import ProgressBar from "./components/ProgressBar.jsx";
 import LoginButton from "./LoginButton.jsx";
 import Sidebar from "./Sidebar.jsx";
@@ -366,10 +366,25 @@ function ChecklistView() {
                       const isChecked = checked[key];
                       const isImportant = item.includes("MEMORISE");
                       return (
-                        <label key={key} className="flex items-start gap-2.5 py-1.5 px-1 rounded-lg cursor-pointer hover:bg-[#1A1A24] transition-colors">
-                          <input type="checkbox" checked={!!isChecked} onChange={() => toggle(key)} className="mt-1 accent-current cursor-pointer" style={{accentColor: section.color}} />
-                          <span className="text-sm leading-relaxed cursor-pointer" style={{color: isChecked ? "#55556A" : isImportant ? "#FBBF24" : "#C8C4BC", textDecoration: isChecked ? "line-through" : "none"}}>{item}</span>
-                        </label>
+                        <Checkbox
+                          key={key}
+                          isSelected={!!isChecked}
+                          onChange={() => toggle(key)}
+                          className="flex items-start gap-2.5 py-1.5 px-1 rounded-lg cursor-pointer hover:bg-[#1A1A24] transition-colors max-w-full"
+                        >
+                          <Checkbox.Control
+                            className="mt-1 shrink-0"
+                            style={{
+                              borderColor: isChecked ? section.color : section.color + "66",
+                              ...(isChecked ? { backgroundColor: section.color } : {}),
+                            }}
+                          >
+                            <Checkbox.Indicator />
+                          </Checkbox.Control>
+                          <Checkbox.Content>
+                            <span className="text-sm leading-relaxed cursor-pointer" style={{color: isChecked ? "#55556A" : isImportant ? "#FBBF24" : "#C8C4BC", textDecoration: isChecked ? "line-through" : "none"}}>{item}</span>
+                          </Checkbox.Content>
+                        </Checkbox>
                       );
                     })}
                   </div>
@@ -519,41 +534,51 @@ function MCQItem({q, displayNum}) {
         <span className="block text-[15px] text-[#F0EEE8] font-semibold" style={{lineHeight:1.6}}>Q{displayNum}. {q.q}</span>
       </div>
       <div className="flex flex-col gap-2 p-4 pt-2">
-        {q.options.map((opt,i) => {
-          const isSelected=selected===i;
-          const isCorrect=i===q.answer;
-          let bg="#12121A",border="#252533",tc="#C8C4BC";
-          if(confirmed){
-            if(isCorrect){bg="#34D399"+"22";border="#34D399";tc="#6EE7B7";}
-            else if(isSelected&&!isCorrect){bg="#F87171"+"22";border="#F87171";tc="#FCA5A5";}
-          } else if(isSelected){bg=color+"22";border=color;tc="#F0EEE8";}
-          return (
-            <div
-              key={i}
-              className="p-2 rounded-md"
-              onClick={()=>{if(!confirmed)setSelected(i);}}
-              style={{
-                background:bg, border:`1.5px solid ${border}`,
-                cursor:confirmed?"default":"pointer", transition:"all 0.2s",
-              }}
-              onMouseEnter={e=>{if(!confirmed&&!isSelected)e.currentTarget.style.borderColor=color+"66";}}
-              onMouseLeave={e=>{if(!confirmed&&!isSelected)e.currentTarget.style.borderColor="#252533";}}
-            >
-              <div className="flex items-center gap-2 flex-nowrap">
-                <div style={{
-                  width:28,height:28,borderRadius:6,flexShrink:0,
-                  background:confirmed&&isCorrect?"#34D399":confirmed&&isSelected&&!isCorrect?"#F87171":isSelected?color:"#252533",
-                  display:"flex",alignItems:"center",justifyContent:"center",
-                }}>
-                  <span className="text-[11px] text-white font-bold" style={{fontFamily:"'JetBrains Mono', monospace"}}>
-                    {confirmed&&isCorrect?"✓":confirmed&&isSelected&&!isCorrect?"✗":String.fromCharCode(65+i)}
-                  </span>
-                </div>
-                <span className="text-[14px]" style={{color:tc, lineHeight:1.4}}>{opt}</span>
-              </div>
-            </div>
-          );
-        })}
+        <RadioGroup
+          value={selected!==null ? String(selected) : undefined}
+          onChange={(val) => { if(!confirmed) setSelected(Number(val)); }}
+          isReadOnly={confirmed}
+          className="flex flex-col gap-2"
+        >
+          {q.options.map((opt,i) => {
+            const isSelected=selected===i;
+            const isCorrect=i===q.answer;
+            let bg="#12121A",border="#252533",tc="#C8C4BC";
+            if(confirmed){
+              if(isCorrect){bg="#34D399"+"22";border="#34D399";tc="#6EE7B7";}
+              else if(isSelected&&!isCorrect){bg="#F87171"+"22";border="#F87171";tc="#FCA5A5";}
+            } else if(isSelected){bg=color+"22";border=color;tc="#F0EEE8";}
+            return (
+              <Radio
+                key={i}
+                value={String(i)}
+                className="p-2 rounded-md m-0 hover:border-opacity-60"
+                style={{
+                  background:bg, border:`1.5px solid ${border}`,
+                  cursor:confirmed?"default":"pointer", transition:"all 0.2s",
+                }}
+              >
+                <Radio.Control className="hidden">
+                  <Radio.Indicator />
+                </Radio.Control>
+                <Radio.Content>
+                  <div className="flex items-center gap-2 flex-nowrap">
+                    <div style={{
+                      width:28,height:28,borderRadius:6,flexShrink:0,
+                      background:confirmed&&isCorrect?"#34D399":confirmed&&isSelected&&!isCorrect?"#F87171":isSelected?color:"#252533",
+                      display:"flex",alignItems:"center",justifyContent:"center",
+                    }}>
+                      <span className="text-[11px] text-white font-bold" style={{fontFamily:"'JetBrains Mono', monospace"}}>
+                        {confirmed&&isCorrect?"✓":confirmed&&isSelected&&!isCorrect?"✗":String.fromCharCode(65+i)}
+                      </span>
+                    </div>
+                    <span className="text-[14px]" style={{color:tc, lineHeight:1.4}}>{opt}</span>
+                  </div>
+                </Radio.Content>
+              </Radio>
+            );
+          })}
+        </RadioGroup>
         {!confirmed ? (
           <Button
             fullWidth
