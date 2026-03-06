@@ -38,7 +38,7 @@ export default function Sidebar({ activeSubject, sidebarOpen, onClose }) {
           width: 220,
           height: "100vh",
           zIndex: 200,
-          backgroundColor: "#0D0D14",
+          backgroundColor: "var(--bg-base)",
           borderRight: "1px solid var(--bg-input)",
           display: "flex",
           flexDirection: "column",

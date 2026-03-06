@@ -9,10 +9,10 @@ export default function LandingPage() {
       <div
         style={{
           position: "sticky", top: 0, zIndex: 100,
-          background: "rgba(9, 9, 15, 0.85)",
+          background: "var(--bg-header)",
           backdropFilter: "blur(12px)",
           WebkitBackdropFilter: "blur(12px)",
-          borderBottom: "1px solid rgba(255,255,255,0.04)",
+          borderBottom: "1px solid var(--border-header)",
         }}
       >
         <div className="max-w-4xl mx-auto py-2 px-4">

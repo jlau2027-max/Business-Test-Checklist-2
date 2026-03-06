@@ -401,7 +401,7 @@ export default function WrittenAdmin() {
           <Table className="w-full">
             <Table.ScrollContainer>
               <Table.Content>
-                <Table.Header className="bg-[#0D0D14]">
+                <Table.Header className="bg-[var(--bg-base)]">
                   <Table.Column className="text-[var(--text-secondary)] text-xs font-semibold uppercase tracking-wider border-b border-[var(--border)] px-4 py-2">
                     Category
                   </Table.Column>

@@ -385,7 +385,7 @@ function ChecklistView() {
                             <Checkbox.Indicator />
                           </Checkbox.Control>
                           <Checkbox.Content>
-                            <span className="text-sm leading-relaxed cursor-pointer" style={{color: isChecked ? "var(--text-muted)" : isImportant ? "#FBBF24" : "#C8C4BC", textDecoration: isChecked ? "line-through" : "none"}}>{item}</span>
+                            <span className="text-sm leading-relaxed cursor-pointer" style={{color: isChecked ? "var(--text-muted)" : isImportant ? "#FBBF24" : "var(--text-body)", textDecoration: isChecked ? "line-through" : "none"}}>{item}</span>
                           </Checkbox.Content>
                         </Checkbox>
                       );
@@ -437,9 +437,9 @@ function FlashCard({card, catColor}) {
           }}
         >
           <span className="block text-[11px] uppercase text-[var(--text-muted)] mb-2" style={{fontFamily:"'JSans', sans-serif", letterSpacing:2}}>DEFINITION</span>
-          <span className="block text-[13px] text-[#C8C4BC]" style={{lineHeight:1.65}}>{card.def}</span>
+          <span className="block text-[13px] text-[var(--text-body)]" style={{lineHeight:1.65}}>{card.def}</span>
           {card.formula && (
-            <div className="mt-2 p-2" style={{ background: "#0D0D14", borderRadius: 8, borderLeft: `3px solid ${catColor}` }}>
+            <div className="mt-2 p-2" style={{ background: "var(--bg-base)", borderRadius: 8, borderLeft: `3px solid ${catColor}` }}>
               <span className="block text-[10px] text-current mb-1" style={{fontFamily:"'JSans', sans-serif", letterSpacing:1, color:catColor}}>FORMULA</span>
               <span className="block text-[12px] text-[#A9E6FF]" style={{fontFamily:"'JSans', sans-serif"}}>{card.formula}</span>
             </div>
@@ -546,7 +546,7 @@ function MCQItem({q, displayNum}) {
           {q.options.map((opt,i) => {
             const isSelected=selected===i;
             const isCorrect=i===q.answer;
-            let bg="var(--bg-card)",border="var(--border)",tc="#C8C4BC";
+            let bg="var(--bg-card)",border="var(--border)",tc="var(--text-body)";
             if(confirmed){
               if(isCorrect){bg="#34D399"+"22";border="#34D399";tc="#6EE7B7";}
               else if(isSelected&&!isCorrect){bg="#F87171"+"22";border="#F87171";tc="#FCA5A5";}
@@ -968,10 +968,10 @@ export default function App({ initialTab = "checklist" }) {
       <div
         style={{
           position: "sticky", top: 0, zIndex: 100,
-          background: "rgba(9, 9, 15, 0.85)",
+          background: "var(--bg-header)",
           backdropFilter: "blur(12px)",
           WebkitBackdropFilter: "blur(12px)",
-          borderBottom: "1px solid rgba(255,255,255,0.04)",
+          borderBottom: "1px solid var(--border-header)",
         }}
       >
         <div className="max-w-5xl mx-auto py-2">
