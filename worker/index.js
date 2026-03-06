@@ -1001,36 +1001,50 @@ export default {
 
     // Admin: GET /api/admin/users
     if (path === "/api/admin/users" && request.method === "GET") {
+      const auth = await requireAuth(request, env, ADMIN_ROLES);
+      if (auth.response) return auth.response;
       return handleAdminUsers(env);
     }
 
     // Admin: PUT /api/admin/users/status
     if (path === "/api/admin/users/status" && request.method === "PUT") {
+      const auth = await requireAuth(request, env, ADMIN_ROLES);
+      if (auth.response) return auth.response;
       return handleAdminUpdateStatus(request, env);
     }
 
     // Admin: POST /api/admin/users/ban
     if (path === "/api/admin/users/ban" && request.method === "POST") {
+      const auth = await requireAuth(request, env, DELETE_ROLES);
+      if (auth.response) return auth.response;
       return handleAdminBanUser(request, env);
     }
 
     // Admin: POST /api/admin/users/unban
     if (path === "/api/admin/users/unban" && request.method === "POST") {
+      const auth = await requireAuth(request, env, DELETE_ROLES);
+      if (auth.response) return auth.response;
       return handleAdminUnbanUser(request, env);
     }
 
     // Admin: POST /api/admin/users/signout
     if (path === "/api/admin/users/signout" && request.method === "POST") {
+      const auth = await requireAuth(request, env, DELETE_ROLES);
+      if (auth.response) return auth.response;
       return handleAdminSignOut(request, env);
     }
 
     // Admin: PATCH /api/admin/users/profile
     if (path === "/api/admin/users/profile" && request.method === "PATCH") {
+      const auth = await requireAuth(request, env, EDIT_ROLES);
+      if (auth.response) return auth.response;
       return handleAdminEditProfile(request, env);
     }
 
     // Admin: PUT /api/admin/users/role
     if (path === "/api/admin/users/role" && request.method === "PUT") {
+      const auth = await requireAuth(request, env, DELETE_ROLES);
+      if (auth.response) return auth.response;
       return handleAdminChangeRole(request, env);
     }
 
