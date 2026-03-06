@@ -643,7 +643,13 @@ function slugify(text) {
     .replace(/^-|-$/g, "");
 }
 
+const ALLOWED_TABLES = [
+  "flashcard_topics", "flashcards", "mcq_questions", "written_questions",
+  "history_questions", "checklist_sections", "checklist_items", "category_colors",
+];
+
 async function getNextId(env, table, prefix) {
+  if (!ALLOWED_TABLES.includes(table)) throw new Error(`Invalid table: ${table}`);
   const row = await env.CONTENT_DB.prepare(
     `SELECT id FROM ${table} ORDER BY id DESC LIMIT 1`
   ).first();
@@ -653,7 +659,11 @@ async function getNextId(env, table, prefix) {
   return `${prefix}${num}`;
 }
 
+const ALLOWED_WHERE_CLAUSES = ["", "topic_id = ?", "section_id = ?"];
+
 async function getNextSortOrder(env, table, whereClause = "", bindings = []) {
+  if (!ALLOWED_TABLES.includes(table)) throw new Error(`Invalid table: ${table}`);
+  if (!ALLOWED_WHERE_CLAUSES.includes(whereClause)) throw new Error(`Invalid where clause: ${whereClause}`);
   const sql = `SELECT MAX(sort_order) as max_sort FROM ${table}${whereClause ? " WHERE " + whereClause : ""}`;
   const row = await env.CONTENT_DB.prepare(sql).bind(...bindings).first();
   return (row?.max_sort ?? -1) + 1;
@@ -671,16 +681,18 @@ async function handleAdminFlashcardTopicsPost(request, env) {
   return json({ ok: true, id }, 201);
 }
 
+const FIELDS_FLASHCARD_TOPICS = ["label", "color", "sort_order"];
+
 async function handleAdminFlashcardTopicsPut(id, request, env) {
   const body = await request.json();
   const fields = [];
   const values = [];
   for (const [key, val] of Object.entries(body)) {
-    if (key === "id") continue;
+    if (!FIELDS_FLASHCARD_TOPICS.includes(key)) continue;
     fields.push(`${key} = ?`);
     values.push(val);
   }
-  if (fields.length === 0) return json({ error: "No fields to update" }, 400);
+  if (fields.length === 0) return json({ error: "No valid fields to update" }, 400);
   values.push(id);
   await env.CONTENT_DB.prepare(
     `UPDATE flashcard_topics SET ${fields.join(", ")} WHERE id = ?`
@@ -705,16 +717,18 @@ async function handleAdminFlashcardsPost(request, env) {
   return json({ ok: true, id }, 201);
 }
 
+const FIELDS_FLASHCARDS = ["topic_id", "term", "definition", "formula", "sort_order"];
+
 async function handleAdminFlashcardsPut(id, request, env) {
   const body = await request.json();
   const fields = [];
   const values = [];
   for (const [key, val] of Object.entries(body)) {
-    if (key === "id") continue;
+    if (!FIELDS_FLASHCARDS.includes(key)) continue;
     fields.push(`${key} = ?`);
     values.push(val);
   }
-  if (fields.length === 0) return json({ error: "No fields to update" }, 400);
+  if (fields.length === 0) return json({ error: "No valid fields to update" }, 400);
   values.push(id);
   await env.CONTENT_DB.prepare(
     `UPDATE flashcards SET ${fields.join(", ")} WHERE id = ?`
@@ -744,16 +758,18 @@ async function handleAdminMcqPost(request, env) {
   return json({ ok: true, id }, 201);
 }
 
+const FIELDS_MCQ = ["category", "difficulty", "question_text", "option_a", "option_b", "option_c", "option_d", "correct_option", "explanation", "sort_order"];
+
 async function handleAdminMcqPut(id, request, env) {
   const body = await request.json();
   const fields = [];
   const values = [];
   for (const [key, val] of Object.entries(body)) {
-    if (key === "id") continue;
+    if (!FIELDS_MCQ.includes(key)) continue;
     fields.push(`${key} = ?`);
     values.push(val);
   }
-  if (fields.length === 0) return json({ error: "No fields to update" }, 400);
+  if (fields.length === 0) return json({ error: "No valid fields to update" }, 400);
   values.push(id);
   await env.CONTENT_DB.prepare(
     `UPDATE mcq_questions SET ${fields.join(", ")} WHERE id = ?`
@@ -783,16 +799,18 @@ async function handleAdminWrittenPost(request, env) {
   return json({ ok: true, id }, 201);
 }
 
+const FIELDS_WRITTEN = ["category", "difficulty", "question_type", "marks", "question_text", "mark_scheme", "label", "sort_order"];
+
 async function handleAdminWrittenPut(id, request, env) {
   const body = await request.json();
   const fields = [];
   const values = [];
   for (const [key, val] of Object.entries(body)) {
-    if (key === "id") continue;
+    if (!FIELDS_WRITTEN.includes(key)) continue;
     fields.push(`${key} = ?`);
     values.push(val);
   }
-  if (fields.length === 0) return json({ error: "No fields to update" }, 400);
+  if (fields.length === 0) return json({ error: "No valid fields to update" }, 400);
   values.push(id);
   await env.CONTENT_DB.prepare(
     `UPDATE written_questions SET ${fields.join(", ")} WHERE id = ?`
@@ -822,16 +840,18 @@ async function handleAdminHistoryPost(request, env) {
   return json({ ok: true, id }, 201);
 }
 
+const FIELDS_HISTORY = ["paper", "topic", "question_number", "question_text", "marks", "mark_scheme", "sort_order"];
+
 async function handleAdminHistoryPut(id, request, env) {
   const body = await request.json();
   const fields = [];
   const values = [];
   for (const [key, val] of Object.entries(body)) {
-    if (key === "id") continue;
+    if (!FIELDS_HISTORY.includes(key)) continue;
     fields.push(`${key} = ?`);
     values.push(val);
   }
-  if (fields.length === 0) return json({ error: "No fields to update" }, 400);
+  if (fields.length === 0) return json({ error: "No valid fields to update" }, 400);
   values.push(id);
   await env.CONTENT_DB.prepare(
     `UPDATE history_questions SET ${fields.join(", ")} WHERE id = ?`
@@ -856,16 +876,18 @@ async function handleAdminChecklistSectionsPost(request, env) {
   return json({ ok: true, id }, 201);
 }
 
+const FIELDS_CHECKLIST_SECTIONS = ["title", "color", "sort_order"];
+
 async function handleAdminChecklistSectionsPut(id, request, env) {
   const body = await request.json();
   const fields = [];
   const values = [];
   for (const [key, val] of Object.entries(body)) {
-    if (key === "id") continue;
+    if (!FIELDS_CHECKLIST_SECTIONS.includes(key)) continue;
     fields.push(`${key} = ?`);
     values.push(val);
   }
-  if (fields.length === 0) return json({ error: "No fields to update" }, 400);
+  if (fields.length === 0) return json({ error: "No valid fields to update" }, 400);
   values.push(id);
   await env.CONTENT_DB.prepare(
     `UPDATE checklist_sections SET ${fields.join(", ")} WHERE id = ?`
@@ -890,16 +912,18 @@ async function handleAdminChecklistItemsPost(request, env) {
   return json({ ok: true, id }, 201);
 }
 
+const FIELDS_CHECKLIST_ITEMS = ["section_id", "text", "sort_order"];
+
 async function handleAdminChecklistItemsPut(id, request, env) {
   const body = await request.json();
   const fields = [];
   const values = [];
   for (const [key, val] of Object.entries(body)) {
-    if (key === "id") continue;
+    if (!FIELDS_CHECKLIST_ITEMS.includes(key)) continue;
     fields.push(`${key} = ?`);
     values.push(val);
   }
-  if (fields.length === 0) return json({ error: "No fields to update" }, 400);
+  if (fields.length === 0) return json({ error: "No valid fields to update" }, 400);
   values.push(id);
   await env.CONTENT_DB.prepare(
     `UPDATE checklist_items SET ${fields.join(", ")} WHERE id = ?`
