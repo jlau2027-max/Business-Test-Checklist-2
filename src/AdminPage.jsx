@@ -17,7 +17,7 @@ import {
   forceSignOut,
   editUserProfile,
   changeUserRole,
-} from "./firestoreService.js";
+} from "./userApi.js";
 import LoginButton from "./LoginButton.jsx";
 
 const CAT_COLORS = {

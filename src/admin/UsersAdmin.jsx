@@ -16,7 +16,7 @@ import {
   forceSignOut,
   editUserProfile,
   changeUserRole,
-} from "../firestoreService.js";
+} from "../userApi.js";
 
 const CAT_COLORS = {
   "Costs & Revenue": "#7C6FFF",
