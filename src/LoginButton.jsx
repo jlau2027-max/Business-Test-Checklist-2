@@ -18,7 +18,7 @@ export default function LoginButton() {
               right: 0,
               top: "50%",
               transform: "translateY(-50%)",
-              fontFamily: "'Inter', sans-serif",
+              fontFamily: "'JSans', sans-serif",
             }}
           >
             Sign In

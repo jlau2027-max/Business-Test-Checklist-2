@@ -24,10 +24,10 @@ export default function CategorySelect({ value, onChange, categories, label, ...
       onSelectionChange={(key) => onChange(key)}
       {...props}
     >
-      <Label className="text-[#8B8B9E] text-[11px] tracking-wider mb-1" style={{ fontFamily: "'JetBrains Mono', monospace" }}>
+      <Label className="text-[#8B8B9E] text-[11px] tracking-wider mb-1" style={{ fontFamily: "'JSans', sans-serif" }}>
         {label || "Category"}
       </Label>
-      <Select.Trigger className="bg-[#1A1A24] border border-[#252533] text-[#F0EEE8] rounded-full" style={{ fontFamily: "'JetBrains Mono', monospace" }}>
+      <Select.Trigger className="bg-[#1A1A24] border border-[#252533] text-[#F0EEE8] rounded-full" style={{ fontFamily: "'JSans', sans-serif" }}>
         <Select.Value />
         <Select.Indicator />
       </Select.Trigger>
@@ -39,7 +39,7 @@ export default function CategorySelect({ value, onChange, categories, label, ...
               id={c.value || c.category}
               textValue={c.value || c.category}
               className="text-[#F0EEE8] text-xs"
-              style={{ fontFamily: "'JetBrains Mono', monospace" }}
+              style={{ fontFamily: "'JSans', sans-serif" }}
             >
               <span className="inline-block w-2 h-2 rounded-full mr-2" style={{ backgroundColor: c.color }} />
               {c.value || c.category}

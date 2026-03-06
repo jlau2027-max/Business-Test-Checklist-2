@@ -226,13 +226,13 @@ function SpecimenQuestion({ q }) {
       <div className="flex items-start gap-2 mb-2" style={{ flexWrap: "nowrap" }}>
         <span
           className="text-sm px-2 py-1 rounded-full font-bold"
-          style={{ backgroundColor: "#2DD4BF18", color: "#2DD4BF", border: "none", flexShrink: 0, fontFamily: "'JetBrains Mono', monospace" }}
+          style={{ backgroundColor: "#2DD4BF18", color: "#2DD4BF", border: "none", flexShrink: 0, fontFamily: "'JSans', sans-serif" }}
         >
           {q.label}
         </span>
         <span
           className="text-xs px-1.5 py-0.5 rounded-full font-semibold"
-          style={{ backgroundColor: "#8B5CF618", color: "#8B5CF6", border: "none", flexShrink: 0, fontFamily: "'JetBrains Mono', monospace" }}
+          style={{ backgroundColor: "#8B5CF618", color: "#8B5CF6", border: "none", flexShrink: 0, fontFamily: "'JSans', sans-serif" }}
         >
           {q.marks} mark{q.marks !== 1 ? "s" : ""}
         </span>
@@ -251,7 +251,7 @@ function SpecimenQuestion({ q }) {
         rows={minRows}
         fullWidth
         className="rounded-2xl mb-2 bg-[#09090F] border border-[#252533] text-[#F0EEE8] text-sm leading-[1.7] placeholder:text-[#55556A] focus:border-[#7C6FFF] p-3"
-        style={{ fontFamily: "'Inter', sans-serif", resize: "vertical" }}
+        style={{ fontFamily: "'JSans', sans-serif", resize: "vertical" }}
       />
 
       {/* Action buttons */}
@@ -262,7 +262,7 @@ function SpecimenQuestion({ q }) {
           onPress={handleSolve}
           isDisabled={!answer.trim()}
           className="rounded-full bg-[#2DD4BF] text-white"
-          style={{ fontFamily: "'JetBrains Mono', monospace" }}
+          style={{ fontFamily: "'JSans', sans-serif" }}
         >
           {({isPending}) => <>
             {isPending && <Spinner color="current" size="sm" />}
@@ -275,7 +275,7 @@ function SpecimenQuestion({ q }) {
           variant="ghost"
           onPress={() => setRevealed((r) => !r)}
           className={`rounded-full ${revealed ? "text-[#8B8B9E]" : "bg-[#8B5CF6] text-white"}`}
-          style={{ fontFamily: "'JetBrains Mono', monospace" }}
+          style={{ fontFamily: "'JSans', sans-serif" }}
         >
           {revealed ? "Hide Markscheme" : "Show Markscheme"}
         </Button>
@@ -286,13 +286,13 @@ function SpecimenQuestion({ q }) {
             variant="ghost"
             onPress={handleClear}
             className="rounded-full text-[#8B8B9E]"
-            style={{ fontFamily: "'JetBrains Mono', monospace" }}
+            style={{ fontFamily: "'JSans', sans-serif" }}
           >
             Clear
           </Button>
         )}
 
-        <span className="text-xs px-1.5 py-0.5 rounded-full ml-auto" style={{ backgroundColor: "rgba(45,212,191,0.1)", color: "#2DD4BF", fontFamily: "'JetBrains Mono', monospace" }}>
+        <span className="text-xs px-1.5 py-0.5 rounded-full ml-auto" style={{ backgroundColor: "rgba(45,212,191,0.1)", color: "#2DD4BF", fontFamily: "'JSans', sans-serif" }}>
           auto-saved
         </span>
       </div>
@@ -308,7 +308,7 @@ function SpecimenQuestion({ q }) {
                   backgroundColor: gradeResult.score >= gradeResult.maxMarks * 0.7 ? "#34D39922" : gradeResult.score >= gradeResult.maxMarks * 0.4 ? "#FBBF2422" : "#EF444422",
                   color: gradeResult.score >= gradeResult.maxMarks * 0.7 ? "#34D399" : gradeResult.score >= gradeResult.maxMarks * 0.4 ? "#FBBF24" : "#EF4444",
                   border: "none",
-                  fontFamily: "'JetBrains Mono', monospace",
+                  fontFamily: "'JSans', sans-serif",
                 }}
               >
                 {gradeResult.score} / {gradeResult.maxMarks}
@@ -324,7 +324,7 @@ function SpecimenQuestion({ q }) {
       {/* Markscheme reveal */}
       {revealed && (
         <div className="mt-4 pt-4" style={{ borderTop: "1px solid #252533" }}>
-          <span className="block text-[#34D399] mb-2" style={{ fontSize: 11, fontFamily: "'JetBrains Mono', monospace", letterSpacing: 1 }}>
+          <span className="block text-[#34D399] mb-2" style={{ fontSize: 11, fontFamily: "'JSans', sans-serif", letterSpacing: 1 }}>
             MARKSCHEME
           </span>
           <span className="block text-[#B0ADA6]" style={{ fontSize: 13, lineHeight: 1.7, whiteSpace: "pre-line" }}>
@@ -369,7 +369,7 @@ export default function SpecimenPage() {
   const totalMarks = SPECIMEN_QUESTIONS.reduce((sum, q) => sum + q.marks, 0);
 
   return (
-    <div className="min-h-screen" style={{ backgroundColor: "#09090F", fontFamily: "'Inter', sans-serif", color: "#F0EEE8" }}>
+    <div className="min-h-screen" style={{ backgroundColor: "#09090F", fontFamily: "'JSans', sans-serif", color: "#F0EEE8" }}>
       <Sidebar activeSubject="business" sidebarOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
 
       {/* Header */}
@@ -407,7 +407,7 @@ export default function SpecimenPage() {
             </Button>
             <span
               className="text-xs px-2 py-0.5 rounded-full uppercase font-bold"
-              style={{ letterSpacing: 2, backgroundColor: "#2DD4BF18", color: "#2DD4BF", border: "none", fontFamily: "'JetBrains Mono', monospace" }}
+              style={{ letterSpacing: 2, backgroundColor: "#2DD4BF18", color: "#2DD4BF", border: "none", fontFamily: "'JSans', sans-serif" }}
             >
               IB HL Business Management
             </span>
@@ -427,7 +427,7 @@ export default function SpecimenPage() {
               <Button
                 size="sm"
                 className="rounded-full bg-[#1A1A24] text-[#8B8B9E] border border-[#252533]"
-                style={{ fontFamily: "'JetBrains Mono', monospace" }}
+                style={{ fontFamily: "'JSans', sans-serif" }}
               >
                 ← Back to Revision Hub
               </Button>
@@ -449,10 +449,10 @@ export default function SpecimenPage() {
               below — everything auto-saves. Use "Solve" for AI grading and "Show Markscheme" to reveal the rubric.
             </span>
             <div className="flex items-center gap-1 mt-2">
-              <span className="text-xs px-1.5 py-0.5 rounded-full" style={{ backgroundColor: "rgba(45,212,191,0.1)", color: "#2DD4BF", fontFamily: "'JetBrains Mono', monospace" }}>
+              <span className="text-xs px-1.5 py-0.5 rounded-full" style={{ backgroundColor: "rgba(45,212,191,0.1)", color: "#2DD4BF", fontFamily: "'JSans', sans-serif" }}>
                 {SPECIMEN_QUESTIONS.length} questions
               </span>
-              <span className="text-xs px-1.5 py-0.5 rounded-full" style={{ backgroundColor: "rgba(139,92,246,0.1)", color: "#8B5CF6", fontFamily: "'JetBrains Mono', monospace" }}>
+              <span className="text-xs px-1.5 py-0.5 rounded-full" style={{ backgroundColor: "rgba(139,92,246,0.1)", color: "#8B5CF6", fontFamily: "'JSans', sans-serif" }}>
                 {totalMarks} marks
               </span>
             </div>
@@ -460,7 +460,7 @@ export default function SpecimenPage() {
 
           {/* Case study context */}
           <Surface className="rounded-3xl p-4 mb-6" style={{ border: "1px solid #1E3A5F" }}>
-            <span className="block text-[#60A5FA] mb-2" style={{ fontSize: 11, fontFamily: "'JetBrains Mono', monospace", letterSpacing: 1 }}>
+            <span className="block text-[#60A5FA] mb-2" style={{ fontSize: 11, fontFamily: "'JSans', sans-serif", letterSpacing: 1 }}>
               CASE STUDY
             </span>
             <span className="block text-[#F0EEE8] font-semibold mb-1" style={{ fontSize: 14 }}>

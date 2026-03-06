@@ -408,7 +408,7 @@ export default function HistoryAdmin() {
                     </Tabs>
                   </div>
                   <NumberField className="w-full" value={form.question_number} onChange={(val) => updateField("question_number", val)} minValue={1}>
-                    <Label className="text-[#8B8B9E] text-[11px] tracking-wider mb-1" style={{ fontFamily: "'JetBrains Mono', monospace" }}>Question Number</Label>
+                    <Label className="text-[#8B8B9E] text-[11px] tracking-wider mb-1" style={{ fontFamily: "'JSans', sans-serif" }}>Question Number</Label>
                     <NumberField.Group>
                       <NumberField.DecrementButton />
                       <NumberField.Input className="bg-[#1A1A24] border border-[#252533] text-[#F0EEE8] rounded-full" />
@@ -431,7 +431,7 @@ export default function HistoryAdmin() {
 
                 {/* Marks */}
                 <NumberField className="w-full" value={form.marks} onChange={(val) => updateField("marks", val)} minValue={1}>
-                  <Label className="text-[#8B8B9E] text-[11px] tracking-wider mb-1" style={{ fontFamily: "'JetBrains Mono', monospace" }}>Marks</Label>
+                  <Label className="text-[#8B8B9E] text-[11px] tracking-wider mb-1" style={{ fontFamily: "'JSans', sans-serif" }}>Marks</Label>
                   <NumberField.Group>
                     <NumberField.DecrementButton />
                     <NumberField.Input className="bg-[#1A1A24] border border-[#252533] text-[#F0EEE8] rounded-full" />

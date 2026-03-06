@@ -114,7 +114,7 @@ function TopicModal({ opened, onClose, topic, onSave }) {
         <Modal.Dialog className="sm:max-w-md" style={{ backgroundColor: "#12121A", border: "1px solid #252533" }}>
           <Modal.CloseTrigger />
           <Modal.Header style={{ borderBottom: "1px solid #252533" }}>
-            <Modal.Heading style={{ color: TEXT_COLOR, fontWeight: 700, fontFamily: "'JetBrains Mono', monospace" }}>
+            <Modal.Heading style={{ color: TEXT_COLOR, fontWeight: 700, fontFamily: "'JSans', sans-serif" }}>
               {isEdit ? "Edit Topic" : "Create Topic"}
             </Modal.Heading>
           </Modal.Header>
@@ -130,22 +130,22 @@ function TopicModal({ opened, onClose, topic, onSave }) {
                   </Alert>
                 )}
                 <TextField className="w-full" name="label" onChange={(val) => setLabel(val)}>
-                  <Label className="text-[#8B8B9E] text-[11px] tracking-wider mb-1" style={{ fontFamily: "'JetBrains Mono', monospace" }}>Label</Label>
-                  <Input value={label} placeholder="e.g. Ratio Analysis" className="bg-[#1A1A24] border border-[#252533] text-[#F0EEE8] rounded-full" style={{ fontFamily: "'JetBrains Mono', monospace" }} />
+                  <Label className="text-[#8B8B9E] text-[11px] tracking-wider mb-1" style={{ fontFamily: "'JSans', sans-serif" }}>Label</Label>
+                  <Input value={label} placeholder="e.g. Ratio Analysis" className="bg-[#1A1A24] border border-[#252533] text-[#F0EEE8] rounded-full" style={{ fontFamily: "'JSans', sans-serif" }} />
                 </TextField>
                 <TextField className="w-full" name="id" isReadOnly={isEdit} onChange={(val) => { if (!isEdit) setId(val); }}>
-                  <Label className="text-[#8B8B9E] text-[11px] tracking-wider mb-1" style={{ fontFamily: "'JetBrains Mono', monospace" }}>ID</Label>
+                  <Label className="text-[#8B8B9E] text-[11px] tracking-wider mb-1" style={{ fontFamily: "'JSans', sans-serif" }}>ID</Label>
                   <Input
                     value={id}
                     placeholder="Auto-generated from label"
                     className={`bg-[#1A1A24] border border-[#252533] text-[#F0EEE8] rounded-full ${isEdit ? "opacity-50 cursor-not-allowed" : ""}`}
-                    style={{ fontFamily: "'JetBrains Mono', monospace" }}
+                    style={{ fontFamily: "'JSans', sans-serif" }}
                   />
                 </TextField>
                 <div className="flex items-end gap-3">
                   <TextField className="flex-1" name="color" onChange={setColor}>
-                    <Label className="text-[#8B8B9E] text-[11px] tracking-wider mb-1" style={{ fontFamily: "'JetBrains Mono', monospace" }}>Color</Label>
-                    <Input value={color} placeholder="#7C6FFF" className="bg-[#1A1A24] border border-[#252533] text-[#F0EEE8] rounded-full" style={{ fontFamily: "'JetBrains Mono', monospace" }} />
+                    <Label className="text-[#8B8B9E] text-[11px] tracking-wider mb-1" style={{ fontFamily: "'JSans', sans-serif" }}>Color</Label>
+                    <Input value={color} placeholder="#7C6FFF" className="bg-[#1A1A24] border border-[#252533] text-[#F0EEE8] rounded-full" style={{ fontFamily: "'JSans', sans-serif" }} />
                   </TextField>
                   <div className="w-9 h-9 rounded-lg border border-[#252533] shrink-0" style={{ backgroundColor: color || "#8B8B9E" }} />
                 </div>
@@ -228,7 +228,7 @@ function CardModal({ opened, onClose, card, topicId, onSave }) {
         <Modal.Dialog className="sm:max-w-lg" style={{ backgroundColor: "#12121A", border: "1px solid #252533" }}>
           <Modal.CloseTrigger />
           <Modal.Header style={{ borderBottom: "1px solid #252533" }}>
-            <Modal.Heading style={{ color: TEXT_COLOR, fontWeight: 700, fontFamily: "'JetBrains Mono', monospace" }}>
+            <Modal.Heading style={{ color: TEXT_COLOR, fontWeight: 700, fontFamily: "'JSans', sans-serif" }}>
               {isEdit ? "Edit Card" : "Create Card"}
             </Modal.Heading>
           </Modal.Header>
@@ -244,11 +244,11 @@ function CardModal({ opened, onClose, card, topicId, onSave }) {
                   </Alert>
                 )}
                 <TextField className="w-full" name="term" onChange={(val) => setTerm(val)}>
-                  <Label className="text-[#8B8B9E] text-[11px] tracking-wider mb-1" style={{ fontFamily: "'JetBrains Mono', monospace" }}>Term</Label>
-                  <Input value={term} placeholder="e.g. Net Present Value" className="bg-[#1A1A24] border border-[#252533] text-[#F0EEE8] rounded-full" style={{ fontFamily: "'JetBrains Mono', monospace" }} />
+                  <Label className="text-[#8B8B9E] text-[11px] tracking-wider mb-1" style={{ fontFamily: "'JSans', sans-serif" }}>Term</Label>
+                  <Input value={term} placeholder="e.g. Net Present Value" className="bg-[#1A1A24] border border-[#252533] text-[#F0EEE8] rounded-full" style={{ fontFamily: "'JSans', sans-serif" }} />
                 </TextField>
                 <div>
-                  <label className="text-[#8B8B9E] text-xs font-medium mb-1 block" style={{ fontFamily: "'JetBrains Mono', monospace" }}>Definition</label>
+                  <label className="text-[#8B8B9E] text-xs font-medium mb-1 block" style={{ fontFamily: "'JSans', sans-serif" }}>Definition</label>
                   <TextArea
                     value={definition}
                     onChange={(e) => setDefinition(e.target.value)}
@@ -258,8 +258,8 @@ function CardModal({ opened, onClose, card, topicId, onSave }) {
                   />
                 </div>
                 <TextField className="w-full" name="formula" onChange={(val) => setFormula(val)}>
-                  <Label className="text-[#8B8B9E] text-[11px] tracking-wider mb-1" style={{ fontFamily: "'JetBrains Mono', monospace" }}>Formula (optional)</Label>
-                  <Input value={formula} placeholder="e.g. NPV = Sum of PV of cash flows - initial investment" className="bg-[#1A1A24] border border-[#252533] text-[#F0EEE8] rounded-full" style={{ fontFamily: "'JetBrains Mono', monospace" }} />
+                  <Label className="text-[#8B8B9E] text-[11px] tracking-wider mb-1" style={{ fontFamily: "'JSans', sans-serif" }}>Formula (optional)</Label>
+                  <Input value={formula} placeholder="e.g. NPV = Sum of PV of cash flows - initial investment" className="bg-[#1A1A24] border border-[#252533] text-[#F0EEE8] rounded-full" style={{ fontFamily: "'JSans', sans-serif" }} />
                 </TextField>
                 <div className="flex items-center justify-end gap-2 mt-1">
                   <Button variant="ghost" className="rounded-full text-[#8B8B9E]" onPress={onClose} isDisabled={saving}>
@@ -675,7 +675,7 @@ export default function FlashcardAdmin() {
                             </Table.Cell>
                             <Table.Cell>
                               {card.formula ? (
-                                <span className="text-xs text-[#A78BFA]" style={{ fontFamily: "'JetBrains Mono', monospace" }}>
+                                <span className="text-xs text-[#A78BFA]" style={{ fontFamily: "'JSans', sans-serif" }}>
                                   {truncate(card.formula, 60)}
                                 </span>
                               ) : (

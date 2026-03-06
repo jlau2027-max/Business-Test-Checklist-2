@@ -47,7 +47,7 @@ export default function Sidebar({ activeSubject, sidebarOpen, onClose }) {
           transition: "left 0.25s ease",
         }}
       >
-        <span className="text-[#55556A] mb-1 px-2" style={{ fontSize: 11, fontFamily: "'JetBrains Mono', monospace", letterSpacing: 1 }}>
+        <span className="text-[#55556A] mb-1 px-2" style={{ fontSize: 11, fontFamily: "'JSans', sans-serif", letterSpacing: 1 }}>
           SUBJECTS
         </span>
         {items.map(s => {
@@ -61,7 +61,7 @@ export default function Sidebar({ activeSubject, sidebarOpen, onClose }) {
               style={{
                 height: 44,
                 paddingLeft: 14,
-                fontFamily: "'JetBrains Mono', monospace",
+                fontFamily: "'JSans', sans-serif",
                 backgroundColor: active ? color : "transparent",
                 color: active ? "#fff" : "#8B8B9E",
                 border: active ? "none" : "1px solid transparent",
@@ -79,7 +79,7 @@ export default function Sidebar({ activeSubject, sidebarOpen, onClose }) {
         })}
 
         <div style={{ flex: 1 }} />
-        <span className="text-center block" style={{ fontSize: 10, color: "#33334A", fontFamily: "'JetBrains Mono', monospace" }}>
+        <span className="text-center block" style={{ fontSize: 10, color: "#33334A", fontFamily: "'JSans', sans-serif" }}>
           More subjects coming soon
         </span>
       </div>

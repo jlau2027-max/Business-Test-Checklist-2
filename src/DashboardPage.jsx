@@ -41,10 +41,10 @@ function formatTime(ms) {
 function StatCard({ label, value, sub, color = "#7C6FFF" }) {
   return (
     <Surface className="rounded-2xl p-4" style={{ flex: 1, minWidth: 160 }}>
-      <span className="block text-[#55556A] mb-1" style={{ fontSize: 11, fontFamily: "'JetBrains Mono', monospace", letterSpacing: 1 }}>
+      <span className="block text-[#55556A] mb-1" style={{ fontSize: 11, fontFamily: "'JSans', sans-serif", letterSpacing: 1 }}>
         {label}
       </span>
-      <span className="block font-extrabold" style={{ fontSize: 28, color, fontFamily: "'JetBrains Mono', monospace" }}>
+      <span className="block font-extrabold" style={{ fontSize: 28, color, fontFamily: "'JSans', sans-serif" }}>
         {value}
       </span>
       {sub && (
@@ -82,7 +82,7 @@ export default function DashboardPage() {
   if (authLoading) return null;
 
   return (
-    <div className="min-h-screen" style={{ backgroundColor: "#09090F", fontFamily: "'Inter', sans-serif", color: "#F0EEE8" }}>
+    <div className="min-h-screen" style={{ backgroundColor: "#09090F", fontFamily: "'JSans', sans-serif", color: "#F0EEE8" }}>
       <Sidebar activeSubject="dashboard" sidebarOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
 
       {/* Header */}
@@ -119,7 +119,7 @@ export default function DashboardPage() {
             </Button>
             <span
               className="text-xs px-2 py-0.5 rounded-full uppercase font-bold"
-              style={{ letterSpacing: 2, backgroundColor: "#7C6FFF18", color: "#A78BFA", border: "none", fontFamily: "'JetBrains Mono', monospace" }}
+              style={{ letterSpacing: 2, backgroundColor: "#7C6FFF18", color: "#A78BFA", border: "none", fontFamily: "'JSans', sans-serif" }}
             >
               Analytics
             </span>
@@ -209,7 +209,7 @@ export default function DashboardPage() {
 
             {/* Category Breakdown */}
             <Surface className="rounded-2xl p-4">
-              <span className="block text-[#55556A] mb-4" style={{ fontSize: 11, fontFamily: "'JetBrains Mono', monospace", letterSpacing: 1 }}>
+              <span className="block text-[#55556A] mb-4" style={{ fontSize: 11, fontFamily: "'JSans', sans-serif", letterSpacing: 1 }}>
                 PERFORMANCE BY TOPIC
               </span>
               <div className="flex flex-col gap-4">
@@ -227,16 +227,16 @@ export default function DashboardPage() {
                           </div>
                           <div className="flex items-center gap-1">
                             {cat.mcqAccuracy != null && (
-                              <span className="text-xs px-1.5 py-0.5 rounded-full" style={{ backgroundColor: color + "22", color, border: "none", fontFamily: "'JetBrains Mono', monospace" }}>
+                              <span className="text-xs px-1.5 py-0.5 rounded-full" style={{ backgroundColor: color + "22", color, border: "none", fontFamily: "'JSans', sans-serif" }}>
                                 MCQ: {cat.mcqAccuracy}%
                               </span>
                             )}
                             {cat.writtenAvg != null && (
-                              <span className="text-xs px-1.5 py-0.5 rounded-full" style={{ backgroundColor: color + "22", color, border: "none", fontFamily: "'JetBrains Mono', monospace" }}>
+                              <span className="text-xs px-1.5 py-0.5 rounded-full" style={{ backgroundColor: color + "22", color, border: "none", fontFamily: "'JSans', sans-serif" }}>
                                 Written: {cat.writtenAvg}%
                               </span>
                             )}
-                            <span className="text-[#55556A]" style={{ fontSize: 11, fontFamily: "'JetBrains Mono', monospace" }}>
+                            <span className="text-[#55556A]" style={{ fontSize: 11, fontFamily: "'JSans', sans-serif" }}>
                               {cat.totalAttempts} attempt{cat.totalAttempts !== 1 ? "s" : ""} · avg {formatTime(cat.avgTimeMs)}
                             </span>
                           </div>
@@ -254,7 +254,7 @@ export default function DashboardPage() {
             {/* Wrong Answers */}
             {wrongAnswers.length > 0 && (
               <Surface className="rounded-2xl p-4">
-                <span className="block text-[#55556A] mb-4" style={{ fontSize: 11, fontFamily: "'JetBrains Mono', monospace", letterSpacing: 1 }}>
+                <span className="block text-[#55556A] mb-4" style={{ fontSize: 11, fontFamily: "'JSans', sans-serif", letterSpacing: 1 }}>
                   QUESTIONS TO REVIEW ({wrongAnswers.length})
                 </span>
                 <div className="flex flex-col gap-2">
@@ -267,7 +267,7 @@ export default function DashboardPage() {
                             backgroundColor: a.isCorrect === false ? "#F8717122" : "#FBBF2422",
                             color: a.isCorrect === false ? "#F87171" : "#FBBF24",
                             border: "none",
-                            fontFamily: "'JetBrains Mono', monospace",
+                            fontFamily: "'JSans', sans-serif",
                           }}
                         >
                           {a.questionType === "mcq" ? "MCQ — Wrong" : `${a.score}/${a.maxMarks}`}
@@ -278,13 +278,13 @@ export default function DashboardPage() {
                             backgroundColor: (CAT_COLORS[a.category] || "#7C6FFF") + "22",
                             color: CAT_COLORS[a.category] || "#7C6FFF",
                             border: "none",
-                            fontFamily: "'JetBrains Mono', monospace",
+                            fontFamily: "'JSans', sans-serif",
                           }}
                         >
                           {a.category}
                         </span>
                         {a.timeSpentMs > 0 && (
-                          <span className="text-[#55556A] ml-auto" style={{ fontSize: 10, fontFamily: "'JetBrains Mono', monospace" }}>
+                          <span className="text-[#55556A] ml-auto" style={{ fontSize: 10, fontFamily: "'JSans', sans-serif" }}>
                             {formatTime(a.timeSpentMs)}
                           </span>
                         )}
@@ -300,7 +300,7 @@ export default function DashboardPage() {
 
             {/* Recent Activity */}
             <Surface className="rounded-2xl p-4">
-              <span className="block text-[#55556A] mb-4" style={{ fontSize: 11, fontFamily: "'JetBrains Mono', monospace", letterSpacing: 1 }}>
+              <span className="block text-[#55556A] mb-4" style={{ fontSize: 11, fontFamily: "'JSans', sans-serif", letterSpacing: 1 }}>
                 RECENT ACTIVITY
               </span>
               <div className="flex flex-col gap-1">
@@ -317,19 +317,19 @@ export default function DashboardPage() {
                         backgroundColor: isGood ? "#34D399" : "#F87171",
                         flexShrink: 0,
                       }} />
-                      <span className="text-xs px-1.5 py-0.5 rounded-full" style={{ backgroundColor: color + "22", color, border: "none", fontFamily: "'JetBrains Mono', monospace", flexShrink: 0 }}>
+                      <span className="text-xs px-1.5 py-0.5 rounded-full" style={{ backgroundColor: color + "22", color, border: "none", fontFamily: "'JSans', sans-serif", flexShrink: 0 }}>
                         {a.questionType.toUpperCase()}
                       </span>
                       <span className="text-[#8B8B9E] truncate" style={{ fontSize: 12, flex: 1 }}>
                         {a.category} — {a.questionId}
                       </span>
-                      <span className="text-[#55556A]" style={{ fontSize: 11, fontFamily: "'JetBrains Mono', monospace", flexShrink: 0 }}>
+                      <span className="text-[#55556A]" style={{ fontSize: 11, fontFamily: "'JSans', sans-serif", flexShrink: 0 }}>
                         {a.questionType === "mcq"
                           ? (a.isCorrect ? "Correct" : "Wrong")
                           : (a.score != null ? `${a.score}/${a.maxMarks}` : "—")}
                       </span>
                       {a.timeSpentMs > 0 && (
-                        <span className="text-[#55556A]" style={{ fontSize: 10, fontFamily: "'JetBrains Mono', monospace", flexShrink: 0 }}>
+                        <span className="text-[#55556A]" style={{ fontSize: 10, fontFamily: "'JSans', sans-serif", flexShrink: 0 }}>
                           {formatTime(a.timeSpentMs)}
                         </span>
                       )}

@@ -393,7 +393,7 @@ export default function McqAdmin() {
           <Modal.Dialog className="sm:max-w-lg" style={{ backgroundColor: "#12121A", border: "1px solid #252533" }}>
             <Modal.CloseTrigger />
             <Modal.Header style={{ borderBottom: "1px solid #252533" }}>
-              <Modal.Heading style={{ color: "#F0EEE8", fontWeight: 700, fontFamily: "'JetBrains Mono', monospace" }}>
+              <Modal.Heading style={{ color: "#F0EEE8", fontWeight: 700, fontFamily: "'JSans', sans-serif" }}>
                 {editingQuestion ? "Edit Question" : "New Question"}
               </Modal.Heading>
             </Modal.Header>
@@ -449,7 +449,7 @@ export default function McqAdmin() {
                   </span>
                   {["a", "b", "c", "d"].map((letter, idx) => (
                     <TextField key={letter} className="w-full" name={`option_${letter}`} onChange={(val) => updateField(`option_${letter}`, val)}>
-                      <Label className="text-[#8B8B9E] text-[11px] tracking-wider mb-1" style={{ fontFamily: "'JetBrains Mono', monospace" }}>Option {OPTION_LETTERS[idx]}</Label>
+                      <Label className="text-[#8B8B9E] text-[11px] tracking-wider mb-1" style={{ fontFamily: "'JSans', sans-serif" }}>Option {OPTION_LETTERS[idx]}</Label>
                       <Input
                         value={form[`option_${letter}`]}
                         placeholder={`Enter option ${OPTION_LETTERS[idx]}...`}

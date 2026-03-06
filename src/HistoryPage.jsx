@@ -773,13 +773,13 @@ function HistoryQuestion({ q, levelDescriptors, prefix }) {
       <div className="flex items-start gap-2 mb-2" style={{ flexWrap: "nowrap" }}>
         <span
           className="text-sm px-2 py-1 rounded-full font-bold"
-          style={{ backgroundColor: "#F8717118", color: "#F87171", border: "none", flexShrink: 0, fontFamily: "'JetBrains Mono', monospace" }}
+          style={{ backgroundColor: "#F8717118", color: "#F87171", border: "none", flexShrink: 0, fontFamily: "'JSans', sans-serif" }}
         >
           Q{q.number}
         </span>
         <span
           className="text-xs px-1.5 py-0.5 rounded-full font-semibold"
-          style={{ backgroundColor: "#8B5CF618", color: "#8B5CF6", border: "none", flexShrink: 0, fontFamily: "'JetBrains Mono', monospace" }}
+          style={{ backgroundColor: "#8B5CF618", color: "#8B5CF6", border: "none", flexShrink: 0, fontFamily: "'JSans', sans-serif" }}
         >
           {q.marks} marks
         </span>
@@ -798,7 +798,7 @@ function HistoryQuestion({ q, levelDescriptors, prefix }) {
         rows={16}
         fullWidth
         className="rounded-2xl mb-2 bg-[#09090F] border border-[#252533] text-[#F0EEE8] text-sm leading-[1.7] placeholder:text-[#55556A] focus:border-[#F87171] p-3"
-        style={{ fontFamily: "'Inter', sans-serif", resize: "vertical" }}
+        style={{ fontFamily: "'JSans', sans-serif", resize: "vertical" }}
       />
 
       {/* Action buttons */}
@@ -809,7 +809,7 @@ function HistoryQuestion({ q, levelDescriptors, prefix }) {
           onPress={handleSolve}
           isDisabled={!answer.trim()}
           className="rounded-full bg-[#F87171] text-white"
-          style={{ fontFamily: "'JetBrains Mono', monospace" }}
+          style={{ fontFamily: "'JSans', sans-serif" }}
         >
           {({isPending}) => <>
             {isPending && <Spinner color="current" size="sm" />}
@@ -822,7 +822,7 @@ function HistoryQuestion({ q, levelDescriptors, prefix }) {
           variant="ghost"
           onPress={() => setRevealed((r) => !r)}
           className={`rounded-full ${revealed ? "text-[#8B8B9E]" : "bg-[#8B5CF6] text-white"}`}
-          style={{ fontFamily: "'JetBrains Mono', monospace" }}
+          style={{ fontFamily: "'JSans', sans-serif" }}
         >
           {revealed ? "Hide Markscheme" : "Show Markscheme"}
         </Button>
@@ -832,7 +832,7 @@ function HistoryQuestion({ q, levelDescriptors, prefix }) {
           variant="ghost"
           onPress={() => setLevelsRevealed((r) => !r)}
           className={`rounded-full ${levelsRevealed ? "text-[#8B8B9E]" : "bg-[#FBBF24] text-black"}`}
-          style={{ fontFamily: "'JetBrains Mono', monospace" }}
+          style={{ fontFamily: "'JSans', sans-serif" }}
         >
           {levelsRevealed ? "Hide Levels" : "Level Descriptors"}
         </Button>
@@ -843,13 +843,13 @@ function HistoryQuestion({ q, levelDescriptors, prefix }) {
             variant="ghost"
             onPress={handleClear}
             className="rounded-full text-[#8B8B9E]"
-            style={{ fontFamily: "'JetBrains Mono', monospace" }}
+            style={{ fontFamily: "'JSans', sans-serif" }}
           >
             Clear
           </Button>
         )}
 
-        <span className="text-xs px-1.5 py-0.5 rounded-full ml-auto" style={{ backgroundColor: "rgba(248,113,113,0.1)", color: "#F87171", fontFamily: "'JetBrains Mono', monospace" }}>
+        <span className="text-xs px-1.5 py-0.5 rounded-full ml-auto" style={{ backgroundColor: "rgba(248,113,113,0.1)", color: "#F87171", fontFamily: "'JSans', sans-serif" }}>
           auto-saved
         </span>
       </div>
@@ -865,7 +865,7 @@ function HistoryQuestion({ q, levelDescriptors, prefix }) {
                   backgroundColor: gradeResult.score >= gradeResult.maxMarks * 0.7 ? "#34D39922" : gradeResult.score >= gradeResult.maxMarks * 0.4 ? "#FBBF2422" : "#EF444422",
                   color: gradeResult.score >= gradeResult.maxMarks * 0.7 ? "#34D399" : gradeResult.score >= gradeResult.maxMarks * 0.4 ? "#FBBF24" : "#EF4444",
                   border: "none",
-                  fontFamily: "'JetBrains Mono', monospace",
+                  fontFamily: "'JSans', sans-serif",
                 }}
               >
                 {gradeResult.score} / {gradeResult.maxMarks}
@@ -881,7 +881,7 @@ function HistoryQuestion({ q, levelDescriptors, prefix }) {
       {/* Markscheme reveal */}
       {revealed && (
         <div className="mt-4 pt-4" style={{ borderTop: "1px solid #252533" }}>
-          <span className="block text-[#34D399] mb-2" style={{ fontSize: 11, fontFamily: "'JetBrains Mono', monospace", letterSpacing: 1 }}>
+          <span className="block text-[#34D399] mb-2" style={{ fontSize: 11, fontFamily: "'JSans', sans-serif", letterSpacing: 1 }}>
             MARKSCHEME
           </span>
           <span className="block text-[#B0ADA6]" style={{ fontSize: 13, lineHeight: 1.7, whiteSpace: "pre-line" }}>
@@ -893,7 +893,7 @@ function HistoryQuestion({ q, levelDescriptors, prefix }) {
       {/* Level descriptors reveal */}
       {levelsRevealed && (
         <div className="mt-4 pt-4" style={{ borderTop: "1px solid #252533" }}>
-          <span className="block text-[#FBBF24] mb-2" style={{ fontSize: 11, fontFamily: "'JetBrains Mono', monospace", letterSpacing: 1 }}>
+          <span className="block text-[#FBBF24] mb-2" style={{ fontSize: 11, fontFamily: "'JSans', sans-serif", letterSpacing: 1 }}>
             LEVEL DESCRIPTORS
           </span>
           <span className="block text-[#B0ADA6]" style={{ fontSize: 13, lineHeight: 1.7, whiteSpace: "pre-line" }}>
@@ -977,7 +977,7 @@ export default function HistoryPage() {
   const loading = paper === "paper2" ? loadingP2 : loadingP3;
 
   return (
-    <div className="min-h-screen" style={{ backgroundColor: "#09090F", fontFamily: "'Inter', sans-serif", color: "#F0EEE8" }}>
+    <div className="min-h-screen" style={{ backgroundColor: "#09090F", fontFamily: "'JSans', sans-serif", color: "#F0EEE8" }}>
 
       <Sidebar activeSubject="history" sidebarOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
 
@@ -1016,7 +1016,7 @@ export default function HistoryPage() {
             </Button>
             <span
               className="text-xs px-2 py-0.5 rounded-full uppercase font-bold"
-              style={{ letterSpacing: 2, backgroundColor: "#F8717118", color: "#F87171", border: "none", fontFamily: "'JetBrains Mono', monospace" }}
+              style={{ letterSpacing: 2, backgroundColor: "#F8717118", color: "#F87171", border: "none", fontFamily: "'JSans', sans-serif" }}
             >
               IB HL History
             </span>
@@ -1046,7 +1046,7 @@ export default function HistoryPage() {
                 onPress={() => setPaper(t.key)}
                 className="rounded-full font-semibold text-[13px]"
                 style={{
-                  fontFamily: "'JetBrains Mono', monospace",
+                  fontFamily: "'JSans', sans-serif",
                   backgroundColor: paper === t.key ? "#F0EEE8" : "transparent",
                   color: paper === t.key ? "#09090F" : "#55556A",
                   border: paper === t.key ? "none" : "1px solid #252533",
@@ -1078,17 +1078,17 @@ export default function HistoryPage() {
                 : "Answer three questions. Each question is worth 15 marks. The maximum mark for this paper is 45. 2 hours 30 minutes. HL only. Type your essay answers below \u2014 everything auto-saves. Use \"Solve\" for AI grading, \"Show Markscheme\" for the rubric, and \"Level Descriptors\" for the marking bands."}
             </span>
             <div className="flex items-center gap-1 mt-2">
-              <span className="text-xs px-1.5 py-0.5 rounded-full" style={{ backgroundColor: "rgba(248,113,113,0.1)", color: "#F87171", fontFamily: "'JetBrains Mono', monospace" }}>
+              <span className="text-xs px-1.5 py-0.5 rounded-full" style={{ backgroundColor: "rgba(248,113,113,0.1)", color: "#F87171", fontFamily: "'JSans', sans-serif" }}>
                 {questions.length} questions
               </span>
-              <span className="text-xs px-1.5 py-0.5 rounded-full" style={{ backgroundColor: "rgba(139,92,246,0.1)", color: "#8B5CF6", fontFamily: "'JetBrains Mono', monospace" }}>
+              <span className="text-xs px-1.5 py-0.5 rounded-full" style={{ backgroundColor: "rgba(139,92,246,0.1)", color: "#8B5CF6", fontFamily: "'JSans', sans-serif" }}>
                 {topics.length} topics
               </span>
-              <span className="text-xs px-1.5 py-0.5 rounded-full" style={{ backgroundColor: "rgba(251,191,36,0.1)", color: "#FBBF24", fontFamily: "'JetBrains Mono', monospace" }}>
+              <span className="text-xs px-1.5 py-0.5 rounded-full" style={{ backgroundColor: "rgba(251,191,36,0.1)", color: "#FBBF24", fontFamily: "'JSans', sans-serif" }}>
                 15 marks each
               </span>
               {paper === "paper3" && (
-                <span className="text-xs px-1.5 py-0.5 rounded-full" style={{ backgroundColor: "rgba(34,211,238,0.1)", color: "#22D3EE", fontFamily: "'JetBrains Mono', monospace" }}>
+                <span className="text-xs px-1.5 py-0.5 rounded-full" style={{ backgroundColor: "rgba(34,211,238,0.1)", color: "#22D3EE", fontFamily: "'JSans', sans-serif" }}>
                   HL only
                 </span>
               )}
@@ -1119,7 +1119,7 @@ export default function HistoryPage() {
                 <div key={topic} className="mb-6">
                   <span
                     className="block text-[#F87171] font-bold uppercase mb-4"
-                    style={{ fontSize: 11, fontFamily: "'JetBrains Mono', monospace", letterSpacing: 1 }}
+                    style={{ fontSize: 11, fontFamily: "'JSans', sans-serif", letterSpacing: 1 }}
                   >
                     {topic}
                   </span>

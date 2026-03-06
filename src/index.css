@@ -1,12 +1,21 @@
 @import "tailwindcss";
 @import "@heroui/styles";
 
+@font-face {
+  font-family: 'JSans';
+  src: url('/JSans.ttf') format('truetype');
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+
 html, body, #root {
   margin: 0;
   padding: 0;
   width: 100%;
   min-height: 100vh;
   background: #09090F;
+  font-family: 'JSans', sans-serif;
 }
 
 *, *::before, *::after {

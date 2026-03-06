@@ -62,7 +62,7 @@ export default function ShortAnswerQuestion({
         rows={5}
         fullWidth
         className="rounded-2xl bg-[#1A1A24] border border-[#252533] text-[#F0EEE8] text-sm leading-relaxed placeholder:text-[#55556A] focus:border-[#7C6FFF] p-3"
-        style={{ fontFamily: "'Inter', sans-serif", resize: "vertical" }}
+        style={{ fontFamily: "'JSans', sans-serif", resize: "vertical" }}
       />
 
       {!submitted ? (
@@ -96,7 +96,7 @@ export default function ShortAnswerQuestion({
             border: `1px solid ${scoreColor}44`,
           }}
         >
-          <span className="font-bold block mb-2" style={{ fontFamily: "'JetBrains Mono', monospace", color: scoreColor }}>
+          <span className="font-bold block mb-2" style={{ fontFamily: "'JSans', sans-serif", color: scoreColor }}>
             Score: {grade}/5
           </span>
           <ProgressBar

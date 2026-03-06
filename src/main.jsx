@@ -64,7 +64,7 @@ createRoot(document.getElementById('root')).render(
           colorText: "#F0EEE8",
           colorTextSecondary: "#8B8B9E",
           borderRadius: "0.5rem",
-          fontFamily: "'Inter', sans-serif",
+          fontFamily: "'JSans', sans-serif",
         },
       }}
     >

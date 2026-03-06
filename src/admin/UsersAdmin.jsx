@@ -44,10 +44,10 @@ function formatTime(ms) {
 function StatCard({ label, value, sub, color = "#7C6FFF" }) {
   return (
     <div className="bg-[#12121A] rounded-lg p-6 border border-[#252533] flex-1 min-w-[160px]">
-      <span className="text-[11px] text-[#55556A] tracking-wider block mb-1" style={{ fontFamily: "'JetBrains Mono', monospace" }}>
+      <span className="text-[11px] text-[#55556A] tracking-wider block mb-1" style={{ fontFamily: "'JSans', sans-serif" }}>
         {label}
       </span>
-      <span className="text-[28px] font-extrabold block" style={{ color, fontFamily: "'JetBrains Mono', monospace" }}>
+      <span className="text-[28px] font-extrabold block" style={{ color, fontFamily: "'JSans', sans-serif" }}>
         {value}
       </span>
       {sub && (
@@ -84,7 +84,7 @@ function UserDetail({ uid, displayName, onBack }) {
   return (
     <div className="flex flex-col gap-8">
       <div className="flex items-center gap-2">
-        <Button variant="outline" onPress={onBack} className="rounded-full border-[#252533] text-[#8B8B9E] bg-transparent min-w-[auto] h-8 px-3 text-xs" style={{ fontFamily: "'JetBrains Mono', monospace" }}>← All Users</Button>
+        <Button variant="outline" onPress={onBack} className="rounded-full border-[#252533] text-[#8B8B9E] bg-transparent min-w-[auto] h-8 px-3 text-xs" style={{ fontFamily: "'JSans', sans-serif" }}>← All Users</Button>
         <span className="text-lg font-bold text-[#F0EEE8]">{displayName}</span>
       </div>
 
@@ -125,7 +125,7 @@ function UserDetail({ uid, displayName, onBack }) {
 
           {/* Category Breakdown */}
           <div className="bg-[#12121A] rounded-lg p-6 border border-[#252533]">
-            <span className="text-[11px] text-[#55556A] tracking-wider block mb-4" style={{ fontFamily: "'JetBrains Mono', monospace" }}>
+            <span className="text-[11px] text-[#55556A] tracking-wider block mb-4" style={{ fontFamily: "'JSans', sans-serif" }}>
               PERFORMANCE BY TOPIC
             </span>
             <div className="flex flex-col gap-4">
@@ -143,16 +143,16 @@ function UserDetail({ uid, displayName, onBack }) {
                         </div>
                         <div className="flex items-center gap-2">
                           {cat.mcqAccuracy != null && (
-                            <span className="text-xs px-1.5 py-0.5 rounded-full" style={{ backgroundColor: color + "22", color, fontFamily: "'JetBrains Mono', monospace" }}>
+                            <span className="text-xs px-1.5 py-0.5 rounded-full" style={{ backgroundColor: color + "22", color, fontFamily: "'JSans', sans-serif" }}>
                               MCQ: {cat.mcqAccuracy}%
                             </span>
                           )}
                           {cat.writtenAvg != null && (
-                            <span className="text-xs px-1.5 py-0.5 rounded-full" style={{ backgroundColor: color + "22", color, fontFamily: "'JetBrains Mono', monospace" }}>
+                            <span className="text-xs px-1.5 py-0.5 rounded-full" style={{ backgroundColor: color + "22", color, fontFamily: "'JSans', sans-serif" }}>
                               Written: {cat.writtenAvg}%
                             </span>
                           )}
-                          <span className="text-[11px] text-[#55556A]" style={{ fontFamily: "'JetBrains Mono', monospace" }}>
+                          <span className="text-[11px] text-[#55556A]" style={{ fontFamily: "'JSans', sans-serif" }}>
                             {cat.totalAttempts} attempt{cat.totalAttempts !== 1 ? "s" : ""} · avg {formatTime(cat.avgTimeMs)}
                           </span>
                         </div>
@@ -170,7 +170,7 @@ function UserDetail({ uid, displayName, onBack }) {
           {/* Wrong Answers */}
           {wrongAnswers.length > 0 && (
             <div className="bg-[#12121A] rounded-lg p-6 border border-[#252533]">
-              <span className="text-[11px] text-[#55556A] tracking-wider block mb-4" style={{ fontFamily: "'JetBrains Mono', monospace" }}>
+              <span className="text-[11px] text-[#55556A] tracking-wider block mb-4" style={{ fontFamily: "'JSans', sans-serif" }}>
                 QUESTIONS TO REVIEW ({wrongAnswers.length})
               </span>
               <div className="flex flex-col gap-2">
@@ -182,7 +182,7 @@ function UserDetail({ uid, displayName, onBack }) {
                         style={{
                           backgroundColor: a.isCorrect === false ? "#F8717122" : "#FBBF2422",
                           color: a.isCorrect === false ? "#F87171" : "#FBBF24",
-                          fontFamily: "'JetBrains Mono', monospace",
+                          fontFamily: "'JSans', sans-serif",
                         }}
                       >
                         {a.questionType === "mcq" ? "MCQ — Wrong" : `${a.score}/${a.maxMarks}`}
@@ -192,7 +192,7 @@ function UserDetail({ uid, displayName, onBack }) {
                         style={{
                           backgroundColor: (CAT_COLORS[a.category] || "#7C6FFF") + "22",
                           color: CAT_COLORS[a.category] || "#7C6FFF",
-                          fontFamily: "'JetBrains Mono', monospace",
+                          fontFamily: "'JSans', sans-serif",
                         }}
                       >
                         {a.category}
@@ -207,7 +207,7 @@ function UserDetail({ uid, displayName, onBack }) {
 
           {/* Recent Activity */}
           <div className="bg-[#12121A] rounded-lg p-6 border border-[#252533]">
-            <span className="text-[11px] text-[#55556A] tracking-wider block mb-4" style={{ fontFamily: "'JetBrains Mono', monospace" }}>
+            <span className="text-[11px] text-[#55556A] tracking-wider block mb-4" style={{ fontFamily: "'JSans', sans-serif" }}>
               RECENT ACTIVITY
             </span>
             <div className="flex flex-col gap-1">
@@ -225,20 +225,20 @@ function UserDetail({ uid, displayName, onBack }) {
                     />
                     <span
                       className="text-xs px-1.5 py-0.5 rounded-full shrink-0"
-                      style={{ backgroundColor: color + "22", color, fontFamily: "'JetBrains Mono', monospace" }}
+                      style={{ backgroundColor: color + "22", color, fontFamily: "'JSans', sans-serif" }}
                     >
                       {a.questionType.toUpperCase()}
                     </span>
                     <span className="text-xs text-[#8B8B9E] flex-1 truncate">
                       {a.category} — {a.questionId}
                     </span>
-                    <span className="text-[11px] text-[#55556A] shrink-0" style={{ fontFamily: "'JetBrains Mono', monospace" }}>
+                    <span className="text-[11px] text-[#55556A] shrink-0" style={{ fontFamily: "'JSans', sans-serif" }}>
                       {a.questionType === "mcq"
                         ? (a.isCorrect ? "Correct" : "Wrong")
                         : (a.score != null ? `${a.score}/${a.maxMarks}` : "—")}
                     </span>
                     {a.timeSpentMs > 0 && (
-                      <span className="text-[10px] text-[#55556A] shrink-0" style={{ fontFamily: "'JetBrains Mono', monospace" }}>
+                      <span className="text-[10px] text-[#55556A] shrink-0" style={{ fontFamily: "'JSans', sans-serif" }}>
                         {formatTime(a.timeSpentMs)}
                       </span>
                     )}
@@ -423,7 +423,7 @@ export default function UsersAdmin() {
 
         {/* Users Table */}
         <div className="bg-[#12121A] rounded-lg p-6 border border-[#252533] overflow-auto">
-          <span className="text-[11px] text-[#55556A] tracking-wider block mb-4" style={{ fontFamily: "'JetBrains Mono', monospace" }}>
+          <span className="text-[11px] text-[#55556A] tracking-wider block mb-4" style={{ fontFamily: "'JSans', sans-serif" }}>
             ALL USERS ({totalUsers})
           </span>
           {usersData.length === 0 ? (
@@ -433,16 +433,16 @@ export default function UsersAdmin() {
               <Table.ScrollContainer>
                 <Table.Content aria-label="All users" className="min-w-[1100px]" style={{ borderCollapse: "collapse" }}>
                   <Table.Header>
-                    <Table.Column isRowHeader className="text-[#55556A] text-[11px] tracking-wider" style={{ fontFamily: "'JetBrains Mono', monospace", padding: "8px 12px", borderBottom: "1px solid #252533", background: "transparent" }}>NAME</Table.Column>
-                    <Table.Column className="text-[#55556A] text-[11px] tracking-wider" style={{ fontFamily: "'JetBrains Mono', monospace", padding: "8px 12px", borderBottom: "1px solid #252533", background: "transparent" }}>USERNAME</Table.Column>
-                    <Table.Column className="text-[#55556A] text-[11px] tracking-wider" style={{ fontFamily: "'JetBrains Mono', monospace", padding: "8px 12px", borderBottom: "1px solid #252533", background: "transparent" }}>EMAIL</Table.Column>
-                    <Table.Column className="text-[#55556A] text-[11px] tracking-wider" style={{ fontFamily: "'JetBrains Mono', monospace", padding: "8px 12px", borderBottom: "1px solid #252533", background: "transparent" }}>STATUS</Table.Column>
-                    <Table.Column className="text-[#55556A] text-[11px] tracking-wider text-right" style={{ fontFamily: "'JetBrains Mono', monospace", padding: "8px 12px", borderBottom: "1px solid #252533", background: "transparent" }}>ATTEMPTS</Table.Column>
-                    <Table.Column className="text-[#55556A] text-[11px] tracking-wider text-right" style={{ fontFamily: "'JetBrains Mono', monospace", padding: "8px 12px", borderBottom: "1px solid #252533", background: "transparent" }}>MCQ %</Table.Column>
-                    <Table.Column className="text-[#55556A] text-[11px] tracking-wider text-right" style={{ fontFamily: "'JetBrains Mono', monospace", padding: "8px 12px", borderBottom: "1px solid #252533", background: "transparent" }}>WRITTEN %</Table.Column>
-                    <Table.Column className="text-[#55556A] text-[11px] tracking-wider text-right" style={{ fontFamily: "'JetBrains Mono', monospace", padding: "8px 12px", borderBottom: "1px solid #252533", background: "transparent" }}>TIME</Table.Column>
-                    <Table.Column className="text-[#55556A] text-[11px] tracking-wider text-right" style={{ fontFamily: "'JetBrains Mono', monospace", padding: "8px 12px", borderBottom: "1px solid #252533", background: "transparent" }}>LAST ACTIVE</Table.Column>
-                    <Table.Column className="text-[#55556A] text-[11px] tracking-wider" style={{ fontFamily: "'JetBrains Mono', monospace", padding: "8px 12px", borderBottom: "1px solid #252533", background: "transparent" }}>ACTIONS</Table.Column>
+                    <Table.Column isRowHeader className="text-[#55556A] text-[11px] tracking-wider" style={{ fontFamily: "'JSans', sans-serif", padding: "8px 12px", borderBottom: "1px solid #252533", background: "transparent" }}>NAME</Table.Column>
+                    <Table.Column className="text-[#55556A] text-[11px] tracking-wider" style={{ fontFamily: "'JSans', sans-serif", padding: "8px 12px", borderBottom: "1px solid #252533", background: "transparent" }}>USERNAME</Table.Column>
+                    <Table.Column className="text-[#55556A] text-[11px] tracking-wider" style={{ fontFamily: "'JSans', sans-serif", padding: "8px 12px", borderBottom: "1px solid #252533", background: "transparent" }}>EMAIL</Table.Column>
+                    <Table.Column className="text-[#55556A] text-[11px] tracking-wider" style={{ fontFamily: "'JSans', sans-serif", padding: "8px 12px", borderBottom: "1px solid #252533", background: "transparent" }}>STATUS</Table.Column>
+                    <Table.Column className="text-[#55556A] text-[11px] tracking-wider text-right" style={{ fontFamily: "'JSans', sans-serif", padding: "8px 12px", borderBottom: "1px solid #252533", background: "transparent" }}>ATTEMPTS</Table.Column>
+                    <Table.Column className="text-[#55556A] text-[11px] tracking-wider text-right" style={{ fontFamily: "'JSans', sans-serif", padding: "8px 12px", borderBottom: "1px solid #252533", background: "transparent" }}>MCQ %</Table.Column>
+                    <Table.Column className="text-[#55556A] text-[11px] tracking-wider text-right" style={{ fontFamily: "'JSans', sans-serif", padding: "8px 12px", borderBottom: "1px solid #252533", background: "transparent" }}>WRITTEN %</Table.Column>
+                    <Table.Column className="text-[#55556A] text-[11px] tracking-wider text-right" style={{ fontFamily: "'JSans', sans-serif", padding: "8px 12px", borderBottom: "1px solid #252533", background: "transparent" }}>TIME</Table.Column>
+                    <Table.Column className="text-[#55556A] text-[11px] tracking-wider text-right" style={{ fontFamily: "'JSans', sans-serif", padding: "8px 12px", borderBottom: "1px solid #252533", background: "transparent" }}>LAST ACTIVE</Table.Column>
+                    <Table.Column className="text-[#55556A] text-[11px] tracking-wider" style={{ fontFamily: "'JSans', sans-serif", padding: "8px 12px", borderBottom: "1px solid #252533", background: "transparent" }}>ACTIONS</Table.Column>
                   </Table.Header>
                   <Table.Body>
                     {usersData.map((u) => {
@@ -463,7 +463,7 @@ export default function UsersAdmin() {
                             <span className="font-semibold text-[#F0EEE8] text-[13px]">{u.displayName || "Student"}</span>
                           </Table.Cell>
                           <Table.Cell style={cellStyle} onClick={selectUser}>
-                            <span className="text-[#8B8B9E] text-xs" style={{ fontFamily: "'JetBrains Mono', monospace" }}>{u.username || "---"}</span>
+                            <span className="text-[#8B8B9E] text-xs" style={{ fontFamily: "'JSans', sans-serif" }}>{u.username || "---"}</span>
                           </Table.Cell>
                           <Table.Cell style={cellStyle} onClick={selectUser}>
                             <span className="text-[#8B8B9E] text-xs truncate">{u.email || "—"}</span>
@@ -474,19 +474,19 @@ export default function UsersAdmin() {
                               style={{
                                 backgroundColor: statusColor + "22",
                                 color: statusColor,
-                                fontFamily: "'JetBrains Mono', monospace",
+                                fontFamily: "'JSans', sans-serif",
                               }}
                             >
                               {u.accountStatus || "active"}
                             </span>
                           </Table.Cell>
                           <Table.Cell style={{ ...cellStyle, textAlign: "right" }} onClick={selectUser}>
-                            <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 13 }}>{u.totalAttempts}</span>
+                            <span style={{ fontFamily: "'JSans', sans-serif", fontSize: 13 }}>{u.totalAttempts}</span>
                           </Table.Cell>
                           <Table.Cell style={{ ...cellStyle, textAlign: "right" }} onClick={selectUser}>
                             <span
                               style={{
-                                fontFamily: "'JetBrains Mono', monospace",
+                                fontFamily: "'JSans', sans-serif",
                                 fontSize: 13,
                                 color: mcqAcc == null ? "#55556A" : mcqAcc >= 75 ? "#34D399" : mcqAcc >= 40 ? "#FBBF24" : "#F87171",
                               }}
@@ -497,7 +497,7 @@ export default function UsersAdmin() {
                           <Table.Cell style={{ ...cellStyle, textAlign: "right" }} onClick={selectUser}>
                             <span
                               style={{
-                                fontFamily: "'JetBrains Mono', monospace",
+                                fontFamily: "'JSans', sans-serif",
                                 fontSize: 13,
                                 color: writtenAvg == null ? "#55556A" : writtenAvg >= 75 ? "#34D399" : writtenAvg >= 40 ? "#FBBF24" : "#F87171",
                               }}
@@ -506,33 +506,33 @@ export default function UsersAdmin() {
                             </span>
                           </Table.Cell>
                           <Table.Cell style={{ ...cellStyle, textAlign: "right" }} onClick={selectUser}>
-                            <span className="text-[#8B8B9E] text-xs" style={{ fontFamily: "'JetBrains Mono', monospace" }}>
+                            <span className="text-[#8B8B9E] text-xs" style={{ fontFamily: "'JSans', sans-serif" }}>
                               {formatTime(u.totalTimeMs)}
                             </span>
                           </Table.Cell>
                           <Table.Cell style={{ ...cellStyle, textAlign: "right" }} onClick={selectUser}>
-                            <span className="text-[#8B8B9E] text-xs" style={{ fontFamily: "'JetBrains Mono', monospace" }}>{lastActive}</span>
+                            <span className="text-[#8B8B9E] text-xs" style={{ fontFamily: "'JSans', sans-serif" }}>{lastActive}</span>
                           </Table.Cell>
                           <Table.Cell style={{ padding: "10px 12px", borderBottom: "1px solid #1A1A24" }}>
                             <div className="flex gap-1 flex-nowrap">
                               {canBanUnban(role) && (
                                 <>
                                   {(u.accountStatus || "active") !== "banned" ? (
-                                    <Button size="sm" className="rounded-full" onPress={() => handleBan(u.uid)} style={{backgroundColor: "#F87171", color: "#fff", border: "none", fontFamily: "'JetBrains Mono', monospace", fontSize: 10,}}>Ban</Button>
+                                    <Button size="sm" className="rounded-full" onPress={() => handleBan(u.uid)} style={{backgroundColor: "#F87171", color: "#fff", border: "none", fontFamily: "'JSans', sans-serif", fontSize: 10,}}>Ban</Button>
                                   ) : (
-                                    <Button size="sm" className="rounded-full" onPress={() => handleUnban(u.uid)} style={{backgroundColor: "#34D399", color: "#fff", border: "none", fontFamily: "'JetBrains Mono', monospace", fontSize: 10,}}>Unban</Button>
+                                    <Button size="sm" className="rounded-full" onPress={() => handleUnban(u.uid)} style={{backgroundColor: "#34D399", color: "#fff", border: "none", fontFamily: "'JSans', sans-serif", fontSize: 10,}}>Unban</Button>
                                   )}
-                                  <Button size="sm" className="rounded-full" onPress={() => handleForceSignOut(u.uid)} style={{backgroundColor: "#FBBF24", color: "#000", border: "none", fontFamily: "'JetBrains Mono', monospace", fontSize: 10,}}>Sign Out</Button>
+                                  <Button size="sm" className="rounded-full" onPress={() => handleForceSignOut(u.uid)} style={{backgroundColor: "#FBBF24", color: "#000", border: "none", fontFamily: "'JSans', sans-serif", fontSize: 10,}}>Sign Out</Button>
                                 </>
                               )}
                               {canEdit(role) && (
-                                <Button size="sm" className="rounded-full" onPress={() => openEditFn(u)} style={{backgroundColor: "#7C6FFF", color: "#fff", border: "none", fontFamily: "'JetBrains Mono', monospace", fontSize: 10,}}>Edit</Button>
+                                <Button size="sm" className="rounded-full" onPress={() => openEditFn(u)} style={{backgroundColor: "#7C6FFF", color: "#fff", border: "none", fontFamily: "'JSans', sans-serif", fontSize: 10,}}>Edit</Button>
                               )}
                               {canChangeRole(role) && (
-                                <Button size="sm" className="rounded-full" onPress={() => openRoleChange(u)} style={{backgroundColor: "#FB923C", color: "#fff", border: "none", fontFamily: "'JetBrains Mono', monospace", fontSize: 10,}}>Role</Button>
+                                <Button size="sm" className="rounded-full" onPress={() => openRoleChange(u)} style={{backgroundColor: "#FB923C", color: "#fff", border: "none", fontFamily: "'JSans', sans-serif", fontSize: 10,}}>Role</Button>
                               )}
                               {role === "viewer" && (
-                                <span className="text-[10px] text-[#55556A]" style={{ fontFamily: "'JetBrains Mono', monospace" }}>View only</span>
+                                <span className="text-[10px] text-[#55556A]" style={{ fontFamily: "'JSans', sans-serif" }}>View only</span>
                               )}
                             </div>
                           </Table.Cell>
@@ -558,29 +558,29 @@ export default function UsersAdmin() {
           <Modal.Dialog className="sm:max-w-md" style={{ backgroundColor: "#12121A", border: "1px solid #252533" }}>
             <Modal.CloseTrigger />
             <Modal.Header style={{ borderBottom: "1px solid #252533" }}>
-              <Modal.Heading style={{ color: "#F0EEE8", fontWeight: 700, fontFamily: "'JetBrains Mono', monospace" }}>
+              <Modal.Heading style={{ color: "#F0EEE8", fontWeight: 700, fontFamily: "'JSans', sans-serif" }}>
                 Edit User Profile
               </Modal.Heading>
             </Modal.Header>
             <Modal.Body>
               <div className="flex flex-col gap-4">
                 <TextField className="w-full" name="firstName" onChange={(val) => setEditForm((f) => ({ ...f, firstName: val }))}>
-                  <Label className="text-[#8B8B9E] text-[11px] tracking-wider mb-1" style={{ fontFamily: "'JetBrains Mono', monospace" }}>First Name</Label>
-                  <Input value={editForm.firstName} className="bg-[#1A1A24] border border-[#252533] text-[#F0EEE8] rounded-full" style={{ fontFamily: "'JetBrains Mono', monospace" }} />
+                  <Label className="text-[#8B8B9E] text-[11px] tracking-wider mb-1" style={{ fontFamily: "'JSans', sans-serif" }}>First Name</Label>
+                  <Input value={editForm.firstName} className="bg-[#1A1A24] border border-[#252533] text-[#F0EEE8] rounded-full" style={{ fontFamily: "'JSans', sans-serif" }} />
                 </TextField>
                 <TextField className="w-full" name="lastName" onChange={(val) => setEditForm((f) => ({ ...f, lastName: val }))}>
-                  <Label className="text-[#8B8B9E] text-[11px] tracking-wider mb-1" style={{ fontFamily: "'JetBrains Mono', monospace" }}>Last Name</Label>
-                  <Input value={editForm.lastName} className="bg-[#1A1A24] border border-[#252533] text-[#F0EEE8] rounded-full" style={{ fontFamily: "'JetBrains Mono', monospace" }} />
+                  <Label className="text-[#8B8B9E] text-[11px] tracking-wider mb-1" style={{ fontFamily: "'JSans', sans-serif" }}>Last Name</Label>
+                  <Input value={editForm.lastName} className="bg-[#1A1A24] border border-[#252533] text-[#F0EEE8] rounded-full" style={{ fontFamily: "'JSans', sans-serif" }} />
                 </TextField>
                 <TextField className="w-full" name="username" onChange={(val) => setEditForm((f) => ({ ...f, username: val }))}>
-                  <Label className="text-[#8B8B9E] text-[11px] tracking-wider mb-1" style={{ fontFamily: "'JetBrains Mono', monospace" }}>Username</Label>
-                  <Input value={editForm.username} className="bg-[#1A1A24] border border-[#252533] text-[#F0EEE8] rounded-full" style={{ fontFamily: "'JetBrains Mono', monospace" }} />
+                  <Label className="text-[#8B8B9E] text-[11px] tracking-wider mb-1" style={{ fontFamily: "'JSans', sans-serif" }}>Username</Label>
+                  <Input value={editForm.username} className="bg-[#1A1A24] border border-[#252533] text-[#F0EEE8] rounded-full" style={{ fontFamily: "'JSans', sans-serif" }} />
                 </TextField>
               </div>
             </Modal.Body>
             <Modal.Footer>
-              <Button variant="outline" className="rounded-full border-[#252533] text-[#8B8B9E] bg-transparent" onPress={() => setEditModalOpened(false)} style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 12 }}>Cancel</Button>
-              <Button className="rounded-full bg-[#7C6FFF] text-[#F0EEE8] border-none" onPress={handleEditSubmit} style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 12 }}>Save Changes</Button>
+              <Button variant="outline" className="rounded-full border-[#252533] text-[#8B8B9E] bg-transparent" onPress={() => setEditModalOpened(false)} style={{ fontFamily: "'JSans', sans-serif", fontSize: 12 }}>Cancel</Button>
+              <Button className="rounded-full bg-[#7C6FFF] text-[#F0EEE8] border-none" onPress={handleEditSubmit} style={{ fontFamily: "'JSans', sans-serif", fontSize: 12 }}>Save Changes</Button>
             </Modal.Footer>
           </Modal.Dialog>
         </Modal.Container>
@@ -597,7 +597,7 @@ export default function UsersAdmin() {
           <Modal.Dialog className="sm:max-w-md" style={{ backgroundColor: "#12121A", border: "1px solid #252533" }}>
             <Modal.CloseTrigger />
             <Modal.Header style={{ borderBottom: "1px solid #252533" }}>
-              <Modal.Heading style={{ color: "#F0EEE8", fontWeight: 700, fontFamily: "'JetBrains Mono', monospace", fontSize: 14 }}>
+              <Modal.Heading style={{ color: "#F0EEE8", fontWeight: 700, fontFamily: "'JSans', sans-serif", fontSize: 14 }}>
                 {`Change Role — ${roleTarget?.displayName || "User"}`}
               </Modal.Heading>
             </Modal.Header>
@@ -608,15 +608,15 @@ export default function UsersAdmin() {
                 value={selectedRole}
                 onChange={(val) => setSelectedRole(val)}
               >
-                <Label className="text-[#8B8B9E] text-[11px] tracking-wider mb-1" style={{ fontFamily: "'JetBrains Mono', monospace" }}>Select Role</Label>
-                <Select.Trigger className="bg-[#1A1A24] border border-[#252533] text-[#F0EEE8] rounded-full" style={{ fontFamily: "'JetBrains Mono', monospace" }}>
+                <Label className="text-[#8B8B9E] text-[11px] tracking-wider mb-1" style={{ fontFamily: "'JSans', sans-serif" }}>Select Role</Label>
+                <Select.Trigger className="bg-[#1A1A24] border border-[#252533] text-[#F0EEE8] rounded-full" style={{ fontFamily: "'JSans', sans-serif" }}>
                   <Select.Value />
                   <Select.Indicator />
                 </Select.Trigger>
                 <Select.Popover className="bg-[#1A1A24] border border-[#252533]">
                   <ListBox>
                     {ROLE_OPTIONS.map((opt) => (
-                      <ListBox.Item key={opt.value} id={opt.value} textValue={opt.label} className="text-[#F0EEE8] text-xs" style={{ fontFamily: "'JetBrains Mono', monospace" }}>
+                      <ListBox.Item key={opt.value} id={opt.value} textValue={opt.label} className="text-[#F0EEE8] text-xs" style={{ fontFamily: "'JSans', sans-serif" }}>
                         {opt.label}
                         <ListBox.ItemIndicator />
                       </ListBox.Item>
@@ -626,13 +626,13 @@ export default function UsersAdmin() {
               </Select>
             </Modal.Body>
             <Modal.Footer>
-              <Button variant="outline" className="rounded-full border-[#252533] text-[#8B8B9E] bg-transparent" onPress={() => setRoleModalOpened(false)} style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 12 }}>Cancel</Button>
+              <Button variant="outline" className="rounded-full border-[#252533] text-[#8B8B9E] bg-transparent" onPress={() => setRoleModalOpened(false)} style={{ fontFamily: "'JSans', sans-serif", fontSize: 12 }}>Cancel</Button>
               <Button className="rounded-full border-none" onPress={handleRoleSubmit} isDisabled={!selectedRole}
                 style={{
                   backgroundColor: selectedRole ? "#FB923C" : "#252533",
                   color: selectedRole ? "#F0EEE8" : "#55556A",
                   border: "none",
-                  fontFamily: "'JetBrains Mono', monospace",
+                  fontFamily: "'JSans', sans-serif",
                   fontSize: 12,
                 }}
               >

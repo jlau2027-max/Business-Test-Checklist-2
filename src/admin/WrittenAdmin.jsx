@@ -451,7 +451,7 @@ export default function WrittenAdmin() {
                           <span
                             className="text-sm text-[#8B8B9E]"
                             style={{
-                              fontFamily: "'JetBrains Mono', monospace",
+                              fontFamily: "'JSans', sans-serif",
                             }}
                           >
                             {q.label || "-"}
@@ -619,7 +619,7 @@ export default function WrittenAdmin() {
                   >
                     <Label
                       className="text-[#8B8B9E] text-[11px] tracking-wider mb-1"
-                      style={{ fontFamily: "'JetBrains Mono', monospace" }}
+                      style={{ fontFamily: "'JSans', sans-serif" }}
                     >
                       Marks
                     </Label>

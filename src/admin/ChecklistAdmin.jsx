@@ -477,7 +477,7 @@ export default function ChecklistAdmin() {
           <Modal.Dialog className="sm:max-w-md" style={{ backgroundColor: "#12121A", border: "1px solid #252533" }}>
             <Modal.CloseTrigger />
             <Modal.Header style={{ borderBottom: "1px solid #252533" }}>
-              <Modal.Heading style={{ color: "#F0EEE8", fontWeight: 700, fontFamily: "'JetBrains Mono', monospace" }}>{editingSection ? "Edit Section" : "New Section"}</Modal.Heading>
+              <Modal.Heading style={{ color: "#F0EEE8", fontWeight: 700, fontFamily: "'JSans', sans-serif" }}>{editingSection ? "Edit Section" : "New Section"}</Modal.Heading>
             </Modal.Header>
             <Modal.Body>
               <div className="flex flex-col gap-4">
@@ -491,21 +491,21 @@ export default function ChecklistAdmin() {
                 )}
 
                 <TextField className="w-full" name="title" onChange={(val) => updateSectionField("title", val)}>
-                  <Label className="text-[#8B8B9E] text-[11px] tracking-wider mb-1" style={{ fontFamily: "'JetBrains Mono', monospace" }}>Title</Label>
-                  <Input value={sectionForm.title} placeholder="Enter section title..." className="bg-[#1A1A24] border border-[#252533] text-[#F0EEE8] rounded-full" style={{ fontFamily: "'JetBrains Mono', monospace" }} />
+                  <Label className="text-[#8B8B9E] text-[11px] tracking-wider mb-1" style={{ fontFamily: "'JSans', sans-serif" }}>Title</Label>
+                  <Input value={sectionForm.title} placeholder="Enter section title..." className="bg-[#1A1A24] border border-[#252533] text-[#F0EEE8] rounded-full" style={{ fontFamily: "'JSans', sans-serif" }} />
                 </TextField>
 
                 <div className="flex items-end gap-3">
                   <TextField className="flex-1" name="color" onChange={(val) => updateSectionField("color", val)}>
-                    <Label className="text-[#8B8B9E] text-[11px] tracking-wider mb-1" style={{ fontFamily: "'JetBrains Mono', monospace" }}>Color (hex)</Label>
-                    <Input value={sectionForm.color} placeholder="#7C6FFF" className="bg-[#1A1A24] border border-[#252533] text-[#F0EEE8] rounded-full" style={{ fontFamily: "'JetBrains Mono', monospace" }} />
+                    <Label className="text-[#8B8B9E] text-[11px] tracking-wider mb-1" style={{ fontFamily: "'JSans', sans-serif" }}>Color (hex)</Label>
+                    <Input value={sectionForm.color} placeholder="#7C6FFF" className="bg-[#1A1A24] border border-[#252533] text-[#F0EEE8] rounded-full" style={{ fontFamily: "'JSans', sans-serif" }} />
                   </TextField>
                   <div className="w-9 h-9 rounded-lg border border-[#252533] shrink-0" style={{ backgroundColor: sectionForm.color || "#8B8B9E" }} />
                 </div>
 
                 <TextField className="w-full" name="sort_order" onChange={(val) => updateSectionField("sort_order", val)}>
-                  <Label className="text-[#8B8B9E] text-[11px] tracking-wider mb-1" style={{ fontFamily: "'JetBrains Mono', monospace" }}>Sort Order</Label>
-                  <Input type="number" value={String(sectionForm.sort_order)} placeholder="0" className="bg-[#1A1A24] border border-[#252533] text-[#F0EEE8] rounded-full" style={{ fontFamily: "'JetBrains Mono', monospace" }} />
+                  <Label className="text-[#8B8B9E] text-[11px] tracking-wider mb-1" style={{ fontFamily: "'JSans', sans-serif" }}>Sort Order</Label>
+                  <Input type="number" value={String(sectionForm.sort_order)} placeholder="0" className="bg-[#1A1A24] border border-[#252533] text-[#F0EEE8] rounded-full" style={{ fontFamily: "'JSans', sans-serif" }} />
                 </TextField>
               </div>
             </Modal.Body>
@@ -526,7 +526,7 @@ export default function ChecklistAdmin() {
           <Modal.Dialog className="sm:max-w-md" style={{ backgroundColor: "#12121A", border: "1px solid #252533" }}>
             <Modal.CloseTrigger />
             <Modal.Header style={{ borderBottom: "1px solid #252533" }}>
-              <Modal.Heading style={{ color: "#F0EEE8", fontWeight: 700, fontFamily: "'JetBrains Mono', monospace" }}>{editingItem ? "Edit Item" : "New Item"}</Modal.Heading>
+              <Modal.Heading style={{ color: "#F0EEE8", fontWeight: 700, fontFamily: "'JSans', sans-serif" }}>{editingItem ? "Edit Item" : "New Item"}</Modal.Heading>
             </Modal.Header>
             <Modal.Body>
               <div className="flex flex-col gap-4">
@@ -540,13 +540,13 @@ export default function ChecklistAdmin() {
                 )}
 
                 <div>
-                  <label className="text-[#8B8B9E] text-xs font-medium mb-1 block" style={{ fontFamily: "'JetBrains Mono', monospace" }}>Text</label>
-                  <TextArea value={itemForm.text} onChange={(e) => updateItemField("text", e.target.value)} placeholder="Enter checklist item text..." className="w-full bg-[#1A1A24] border border-[#252533] text-[#F0EEE8] rounded-2xl min-h-[80px]" style={{ fontFamily: "'JetBrains Mono', monospace" }} />
+                  <label className="text-[#8B8B9E] text-xs font-medium mb-1 block" style={{ fontFamily: "'JSans', sans-serif" }}>Text</label>
+                  <TextArea value={itemForm.text} onChange={(e) => updateItemField("text", e.target.value)} placeholder="Enter checklist item text..." className="w-full bg-[#1A1A24] border border-[#252533] text-[#F0EEE8] rounded-2xl min-h-[80px]" style={{ fontFamily: "'JSans', sans-serif" }} />
                 </div>
 
                 <TextField className="w-full" name="sort_order" onChange={(val) => updateItemField("sort_order", val)}>
-                  <Label className="text-[#8B8B9E] text-[11px] tracking-wider mb-1" style={{ fontFamily: "'JetBrains Mono', monospace" }}>Sort Order</Label>
-                  <Input type="number" value={String(itemForm.sort_order)} placeholder="0" className="bg-[#1A1A24] border border-[#252533] text-[#F0EEE8] rounded-full" style={{ fontFamily: "'JetBrains Mono', monospace" }} />
+                  <Label className="text-[#8B8B9E] text-[11px] tracking-wider mb-1" style={{ fontFamily: "'JSans', sans-serif" }}>Sort Order</Label>
+                  <Input type="number" value={String(itemForm.sort_order)} placeholder="0" className="bg-[#1A1A24] border border-[#252533] text-[#F0EEE8] rounded-full" style={{ fontFamily: "'JSans', sans-serif" }} />
                 </TextField>
               </div>
             </Modal.Body>

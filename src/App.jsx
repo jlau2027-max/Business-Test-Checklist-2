@@ -329,13 +329,13 @@ function ChecklistView() {
       {/* Progress card */}
       <Surface className="rounded-3xl p-6 mb-6">
         <div className="flex items-center justify-between mb-1">
-          <span className="text-sm text-[#8B8B9E]" style={{fontFamily:"'JetBrains Mono', monospace"}}>Overall Progress</span>
+          <span className="text-sm text-[#8B8B9E]" style={{fontFamily:"'JSans', sans-serif"}}>Overall Progress</span>
           <span className="text-2xl font-extrabold" style={{color: progColor}}>{progress}%</span>
         </div>
         <ProgressBar value={progress} color={progColor} animated />
         <div className="flex items-center justify-between mt-3">
           <span className="text-xs text-[#55556A]">{checkedCount} of {totalItems} topics covered</span>
-          <span className="text-xs px-2 py-0.5 rounded-full" style={{fontFamily:"'JetBrains Mono', monospace", backgroundColor:"#34D39922", color:"#34D399"}}>auto-saved</span>
+          <span className="text-xs px-2 py-0.5 rounded-full" style={{fontFamily:"'JSans', sans-serif", backgroundColor:"#34D39922", color:"#34D399"}}>auto-saved</span>
         </div>
       </Surface>
 
@@ -354,7 +354,7 @@ function ChecklistView() {
             <Accordion.Item key={section.id} id={section.id} className="bg-[#12121A] rounded-2xl overflow-hidden">
               <Accordion.Heading>
                 <Accordion.Trigger className="w-full flex items-center gap-2 px-5 py-3.5 hover:bg-[#1A1A24] transition-colors">
-                  <span className="text-xs px-2 py-0.5 rounded-full font-bold" style={{backgroundColor: section.color + "22", color: section.color, fontFamily: "'JetBrains Mono', monospace"}}>{sectionChecked}/{section.items.length}</span>
+                  <span className="text-xs px-2 py-0.5 rounded-full font-bold" style={{backgroundColor: section.color + "22", color: section.color, fontFamily: "'JSans', sans-serif"}}>{sectionChecked}/{section.items.length}</span>
                   <span className="text-sm font-semibold" style={{color: allDone ? section.color : "#F0EEE8"}}>{allDone && "✓ "}{section.title}</span>
                   <Accordion.Indicator className="ml-auto shrink-0 text-[#55556A]">
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polyline points="6 9 12 15 18 9"/></svg>
@@ -422,7 +422,7 @@ function FlashCard({card, catColor}) {
             textAlign: "center",
           }}
         >
-          <span className="block text-[11px] uppercase text-[#55556A] mb-4" style={{fontFamily:"'JetBrains Mono', monospace", letterSpacing:2}}>TERM</span>
+          <span className="block text-[11px] uppercase text-[#55556A] mb-4" style={{fontFamily:"'JSans', sans-serif", letterSpacing:2}}>TERM</span>
           <span className="block text-[20px] font-bold text-[#F0EEE8]" style={{lineHeight:1.3}}>{card.term}</span>
           <span className="block text-[11px] text-[#55556A] mt-6">tap to reveal</span>
         </div>
@@ -436,12 +436,12 @@ function FlashCard({card, catColor}) {
             overflowY: "auto",
           }}
         >
-          <span className="block text-[11px] uppercase text-[#55556A] mb-2" style={{fontFamily:"'JetBrains Mono', monospace", letterSpacing:2}}>DEFINITION</span>
+          <span className="block text-[11px] uppercase text-[#55556A] mb-2" style={{fontFamily:"'JSans', sans-serif", letterSpacing:2}}>DEFINITION</span>
           <span className="block text-[13px] text-[#C8C4BC]" style={{lineHeight:1.65}}>{card.def}</span>
           {card.formula && (
             <div className="mt-2 p-2" style={{ background: "#0D0D14", borderRadius: 8, borderLeft: `3px solid ${catColor}` }}>
-              <span className="block text-[10px] text-current mb-1" style={{fontFamily:"'JetBrains Mono', monospace", letterSpacing:1, color:catColor}}>FORMULA</span>
-              <span className="block text-[12px] text-[#A9E6FF]" style={{fontFamily:"'JetBrains Mono', monospace"}}>{card.formula}</span>
+              <span className="block text-[10px] text-current mb-1" style={{fontFamily:"'JSans', sans-serif", letterSpacing:1, color:catColor}}>FORMULA</span>
+              <span className="block text-[12px] text-[#A9E6FF]" style={{fontFamily:"'JSans', sans-serif"}}>{card.formula}</span>
             </div>
           )}
         </div>
@@ -468,7 +468,7 @@ function FlashcardsView() {
             onPress={()=>{ setActiveCat(cat.id); saveLS("fc_cat", cat.id); setCardIdx(0); }}
             className="rounded-full text-xs"
             style={{
-              fontFamily: "'JetBrains Mono', monospace",
+              fontFamily: "'JSans', sans-serif",
               backgroundColor: activeCat===cat.id ? cat.color : "#1A1A24",
               color: activeCat===cat.id ? "#fff" : "#8B8B9E",
               border: `1px solid ${activeCat===cat.id ? cat.color : "#252533"}`,
@@ -481,7 +481,7 @@ function FlashcardsView() {
 
       {/* Progress */}
       <div className="flex items-center justify-between mb-4">
-        <span className="text-xs text-[#55556A]" style={{fontFamily:"'JetBrains Mono', monospace"}}>{cardIdx+1} / {currentCat.cards.length} — {currentCat.label}</span>
+        <span className="text-xs text-[#55556A]" style={{fontFamily:"'JSans', sans-serif"}}>{cardIdx+1} / {currentCat.cards.length} — {currentCat.label}</span>
         <div style={{background:"#1A1A24",borderRadius:99,height:4,width:140,overflow:"hidden"}}>
           <div style={{width:`${((cardIdx+1)/currentCat.cards.length)*100}%`,height:"100%",background:currentCat.color,borderRadius:99,transition:"width 0.3s"}}/>
         </div>
@@ -530,9 +530,9 @@ function MCQItem({q, displayNum}) {
     <Surface variant="secondary" className="rounded-2xl mb-2 overflow-hidden" style={{ transition:"all 0.2s" }}>
       <div style={{borderLeft:`4px solid ${color}`,padding:"18px 20px"}}>
         <div className="flex gap-2 mb-2 flex-wrap">
-          <span className="text-xs px-2 py-0.5 rounded-full" style={{fontFamily:"'JetBrains Mono', monospace",backgroundColor:color,color:"#fff"}}>MCQ</span>
-          <span className="text-xs px-2 py-0.5 rounded-full" style={{fontFamily:"'JetBrains Mono', monospace",backgroundColor:color+"22",color:color}}>{ q.cat}</span>
-          <span className="text-xs px-2 py-0.5 rounded-full" style={{fontFamily:"'JetBrains Mono', monospace",backgroundColor:"#1E1E2A",color:"#8B8B9E"}}>{q.difficulty}</span>
+          <span className="text-xs px-2 py-0.5 rounded-full" style={{fontFamily:"'JSans', sans-serif",backgroundColor:color,color:"#fff"}}>MCQ</span>
+          <span className="text-xs px-2 py-0.5 rounded-full" style={{fontFamily:"'JSans', sans-serif",backgroundColor:color+"22",color:color}}>{ q.cat}</span>
+          <span className="text-xs px-2 py-0.5 rounded-full" style={{fontFamily:"'JSans', sans-serif",backgroundColor:"#1E1E2A",color:"#8B8B9E"}}>{q.difficulty}</span>
         </div>
         <span className="block text-[15px] text-[#F0EEE8] font-semibold" style={{lineHeight:1.6}}>Q{displayNum}. {q.q}</span>
       </div>
@@ -571,7 +571,7 @@ function MCQItem({q, displayNum}) {
                       background:confirmed&&isCorrect?"#34D399":confirmed&&isSelected&&!isCorrect?"#F87171":isSelected?color:"#252533",
                       display:"flex",alignItems:"center",justifyContent:"center",
                     }}>
-                      <span className="text-[11px] text-white font-bold" style={{fontFamily:"'JetBrains Mono', monospace"}}>
+                      <span className="text-[11px] text-white font-bold" style={{fontFamily:"'JSans', sans-serif"}}>
                         {confirmed&&isCorrect?"✓":confirmed&&isSelected&&!isCorrect?"✗":String.fromCharCode(65+i)}
                       </span>
                     </div>
@@ -599,7 +599,7 @@ function MCQItem({q, displayNum}) {
           <Alert status={selected===q.answer ? "success" : "danger"} className="mt-1 rounded-2xl" style={{backgroundColor: (selected===q.answer ? "#34D399" : "#F87171") + "11", border: `1px solid ${selected===q.answer ? "#34D399" : "#F87171"}44`}}>
             <Alert.Indicator />
             <Alert.Content>
-              <Alert.Title style={{fontFamily: "'JetBrains Mono', monospace", fontSize: 12}}>{selected===q.answer ? "Correct!" : "Incorrect"}</Alert.Title>
+              <Alert.Title style={{fontFamily: "'JSans', sans-serif", fontSize: 12}}>{selected===q.answer ? "Correct!" : "Incorrect"}</Alert.Title>
               <Alert.Description>
                 <span className="text-sm text-[#8B8B9E] leading-relaxed">{q.explanation}</span>
                 <Button variant="ghost" size="sm" className="mt-2 text-[#8B8B9E]" onPress={()=>{setSelected(null);setConfirmed(false);resetTimer();}}>Try Again</Button>
@@ -642,7 +642,7 @@ function PracticeView() {
                 color: active ? "#fff" : "#8B8B9E",
                 border: `1px solid ${active ? c : "#252533"}`,
                 boxShadow: "none",
-                fontFamily: "'JetBrains Mono', monospace",
+                fontFamily: "'JSans', sans-serif",
               }}
             >
               {cat}
@@ -652,7 +652,7 @@ function PracticeView() {
       </div>
 
       {/* Summary */}
-      <span className="block text-xs text-[#55556A] mb-6" style={{fontFamily:"'JetBrains Mono', monospace"}}>
+      <span className="block text-xs text-[#55556A] mb-6" style={{fontFamily:"'JSans', sans-serif"}}>
         Showing {filtered.length} question{filtered.length!==1?"s":""}{filterCat!=="All"?` · ${filterCat}`:""}
       </span>
 
@@ -721,9 +721,9 @@ function WrittenPracticeItem({q, displayNum}) {
     <Surface variant="secondary" className="rounded-2xl mb-4 overflow-hidden">
       <div style={{borderLeft:`4px solid ${color}`, padding:"18px 20px"}}>
         <div className="flex gap-2 mb-2 flex-wrap">
-          <span className="text-xs px-2 py-0.5 rounded-full" style={{fontFamily:"'JetBrains Mono', monospace",backgroundColor:color+"22", color}}>{q.cat}</span>
-          <span className="text-xs px-2 py-0.5 rounded-full" style={{fontFamily:"'JetBrains Mono', monospace",backgroundColor:"#1E1E2A", color:"#8B8B9E"}}>{q.difficulty}</span>
-          <span className="text-xs px-2 py-0.5 rounded-full ml-auto" style={{fontFamily:"'JetBrains Mono', monospace",backgroundColor:"#2A2800", color:"#FBBF24", border:"1px solid #5A4A00"}}>[ {q.marks} marks ]</span>
+          <span className="text-xs px-2 py-0.5 rounded-full" style={{fontFamily:"'JSans', sans-serif",backgroundColor:color+"22", color}}>{q.cat}</span>
+          <span className="text-xs px-2 py-0.5 rounded-full" style={{fontFamily:"'JSans', sans-serif",backgroundColor:"#1E1E2A", color:"#8B8B9E"}}>{q.difficulty}</span>
+          <span className="text-xs px-2 py-0.5 rounded-full ml-auto" style={{fontFamily:"'JSans', sans-serif",backgroundColor:"#2A2800", color:"#FBBF24", border:"1px solid #5A4A00"}}>[ {q.marks} marks ]</span>
         </div>
         <span className="block text-[15px] text-[#F0EEE8] font-semibold" style={{lineHeight:1.6, whiteSpace:"pre-line"}}>Q{displayNum}. {q.q}</span>
       </div>
@@ -737,7 +737,7 @@ function WrittenPracticeItem({q, displayNum}) {
           disabled={grading}
           fullWidth
           className="rounded-2xl bg-[#12121A] border border-[#252533] text-[#F0EEE8] text-sm leading-relaxed placeholder:text-[#55556A] p-3 mb-2"
-          style={{ fontFamily: "'Inter', sans-serif", resize: "vertical" }}
+          style={{ fontFamily: "'JSans', sans-serif", resize: "vertical" }}
         />
 
         <div className="flex items-center gap-2">
@@ -749,7 +749,7 @@ function WrittenPracticeItem({q, displayNum}) {
             isDisabled={!answer.trim() || grading}
             style={{
               background: answer.trim() && !grading ? "#7C6FFF" : "#1E1E2A",
-              fontFamily: "'JetBrains Mono', monospace",
+              fontFamily: "'JSans', sans-serif",
             }}
           >
             {({isPending}) => <>
@@ -765,11 +765,11 @@ function WrittenPracticeItem({q, displayNum}) {
               : "rounded-full"
             }
             onPress={()=>setRevealed(r=>!r)}
-            style={revealed ? { fontFamily: "'JetBrains Mono', monospace" } : {
+            style={revealed ? { fontFamily: "'JSans', sans-serif" } : {
               backgroundColor: color,
               color: "#fff",
               border: "none",
-              fontFamily: "'JetBrains Mono', monospace",
+              fontFamily: "'JSans', sans-serif",
             }}
           >
             {revealed ? "Hide Markscheme" : "Show Markscheme"}
@@ -779,7 +779,7 @@ function WrittenPracticeItem({q, displayNum}) {
               size="sm"
               variant="ghost"
               className="rounded-full text-[#8B8B9E]"
-              style={{ fontFamily: "'JetBrains Mono', monospace" }}
+              style={{ fontFamily: "'JSans', sans-serif" }}
               onPress={()=>{ setAnswer(""); setGradeResult(null); saveLS(`written_ans_${q.id}`, ""); saveLS(`written_grade_${q.id}`, null); }}
             >
               Clear
@@ -792,7 +792,7 @@ function WrittenPracticeItem({q, displayNum}) {
           <Alert status={gradeResult.score == null ? "warning" : scorePct >= 0.75 ? "success" : scorePct >= 0.4 ? "warning" : "danger"} className="mt-4 rounded-2xl" style={{backgroundColor: (gradeResult.score == null ? "#8B8B9E" : scoreColor) + "11", border: `1px solid ${gradeResult.score == null ? "#8B8B9E" : scoreColor}44`}}>
             <Alert.Indicator />
             <Alert.Content>
-              <Alert.Title style={{fontFamily: "'JetBrains Mono', monospace", fontSize: 12}}>{gradeResult.score != null ? `AI Score: ${gradeResult.score}/${gradeResult.maxMarks || q.marks}` : "Grading Error"}</Alert.Title>
+              <Alert.Title style={{fontFamily: "'JSans', sans-serif", fontSize: 12}}>{gradeResult.score != null ? `AI Score: ${gradeResult.score}/${gradeResult.maxMarks || q.marks}` : "Grading Error"}</Alert.Title>
               <Alert.Description>
                 {gradeResult.score != null && <ProgressBar value={scorePct * 100} color={scoreColor} animated className="mb-2" />}
                 <span className="text-sm text-[#8B8B9E] leading-relaxed">{gradeResult.feedback}</span>
@@ -803,7 +803,7 @@ function WrittenPracticeItem({q, displayNum}) {
 
         {revealed && (
           <div className="mt-4 pt-4 border-t border-[#252533]">
-            <span className="block text-[11px] text-[#34D399] mb-2" style={{fontFamily:"'JetBrains Mono', monospace", letterSpacing:1}}>MARKSCHEME</span>
+            <span className="block text-[11px] text-[#34D399] mb-2" style={{fontFamily:"'JSans', sans-serif", letterSpacing:1}}>MARKSCHEME</span>
             <span className="block text-[13px] text-[#B0ADA6]" style={{lineHeight:1.7, whiteSpace:"pre-line"}}>{q.modelAnswer}</span>
           </div>
         )}
@@ -852,7 +852,7 @@ function WrittenPracticeView() {
             fontSize: 15,
             lineHeight: 1,
             boxShadow: mode === "short" ? "0 0 16px #7C6FFF33" : "none",
-            fontFamily: "'JetBrains Mono', monospace",
+            fontFamily: "'JSans', sans-serif",
           }}
         >
           Short Answer
@@ -869,7 +869,7 @@ function WrittenPracticeView() {
             fontSize: 15,
             lineHeight: 1,
             boxShadow: mode === "10mark" ? "0 0 16px #F8717133" : "none",
-            fontFamily: "'JetBrains Mono', monospace",
+            fontFamily: "'JSans', sans-serif",
           }}
         >
           10 Marker
@@ -885,7 +885,7 @@ function WrittenPracticeView() {
               border: "2px solid #2DD4BF",
               fontSize: 15,
               lineHeight: 1,
-              fontFamily: "'JetBrains Mono', monospace",
+              fontFamily: "'JSans', sans-serif",
             }}
           >
             Specimen →
@@ -910,7 +910,7 @@ function WrittenPracticeView() {
                   color: active ? "#fff" : "#8B8B9E",
                   border: `1px solid ${active ? c : "#252533"}`,
                   boxShadow: "none",
-                  fontFamily: "'JetBrains Mono', monospace",
+                  fontFamily: "'JSans', sans-serif",
                 }}
               >
                 {cat}
@@ -920,7 +920,7 @@ function WrittenPracticeView() {
         </div>
       )}
 
-      <span className="block text-xs text-[#55556A] mb-6" style={{fontFamily:"'JetBrains Mono', monospace"}}>
+      <span className="block text-xs text-[#55556A] mb-6" style={{fontFamily:"'JSans', sans-serif"}}>
         Showing {filtered.length} question{filtered.length!==1?"s":""}{mode === "short" && filterCat!=="All"?` · ${filterCat}`:""}
         {mode === "10mark" ? " · 10 Markers" : ""}
       </span>
@@ -960,7 +960,7 @@ export default function App({ initialTab = "checklist" }) {
 
   return (
     <ContentCtx.Provider value={content}>
-    <div className="min-h-screen bg-[#09090F]" style={{fontFamily:"'Inter', sans-serif",color:"#F0EEE8"}}>
+    <div className="min-h-screen bg-[#09090F]" style={{fontFamily:"'JSans', sans-serif",color:"#F0EEE8"}}>
 
       <Sidebar activeSubject="business" sidebarOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
 
@@ -995,7 +995,7 @@ export default function App({ initialTab = "checklist" }) {
                 <line x1="3" y1="18" x2="21" y2="18"/>
               </svg>
             </Button>
-            <span className="text-xs px-2.5 py-1 rounded-full uppercase font-bold tracking-widest" style={{fontFamily: "'JetBrains Mono', monospace", backgroundColor: "#7C6FFF18", color: "#A78BFA"}}>
+            <span className="text-xs px-2.5 py-1 rounded-full uppercase font-bold tracking-widest" style={{fontFamily: "'JSans', sans-serif", backgroundColor: "#7C6FFF18", color: "#A78BFA"}}>
               IB HL Business Management
             </span>
             <LoginButton />
@@ -1014,7 +1014,7 @@ export default function App({ initialTab = "checklist" }) {
                   <Tabs.Tab key={t.value} id={t.value}
                     render={(domProps) => <a {...domProps} href={t.href} style={{textDecoration:"none", flex:1, textAlign:"center"}} />}
                     className="text-[13px] font-semibold py-2.5 text-[#55556A] data-[selected=true]:text-[#F0EEE8]"
-                    style={{fontFamily: "'Inter', sans-serif"}}
+                    style={{fontFamily: "'JSans', sans-serif"}}
                   >
                     {t.label}
                     <Tabs.Indicator className="bg-[#7C6FFF]" />

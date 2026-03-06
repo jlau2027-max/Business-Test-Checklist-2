@@ -4,7 +4,7 @@ import LoginButton from "./LoginButton.jsx";
 
 export default function LandingPage() {
   return (
-    <div className="min-h-screen" style={{ backgroundColor: "#09090F", fontFamily: "'Inter', sans-serif", color: "#F0EEE8" }}>
+    <div className="min-h-screen" style={{ backgroundColor: "#09090F", fontFamily: "'JSans', sans-serif", color: "#F0EEE8" }}>
       {/* Header */}
       <div
         style={{
@@ -19,7 +19,7 @@ export default function LandingPage() {
           <div className="flex items-center justify-center" style={{ position: "relative" }}>
             <span
               className="text-xs px-2 py-0.5 rounded-full uppercase font-bold"
-              style={{ letterSpacing: 2, backgroundColor: "#7C6FFF18", color: "#A78BFA", border: "none", fontFamily: "'JetBrains Mono', monospace" }}
+              style={{ letterSpacing: 2, backgroundColor: "#7C6FFF18", color: "#A78BFA", border: "none", fontFamily: "'JSans', sans-serif" }}
             >
               IB Revision Hub
             </span>
@@ -48,7 +48,7 @@ export default function LandingPage() {
                 render={(props) => <button {...props} />}
                 size="md"
                 className="rounded-full bg-[#7C6FFF] text-white border-none text-[15px] font-semibold"
-                style={{ fontFamily: "'Inter', sans-serif" }}
+                style={{ fontFamily: "'JSans', sans-serif" }}
               >
                 Sign In
               </Button>
@@ -59,7 +59,7 @@ export default function LandingPage() {
                 size="md"
                 variant="outline"
                 className="rounded-full bg-transparent text-[#A78BFA] border border-[#252533] text-[15px] font-semibold"
-                style={{ fontFamily: "'Inter', sans-serif" }}
+                style={{ fontFamily: "'JSans', sans-serif" }}
               >
                 Sign Up
               </Button>
@@ -87,7 +87,7 @@ export default function LandingPage() {
           >
             <span
               className="text-xs px-1.5 py-0.5 rounded-full mb-2 inline-block"
-              style={{ backgroundColor: "#7C6FFF18", color: "#A78BFA", border: "none", fontFamily: "'JetBrains Mono', monospace" }}
+              style={{ backgroundColor: "#7C6FFF18", color: "#A78BFA", border: "none", fontFamily: "'JSans', sans-serif" }}
             >
               HL
             </span>
@@ -113,7 +113,7 @@ export default function LandingPage() {
           >
             <span
               className="text-xs px-1.5 py-0.5 rounded-full mb-2 inline-block"
-              style={{ backgroundColor: "#F8717118", color: "#F87171", border: "none", fontFamily: "'JetBrains Mono', monospace" }}
+              style={{ backgroundColor: "#F8717118", color: "#F87171", border: "none", fontFamily: "'JSans', sans-serif" }}
             >
               HL / SL
             </span>

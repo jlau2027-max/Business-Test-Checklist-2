@@ -12,7 +12,7 @@ export default function ConfirmDeleteModal({ opened, onClose, onConfirm, title, 
         <Modal.Dialog className="sm:max-w-md" style={{ backgroundColor: "#12121A", border: "1px solid #252533" }}>
           <Modal.CloseTrigger />
           <Modal.Header style={{ borderBottom: "1px solid #252533" }}>
-            <Modal.Heading style={{ color: "#F0EEE8", fontWeight: 700, fontFamily: "'JetBrains Mono', monospace" }}>
+            <Modal.Heading style={{ color: "#F0EEE8", fontWeight: 700, fontFamily: "'JSans', sans-serif" }}>
               {title || "Confirm Delete"}
             </Modal.Heading>
           </Modal.Header>
