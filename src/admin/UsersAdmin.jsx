@@ -1,8 +1,8 @@
 import { useState, useEffect } from "react";
 import {
-  Badge, Text, Group, Paper, Progress, Box, Stack, TextInput, Select,
+  Badge, Text, Group, Paper, Progress, Box, Stack,
 } from "@mantine/core";
-import { Button, Table, Modal } from "@heroui/react";
+import { Button, Table, Modal, TextField, Input, Label, Select, ListBox } from "@heroui/react";
 import { useAuth } from "../AuthContext.jsx";
 import {
   getAllUsersStats,
@@ -565,35 +565,20 @@ export default function UsersAdmin() {
               </Modal.Heading>
             </Modal.Header>
             <Modal.Body>
-              <Stack gap="md">
-                <TextInput
-                  label="First Name"
-                  value={editForm.firstName}
-                  onChange={(e) => setEditForm((f) => ({ ...f, firstName: e.target.value }))}
-                  styles={{
-                    label: { color: "#8B8B9E", fontSize: 11, fontFamily: "'JetBrains Mono', monospace", letterSpacing: 1, marginBottom: 4 },
-                    input: { backgroundColor: "#1A1A24", border: "1px solid #252533", color: "#F0EEE8", fontFamily: "'JetBrains Mono', monospace" },
-                  }}
-                />
-                <TextInput
-                  label="Last Name"
-                  value={editForm.lastName}
-                  onChange={(e) => setEditForm((f) => ({ ...f, lastName: e.target.value }))}
-                  styles={{
-                    label: { color: "#8B8B9E", fontSize: 11, fontFamily: "'JetBrains Mono', monospace", letterSpacing: 1, marginBottom: 4 },
-                    input: { backgroundColor: "#1A1A24", border: "1px solid #252533", color: "#F0EEE8", fontFamily: "'JetBrains Mono', monospace" },
-                  }}
-                />
-                <TextInput
-                  label="Username"
-                  value={editForm.username}
-                  onChange={(e) => setEditForm((f) => ({ ...f, username: e.target.value }))}
-                  styles={{
-                    label: { color: "#8B8B9E", fontSize: 11, fontFamily: "'JetBrains Mono', monospace", letterSpacing: 1, marginBottom: 4 },
-                    input: { backgroundColor: "#1A1A24", border: "1px solid #252533", color: "#F0EEE8", fontFamily: "'JetBrains Mono', monospace" },
-                  }}
-                />
-              </Stack>
+              <div className="flex flex-col gap-4">
+                <TextField className="w-full" name="firstName" onChange={(val) => setEditForm((f) => ({ ...f, firstName: val }))}>
+                  <Label className="text-[#8B8B9E] text-[11px] tracking-wider mb-1" style={{ fontFamily: "'JetBrains Mono', monospace" }}>First Name</Label>
+                  <Input value={editForm.firstName} className="bg-[#1A1A24] border border-[#252533] text-[#F0EEE8] rounded-md" style={{ fontFamily: "'JetBrains Mono', monospace" }} />
+                </TextField>
+                <TextField className="w-full" name="lastName" onChange={(val) => setEditForm((f) => ({ ...f, lastName: val }))}>
+                  <Label className="text-[#8B8B9E] text-[11px] tracking-wider mb-1" style={{ fontFamily: "'JetBrains Mono', monospace" }}>Last Name</Label>
+                  <Input value={editForm.lastName} className="bg-[#1A1A24] border border-[#252533] text-[#F0EEE8] rounded-md" style={{ fontFamily: "'JetBrains Mono', monospace" }} />
+                </TextField>
+                <TextField className="w-full" name="username" onChange={(val) => setEditForm((f) => ({ ...f, username: val }))}>
+                  <Label className="text-[#8B8B9E] text-[11px] tracking-wider mb-1" style={{ fontFamily: "'JetBrains Mono', monospace" }}>Username</Label>
+                  <Input value={editForm.username} className="bg-[#1A1A24] border border-[#252533] text-[#F0EEE8] rounded-md" style={{ fontFamily: "'JetBrains Mono', monospace" }} />
+                </TextField>
+              </div>
             </Modal.Body>
             <Modal.Footer>
               <Button variant="outline" className="rounded-md border-[#252533] text-[#8B8B9E] bg-transparent" onPress={() => setEditModalOpened(false)} style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 12 }}>Cancel</Button>
@@ -619,21 +604,28 @@ export default function UsersAdmin() {
               </Modal.Heading>
             </Modal.Header>
             <Modal.Body>
-              <Stack gap="md">
-                <Select
-                  label="Select Role"
-                  placeholder="Choose a role..."
-                  data={ROLE_OPTIONS}
-                  value={selectedRole}
-                  onChange={setSelectedRole}
-                  styles={{
-                    label: { color: "#8B8B9E", fontSize: 11, fontFamily: "'JetBrains Mono', monospace", letterSpacing: 1, marginBottom: 4 },
-                    input: { backgroundColor: "#1A1A24", border: "1px solid #252533", color: "#F0EEE8", fontFamily: "'JetBrains Mono', monospace" },
-                    dropdown: { backgroundColor: "#1A1A24", border: "1px solid #252533" },
-                    option: { color: "#F0EEE8", fontFamily: "'JetBrains Mono', monospace", fontSize: 12 },
-                  }}
-                />
-              </Stack>
+              <Select
+                className="w-full"
+                placeholder="Choose a role..."
+                value={selectedRole}
+                onChange={(val) => setSelectedRole(val)}
+              >
+                <Label className="text-[#8B8B9E] text-[11px] tracking-wider mb-1" style={{ fontFamily: "'JetBrains Mono', monospace" }}>Select Role</Label>
+                <Select.Trigger className="bg-[#1A1A24] border border-[#252533] text-[#F0EEE8] rounded-md" style={{ fontFamily: "'JetBrains Mono', monospace" }}>
+                  <Select.Value />
+                  <Select.Indicator />
+                </Select.Trigger>
+                <Select.Popover className="bg-[#1A1A24] border border-[#252533]">
+                  <ListBox>
+                    {ROLE_OPTIONS.map((opt) => (
+                      <ListBox.Item key={opt.value} id={opt.value} textValue={opt.label} className="text-[#F0EEE8] text-xs" style={{ fontFamily: "'JetBrains Mono', monospace" }}>
+                        {opt.label}
+                        <ListBox.ItemIndicator />
+                      </ListBox.Item>
+                    ))}
+                  </ListBox>
+                </Select.Popover>
+              </Select>
             </Modal.Body>
             <Modal.Footer>
               <Button variant="outline" className="rounded-md border-[#252533] text-[#8B8B9E] bg-transparent" onPress={() => setRoleModalOpened(false)} style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 12 }}>Cancel</Button>
