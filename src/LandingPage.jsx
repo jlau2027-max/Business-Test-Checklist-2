@@ -64,7 +64,7 @@ export default function LandingPage() {
           {/* ASCII art title */}
           <div style={{ position: "relative", width: "280%", maxWidth: "2400px", height: "clamp(600px, 90vw, 1100px)", marginBottom: 8 }}>
             <ASCIIText
-              text="ib rev hub"
+              text="ib rev"
               enableWaves={false}
               asciiFontSize={8}
               textFontSize={200}
