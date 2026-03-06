@@ -974,8 +974,8 @@ export default function App({ initialTab = "checklist" }) {
           borderBottom: "1px solid var(--border-header)",
         }}
       >
-        <div className="max-w-5xl mx-auto py-2">
-          <div className="flex items-center justify-center mb-1" style={{ position: "relative" }}>
+        <div className="max-w-5xl mx-auto pt-4 pb-2 px-4">
+          <div className="flex items-center justify-center mb-2.5" style={{ position: "relative" }}>
             {/* Sidebar toggle */}
             <Button
               isIconOnly
@@ -1000,7 +1000,7 @@ export default function App({ initialTab = "checklist" }) {
             </span>
             <LoginButton />
           </div>
-          <h1 className="text-center font-extrabold text-[22px] sm:text-[30px] text-[var(--text-primary)]" style={{letterSpacing: -0.5}}>Finance Unit — Revision Hub</h1>
+          <h1 className="text-center font-extrabold text-[22px] sm:text-[30px] text-[var(--text-primary)] mb-3" style={{letterSpacing: -0.5}}>Finance Unit — Revision Hub</h1>
 
           <Tabs variant="secondary" selectedKey={tab}>
             <Tabs.ListContainer>
