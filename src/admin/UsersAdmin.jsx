@@ -522,7 +522,7 @@ export default function UsersAdmin() {
                       <Table.Td style={{ textAlign: "right" }}>
                         <Text ff="'JetBrains Mono', monospace" fz={12} c="#8B8B9E">{lastActive}</Text>
                       </Table.Td>
-                      <Table.Td>
+                      <Table.Td onClick={(e) => e.stopPropagation()}>
                         <Group gap={4} wrap="nowrap">
                           {canBanUnban(role) && (
                             <>

@@ -736,12 +736,11 @@ async function handleAdminFlashcardTopicsDelete(id, env) {
 
 async function handleAdminFlashcardsPost(request, env) {
   const body = await request.json();
-  const id = body.id || crypto.randomUUID();
   const sort_order = body.sort_order ?? await getNextSortOrder(env, "flashcards", "topic_id = ?", [body.topic_id]);
-  await env.CONTENT_DB.prepare(
-    `INSERT INTO flashcards (id, topic_id, term, definition, formula, sort_order) VALUES (?, ?, ?, ?, ?, ?)`
-  ).bind(id, body.topic_id, body.term, body.definition, body.formula || null, sort_order).run();
-  return json({ ok: true, id }, 201);
+  const result = await env.CONTENT_DB.prepare(
+    `INSERT INTO flashcards (topic_id, term, definition, formula, sort_order) VALUES (?, ?, ?, ?, ?)`
+  ).bind(body.topic_id, body.term, body.definition, body.formula || null, sort_order).run();
+  return json({ ok: true, id: result.meta.last_row_id }, 201);
 }
 
 const FIELDS_FLASHCARDS = ["topic_id", "term", "definition", "formula", "sort_order"];
@@ -931,12 +930,11 @@ async function handleAdminChecklistSectionsDelete(id, env) {
 
 async function handleAdminChecklistItemsPost(request, env) {
   const body = await request.json();
-  const id = body.id || crypto.randomUUID();
   const sort_order = body.sort_order ?? await getNextSortOrder(env, "checklist_items", "section_id = ?", [body.section_id]);
-  await env.CONTENT_DB.prepare(
-    `INSERT INTO checklist_items (id, section_id, text, sort_order) VALUES (?, ?, ?, ?)`
-  ).bind(id, body.section_id, body.text, sort_order).run();
-  return json({ ok: true, id }, 201);
+  const result = await env.CONTENT_DB.prepare(
+    `INSERT INTO checklist_items (section_id, text, sort_order) VALUES (?, ?, ?)`
+  ).bind(body.section_id, body.text, sort_order).run();
+  return json({ ok: true, id: result.meta.last_row_id }, 201);
 }
 
 const FIELDS_CHECKLIST_ITEMS = ["section_id", "text", "sort_order"];
