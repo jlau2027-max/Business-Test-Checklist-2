@@ -1,24 +1,20 @@
 import { useState, useEffect, useCallback } from "react";
 import {
-  Stack,
-  Group,
-  Text,
-  Paper,
-  Badge,
-  Table,
+  Button,
+  Spinner,
   Modal,
-  TextInput,
-  Textarea,
-  NumberInput,
-  SegmentedControl,
+  TextField,
+  Input,
+  Label,
+  TextArea,
+  NumberField,
   Select,
-  Loader,
-  Alert,
-  ActionIcon,
+  ListBox,
+  Table,
+  Tabs,
   Tooltip,
-  Box,
-} from "@mantine/core";
-import { Button, Spinner } from "@heroui/react";
+  Alert,
+} from "@heroui/react";
 import { useAuth } from "../AuthContext.jsx";
 import {
   fetchWrittenQuestions,
@@ -68,25 +64,24 @@ function getMarksColor(marks) {
 }
 
 // ---------------------------------------------------------------------------
-// Shared dark-theme style tokens
+// Marks badge color mapping (Tailwind classes)
 // ---------------------------------------------------------------------------
 
-const inputStyles = {
-  input: {
-    backgroundColor: "#1A1A24",
-    borderColor: "#252533",
-    color: "#F0EEE8",
-    "&:focus": { borderColor: "#7C6FFF" },
-    "&::placeholder": { color: "#55556A" },
-  },
-  label: { color: "#8B8B9E", fontWeight: 500, marginBottom: 4 },
+const MARKS_BADGE_STYLES = {
+  gray: "bg-gray-500 text-white",
+  teal: "bg-teal-500 text-white",
+  cyan: "bg-cyan-500 text-white",
+  blue: "bg-blue-500 text-white",
+  indigo: "bg-indigo-500 text-white",
+  violet: "bg-violet-500 text-white",
+  grape: "bg-purple-500 text-white",
+  orange: "bg-orange-500 text-white",
 };
 
-const modalStyles = {
-  header: { backgroundColor: "#12121A", borderBottom: "1px solid #252533" },
-  body: { backgroundColor: "#12121A" },
-  title: { color: "#F0EEE8", fontWeight: 700 },
-};
+function getMarksBadgeClasses(marks) {
+  const color = getMarksColor(marks);
+  return MARKS_BADGE_STYLES[color] || "bg-violet-500 text-white";
+}
 
 // ---------------------------------------------------------------------------
 // Truncate helper
@@ -279,28 +274,40 @@ export default function WrittenAdmin() {
   // ------------------------------------------------------------------
 
   return (
-    <Stack gap="md">
+    <div className="flex flex-col gap-4">
       {/* ---------- Sub-tabs ---------- */}
-      <SegmentedControl
-        value={activeType}
-        onChange={(val) => {
+      <Tabs
+        variant="primary"
+        selectedKey={activeType}
+        onSelectionChange={(val) => {
           setActiveType(val);
           setFilterCategory(null);
           setFilterDifficulty(null);
         }}
-        data={QUESTION_TYPES}
-        color="violet"
-        radius="md"
-        styles={{
-          root: { backgroundColor: "#1A1A24", border: "1px solid #252533" },
-          label: { color: "#8B8B9E", fontWeight: 500, "&[data-active]": { color: "#F0EEE8" } },
-        }}
-      />
+      >
+        <Tabs.ListContainer>
+          <Tabs.List
+            aria-label="Question type"
+            className="bg-[#1A1A24] border border-[#252533] rounded-lg p-0.5"
+          >
+            {QUESTION_TYPES.map((opt) => (
+              <Tabs.Tab
+                key={opt.value}
+                id={opt.value}
+                className="text-[#8B8B9E] text-sm font-medium px-4 py-2 data-[selected=true]:text-white rounded-md"
+              >
+                {opt.label}
+                <Tabs.Indicator className="bg-[#7C6FFF] rounded-md" />
+              </Tabs.Tab>
+            ))}
+          </Tabs.List>
+        </Tabs.ListContainer>
+      </Tabs>
 
       {/* ---------- Filter bar ---------- */}
-      <Paper bg="#12121A" radius="lg" p="md" style={{ border: "1px solid #252533" }}>
-        <Group justify="space-between" wrap="wrap" gap="sm">
-          <Group gap="sm" wrap="wrap">
+      <div className="bg-[#12121A] rounded-lg p-4 border border-[#252533]">
+        <div className="flex flex-wrap items-center justify-between gap-2">
+          <div className="flex flex-wrap items-center gap-2">
             <CategorySelect
               value={filterCategory}
               onChange={setFilterCategory}
@@ -310,299 +317,420 @@ export default function WrittenAdmin() {
               w={200}
             />
             <Select
+              className="w-[140px]"
               placeholder="All difficulties"
-              data={DIFFICULTY_OPTIONS}
-              value={filterDifficulty}
-              onChange={setFilterDifficulty}
-              clearable
-              size="sm"
-              w={140}
-              radius="md"
-              styles={{
-                input: { backgroundColor: "#1A1A24", borderColor: "#252533", color: "#F0EEE8" },
-                dropdown: { backgroundColor: "#12121A", borderColor: "#252533" },
-                option: { color: "#F0EEE8" },
-              }}
-            />
-          </Group>
+              selectedKey={filterDifficulty}
+              onSelectionChange={setFilterDifficulty}
+            >
+              <Select.Trigger className="bg-[#1A1A24] border border-[#252533] text-[#F0EEE8] rounded-md text-sm">
+                <Select.Value />
+                <Select.Indicator />
+              </Select.Trigger>
+              <Select.Popover className="bg-[#1A1A24] border border-[#252533]">
+                <ListBox>
+                  {DIFFICULTY_OPTIONS.map((opt) => (
+                    <ListBox.Item
+                      key={opt.value}
+                      id={opt.value}
+                      textValue={opt.label}
+                      className="text-[#F0EEE8] text-xs"
+                    >
+                      {opt.label}
+                      <ListBox.ItemIndicator />
+                    </ListBox.Item>
+                  ))}
+                </ListBox>
+              </Select.Popover>
+            </Select>
+          </div>
 
           {canEditContent && (
-            <Button onPress={openCreate} size="sm" className="rounded-md border-none font-semibold bg-gradient-to-br from-[#7C6FFF] to-[#A78BFA] text-white shadow-[0_4px_16px_#7C6FFF30]">+ Add Question</Button>
+            <Button
+              onPress={openCreate}
+              size="sm"
+              className="rounded-md border-none font-semibold bg-gradient-to-br from-[#7C6FFF] to-[#A78BFA] text-white shadow-[0_4px_16px_#7C6FFF30]"
+            >
+              + Add Question
+            </Button>
           )}
-        </Group>
-      </Paper>
+        </div>
+      </div>
 
       {/* ---------- Error alert ---------- */}
       {error && (
         <Alert
-          color="red"
-          variant="light"
-          radius="md"
-          withCloseButton
-          onClose={() => setError(null)}
-          styles={{
-            root: { backgroundColor: "#F8717111", border: "1px solid #F8717144" },
-          }}
+          status="danger"
+          className="bg-[#F8717111] border border-[#F8717144]"
         >
-          {error}
+          <Alert.Indicator />
+          <Alert.Content className="flex-1">
+            <Alert.Description>{error}</Alert.Description>
+          </Alert.Content>
+          <button
+            onClick={() => setError(null)}
+            className="text-[#8B8B9E] hover:text-white"
+          >
+            ✕
+          </button>
         </Alert>
       )}
 
       {/* ---------- Loading state ---------- */}
       {loading && (
-        <Paper
-          bg="#12121A"
-          radius="lg"
-          p="xl"
-          style={{ border: "1px solid #252533", textAlign: "center" }}
-        >
-          <Loader color="violet" size="md" />
-          <Text fz="sm" c="#8B8B9E" mt="sm">
+        <div className="bg-[#12121A] rounded-lg p-6 border border-[#252533] text-center">
+          <Spinner color="current" size="md" />
+          <span className="text-sm text-[#8B8B9E] mt-2 block">
             Loading questions...
-          </Text>
-        </Paper>
+          </span>
+        </div>
       )}
 
       {/* ---------- Empty state ---------- */}
       {!loading && !error && questions.length === 0 && (
-        <Paper
-          bg="#12121A"
-          radius="lg"
-          p="xl"
-          style={{ border: "1px solid #252533", textAlign: "center" }}
-        >
-          <Text fz="lg" c="#55556A" fw={600}>
+        <div className="bg-[#12121A] rounded-lg p-6 border border-[#252533] text-center">
+          <span className="text-lg text-[#55556A] font-semibold block">
             No questions found
-          </Text>
-          <Text fz="sm" c="#8B8B9E" mt={4}>
+          </span>
+          <span className="text-sm text-[#8B8B9E] mt-1 block">
             {filterCategory || filterDifficulty
               ? "Try changing the filters."
-              : "Click \"Add Question\" to create the first one."}
-          </Text>
-        </Paper>
+              : 'Click "Add Question" to create the first one.'}
+          </span>
+        </div>
       )}
 
       {/* ---------- Questions table ---------- */}
       {!loading && questions.length > 0 && (
-        <Paper bg="#12121A" radius="lg" style={{ border: "1px solid #252533", overflow: "hidden" }}>
-          <Table
-            horizontalSpacing="md"
-            verticalSpacing="sm"
-            highlightOnHover
-            styles={{
-              table: { backgroundColor: "#12121A" },
-              thead: { backgroundColor: "#0D0D14" },
-              th: { color: "#8B8B9E", fontWeight: 600, fontSize: 12, textTransform: "uppercase", letterSpacing: 0.5, borderBottom: "1px solid #252533" },
-              td: { color: "#F0EEE8", borderBottom: "1px solid #1A1A24" },
-              tr: { "&:hover": { backgroundColor: "#1A1A2A" } },
-            }}
-          >
-            <Table.Thead>
-              <Table.Tr>
-                <Table.Th>Category</Table.Th>
-                <Table.Th>Difficulty</Table.Th>
-                <Table.Th>Marks</Table.Th>
-                {activeType === "specimen" && <Table.Th>Label</Table.Th>}
-                <Table.Th>Question</Table.Th>
-                {canEditContent && <Table.Th w={100}>Actions</Table.Th>}
-              </Table.Tr>
-            </Table.Thead>
-            <Table.Tbody>
-              {questions.map((q) => (
-                <Table.Tr key={q.id}>
-                  <Table.Td>
-                    <Badge size="sm" variant="light" color="violet" radius="sm">
-                      {q.category || "-"}
-                    </Badge>
-                  </Table.Td>
-                  <Table.Td>
-                    <DifficultyBadge difficulty={q.difficulty} />
-                  </Table.Td>
-                  <Table.Td>
-                    <Badge size="sm" variant="filled" color={getMarksColor(q.marks)} radius="sm">
-                      {q.marks} {q.marks === 1 ? "mark" : "marks"}
-                    </Badge>
-                  </Table.Td>
+        <div className="bg-[#12121A] rounded-lg border border-[#252533] overflow-hidden">
+          <Table className="w-full">
+            <Table.ScrollContainer>
+              <Table.Content>
+                <Table.Header className="bg-[#0D0D14]">
+                  <Table.Column className="text-[#8B8B9E] text-xs font-semibold uppercase tracking-wider border-b border-[#252533] px-4 py-2">
+                    Category
+                  </Table.Column>
+                  <Table.Column className="text-[#8B8B9E] text-xs font-semibold uppercase tracking-wider border-b border-[#252533] px-4 py-2">
+                    Difficulty
+                  </Table.Column>
+                  <Table.Column className="text-[#8B8B9E] text-xs font-semibold uppercase tracking-wider border-b border-[#252533] px-4 py-2">
+                    Marks
+                  </Table.Column>
                   {activeType === "specimen" && (
-                    <Table.Td>
-                      <Text fz="sm" c="#8B8B9E" ff="'JetBrains Mono', monospace">
-                        {q.label || "-"}
-                      </Text>
-                    </Table.Td>
+                    <Table.Column className="text-[#8B8B9E] text-xs font-semibold uppercase tracking-wider border-b border-[#252533] px-4 py-2">
+                      Label
+                    </Table.Column>
                   )}
-                  <Table.Td>
-                    <Text fz="sm" c="#F0EEE8" lineClamp={2}>
-                      {truncate(q.question_text, 120)}
-                    </Text>
-                  </Table.Td>
+                  <Table.Column className="text-[#8B8B9E] text-xs font-semibold uppercase tracking-wider border-b border-[#252533] px-4 py-2">
+                    Question
+                  </Table.Column>
                   {canEditContent && (
-                    <Table.Td>
-                      <Group gap={4} wrap="nowrap">
-                        <Tooltip label="Edit" withArrow>
-                          <ActionIcon
-                            variant="subtle"
-                            color="violet"
-                            size="sm"
-                            radius="md"
-                            onClick={() => openEdit(q)}
-                          >
-                            <EditIcon />
-                          </ActionIcon>
-                        </Tooltip>
-                        {canDeleteContent && (
-                          <Tooltip label="Delete" withArrow>
-                            <ActionIcon
-                              variant="subtle"
-                              color="red"
-                              size="sm"
-                              radius="md"
-                              onClick={() => setDeleteTarget(q)}
-                            >
-                              <TrashIcon />
-                            </ActionIcon>
-                          </Tooltip>
-                        )}
-                      </Group>
-                    </Table.Td>
+                    <Table.Column className="text-[#8B8B9E] text-xs font-semibold uppercase tracking-wider border-b border-[#252533] px-4 py-2 w-[100px]">
+                      Actions
+                    </Table.Column>
                   )}
-                </Table.Tr>
-              ))}
-            </Table.Tbody>
+                </Table.Header>
+                <Table.Body>
+                  {questions.map((q) => (
+                    <Table.Row
+                      key={q.id}
+                      className="hover:bg-[#1A1A2A] border-b border-[#1A1A24]"
+                    >
+                      <Table.Cell className="px-4 py-2">
+                        <span className="text-xs px-2 py-0.5 rounded bg-[#7C6FFF22] text-[#A78BFA]">
+                          {q.category || "-"}
+                        </span>
+                      </Table.Cell>
+                      <Table.Cell className="px-4 py-2">
+                        <DifficultyBadge difficulty={q.difficulty} />
+                      </Table.Cell>
+                      <Table.Cell className="px-4 py-2">
+                        <span
+                          className={`text-xs px-2 py-0.5 rounded ${getMarksBadgeClasses(q.marks)}`}
+                        >
+                          {q.marks} {q.marks === 1 ? "mark" : "marks"}
+                        </span>
+                      </Table.Cell>
+                      {activeType === "specimen" && (
+                        <Table.Cell className="px-4 py-2">
+                          <span
+                            className="text-sm text-[#8B8B9E]"
+                            style={{
+                              fontFamily: "'JetBrains Mono', monospace",
+                            }}
+                          >
+                            {q.label || "-"}
+                          </span>
+                        </Table.Cell>
+                      )}
+                      <Table.Cell className="px-4 py-2">
+                        <span className="text-sm text-[#F0EEE8] line-clamp-2">
+                          {truncate(q.question_text, 120)}
+                        </span>
+                      </Table.Cell>
+                      {canEditContent && (
+                        <Table.Cell className="px-4 py-2">
+                          <div className="flex items-center gap-1 flex-nowrap">
+                            <Tooltip delay={0}>
+                              <Button
+                                isIconOnly
+                                size="sm"
+                                variant="ghost"
+                                className="text-[#A78BFA]"
+                                onPress={() => openEdit(q)}
+                              >
+                                <EditIcon />
+                              </Button>
+                              <Tooltip.Content>
+                                <p>Edit</p>
+                              </Tooltip.Content>
+                            </Tooltip>
+                            {canDeleteContent && (
+                              <Tooltip delay={0}>
+                                <Button
+                                  isIconOnly
+                                  size="sm"
+                                  variant="ghost"
+                                  className="text-[#F87171]"
+                                  onPress={() => setDeleteTarget(q)}
+                                >
+                                  <TrashIcon />
+                                </Button>
+                                <Tooltip.Content>
+                                  <p>Delete</p>
+                                </Tooltip.Content>
+                              </Tooltip>
+                            )}
+                          </div>
+                        </Table.Cell>
+                      )}
+                    </Table.Row>
+                  ))}
+                </Table.Body>
+              </Table.Content>
+            </Table.ScrollContainer>
           </Table>
 
-          <Box px="md" py="xs" style={{ borderTop: "1px solid #252533" }}>
-            <Text fz="xs" c="#55556A">
+          <div
+            className="px-4 py-2"
+            style={{ borderTop: "1px solid #252533" }}
+          >
+            <span className="text-xs text-[#55556A]">
               {questions.length} question{questions.length !== 1 ? "s" : ""}
-            </Text>
-          </Box>
-        </Paper>
+            </span>
+          </div>
+        </div>
       )}
 
       {/* ---------- Create / Edit Modal ---------- */}
-      <Modal
-        opened={modalOpen}
-        onClose={closeModal}
-        title={editing ? "Edit Question" : "New Question"}
-        centered
-        size="lg"
-        radius="md"
-        styles={modalStyles}
+      <Modal.Backdrop
+        variant="opaque"
+        isKeyboardDismissDisabled={false}
+        isOpen={modalOpen}
+        onOpenChange={(open) => {
+          if (!open) closeModal();
+        }}
       >
-        <Stack gap="md">
-          {/* Question type */}
-          <Box>
-            <Text fz="sm" fw={500} c="#8B8B9E" mb={4}>
-              Question Type
-            </Text>
-            <SegmentedControl
-              value={formType}
-              onChange={handleFormTypeChange}
-              data={QUESTION_TYPES}
-              color="violet"
-              radius="md"
-              fullWidth
-              styles={{
-                root: { backgroundColor: "#1A1A24", border: "1px solid #252533" },
-                label: { color: "#8B8B9E", fontWeight: 500, "&[data-active]": { color: "#F0EEE8" } },
-              }}
-            />
-          </Box>
+        <Modal.Container>
+          <Modal.Dialog
+            className="sm:max-w-lg"
+            style={{
+              backgroundColor: "#12121A",
+              border: "1px solid #252533",
+            }}
+          >
+            <Modal.CloseTrigger />
+            <Modal.Header style={{ borderBottom: "1px solid #252533" }}>
+              <Modal.Heading style={{ color: "#F0EEE8", fontWeight: 700 }}>
+                {editing ? "Edit Question" : "New Question"}
+              </Modal.Heading>
+            </Modal.Header>
+            <Modal.Body>
+              <div className="flex flex-col gap-4">
+                {/* Question type */}
+                <div>
+                  <span className="text-sm font-medium text-[#8B8B9E] mb-1 block">
+                    Question Type
+                  </span>
+                  <Tabs
+                    variant="primary"
+                    selectedKey={formType}
+                    onSelectionChange={handleFormTypeChange}
+                  >
+                    <Tabs.ListContainer>
+                      <Tabs.List
+                        aria-label="Question type selector"
+                        className="bg-[#1A1A24] border border-[#252533] rounded-lg p-0.5 w-full"
+                      >
+                        {QUESTION_TYPES.map((opt) => (
+                          <Tabs.Tab
+                            key={opt.value}
+                            id={opt.value}
+                            className="text-[#8B8B9E] text-sm font-medium px-4 py-2 data-[selected=true]:text-white rounded-md flex-1 text-center"
+                          >
+                            {opt.label}
+                            <Tabs.Indicator className="bg-[#7C6FFF] rounded-md" />
+                          </Tabs.Tab>
+                        ))}
+                      </Tabs.List>
+                    </Tabs.ListContainer>
+                  </Tabs>
+                </div>
 
-          {/* Category */}
-          <CategorySelect
-            value={formCategory}
-            onChange={setFormCategory}
-          />
+                {/* Category */}
+                <CategorySelect
+                  value={formCategory}
+                  onChange={setFormCategory}
+                />
 
-          {/* Difficulty */}
-          <Box>
-            <Text fz="sm" fw={500} c="#8B8B9E" mb={4}>
-              Difficulty
-            </Text>
-            <SegmentedControl
-              value={formDifficulty}
-              onChange={setFormDifficulty}
-              data={DIFFICULTY_OPTIONS}
-              color="violet"
-              radius="md"
-              fullWidth
-              styles={{
-                root: { backgroundColor: "#1A1A24", border: "1px solid #252533" },
-                label: { color: "#8B8B9E", fontWeight: 500, "&[data-active]": { color: "#F0EEE8" } },
-              }}
-            />
-          </Box>
+                {/* Difficulty */}
+                <div>
+                  <span className="text-sm font-medium text-[#8B8B9E] mb-1 block">
+                    Difficulty
+                  </span>
+                  <Tabs
+                    variant="primary"
+                    selectedKey={formDifficulty}
+                    onSelectionChange={setFormDifficulty}
+                  >
+                    <Tabs.ListContainer>
+                      <Tabs.List
+                        aria-label="Difficulty selector"
+                        className="bg-[#1A1A24] border border-[#252533] rounded-lg p-0.5 w-full"
+                      >
+                        {DIFFICULTY_OPTIONS.map((opt) => (
+                          <Tabs.Tab
+                            key={opt.value}
+                            id={opt.value}
+                            className="text-[#8B8B9E] text-sm font-medium px-4 py-2 data-[selected=true]:text-white rounded-md flex-1 text-center"
+                          >
+                            {opt.label}
+                            <Tabs.Indicator className="bg-[#7C6FFF] rounded-md" />
+                          </Tabs.Tab>
+                        ))}
+                      </Tabs.List>
+                    </Tabs.ListContainer>
+                  </Tabs>
+                </div>
 
-          {/* Marks + Label (side by side) */}
-          <Group grow gap="sm">
-            <NumberInput
-              label="Marks"
-              value={formMarks}
-              onChange={setFormMarks}
-              min={1}
-              max={30}
-              radius="md"
-              styles={inputStyles}
-            />
-            <TextInput
-              label="Label"
-              placeholder={formType === "specimen" ? 'e.g. "(a)", "(b)(i)"' : "Optional"}
-              value={formLabel}
-              onChange={(e) => setFormLabel(e.currentTarget.value)}
-              radius="md"
-              styles={inputStyles}
-            />
-          </Group>
+                {/* Marks + Label (side by side) */}
+                <div className="grid grid-cols-2 gap-2">
+                  <NumberField
+                    className="w-full"
+                    value={formMarks}
+                    onChange={setFormMarks}
+                    minValue={1}
+                    maxValue={30}
+                  >
+                    <Label
+                      className="text-[#8B8B9E] text-[11px] tracking-wider mb-1"
+                      style={{ fontFamily: "'JetBrains Mono', monospace" }}
+                    >
+                      Marks
+                    </Label>
+                    <NumberField.Group>
+                      <NumberField.DecrementButton />
+                      <NumberField.Input className="bg-[#1A1A24] border border-[#252533] text-[#F0EEE8] rounded-md" />
+                      <NumberField.IncrementButton />
+                    </NumberField.Group>
+                  </NumberField>
 
-          {/* Question text */}
-          <Textarea
-            label="Question"
-            placeholder="Enter the question text..."
-            value={formQuestion}
-            onChange={(e) => setFormQuestion(e.currentTarget.value)}
-            autosize
-            minRows={3}
-            radius="md"
-            styles={inputStyles}
-          />
+                  <TextField
+                    className="w-full"
+                    name="label"
+                    onChange={(val) => setFormLabel(val)}
+                  >
+                    <Label className="text-[#8B8B9E] text-[11px] tracking-wider mb-1">
+                      Label
+                    </Label>
+                    <Input
+                      value={formLabel}
+                      placeholder={
+                        formType === "specimen"
+                          ? 'e.g. "(a)", "(b)(i)"'
+                          : "Optional"
+                      }
+                      className="bg-[#1A1A24] border border-[#252533] text-[#F0EEE8] rounded-md"
+                    />
+                  </TextField>
+                </div>
 
-          {/* Mark scheme */}
-          <Box>
-            <Textarea
-              label="Mark Scheme / Model Answer"
-              placeholder="Enter the mark scheme or model answer..."
-              value={formMarkScheme}
-              onChange={(e) => setFormMarkScheme(e.currentTarget.value)}
-              autosize
-              minRows={6}
-              radius="md"
-              styles={inputStyles}
-            />
-            <Text fz="xs" c="#55556A" mt={4}>
-              This is sent to the AI marker along with the student's answer. Use [1], [2] notation
-              for mark points.
-            </Text>
-          </Box>
+                {/* Question text */}
+                <div>
+                  <label className="text-[#8B8B9E] text-xs font-medium mb-1 block">
+                    Question
+                  </label>
+                  <TextArea
+                    value={formQuestion}
+                    onChange={(e) => setFormQuestion(e.target.value)}
+                    placeholder="Enter the question text..."
+                    className="w-full bg-[#1A1A24] border border-[#252533] text-[#F0EEE8] rounded-md min-h-[80px]"
+                    rows={3}
+                  />
+                </div>
 
-          {/* Form error */}
-          {formError && (
-            <Alert
-              color="red"
-              variant="light"
-              radius="md"
-              styles={{ root: { backgroundColor: "#F8717111", border: "1px solid #F8717144" } }}
-            >
-              {formError}
-            </Alert>
-          )}
+                {/* Mark scheme */}
+                <div>
+                  <label className="text-[#8B8B9E] text-xs font-medium mb-1 block">
+                    Mark Scheme / Model Answer
+                  </label>
+                  <TextArea
+                    value={formMarkScheme}
+                    onChange={(e) => setFormMarkScheme(e.target.value)}
+                    placeholder="Enter the mark scheme or model answer..."
+                    className="w-full bg-[#1A1A24] border border-[#252533] text-[#F0EEE8] rounded-md min-h-[160px]"
+                    rows={6}
+                  />
+                  <span className="text-xs text-[#55556A] mt-1 block">
+                    This is sent to the AI marker along with the student's
+                    answer. Use [1], [2] notation for mark points.
+                  </span>
+                </div>
 
-          {/* Actions */}
-          <Group justify="flex-end" gap="sm" mt="xs">
-            <Button variant="ghost" className="rounded-md text-[#8B8B9E]" onPress={closeModal} isDisabled={saving}>Cancel</Button>
-            <Button className="rounded-md border-none font-semibold bg-gradient-to-br from-[#7C6FFF] to-[#A78BFA] text-white shadow-[0_4px_16px_#7C6FFF30]" onPress={handleSave} isPending={saving}>{({isPending}) => <>{isPending && <Spinner color="current" size="sm" />}{isPending ? "Saving..." : (editing ? "Save Changes" : "Create Question")}</>}</Button>
-          </Group>
-        </Stack>
-      </Modal>
+                {/* Form error */}
+                {formError && (
+                  <Alert
+                    status="danger"
+                    className="bg-[#F8717111] border border-[#F8717144]"
+                  >
+                    <Alert.Indicator />
+                    <Alert.Content className="flex-1">
+                      <Alert.Description>{formError}</Alert.Description>
+                    </Alert.Content>
+                  </Alert>
+                )}
+              </div>
+            </Modal.Body>
+            <Modal.Footer>
+              <div className="flex items-center justify-end gap-2">
+                <Button
+                  variant="ghost"
+                  className="rounded-md text-[#8B8B9E]"
+                  onPress={closeModal}
+                  isDisabled={saving}
+                >
+                  Cancel
+                </Button>
+                <Button
+                  className="rounded-md border-none font-semibold bg-gradient-to-br from-[#7C6FFF] to-[#A78BFA] text-white shadow-[0_4px_16px_#7C6FFF30]"
+                  onPress={handleSave}
+                  isPending={saving}
+                >
+                  {({ isPending }) => (
+                    <>
+                      {isPending && <Spinner color="current" size="sm" />}
+                      {isPending
+                        ? "Saving..."
+                        : editing
+                          ? "Save Changes"
+                          : "Create Question"}
+                    </>
+                  )}
+                </Button>
+              </div>
+            </Modal.Footer>
+          </Modal.Dialog>
+        </Modal.Container>
+      </Modal.Backdrop>
 
       {/* ---------- Delete confirmation ---------- */}
       <ConfirmDeleteModal
@@ -614,12 +742,14 @@ export default function WrittenAdmin() {
         message={
           deleteTarget
             ? `Are you sure you want to delete this ${
-                deleteTarget.question_type === "ten_marker" ? "10-marker" : deleteTarget.question_type?.replace("_", " ")
+                deleteTarget.question_type === "ten_marker"
+                  ? "10-marker"
+                  : deleteTarget.question_type?.replace("_", " ")
               } question? This action cannot be undone.`
             : undefined
         }
       />
-    </Stack>
+    </div>
   );
 }
 
@@ -629,7 +759,16 @@ export default function WrittenAdmin() {
 
 function EditIcon() {
   return (
-    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <svg
+      width="14"
+      height="14"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
       <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" />
       <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" />
     </svg>
@@ -638,7 +777,16 @@ function EditIcon() {
 
 function TrashIcon() {
   return (
-    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <svg
+      width="14"
+      height="14"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
       <polyline points="3 6 5 6 21 6" />
       <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
       <line x1="10" y1="11" x2="10" y2="17" />

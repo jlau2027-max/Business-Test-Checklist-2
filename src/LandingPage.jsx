@@ -1,13 +1,12 @@
-import { Box, Container, Text, Group, Paper, Badge } from "@mantine/core";
 import { Button } from "@heroui/react";
 import { Show, SignInButton, SignUpButton } from "@clerk/react";
 import LoginButton from "./LoginButton.jsx";
 
 export default function LandingPage() {
   return (
-    <Box mih="100vh" bg="#09090F" style={{ fontFamily: "'Inter', sans-serif", color: "#F0EEE8" }}>
+    <div className="min-h-screen" style={{ backgroundColor: "#09090F", fontFamily: "'Inter', sans-serif", color: "#F0EEE8" }}>
       {/* Header */}
-      <Box
+      <div
         style={{
           position: "sticky", top: 0, zIndex: 100,
           background: "rgba(9, 9, 15, 0.85)",
@@ -16,41 +15,34 @@ export default function LandingPage() {
           borderBottom: "1px solid rgba(255,255,255,0.04)",
         }}
       >
-        <Container size="lg" py="sm">
-          <Group justify="center" style={{ position: "relative" }}>
-            <Badge
-              variant="light"
-              size="sm"
-              tt="uppercase"
-              fw={700}
-              ff="'JetBrains Mono', monospace"
-              style={{ letterSpacing: 2, backgroundColor: "#7C6FFF18", color: "#A78BFA", border: "none" }}
+        <div className="max-w-4xl mx-auto py-2 px-4">
+          <div className="flex items-center justify-center" style={{ position: "relative" }}>
+            <span
+              className="text-xs px-2 py-0.5 rounded uppercase font-bold"
+              style={{ letterSpacing: 2, backgroundColor: "#7C6FFF18", color: "#A78BFA", border: "none", fontFamily: "'JetBrains Mono', monospace" }}
             >
               IB Revision Hub
-            </Badge>
+            </span>
             <LoginButton />
-          </Group>
-        </Container>
-      </Box>
+          </div>
+        </div>
+      </div>
 
       {/* Hero */}
-      <Container size="sm" py={80}>
-        <Text
-          ta="center" fw={800}
-          fz={{ base: 28, sm: 40 }}
-          c="#F0EEE8"
-          style={{ letterSpacing: -1 }}
-          mb="xs"
+      <div className="max-w-xl mx-auto px-4" style={{ paddingTop: 80, paddingBottom: 80 }}>
+        <span
+          className="text-center block font-extrabold text-[#F0EEE8] mb-1"
+          style={{ fontSize: "clamp(28px, 5vw, 40px)", letterSpacing: -1 }}
         >
           IB Revision Hub
-        </Text>
-        <Text ta="center" fz="md" c="#8B8B9E" mb={40} maw={420} mx="auto">
+        </span>
+        <span className="text-center block text-base text-[#8B8B9E] mx-auto" style={{ marginBottom: 40, maxWidth: 420 }}>
           Flashcards, MCQs, written practice with AI grading, and more — built for IB students.
-        </Text>
+        </span>
 
         {/* Auth prompt for signed-out users */}
         <Show when="signed-out">
-          <Group justify="center" gap="sm" mb={48}>
+          <div className="flex items-center justify-center gap-2" style={{ marginBottom: 48 }}>
             <SignInButton mode="modal">
               <Button
                 render={(props) => <button {...props} />}
@@ -72,21 +64,18 @@ export default function LandingPage() {
                 Sign Up
               </Button>
             </SignUpButton>
-          </Group>
+          </div>
         </Show>
 
         <Show when="signed-in">
-          <Box mb={48} />
+          <div style={{ marginBottom: 48 }} />
         </Show>
 
         {/* Subject cards */}
-        <Group grow gap="md">
-          <Paper
-            component="a"
+        <div className="flex gap-4 grow">
+          <a
             href="/business/checklist"
-            bg="#12121A"
-            radius="lg"
-            p="xl"
+            className="bg-[#12121A] rounded-lg p-6 flex-1"
             style={{
               border: "1px solid #252533",
               textDecoration: "none",
@@ -96,29 +85,23 @@ export default function LandingPage() {
             onMouseEnter={e => { e.currentTarget.style.borderColor = "#7C6FFF"; e.currentTarget.style.boxShadow = "0 0 20px #7C6FFF22"; }}
             onMouseLeave={e => { e.currentTarget.style.borderColor = "#252533"; e.currentTarget.style.boxShadow = "none"; }}
           >
-            <Badge
-              size="xs"
-              variant="light"
-              ff="'JetBrains Mono', monospace"
-              mb="sm"
-              style={{ backgroundColor: "#7C6FFF18", color: "#A78BFA", border: "none" }}
+            <span
+              className="text-xs px-1.5 py-0.5 rounded mb-2 inline-block"
+              style={{ backgroundColor: "#7C6FFF18", color: "#A78BFA", border: "none", fontFamily: "'JetBrains Mono', monospace" }}
             >
               HL
-            </Badge>
-            <Text fz="lg" fw={700} c="#F0EEE8" mb={4}>
+            </span>
+            <span className="font-bold text-lg text-[#F0EEE8] block" style={{ marginBottom: 4 }}>
               Business Management
-            </Text>
-            <Text fz="sm" c="#8B8B9E" lh={1.5}>
+            </span>
+            <span className="text-sm text-[#8B8B9E]" style={{ lineHeight: 1.5 }}>
               Finance unit — checklist, flashcards, MCQs, written practice & specimen papers
-            </Text>
-          </Paper>
+            </span>
+          </a>
 
-          <Paper
-            component="a"
+          <a
             href="/history/specimen"
-            bg="#12121A"
-            radius="lg"
-            p="xl"
+            className="bg-[#12121A] rounded-lg p-6 flex-1"
             style={{
               border: "1px solid #252533",
               textDecoration: "none",
@@ -128,24 +111,21 @@ export default function LandingPage() {
             onMouseEnter={e => { e.currentTarget.style.borderColor = "#F87171"; e.currentTarget.style.boxShadow = "0 0 20px #F8717122"; }}
             onMouseLeave={e => { e.currentTarget.style.borderColor = "#252533"; e.currentTarget.style.boxShadow = "none"; }}
           >
-            <Badge
-              size="xs"
-              variant="light"
-              ff="'JetBrains Mono', monospace"
-              mb="sm"
-              style={{ backgroundColor: "#F8717118", color: "#F87171", border: "none" }}
+            <span
+              className="text-xs px-1.5 py-0.5 rounded mb-2 inline-block"
+              style={{ backgroundColor: "#F8717118", color: "#F87171", border: "none", fontFamily: "'JetBrains Mono', monospace" }}
             >
               HL / SL
-            </Badge>
-            <Text fz="lg" fw={700} c="#F0EEE8" mb={4}>
+            </span>
+            <span className="font-bold text-lg text-[#F0EEE8] block" style={{ marginBottom: 4 }}>
               History
-            </Text>
-            <Text fz="sm" c="#8B8B9E" lh={1.5}>
+            </span>
+            <span className="text-sm text-[#8B8B9E]" style={{ lineHeight: 1.5 }}>
               Paper 2 & Paper 3 specimen questions with AI-powered grading
-            </Text>
-          </Paper>
-        </Group>
-      </Container>
-    </Box>
+            </span>
+          </a>
+        </div>
+      </div>
+    </div>
   );
 }

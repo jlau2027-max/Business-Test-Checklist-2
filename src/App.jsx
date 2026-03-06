@@ -1,11 +1,7 @@
 import { useState, useEffect, createContext, useContext } from "react";
 import { Analytics } from "@vercel/analytics/react";
-import {
-  Container, Badge, Text, Group, Paper, Progress,
-  Accordion, Checkbox, Collapse,
-  Alert, Box, Stack, useMantineTheme,
-} from "@mantine/core";
-import { Button, TextArea, Spinner } from "@heroui/react";
+import { Button, TextArea, Spinner, Alert, Checkbox, Tabs } from "@heroui/react";
+import ProgressBar from "./components/ProgressBar.jsx";
 import LoginButton from "./LoginButton.jsx";
 import Sidebar from "./Sidebar.jsx";
 import { useAuth } from "./AuthContext.jsx";
@@ -330,102 +326,64 @@ function ChecklistView() {
   return (
     <div style={{maxWidth:1060,margin:"0 auto",padding:"0 0 40px"}}>
       {/* Progress card */}
-      <Paper
-        bg="#12121A"
-        radius="lg"
-        p="xl"
-        mb="xl"
-        style={{
-          border: "1px solid #252533",
-          boxShadow: "0 2px 8px rgba(0,0,0,0.2)",
-        }}
-      >
-        <Group justify="space-between" mb="xs">
-          <Text fz="sm" c="#8B8B9E" ff="'JetBrains Mono', monospace">Overall Progress</Text>
-          <Text fz={24} fw={800} c={progColor}>{progress}%</Text>
-        </Group>
-        <Progress
-          value={progress}
-          size="md"
-          radius="xl"
-          color={progColor}
-          animated
-          styles={{ root: { background: "#1E1E2A" } }}
-        />
-        <Group justify="space-between" mt="sm">
-          <Text fz="xs" c="#55556A">{checkedCount} of {totalItems} topics covered</Text>
-          <Badge size="xs" variant="light" color="teal" ff="'JetBrains Mono', monospace">auto-saved</Badge>
-        </Group>
-      </Paper>
+      <div className="bg-[#12121A] rounded-lg p-6 mb-6 border border-[#252533]" style={{boxShadow: "0 2px 8px rgba(0,0,0,0.2)"}}>
+        <div className="flex items-center justify-between mb-1">
+          <span className="text-sm text-[#8B8B9E]" style={{fontFamily:"'JetBrains Mono', monospace"}}>Overall Progress</span>
+          <span className="text-2xl font-extrabold" style={{color: progColor}}>{progress}%</span>
+        </div>
+        <ProgressBar value={progress} color={progColor} animated />
+        <div className="flex items-center justify-between mt-3">
+          <span className="text-xs text-[#55556A]">{checkedCount} of {totalItems} topics covered</span>
+          <span className="text-xs px-1.5 py-0.5 rounded" style={{fontFamily:"'JetBrains Mono', monospace", backgroundColor:"#34D39922", color:"#34D399"}}>auto-saved</span>
+        </div>
+      </div>
 
       {/* Sections */}
-      <Accordion
-        multiple
-        value={openSections}
-        onChange={handleAccordion}
-        variant="separated"
-        radius="md"
-        styles={{
-          item: { backgroundColor: "#12121A", border: "1px solid #252533", marginBottom: 12, "&[data-active]": { borderColor: "#35354A" } },
-          control: { padding: "14px 20px", "&:hover": { backgroundColor: "#1A1A24" } },
-          content: { padding: "4px 20px 16px", borderTop: "1px solid #252533" },
-          chevron: { color: "#55556A" },
-        }}
-      >
+      <div className="flex flex-col gap-3">
         {checklistSections.map(section => {
           const sectionChecked = section.items.filter((_,i)=>checked[`${section.id}-${i}`]).length;
           const allDone = sectionChecked===section.items.length;
+          const isOpen = openSections.includes(section.id);
           return (
-            <Accordion.Item value={section.id} key={section.id} style={{ borderLeft: `4px solid ${section.color}` }}>
-              <Accordion.Control>
-                <Group gap="sm">
-                  <Badge
-                    variant="light"
-                    size="sm"
-                    fw={700}
-                    ff="'JetBrains Mono', monospace"
-                    style={{ backgroundColor: section.color + "22", color: section.color, border: "none" }}
-                  >
-                    {sectionChecked}/{section.items.length}
-                  </Badge>
-                  <Text fw={600} fz="sm" c={allDone ? section.color : "#F0EEE8"}>
-                    {allDone && "✓ "}{section.title}
-                  </Text>
-                </Group>
-              </Accordion.Control>
-              <Accordion.Panel>
-                <Stack gap={4}>
-                  {section.items.map((item,i) => {
-                    const key = `${section.id}-${i}`;
-                    const isChecked = checked[key];
-                    const isImportant = item.includes("MEMORISE");
-                    return (
-                      <Checkbox
-                        key={key}
-                        checked={!!isChecked}
-                        onChange={() => toggle(key)}
-                        label={item}
-                        color={section.color}
-                        radius="sm"
-                        styles={{
-                          root: { padding: "6px 4px", borderRadius: 8, cursor: "pointer", transition: "background 0.15s", "&:hover": { backgroundColor: "#1A1A24" } },
-                          label: { color: isChecked ? "#55556A" : isImportant ? "#FBBF24" : "#C8C4BC", textDecoration: isChecked ? "line-through" : "none", fontSize: 14, lineHeight: 1.5, cursor: "pointer" },
-                          input: { cursor: "pointer" },
-                        }}
-                      />
-                    );
-                  })}
-                </Stack>
-              </Accordion.Panel>
-            </Accordion.Item>
+            <div key={section.id} className="bg-[#12121A] rounded-md border border-[#252533]" style={{borderLeft: `4px solid ${section.color}`}}>
+              <button
+                onClick={() => {
+                  const next = isOpen ? openSections.filter(id => id !== section.id) : [...openSections, section.id];
+                  handleAccordion(next);
+                }}
+                className="w-full flex items-center gap-2 px-5 py-3.5 hover:bg-[#1A1A24] transition-colors cursor-pointer"
+                style={{background:"transparent", border:"none", textAlign:"left"}}
+              >
+                <span className="text-xs px-1.5 py-0.5 rounded font-bold" style={{backgroundColor: section.color + "22", color: section.color, fontFamily: "'JetBrains Mono', monospace"}}>{sectionChecked}/{section.items.length}</span>
+                <span className="text-sm font-semibold" style={{color: allDone ? section.color : "#F0EEE8"}}>{allDone && "✓ "}{section.title}</span>
+                <svg className="ml-auto shrink-0" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#55556A" strokeWidth="2" style={{transform: isOpen ? "rotate(180deg)" : "rotate(0deg)", transition:"transform 0.2s"}}><polyline points="6 9 12 15 18 9"/></svg>
+              </button>
+              {isOpen && (
+                <div className="px-5 pb-4 pt-1 border-t border-[#252533]">
+                  <div className="flex flex-col gap-1">
+                    {section.items.map((item,i) => {
+                      const key = `${section.id}-${i}`;
+                      const isChecked = checked[key];
+                      const isImportant = item.includes("MEMORISE");
+                      return (
+                        <label key={key} className="flex items-start gap-2.5 py-1.5 px-1 rounded-lg cursor-pointer hover:bg-[#1A1A24] transition-colors">
+                          <input type="checkbox" checked={!!isChecked} onChange={() => toggle(key)} className="mt-1 accent-current cursor-pointer" style={{accentColor: section.color}} />
+                          <span className="text-sm leading-relaxed cursor-pointer" style={{color: isChecked ? "#55556A" : isImportant ? "#FBBF24" : "#C8C4BC", textDecoration: isChecked ? "line-through" : "none"}}>{item}</span>
+                        </label>
+                      );
+                    })}
+                  </div>
+                </div>
+              )}
+            </div>
           );
         })}
-      </Accordion>
+      </div>
 
-      <Text ta="center" mt="lg" c="#55556A" fz="xs">
+      <span className="text-center block text-xs text-[#55556A] mt-6">
         Click any item to mark it as revised ·{" "}
-        <Text component="span" c="#7C6FFF" style={{cursor:"pointer"}} onClick={()=>{ setChecked({}); saveLS("checklist_checked", {}); }}>Reset all</Text>
-      </Text>
+        <span className="text-[#7C6FFF] cursor-pointer" onClick={()=>{ setChecked({}); saveLS("checklist_checked", {}); }}>Reset all</span>
+      </span>
     </div>
   );
 }
@@ -436,9 +394,8 @@ function FlashCard({card, catColor}) {
     <div className="flashcard-container" onClick={()=>setFlipped(f=>!f)}>
       <div className={`flashcard-inner${flipped ? " flipped" : ""}`}>
         {/* Front */}
-        <Paper
-          className="flashcard-face"
-          bg="#1A1A24"
+        <div
+          className="flashcard-face bg-[#1A1A24]"
           style={{
             border: "1px solid #252533",
             boxShadow: "0 2px 8px rgba(0,0,0,0.3)",
@@ -447,14 +404,13 @@ function FlashCard({card, catColor}) {
             textAlign: "center",
           }}
         >
-          <Text fz={11} ff="'JetBrains Mono', monospace" c="#55556A" tt="uppercase" lts={2} mb="md">TERM</Text>
-          <Text fz={20} fw={700} c="#F0EEE8" lh={1.3}>{card.term}</Text>
-          <Text fz={11} c="#55556A" mt="lg">tap to reveal</Text>
-        </Paper>
+          <span className="block text-[11px] uppercase text-[#55556A] mb-4" style={{fontFamily:"'JetBrains Mono', monospace", letterSpacing:2}}>TERM</span>
+          <span className="block text-[20px] font-bold text-[#F0EEE8]" style={{lineHeight:1.3}}>{card.term}</span>
+          <span className="block text-[11px] text-[#55556A] mt-6">tap to reveal</span>
+        </div>
         {/* Back */}
-        <Paper
-          className="flashcard-face flashcard-back"
-          bg="#1A1A24"
+        <div
+          className="flashcard-face flashcard-back bg-[#1A1A24]"
           style={{
             border: "1px solid #252533",
             boxShadow: "0 2px 8px rgba(0,0,0,0.3)",
@@ -462,15 +418,15 @@ function FlashCard({card, catColor}) {
             overflowY: "auto",
           }}
         >
-          <Text fz={11} ff="'JetBrains Mono', monospace" c="#55556A" tt="uppercase" lts={2} mb="sm">DEFINITION</Text>
-          <Text fz={13} c="#C8C4BC" lh={1.65}>{card.def}</Text>
+          <span className="block text-[11px] uppercase text-[#55556A] mb-2" style={{fontFamily:"'JetBrains Mono', monospace", letterSpacing:2}}>DEFINITION</span>
+          <span className="block text-[13px] text-[#C8C4BC]" style={{lineHeight:1.65}}>{card.def}</span>
           {card.formula && (
-            <Box mt="sm" p="sm" style={{ background: "#0D0D14", borderRadius: 8, borderLeft: `3px solid ${catColor}` }}>
-              <Text fz={10} ff="'JetBrains Mono', monospace" c={catColor} lts={1} mb={4}>FORMULA</Text>
-              <Text fz={12} ff="'JetBrains Mono', monospace" c="#A9E6FF">{card.formula}</Text>
-            </Box>
+            <div className="mt-2 p-2" style={{ background: "#0D0D14", borderRadius: 8, borderLeft: `3px solid ${catColor}` }}>
+              <span className="block text-[10px] text-current mb-1" style={{fontFamily:"'JetBrains Mono', monospace", letterSpacing:1, color:catColor}}>FORMULA</span>
+              <span className="block text-[12px] text-[#A9E6FF]" style={{fontFamily:"'JetBrains Mono', monospace"}}>{card.formula}</span>
+            </div>
           )}
-        </Paper>
+        </div>
       </div>
     </div>
   );
@@ -481,12 +437,12 @@ function FlashcardsView() {
   const [activeCat,setActiveCat]=useState(()=>loadLS("fc_cat", flashcardCategories[0]?.id));
   const [cardIdx,setCardIdx]=useState(0);
   const currentCat=flashcardCategories.find(c=>c.id===activeCat) || flashcardCategories[0];
-  if (!currentCat || !currentCat.cards || currentCat.cards.length === 0) return <Text ta="center" c="#55556A" py="xl">Loading flashcards…</Text>;
+  if (!currentCat || !currentCat.cards || currentCat.cards.length === 0) return <span className="text-center block text-[#55556A] py-8">Loading flashcards…</span>;
   const currentCard=currentCat.cards[Math.min(cardIdx, currentCat.cards.length - 1)];
   return (
     <div style={{maxWidth:680,margin:"0 auto",padding:"0 0 40px"}}>
       {/* Category filters */}
-      <Group gap={8} mb="lg" style={{flexWrap:"wrap"}}>
+      <div className="flex gap-2 mb-6 flex-wrap">
         {flashcardCategories.map(cat=>(
           <Button
             key={cat.id}
@@ -503,27 +459,28 @@ function FlashcardsView() {
             {cat.label}
           </Button>
         ))}
-      </Group>
+      </div>
 
       {/* Progress */}
-      <Group justify="space-between" mb="md">
-        <Text fz="xs" c="#55556A" ff="'JetBrains Mono', monospace">{cardIdx+1} / {currentCat.cards.length} — {currentCat.label}</Text>
-        <Box style={{background:"#1A1A24",borderRadius:99,height:4,width:140,overflow:"hidden"}}>
+      <div className="flex items-center justify-between mb-4">
+        <span className="text-xs text-[#55556A]" style={{fontFamily:"'JetBrains Mono', monospace"}}>{cardIdx+1} / {currentCat.cards.length} — {currentCat.label}</span>
+        <div style={{background:"#1A1A24",borderRadius:99,height:4,width:140,overflow:"hidden"}}>
           <div style={{width:`${((cardIdx+1)/currentCat.cards.length)*100}%`,height:"100%",background:currentCat.color,borderRadius:99,transition:"width 0.3s"}}/>
-        </Box>
-      </Group>
+        </div>
+      </div>
 
       {/* Card */}
       <FlashCard key={`${activeCat}-${cardIdx}`} card={currentCard} catColor={currentCat.color}/>
 
       {/* Navigation */}
-      <Group grow gap="sm" mt="md">
+      <div className="flex gap-2 grow mt-4">
         <Button
           variant="ghost"
           size="md"
           isDisabled={cardIdx===0}
           onPress={()=>setCardIdx(i=>Math.max(0,i-1))}
           className="rounded-md bg-[#1A1A24] border border-[#252533] text-[#8B8B9E] disabled:bg-[#12121A] disabled:border-[#1E1E2A]"
+          style={{flex:1}}
         >
           Previous
         </Button>
@@ -533,13 +490,14 @@ function FlashcardsView() {
           onPress={()=>setCardIdx(i=>Math.min(currentCat.cards.length-1,i+1))}
           className="rounded-md border-none text-white"
           style={{
+            flex:1,
             background: cardIdx===currentCat.cards.length-1 ? "#1E1E2A" : currentCat.color,
           }}
         >
           Next
         </Button>
-      </Group>
-      <Text ta="center" fz="xs" c="#55556A" mt="md">Tap any card to flip it</Text>
+      </div>
+      <span className="text-center block text-xs text-[#55556A] mt-4">Tap any card to flip it</span>
     </div>
   );
 }
@@ -551,16 +509,16 @@ function MCQItem({q, displayNum}) {
   const color=catColors[q.cat]||"#7C6FFF";
   const { recordAttempt, resetTimer } = useAttemptTracker(q.id, "mcq", q.cat, "business", q.difficulty);
   return (
-    <Paper bg="#1A1A24" radius="lg" mb="sm" style={{ border:"1px solid #252533", overflow:"hidden", transition:"all 0.2s" }}>
+    <div className="bg-[#1A1A24] rounded-lg mb-2 border border-[#252533]" style={{ overflow:"hidden", transition:"all 0.2s" }}>
       <div style={{borderLeft:`4px solid ${color}`,padding:"18px 20px"}}>
-        <Group gap={8} mb="sm" style={{flexWrap:"wrap"}}>
-          <Badge size="xs" ff="'JetBrains Mono', monospace" style={{backgroundColor:color,color:"#fff"}}>MCQ</Badge>
-          <Badge size="xs" variant="light" ff="'JetBrains Mono', monospace" style={{backgroundColor:color+"22",color:color,border:"none"}}>{q.cat}</Badge>
-          <Badge size="xs" variant="light" ff="'JetBrains Mono', monospace" style={{backgroundColor:"#1E1E2A",color:"#8B8B9E",border:"none"}}>{q.difficulty}</Badge>
-        </Group>
-        <Text fz={15} c="#F0EEE8" lh={1.6} fw={600}>Q{displayNum}. {q.q}</Text>
+        <div className="flex gap-2 mb-2 flex-wrap">
+          <span className="text-xs px-1.5 py-0.5 rounded" style={{fontFamily:"'JetBrains Mono', monospace",backgroundColor:color,color:"#fff"}}>MCQ</span>
+          <span className="text-xs px-1.5 py-0.5 rounded" style={{fontFamily:"'JetBrains Mono', monospace",backgroundColor:color+"22",color:color}}>{ q.cat}</span>
+          <span className="text-xs px-1.5 py-0.5 rounded" style={{fontFamily:"'JetBrains Mono', monospace",backgroundColor:"#1E1E2A",color:"#8B8B9E"}}>{q.difficulty}</span>
+        </div>
+        <span className="block text-[15px] text-[#F0EEE8] font-semibold" style={{lineHeight:1.6}}>Q{displayNum}. {q.q}</span>
       </div>
-      <Stack gap={8} p="md" pt="sm">
+      <div className="flex flex-col gap-2 p-4 pt-2">
         {q.options.map((opt,i) => {
           const isSelected=selected===i;
           const isCorrect=i===q.answer;
@@ -570,32 +528,30 @@ function MCQItem({q, displayNum}) {
             else if(isSelected&&!isCorrect){bg="#F87171"+"22";border="#F87171";tc="#FCA5A5";}
           } else if(isSelected){bg=color+"22";border=color;tc="#F0EEE8";}
           return (
-            <Paper
+            <div
               key={i}
-              p="sm"
-              radius="md"
+              className="p-2 rounded-md"
               onClick={()=>{if(!confirmed)setSelected(i);}}
               style={{
                 background:bg, border:`1.5px solid ${border}`,
                 cursor:confirmed?"default":"pointer", transition:"all 0.2s",
-                "&:hover": !confirmed && !isSelected ? {borderColor: color+"66"} : undefined,
               }}
               onMouseEnter={e=>{if(!confirmed&&!isSelected)e.currentTarget.style.borderColor=color+"66";}}
               onMouseLeave={e=>{if(!confirmed&&!isSelected)e.currentTarget.style.borderColor="#252533";}}
             >
-              <Group gap="sm" wrap="nowrap">
-                <Box style={{
+              <div className="flex items-center gap-2 flex-nowrap">
+                <div style={{
                   width:28,height:28,borderRadius:6,flexShrink:0,
                   background:confirmed&&isCorrect?"#34D399":confirmed&&isSelected&&!isCorrect?"#F87171":isSelected?color:"#252533",
                   display:"flex",alignItems:"center",justifyContent:"center",
                 }}>
-                  <Text fz={11} ff="'JetBrains Mono', monospace" c="#fff" fw={700}>
+                  <span className="text-[11px] text-white font-bold" style={{fontFamily:"'JetBrains Mono', monospace"}}>
                     {confirmed&&isCorrect?"✓":confirmed&&isSelected&&!isCorrect?"✗":String.fromCharCode(65+i)}
-                  </Text>
-                </Box>
-                <Text fz={14} c={tc} lh={1.4}>{opt}</Text>
-              </Group>
-            </Paper>
+                  </span>
+                </div>
+                <span className="text-[14px]" style={{color:tc, lineHeight:1.4}}>{opt}</span>
+              </div>
+            </div>
           );
         })}
         {!confirmed ? (
@@ -612,23 +568,19 @@ function MCQItem({q, displayNum}) {
             Check Answer
           </Button>
         ) : (
-          <Alert
-            mt={4}
-            radius="md"
-            variant="light"
-            color={selected===q.answer ? "green" : "red"}
-            title={selected===q.answer ? "Correct!" : "Incorrect"}
-            styles={{
-              root: { backgroundColor: selected===q.answer ? "#34D399"+"11" : "#F87171"+"11", border: `1px solid ${selected===q.answer ? "#34D399" : "#F87171"}44` },
-              title: { fontFamily: "'JetBrains Mono', monospace", fontSize: 12 },
-            }}
-          >
-            <Text fz="sm" c="#8B8B9E" lh={1.6}>{q.explanation}</Text>
-            <Button variant="ghost" size="sm" className="mt-2 text-[#8B8B9E]" onPress={()=>{setSelected(null);setConfirmed(false);resetTimer();}}>Try Again</Button>
+          <Alert status={selected===q.answer ? "success" : "danger"} className="mt-1 rounded-md" style={{backgroundColor: (selected===q.answer ? "#34D399" : "#F87171") + "11", border: `1px solid ${selected===q.answer ? "#34D399" : "#F87171"}44`}}>
+            <Alert.Indicator />
+            <Alert.Content>
+              <Alert.Title style={{fontFamily: "'JetBrains Mono', monospace", fontSize: 12}}>{selected===q.answer ? "Correct!" : "Incorrect"}</Alert.Title>
+              <Alert.Description>
+                <span className="text-sm text-[#8B8B9E] leading-relaxed">{q.explanation}</span>
+                <Button variant="ghost" size="sm" className="mt-2 text-[#8B8B9E]" onPress={()=>{setSelected(null);setConfirmed(false);resetTimer();}}>Try Again</Button>
+              </Alert.Description>
+            </Alert.Content>
           </Alert>
         )}
-      </Stack>
-    </Paper>
+      </div>
+    </div>
   );
 }
 
@@ -647,7 +599,7 @@ function PracticeView() {
   return (
     <div style={{maxWidth:1060,margin:"0 auto",padding:"0 0 40px"}}>
       {/* Category filter */}
-      <Group gap={8} mb="lg" style={{flexWrap:"wrap"}}>
+      <div className="flex gap-2 mb-6 flex-wrap">
         {allCats.map(cat => {
           const c = catColors[cat] || "#7C6FFF";
           const active = filterCat === cat;
@@ -669,15 +621,15 @@ function PracticeView() {
             </Button>
           );
         })}
-      </Group>
+      </div>
 
       {/* Summary */}
-      <Text fz="xs" c="#55556A" ff="'JetBrains Mono', monospace" mb="lg">
+      <span className="block text-xs text-[#55556A] mb-6" style={{fontFamily:"'JetBrains Mono', monospace"}}>
         Showing {filtered.length} question{filtered.length!==1?"s":""}{filterCat!=="All"?` · ${filterCat}`:""}
-      </Text>
+      </span>
 
       {filtered.length === 0 && (
-        <Text ta="center" py={40} c="#55556A" fz="sm">No questions match this filter.</Text>
+        <span className="text-center block py-10 text-[#55556A] text-sm">No questions match this filter.</span>
       )}
 
       {filtered.map((q, i) => (
@@ -738,14 +690,14 @@ function WrittenPracticeItem({q, displayNum}) {
     : "#8B8B9E";
 
   return (
-    <Paper bg="#1A1A24" radius="lg" mb="md" style={{border:"1px solid #252533", overflow:"hidden"}}>
+    <div className="bg-[#1A1A24] rounded-lg mb-4 border border-[#252533]" style={{overflow:"hidden"}}>
       <div style={{borderLeft:`4px solid ${color}`, padding:"18px 20px"}}>
-        <Group gap={8} mb="sm" style={{flexWrap:"wrap"}}>
-          <Badge size="xs" ff="'JetBrains Mono', monospace" style={{backgroundColor:color+"22", color, border:"none"}}>{q.cat}</Badge>
-          <Badge size="xs" variant="light" ff="'JetBrains Mono', monospace" style={{backgroundColor:"#1E1E2A", color:"#8B8B9E", border:"none"}}>{q.difficulty}</Badge>
-          <Badge size="xs" ff="'JetBrains Mono', monospace" ml="auto" style={{backgroundColor:"#2A2800", color:"#FBBF24", border:"1px solid #5A4A00"}}>[ {q.marks} marks ]</Badge>
-        </Group>
-        <Text fz={15} c="#F0EEE8" lh={1.6} fw={600} style={{whiteSpace:"pre-line"}}>Q{displayNum}. {q.q}</Text>
+        <div className="flex gap-2 mb-2 flex-wrap">
+          <span className="text-xs px-1.5 py-0.5 rounded" style={{fontFamily:"'JetBrains Mono', monospace",backgroundColor:color+"22", color}}>{q.cat}</span>
+          <span className="text-xs px-1.5 py-0.5 rounded" style={{fontFamily:"'JetBrains Mono', monospace",backgroundColor:"#1E1E2A", color:"#8B8B9E"}}>{q.difficulty}</span>
+          <span className="text-xs px-1.5 py-0.5 rounded ml-auto" style={{fontFamily:"'JetBrains Mono', monospace",backgroundColor:"#2A2800", color:"#FBBF24", border:"1px solid #5A4A00"}}>[ {q.marks} marks ]</span>
+        </div>
+        <span className="block text-[15px] text-[#F0EEE8] font-semibold" style={{lineHeight:1.6, whiteSpace:"pre-line"}}>Q{displayNum}. {q.q}</span>
       </div>
 
       <div style={{padding:"12px 20px 16px"}}>
@@ -760,7 +712,7 @@ function WrittenPracticeItem({q, displayNum}) {
           style={{ fontFamily: "'Inter', sans-serif", resize: "vertical" }}
         />
 
-        <Group gap="sm">
+        <div className="flex items-center gap-2">
           <Button
             size="sm"
             className="rounded-md border-none font-semibold"
@@ -805,47 +757,30 @@ function WrittenPracticeItem({q, displayNum}) {
               Clear
             </Button>
           )}
-        </Group>
+        </div>
 
         {/* AI Grade Result */}
         {gradeResult && (
-          <Alert
-            mt="md"
-            radius="md"
-            variant="light"
-            color={gradeResult.score == null ? "gray" : scorePct >= 0.75 ? "green" : scorePct >= 0.4 ? "yellow" : "red"}
-            title={gradeResult.score != null ? `AI Score: ${gradeResult.score}/${gradeResult.maxMarks || q.marks}` : "Grading Error"}
-            styles={{
-              root: {
-                backgroundColor: (gradeResult.score == null ? "#8B8B9E" : scoreColor) + "11",
-                border: `1px solid ${gradeResult.score == null ? "#8B8B9E" : scoreColor}44`,
-              },
-              title: { fontFamily: "'JetBrains Mono', monospace", fontSize: 12 },
-            }}
-          >
-            {gradeResult.score != null && (
-              <Progress
-                value={scorePct * 100}
-                color={scoreColor}
-                size="sm"
-                radius="xl"
-                mb="sm"
-                animated
-                styles={{ root: { background: "#1E1E2A" } }}
-              />
-            )}
-            <Text fz="sm" c="#8B8B9E" lh={1.6}>{gradeResult.feedback}</Text>
+          <Alert status={gradeResult.score == null ? "warning" : scorePct >= 0.75 ? "success" : scorePct >= 0.4 ? "warning" : "danger"} className="mt-4 rounded-md" style={{backgroundColor: (gradeResult.score == null ? "#8B8B9E" : scoreColor) + "11", border: `1px solid ${gradeResult.score == null ? "#8B8B9E" : scoreColor}44`}}>
+            <Alert.Indicator />
+            <Alert.Content>
+              <Alert.Title style={{fontFamily: "'JetBrains Mono', monospace", fontSize: 12}}>{gradeResult.score != null ? `AI Score: ${gradeResult.score}/${gradeResult.maxMarks || q.marks}` : "Grading Error"}</Alert.Title>
+              <Alert.Description>
+                {gradeResult.score != null && <ProgressBar value={scorePct * 100} color={scoreColor} animated className="mb-2" />}
+                <span className="text-sm text-[#8B8B9E] leading-relaxed">{gradeResult.feedback}</span>
+              </Alert.Description>
+            </Alert.Content>
           </Alert>
         )}
 
-        <Collapse in={revealed}>
-          <Box mt="md" pt="md" style={{borderTop:"1px solid #252533"}}>
-            <Text fz={11} ff="'JetBrains Mono', monospace" c="#34D399" lts={1} mb="sm">MARKSCHEME</Text>
-            <Text fz={13} c="#B0ADA6" lh={1.7} style={{whiteSpace:"pre-line"}}>{q.modelAnswer}</Text>
-          </Box>
-        </Collapse>
+        {revealed && (
+          <div className="mt-4 pt-4 border-t border-[#252533]">
+            <span className="block text-[11px] text-[#34D399] mb-2" style={{fontFamily:"'JetBrains Mono', monospace", letterSpacing:1}}>MARKSCHEME</span>
+            <span className="block text-[13px] text-[#B0ADA6]" style={{lineHeight:1.7, whiteSpace:"pre-line"}}>{q.modelAnswer}</span>
+          </div>
+        )}
       </div>
-    </Paper>
+    </div>
   );
 }
 
@@ -868,15 +803,15 @@ function WrittenPracticeView() {
 
   return (
     <div style={{maxWidth:1060, margin:"0 auto", padding:"0 0 40px"}}>
-      <Paper bg="#12121A" radius="lg" p="lg" mb="xl" style={{border:"1px solid #252533"}}>
-        <Text fz="sm" c="#F0EEE8" fw={600} mb={4}>Written Practice</Text>
-        <Text fz="xs" c="#8B8B9E" lh={1.5}>
+      <div className="bg-[#12121A] rounded-lg p-5 mb-6 border border-[#252533]">
+        <span className="block text-sm text-[#F0EEE8] font-semibold mb-1">Written Practice</span>
+        <span className="block text-xs text-[#8B8B9E]" style={{lineHeight:1.5}}>
           Answer each question in the text box, then reveal the markscheme to compare.
-        </Text>
-      </Paper>
+        </span>
+      </div>
 
       {/* Mode selector — Short Answer / 10 Marker / Specimen (link) */}
-      <Group gap={10} mb="lg">
+      <div className="flex gap-2.5 mb-6">
         <Button
           className="rounded-md font-bold"
           onPress={()=>{ setMode("short"); setFilterCat("All"); }}
@@ -928,11 +863,11 @@ function WrittenPracticeView() {
             Specimen →
           </Button>
         </a>
-      </Group>
+      </div>
 
       {/* Category filter — only for short answer mode */}
       {mode === "short" && (
-        <Group gap={8} mb="lg" style={{flexWrap:"wrap"}}>
+        <div className="flex gap-2 mb-6 flex-wrap">
           {writtenCats.map(cat => {
             const c = catColors[cat] || "#7C6FFF";
             const active = filterCat === cat;
@@ -954,16 +889,16 @@ function WrittenPracticeView() {
               </Button>
             );
           })}
-        </Group>
+        </div>
       )}
 
-      <Text fz="xs" c="#55556A" ff="'JetBrains Mono', monospace" mb="lg">
+      <span className="block text-xs text-[#55556A] mb-6" style={{fontFamily:"'JetBrains Mono', monospace"}}>
         Showing {filtered.length} question{filtered.length!==1?"s":""}{mode === "short" && filterCat!=="All"?` · ${filterCat}`:""}
         {mode === "10mark" ? " · 10 Markers" : ""}
-      </Text>
+      </span>
 
       {filtered.length === 0 && (
-        <Text ta="center" py={40} c="#55556A" fz="sm">No questions match this filter.</Text>
+        <span className="text-center block py-10 text-[#55556A] text-sm">No questions match this filter.</span>
       )}
 
       {filtered.map((q, i) => (
@@ -997,12 +932,12 @@ export default function App({ initialTab = "checklist" }) {
 
   return (
     <ContentCtx.Provider value={content}>
-    <Box mih="100vh" bg="#09090F" style={{fontFamily:"'Inter', sans-serif",color:"#F0EEE8"}}>
+    <div className="min-h-screen bg-[#09090F]" style={{fontFamily:"'Inter', sans-serif",color:"#F0EEE8"}}>
 
       <Sidebar activeSubject="business" sidebarOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
 
       {/* Sticky header with glassmorphism */}
-      <Box
+      <div
         style={{
           position: "sticky", top: 0, zIndex: 100,
           background: "rgba(9, 9, 15, 0.85)",
@@ -1011,8 +946,8 @@ export default function App({ initialTab = "checklist" }) {
           borderBottom: "1px solid rgba(255,255,255,0.04)",
         }}
       >
-        <Container size="lg" py="sm">
-          <Group justify="center" mb={4} style={{ position: "relative" }}>
+        <div className="max-w-5xl mx-auto py-2">
+          <div className="flex items-center justify-center mb-1" style={{ position: "relative" }}>
             {/* Sidebar toggle */}
             <Button
               isIconOnly
@@ -1032,77 +967,47 @@ export default function App({ initialTab = "checklist" }) {
                 <line x1="3" y1="18" x2="21" y2="18"/>
               </svg>
             </Button>
-            <Badge
-              variant="light"
-              size="sm"
-              tt="uppercase"
-              fw={700}
-              ff="'JetBrains Mono', monospace"
-              style={{ letterSpacing: 2, backgroundColor: "#7C6FFF18", color: "#A78BFA", border: "none" }}
-            >
+            <span className="text-xs px-2 py-1 rounded uppercase font-bold tracking-widest" style={{fontFamily: "'JetBrains Mono', monospace", backgroundColor: "#7C6FFF18", color: "#A78BFA"}}>
               IB HL Business Management
-            </Badge>
+            </span>
             <LoginButton />
-          </Group>
-          <Text
-            ta="center" fw={800}
-            fz={{ base: 22, sm: 30 }}
-            c="#F0EEE8"
-            style={{ letterSpacing: -0.5 }}
-          >
-            Finance Unit — Revision Hub
-          </Text>
-          <Text ta="center" fz="xs" c="#55556A" mb="sm">
+          </div>
+          <h1 className="text-center font-extrabold text-[22px] sm:text-[30px] text-[#F0EEE8]" style={{letterSpacing: -0.5}}>Finance Unit — Revision Hub</h1>
+          <span className="text-center block text-xs text-[#55556A] mb-2">
             Units 3.1–3.9 · 5.5 Breakeven · BMT Tools · {content.mcqQuestions.length} MCQs · {content.writtenQuestions.length} Written · {content.written10MarkQuestions.length} Extended
-          </Text>
+          </span>
 
-          <Group gap={4} grow>
-            {[
-              { value: "checklist", label: "Checklist", href: "/business/checklist" },
-              { value: "flashcards", label: "Flashcards", href: "/business/flashcards" },
-              { value: "practice", label: "Multi-Choice", href: "/business/multi-choice" },
-              { value: "written", label: "Written", href: "/business/written" },
-            ].map(t => (
-              <a
-                key={t.value}
-                href={t.href}
-                style={{
-                  flex: 1,
-                  textDecoration: "none",
-                }}
-              >
-                <Button
-                  fullWidth
-                  className="rounded-none font-semibold"
-                  style={{
-                    fontSize: 13,
-                    padding: "10px 4px 12px",
-                    backgroundColor: "transparent",
-                    color: tab === t.value ? "#F0EEE8" : "#55556A",
-                    borderBottom: tab === t.value ? "3px solid #7C6FFF" : "3px solid transparent",
-                    borderTop: "none",
-                    borderLeft: "none",
-                    borderRight: "none",
-                    borderRadius: 0,
-                    transition: "all 0.2s",
-                    fontFamily: "'Inter', sans-serif",
-                  }}
-                >
-                  {t.label}
-                </Button>
-              </a>
-            ))}
-          </Group>
-        </Container>
-      </Box>
+          <Tabs variant="secondary" selectedKey={tab}>
+            <Tabs.ListContainer>
+              <Tabs.List aria-label="Content tabs" className="w-full">
+                {[
+                  { value: "checklist", label: "Checklist", href: "/business/checklist" },
+                  { value: "flashcards", label: "Flashcards", href: "/business/flashcards" },
+                  { value: "practice", label: "Multi-Choice", href: "/business/multi-choice" },
+                  { value: "written", label: "Written", href: "/business/written" },
+                ].map(t => (
+                  <Tabs.Tab key={t.value} id={t.value}
+                    render={(domProps) => <a {...domProps} href={t.href} style={{textDecoration:"none", flex:1, textAlign:"center"}} />}
+                    className="text-[13px] font-semibold py-2.5 text-[#55556A] data-[selected=true]:text-[#F0EEE8]"
+                    style={{fontFamily: "'Inter', sans-serif"}}
+                  >
+                    {t.label}
+                    <Tabs.Indicator className="bg-[#7C6FFF]" />
+                  </Tabs.Tab>
+                ))}
+              </Tabs.List>
+            </Tabs.ListContainer>
+          </Tabs>
+        </div>
+      </div>
 
       {/* Content */}
-      <Container size="lg" py="xl" px="md">
+      <div className="max-w-5xl mx-auto py-8 px-4">
         {tab==="checklist" && <ChecklistView/>}
         {tab==="flashcards" && <FlashcardsView/>}
         {tab==="practice" && <PracticeView/>}
         {tab==="written" && <WrittenPracticeView/>}
-      </Container>
+      </div>
 
       {/* Floating support button */}
       <a
@@ -1137,7 +1042,7 @@ export default function App({ initialTab = "checklist" }) {
       </a>
 
       <Analytics />
-    </Box>
+    </div>
     </ContentCtx.Provider>
   );
 }

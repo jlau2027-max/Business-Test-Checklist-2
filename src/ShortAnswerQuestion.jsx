@@ -1,6 +1,6 @@
 import { useState } from 'react';
-import { Paper, Text, Progress, Alert, Box } from '@mantine/core';
 import { Button, TextArea, Spinner } from '@heroui/react';
+import ProgressBar from "./components/ProgressBar.jsx";
 
 export default function ShortAnswerQuestion({
   question,
@@ -51,8 +51,8 @@ export default function ShortAnswerQuestion({
   const scoreColor = grade >= 4 ? '#34D399' : grade >= 2 ? '#FBBF24' : '#F87171';
 
   return (
-    <Paper bg="#12121A" radius="lg" p="lg" style={{ border: '1px solid #252533' }}>
-      <Text fw={600} fz="md" c="#F0EEE8" mb="md">{question}</Text>
+    <div className="bg-[#12121A] rounded-lg p-4" style={{ border: '1px solid #252533' }}>
+      <span className="font-semibold text-base text-[#F0EEE8] block mb-4">{question}</span>
 
       <TextArea
         value={studentAnswer}
@@ -89,29 +89,23 @@ export default function ShortAnswerQuestion({
       )}
 
       {grade !== null && (
-        <Alert
-          color={grade >= 4 ? 'green' : grade >= 2 ? 'yellow' : 'red'}
-          variant="light"
-          radius="md"
-          mt="md"
-          title={`Score: ${grade}/5`}
-          styles={{
-            root: { backgroundColor: scoreColor + '11', border: `1px solid ${scoreColor}44` },
-            title: { fontFamily: "'JetBrains Mono', monospace" },
+        <div
+          className="rounded-md mt-4 p-4"
+          style={{
+            backgroundColor: scoreColor + '11',
+            border: `1px solid ${scoreColor}44`,
           }}
         >
-          <Progress
+          <span className="font-bold block mb-2" style={{ fontFamily: "'JetBrains Mono', monospace", color: scoreColor }}>
+            Score: {grade}/5
+          </span>
+          <ProgressBar
             value={(grade / 5) * 100}
             color={scoreColor}
-            size="sm"
-            radius="xl"
-            mb="sm"
-            animated
-            styles={{ section: { boxShadow: `0 0 8px ${scoreColor}40` } }}
           />
-          <Text fz="sm" c="#8B8B9E" lh={1.6}>{feedback}</Text>
-        </Alert>
+          <span className="text-sm text-[#8B8B9E] block mt-2" style={{ lineHeight: 1.6 }}>{feedback}</span>
+        </div>
       )}
-    </Paper>
+    </div>
   );
 }

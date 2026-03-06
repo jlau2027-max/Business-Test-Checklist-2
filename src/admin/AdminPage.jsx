@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Container, Tabs, Text, Group, Box, SegmentedControl } from "@mantine/core";
+import { Tabs } from "@heroui/react";
 import AdminGuard from "./AdminGuard.jsx";
 import FlashcardAdmin from "./FlashcardAdmin.jsx";
 import McqAdmin from "./McqAdmin.jsx";
@@ -29,7 +29,6 @@ export default function AdminPage() {
 
   const tabs = section === "business" ? BUSINESS_TABS : section === "history" ? HISTORY_TABS : USERS_TABS;
 
-  // Reset to first tab when switching sections
   const handleSectionChange = (val) => {
     setSection(val);
     setActiveTab(val === "business" ? "checklist" : val === "history" ? "history" : "users");
@@ -37,122 +36,83 @@ export default function AdminPage() {
 
   return (
     <AdminGuard>
-      <Box
-        style={{
-          minHeight: "100vh",
-          backgroundColor: "#0A0A12",
-        }}
-      >
-        <Container size="xl" py="lg">
+      <div className="min-h-screen" style={{ backgroundColor: "#0A0A12" }}>
+        <div className="max-w-7xl mx-auto px-4 py-6">
           {/* Header */}
-          <Group justify="space-between" align="center" mb="lg">
-            <Text fz="xl" fw={800} c="#F0EEE8">
-              Admin Panel
-            </Text>
-            <Text
-              component="a"
-              href="/business/checklist"
-              fz="sm"
-              c="#8B8B9E"
-              style={{ textDecoration: "none" }}
-            >
+          <div className="flex items-center justify-between mb-6">
+            <h1 className="text-xl font-extrabold text-[#F0EEE8]">Admin Panel</h1>
+            <a href="/business/checklist" className="text-sm text-[#8B8B9E] no-underline hover:text-[#F0EEE8]">
               Back to App
-            </Text>
-          </Group>
+            </a>
+          </div>
 
-          {/* Section selector */}
-          <SegmentedControl
-            value={section}
-            onChange={handleSectionChange}
-            data={[
-              { label: "Business", value: "business" },
-              { label: "History", value: "history" },
-              { label: "Users", value: "users" },
-            ]}
-            mb="md"
-            radius="md"
-            styles={{
-              root: {
-                backgroundColor: "#12121A",
-                border: "1px solid #252533",
-              },
-              label: {
-                color: "#8B8B9E",
-                fontWeight: 600,
-                fontSize: 14,
-                fontFamily: "'JetBrains Mono', monospace",
-              },
-              indicator: {
-                backgroundColor: section === "business" ? "#7C6FFF" : section === "history" ? "#F87171" : "#38BDF8",
-              },
-              control: {
-                "&[data-active] .mantine-SegmentedControl-label": {
-                  color: "#fff",
-                },
-              },
-            }}
-          />
-
-          {/* Tabs */}
+          {/* Section selector — primary variant */}
           <Tabs
-            value={activeTab}
-            onChange={setActiveTab}
-            radius="md"
-            styles={{
-              root: { },
-              list: {
-                borderBottom: "1px solid #252533",
-                gap: 0,
-              },
-              tab: {
-                color: "#8B8B9E",
-                fontWeight: 600,
-                fontSize: 14,
-                padding: "10px 20px",
-                borderBottom: "2px solid transparent",
-                "&[data-active]": {
-                  color: "#F0EEE8",
-                  borderBottomColor: section === "business" ? "#7C6FFF" : section === "history" ? "#F87171" : "#38BDF8",
-                },
-                "&:hover": {
-                  backgroundColor: "#12121A",
-                  color: "#F0EEE8",
-                },
-              },
-              panel: {
-                paddingTop: 16,
-              },
-            }}
+            variant="primary"
+            selectedKey={section}
+            onSelectionChange={handleSectionChange}
+            className="mb-4"
           >
-            <Tabs.List>
-              {tabs.map((tab) => (
-                <Tabs.Tab key={tab.value} value={tab.value}>
-                  {tab.label}
+            <Tabs.ListContainer>
+              <Tabs.List aria-label="Admin sections" className="bg-[#12121A] border border-[#252533] rounded-lg p-1">
+                <Tabs.Tab id="business" className="font-semibold text-sm font-mono text-[#8B8B9E] data-[selected=true]:text-white rounded-md px-4 py-2">
+                  Business
+                  <Tabs.Indicator className="bg-[#7C6FFF] rounded-md" />
                 </Tabs.Tab>
-              ))}
-            </Tabs.List>
+                <Tabs.Tab id="history" className="font-semibold text-sm font-mono text-[#8B8B9E] data-[selected=true]:text-white rounded-md px-4 py-2">
+                  History
+                  <Tabs.Indicator className="bg-[#F87171] rounded-md" />
+                </Tabs.Tab>
+                <Tabs.Tab id="users" className="font-semibold text-sm font-mono text-[#8B8B9E] data-[selected=true]:text-white rounded-md px-4 py-2">
+                  Users
+                  <Tabs.Indicator className="bg-[#38BDF8] rounded-md" />
+                </Tabs.Tab>
+              </Tabs.List>
+            </Tabs.ListContainer>
+          </Tabs>
 
-            <Tabs.Panel value="checklist">
+          {/* Sub-tabs — secondary variant */}
+          <Tabs
+            variant="secondary"
+            selectedKey={activeTab}
+            onSelectionChange={setActiveTab}
+          >
+            <Tabs.ListContainer>
+              <Tabs.List aria-label="Sub-tabs" className="border-b border-[#252533]">
+                {tabs.map((tab) => (
+                  <Tabs.Tab
+                    key={tab.value}
+                    id={tab.value}
+                    className="font-semibold text-sm text-[#8B8B9E] data-[selected=true]:text-[#F0EEE8] px-5 py-2.5 hover:bg-[#12121A] hover:text-[#F0EEE8]"
+                  >
+                    {tab.label}
+                    <Tabs.Indicator />
+                  </Tabs.Tab>
+                ))}
+              </Tabs.List>
+            </Tabs.ListContainer>
+
+            <Tabs.Panel id="checklist" className="pt-4">
               <ChecklistAdmin />
             </Tabs.Panel>
-            <Tabs.Panel value="flashcards">
+            <Tabs.Panel id="flashcards" className="pt-4">
               <FlashcardAdmin />
             </Tabs.Panel>
-            <Tabs.Panel value="mcq">
+            <Tabs.Panel id="mcq" className="pt-4">
               <McqAdmin />
             </Tabs.Panel>
-            <Tabs.Panel value="written">
+            <Tabs.Panel id="written" className="pt-4">
               <WrittenAdmin />
             </Tabs.Panel>
-            <Tabs.Panel value="history">
+            <Tabs.Panel id="history" className="pt-4">
               <HistoryAdmin />
             </Tabs.Panel>
-            <Tabs.Panel value="users">
+            <Tabs.Panel id="users" className="pt-4">
               <UsersAdmin />
             </Tabs.Panel>
           </Tabs>
-        </Container>
-      </Box>
+        </div>
+      </div>
     </AdminGuard>
   );
 }

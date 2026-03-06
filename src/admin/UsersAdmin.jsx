@@ -1,9 +1,7 @@
 import { useState, useEffect } from "react";
-import {
-  Badge, Text, Group, Paper, Progress, Box, Stack,
-} from "@mantine/core";
 import { Button, Table, Modal, TextField, Input, Label, Select, ListBox } from "@heroui/react";
 import { useAuth } from "../AuthContext.jsx";
+import ProgressBar from "../components/ProgressBar.jsx";
 import {
   getAllUsersStats,
   getUserAttempts,
@@ -45,19 +43,19 @@ function formatTime(ms) {
 
 function StatCard({ label, value, sub, color = "#7C6FFF" }) {
   return (
-    <Paper bg="#12121A" radius="lg" p="lg" style={{ border: "1px solid #252533", flex: 1, minWidth: 160 }}>
-      <Text fz={11} ff="'JetBrains Mono', monospace" c="#55556A" lts={1} mb={4}>
+    <div className="bg-[#12121A] rounded-lg p-6 border border-[#252533] flex-1 min-w-[160px]">
+      <span className="text-[11px] text-[#55556A] tracking-wider block mb-1" style={{ fontFamily: "'JetBrains Mono', monospace" }}>
         {label}
-      </Text>
-      <Text fz={28} fw={800} c={color} ff="'JetBrains Mono', monospace">
+      </span>
+      <span className="text-[28px] font-extrabold block" style={{ color, fontFamily: "'JetBrains Mono', monospace" }}>
         {value}
-      </Text>
+      </span>
       {sub && (
-        <Text fz={12} c="#8B8B9E" mt={2}>
+        <span className="text-xs text-[#8B8B9E] block mt-0.5">
           {sub}
-        </Text>
+        </span>
       )}
-    </Paper>
+    </div>
   );
 }
 
@@ -76,7 +74,7 @@ function UserDetail({ uid, displayName, onBack }) {
   }, [uid]);
 
   if (loading) {
-    return <Text ta="center" c="#55556A" py="xl">Loading user data...</Text>;
+    return <span className="block text-center text-[#55556A] py-8">Loading user data...</span>;
   }
 
   const overall = computeOverallStats(attempts);
@@ -84,21 +82,21 @@ function UserDetail({ uid, displayName, onBack }) {
   const wrongAnswers = getWrongAnswers(attempts);
 
   return (
-    <Stack gap="xl">
-      <Group gap="sm">
+    <div className="flex flex-col gap-8">
+      <div className="flex items-center gap-2">
         <Button variant="outline" onPress={onBack} className="rounded-md border-[#252533] text-[#8B8B9E] bg-transparent min-w-[auto] h-8 px-3 text-xs" style={{ fontFamily: "'JetBrains Mono', monospace" }}>← All Users</Button>
-        <Text fz="lg" fw={700} c="#F0EEE8">{displayName}</Text>
-      </Group>
+        <span className="text-lg font-bold text-[#F0EEE8]">{displayName}</span>
+      </div>
 
       {attempts.length === 0 ? (
-        <Paper bg="#12121A" radius="lg" p="xl" style={{ border: "1px solid #252533", textAlign: "center" }}>
-          <Text fz="lg" fw={700} c="#F0EEE8" mb="xs">No data yet</Text>
-          <Text fz="sm" c="#8B8B9E">This user hasn't answered any questions.</Text>
-        </Paper>
+        <div className="bg-[#12121A] rounded-lg p-8 border border-[#252533] text-center">
+          <span className="text-lg font-bold text-[#F0EEE8] block mb-1">No data yet</span>
+          <span className="text-sm text-[#8B8B9E]">This user hasn't answered any questions.</span>
+        </div>
       ) : (
         <>
           {/* Overview Cards */}
-          <Group gap="md" grow style={{ flexWrap: "wrap" }}>
+          <div className="flex flex-wrap gap-4 grow">
             <StatCard
               label="TOTAL ATTEMPTS"
               value={overall.totalAttempts}
@@ -123,101 +121,96 @@ function UserDetail({ uid, displayName, onBack }) {
               sub="across all questions"
               color="#A78BFA"
             />
-          </Group>
+          </div>
 
           {/* Category Breakdown */}
-          <Paper bg="#12121A" radius="lg" p="lg" style={{ border: "1px solid #252533" }}>
-            <Text fz={11} ff="'JetBrains Mono', monospace" c="#55556A" lts={1} mb="md">
+          <div className="bg-[#12121A] rounded-lg p-6 border border-[#252533]">
+            <span className="text-[11px] text-[#55556A] tracking-wider block mb-4" style={{ fontFamily: "'JetBrains Mono', monospace" }}>
               PERFORMANCE BY TOPIC
-            </Text>
-            <Stack gap="md">
+            </span>
+            <div className="flex flex-col gap-4">
               {categoryStats
                 .sort((a, b) => b.totalAttempts - a.totalAttempts)
                 .map((cat) => {
                   const color = CAT_COLORS[cat.category] || "#7C6FFF";
                   const pct = cat.mcqAccuracy ?? cat.writtenAvg ?? 0;
                   return (
-                    <Box key={cat.category}>
-                      <Group justify="space-between" mb={4}>
-                        <Group gap={8}>
-                          <Box style={{ width: 10, height: 10, borderRadius: 3, backgroundColor: color }} />
-                          <Text fz={13} c="#F0EEE8" fw={600}>{cat.category}</Text>
-                        </Group>
-                        <Group gap="xs">
+                    <div key={cat.category}>
+                      <div className="flex items-center justify-between mb-1">
+                        <div className="flex items-center gap-2">
+                          <div className="w-2.5 h-2.5 rounded-sm" style={{ backgroundColor: color }} />
+                          <span className="text-[13px] text-[#F0EEE8] font-semibold">{cat.category}</span>
+                        </div>
+                        <div className="flex items-center gap-2">
                           {cat.mcqAccuracy != null && (
-                            <Badge size="xs" ff="'JetBrains Mono', monospace" style={{ backgroundColor: color + "22", color, border: "none" }}>
+                            <span className="text-xs px-1.5 py-0.5 rounded" style={{ backgroundColor: color + "22", color, fontFamily: "'JetBrains Mono', monospace" }}>
                               MCQ: {cat.mcqAccuracy}%
-                            </Badge>
+                            </span>
                           )}
                           {cat.writtenAvg != null && (
-                            <Badge size="xs" ff="'JetBrains Mono', monospace" style={{ backgroundColor: color + "22", color, border: "none" }}>
+                            <span className="text-xs px-1.5 py-0.5 rounded" style={{ backgroundColor: color + "22", color, fontFamily: "'JetBrains Mono', monospace" }}>
                               Written: {cat.writtenAvg}%
-                            </Badge>
+                            </span>
                           )}
-                          <Text fz={11} c="#55556A" ff="'JetBrains Mono', monospace">
+                          <span className="text-[11px] text-[#55556A]" style={{ fontFamily: "'JetBrains Mono', monospace" }}>
                             {cat.totalAttempts} attempt{cat.totalAttempts !== 1 ? "s" : ""} · avg {formatTime(cat.avgTimeMs)}
-                          </Text>
-                        </Group>
-                      </Group>
-                      <Progress
+                          </span>
+                        </div>
+                      </div>
+                      <ProgressBar
                         value={pct}
-                        color={pct >= 75 ? "green" : pct >= 40 ? "yellow" : "red"}
-                        size="sm"
-                        radius="xl"
-                        styles={{ root: { background: "#1E1E2A" } }}
+                        color={pct >= 75 ? "#34D399" : pct >= 40 ? "#FBBF24" : "#F87171"}
                       />
-                    </Box>
+                    </div>
                   );
                 })}
-            </Stack>
-          </Paper>
+            </div>
+          </div>
 
           {/* Wrong Answers */}
           {wrongAnswers.length > 0 && (
-            <Paper bg="#12121A" radius="lg" p="lg" style={{ border: "1px solid #252533" }}>
-              <Text fz={11} ff="'JetBrains Mono', monospace" c="#55556A" lts={1} mb="md">
+            <div className="bg-[#12121A] rounded-lg p-6 border border-[#252533]">
+              <span className="text-[11px] text-[#55556A] tracking-wider block mb-4" style={{ fontFamily: "'JetBrains Mono', monospace" }}>
                 QUESTIONS TO REVIEW ({wrongAnswers.length})
-              </Text>
-              <Stack gap="sm">
+              </span>
+              <div className="flex flex-col gap-2">
                 {wrongAnswers.slice(0, 20).map((a, i) => (
-                  <Paper key={a.id || i} bg="#1A1A24" radius="md" p="sm" style={{ border: "1px solid #252533" }}>
-                    <Group gap={8} mb={4} style={{ flexWrap: "wrap" }}>
-                      <Badge
-                        size="xs"
-                        ff="'JetBrains Mono', monospace"
+                  <div key={a.id || i} className="bg-[#1A1A24] rounded-md p-3 border border-[#252533]">
+                    <div className="flex items-center gap-2 mb-1 flex-wrap">
+                      <span
+                        className="text-xs px-1.5 py-0.5 rounded"
                         style={{
                           backgroundColor: a.isCorrect === false ? "#F8717122" : "#FBBF2422",
                           color: a.isCorrect === false ? "#F87171" : "#FBBF24",
-                          border: "none",
+                          fontFamily: "'JetBrains Mono', monospace",
                         }}
                       >
                         {a.questionType === "mcq" ? "MCQ — Wrong" : `${a.score}/${a.maxMarks}`}
-                      </Badge>
-                      <Badge
-                        size="xs"
-                        ff="'JetBrains Mono', monospace"
+                      </span>
+                      <span
+                        className="text-xs px-1.5 py-0.5 rounded"
                         style={{
                           backgroundColor: (CAT_COLORS[a.category] || "#7C6FFF") + "22",
                           color: CAT_COLORS[a.category] || "#7C6FFF",
-                          border: "none",
+                          fontFamily: "'JetBrains Mono', monospace",
                         }}
                       >
                         {a.category}
-                      </Badge>
-                    </Group>
-                    <Text fz={13} c="#B0ADA6" lh={1.5}>{a.questionId}</Text>
-                  </Paper>
+                      </span>
+                    </div>
+                    <span className="text-[13px] text-[#B0ADA6] leading-relaxed">{a.questionId}</span>
+                  </div>
                 ))}
-              </Stack>
-            </Paper>
+              </div>
+            </div>
           )}
 
           {/* Recent Activity */}
-          <Paper bg="#12121A" radius="lg" p="lg" style={{ border: "1px solid #252533" }}>
-            <Text fz={11} ff="'JetBrains Mono', monospace" c="#55556A" lts={1} mb="md">
+          <div className="bg-[#12121A] rounded-lg p-6 border border-[#252533]">
+            <span className="text-[11px] text-[#55556A] tracking-wider block mb-4" style={{ fontFamily: "'JetBrains Mono', monospace" }}>
               RECENT ACTIVITY
-            </Text>
-            <Stack gap="xs">
+            </span>
+            <div className="flex flex-col gap-1">
               {attempts.slice(0, 20).map((a, i) => {
                 const color = CAT_COLORS[a.category] || "#7C6FFF";
                 const isGood = a.questionType === "mcq"
@@ -225,36 +218,38 @@ function UserDetail({ uid, displayName, onBack }) {
                   : a.score != null && a.maxMarks != null && a.score / a.maxMarks >= 0.5;
 
                 return (
-                  <Group key={a.id || i} gap="sm" py={4} style={{ borderBottom: "1px solid #1A1A24" }}>
-                    <Box style={{
-                      width: 8, height: 8, borderRadius: "50%",
-                      backgroundColor: isGood ? "#34D399" : "#F87171",
-                      flexShrink: 0,
-                    }} />
-                    <Badge size="xs" ff="'JetBrains Mono', monospace" style={{ backgroundColor: color + "22", color, border: "none", flexShrink: 0 }}>
+                  <div key={a.id || i} className="flex items-center gap-2 py-1" style={{ borderBottom: "1px solid #1A1A24" }}>
+                    <div
+                      className="w-2 h-2 rounded-full shrink-0"
+                      style={{ backgroundColor: isGood ? "#34D399" : "#F87171" }}
+                    />
+                    <span
+                      className="text-xs px-1.5 py-0.5 rounded shrink-0"
+                      style={{ backgroundColor: color + "22", color, fontFamily: "'JetBrains Mono', monospace" }}
+                    >
                       {a.questionType.toUpperCase()}
-                    </Badge>
-                    <Text fz={12} c="#8B8B9E" style={{ flex: 1 }} truncate>
+                    </span>
+                    <span className="text-xs text-[#8B8B9E] flex-1 truncate">
                       {a.category} — {a.questionId}
-                    </Text>
-                    <Text fz={11} c="#55556A" ff="'JetBrains Mono', monospace" style={{ flexShrink: 0 }}>
+                    </span>
+                    <span className="text-[11px] text-[#55556A] shrink-0" style={{ fontFamily: "'JetBrains Mono', monospace" }}>
                       {a.questionType === "mcq"
                         ? (a.isCorrect ? "Correct" : "Wrong")
                         : (a.score != null ? `${a.score}/${a.maxMarks}` : "—")}
-                    </Text>
+                    </span>
                     {a.timeSpentMs > 0 && (
-                      <Text fz={10} c="#55556A" ff="'JetBrains Mono', monospace" style={{ flexShrink: 0 }}>
+                      <span className="text-[10px] text-[#55556A] shrink-0" style={{ fontFamily: "'JetBrains Mono', monospace" }}>
                         {formatTime(a.timeSpentMs)}
-                      </Text>
+                      </span>
                     )}
-                  </Group>
+                  </div>
                 );
               })}
-            </Stack>
-          </Paper>
+            </div>
+          </div>
         </>
       )}
-    </Stack>
+    </div>
   );
 }
 
@@ -392,7 +387,7 @@ export default function UsersAdmin() {
   };
 
   if (authLoading || loading) {
-    return <Text ta="center" c="#55556A" py="xl">Loading user data...</Text>;
+    return <span className="block text-center text-[#55556A] py-8">Loading user data...</span>;
   }
 
   if (selectedUser) {
@@ -407,9 +402,9 @@ export default function UsersAdmin() {
 
   return (
     <>
-      <Stack gap="xl">
+      <div className="flex flex-col gap-8">
         {/* Aggregate Stats */}
-        <Group gap="md" grow style={{ flexWrap: "wrap" }}>
+        <div className="flex flex-wrap gap-4 grow">
           <StatCard label="TOTAL USERS" value={totalUsers} color="#F0EEE8" />
           <StatCard label="TOTAL ATTEMPTS" value={totalAttempts} color="#7C6FFF" />
           <StatCard
@@ -424,15 +419,15 @@ export default function UsersAdmin() {
             sub={totalWrittenMax > 0 ? `${totalAttempts - totalMcqTotal} answers` : ""}
             color={overallWrittenAvg >= 75 ? "#34D399" : overallWrittenAvg >= 40 ? "#FBBF24" : "#F87171"}
           />
-        </Group>
+        </div>
 
         {/* Users Table */}
-        <Paper bg="#12121A" radius="lg" p="lg" style={{ border: "1px solid #252533", overflow: "auto" }}>
-          <Text fz={11} ff="'JetBrains Mono', monospace" c="#55556A" lts={1} mb="md">
+        <div className="bg-[#12121A] rounded-lg p-6 border border-[#252533] overflow-auto">
+          <span className="text-[11px] text-[#55556A] tracking-wider block mb-4" style={{ fontFamily: "'JetBrains Mono', monospace" }}>
             ALL USERS ({totalUsers})
-          </Text>
+          </span>
           {usersData.length === 0 ? (
-            <Text ta="center" c="#55556A" py="md">No users found.</Text>
+            <span className="block text-center text-[#55556A] py-4">No users found.</span>
           ) : (
             <Table>
               <Table.ScrollContainer>
@@ -465,55 +460,58 @@ export default function UsersAdmin() {
                       return (
                         <Table.Row key={u.uid} className="hover:bg-[#1A1A24] transition-colors">
                           <Table.Cell style={cellStyle} onClick={selectUser}>
-                            <Text fw={600} c="#F0EEE8" fz={13}>{u.displayName || "Student"}</Text>
+                            <span className="font-semibold text-[#F0EEE8] text-[13px]">{u.displayName || "Student"}</span>
                           </Table.Cell>
                           <Table.Cell style={cellStyle} onClick={selectUser}>
-                            <Text c="#8B8B9E" fz={12} ff="'JetBrains Mono', monospace">{u.username || "---"}</Text>
+                            <span className="text-[#8B8B9E] text-xs" style={{ fontFamily: "'JetBrains Mono', monospace" }}>{u.username || "---"}</span>
                           </Table.Cell>
                           <Table.Cell style={cellStyle} onClick={selectUser}>
-                            <Text c="#8B8B9E" fz={12} truncate>{u.email || "—"}</Text>
+                            <span className="text-[#8B8B9E] text-xs truncate">{u.email || "—"}</span>
                           </Table.Cell>
                           <Table.Cell style={cellStyle} onClick={selectUser}>
-                            <Badge
-                              size="xs"
-                              ff="'JetBrains Mono', monospace"
+                            <span
+                              className="text-xs px-1.5 py-0.5 rounded"
                               style={{
                                 backgroundColor: statusColor + "22",
                                 color: statusColor,
-                                border: "none",
+                                fontFamily: "'JetBrains Mono', monospace",
                               }}
                             >
                               {u.accountStatus || "active"}
-                            </Badge>
+                            </span>
                           </Table.Cell>
                           <Table.Cell style={{ ...cellStyle, textAlign: "right" }} onClick={selectUser}>
-                            <Text ff="'JetBrains Mono', monospace" fz={13}>{u.totalAttempts}</Text>
+                            <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 13 }}>{u.totalAttempts}</span>
                           </Table.Cell>
                           <Table.Cell style={{ ...cellStyle, textAlign: "right" }} onClick={selectUser}>
-                            <Text
-                              ff="'JetBrains Mono', monospace"
-                              fz={13}
-                              c={mcqAcc == null ? "#55556A" : mcqAcc >= 75 ? "#34D399" : mcqAcc >= 40 ? "#FBBF24" : "#F87171"}
+                            <span
+                              style={{
+                                fontFamily: "'JetBrains Mono', monospace",
+                                fontSize: 13,
+                                color: mcqAcc == null ? "#55556A" : mcqAcc >= 75 ? "#34D399" : mcqAcc >= 40 ? "#FBBF24" : "#F87171",
+                              }}
                             >
                               {mcqAcc != null ? `${mcqAcc}%` : "—"}
-                            </Text>
+                            </span>
                           </Table.Cell>
                           <Table.Cell style={{ ...cellStyle, textAlign: "right" }} onClick={selectUser}>
-                            <Text
-                              ff="'JetBrains Mono', monospace"
-                              fz={13}
-                              c={writtenAvg == null ? "#55556A" : writtenAvg >= 75 ? "#34D399" : writtenAvg >= 40 ? "#FBBF24" : "#F87171"}
+                            <span
+                              style={{
+                                fontFamily: "'JetBrains Mono', monospace",
+                                fontSize: 13,
+                                color: writtenAvg == null ? "#55556A" : writtenAvg >= 75 ? "#34D399" : writtenAvg >= 40 ? "#FBBF24" : "#F87171",
+                              }}
                             >
                               {writtenAvg != null ? `${writtenAvg}%` : "—"}
-                            </Text>
+                            </span>
                           </Table.Cell>
                           <Table.Cell style={{ ...cellStyle, textAlign: "right" }} onClick={selectUser}>
-                            <Text ff="'JetBrains Mono', monospace" fz={12} c="#8B8B9E">
+                            <span className="text-[#8B8B9E] text-xs" style={{ fontFamily: "'JetBrains Mono', monospace" }}>
                               {formatTime(u.totalTimeMs)}
-                            </Text>
+                            </span>
                           </Table.Cell>
                           <Table.Cell style={{ ...cellStyle, textAlign: "right" }} onClick={selectUser}>
-                            <Text ff="'JetBrains Mono', monospace" fz={12} c="#8B8B9E">{lastActive}</Text>
+                            <span className="text-[#8B8B9E] text-xs" style={{ fontFamily: "'JetBrains Mono', monospace" }}>{lastActive}</span>
                           </Table.Cell>
                           <Table.Cell style={{ padding: "10px 12px", borderBottom: "1px solid #1A1A24" }}>
                             <div className="flex gap-1 flex-nowrap">
@@ -534,7 +532,7 @@ export default function UsersAdmin() {
                                 <Button size="sm" className="rounded-md" onPress={() => openRoleChange(u)} style={{backgroundColor: "#FB923C22", color: "#FB923C", border: "none", fontFamily: "'JetBrains Mono', monospace", fontSize: 10,}}>Role</Button>
                               )}
                               {role === "viewer" && (
-                                <Text fz={10} c="#55556A" ff="'JetBrains Mono', monospace">View only</Text>
+                                <span className="text-[10px] text-[#55556A]" style={{ fontFamily: "'JetBrains Mono', monospace" }}>View only</span>
                               )}
                             </div>
                           </Table.Cell>
@@ -546,8 +544,8 @@ export default function UsersAdmin() {
               </Table.ScrollContainer>
             </Table>
           )}
-        </Paper>
-      </Stack>
+        </div>
+      </div>
 
       {/* Edit Profile Modal */}
       <Modal.Backdrop

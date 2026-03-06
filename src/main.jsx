@@ -1,8 +1,6 @@
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
-import { MantineProvider } from '@mantine/core'
 import { ClerkProvider } from '@clerk/react'
-import '@mantine/core/styles.css'
 import './index.css'
 import App from './App.jsx'
 import SpecimenPage from './SpecimenPage.jsx'
@@ -11,7 +9,6 @@ import DashboardPage from './DashboardPage.jsx'
 import AdminPage from './admin/AdminPage.jsx'
 import LandingPage from './LandingPage.jsx'
 import { AuthProvider, useAuth } from './AuthContext.jsx'
-import theme from './theme.js'
 
 const PUBLISHABLE_KEY = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY || 'pk_live_Y2xlcmsuamFzcGVybGF1bHZsN3N0dWRlbnQuY29tJA'
 
@@ -71,13 +68,11 @@ createRoot(document.getElementById('root')).render(
         },
       }}
     >
-      <MantineProvider theme={theme} defaultColorScheme="dark">
-        <AuthProvider>
-          <AuthGate>
-            <Page {...pageProps} />
-          </AuthGate>
-        </AuthProvider>
-      </MantineProvider>
+      <AuthProvider>
+        <AuthGate>
+          <Page {...pageProps} />
+        </AuthGate>
+      </AuthProvider>
     </ClerkProvider>
   </StrictMode>,
 )

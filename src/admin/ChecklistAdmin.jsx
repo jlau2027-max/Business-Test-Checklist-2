@@ -1,23 +1,5 @@
 import { useState, useEffect, useCallback } from "react";
-import {
-  Container,
-  Paper,
-  Group,
-  Stack,
-  Text,
-  TextInput,
-  Textarea,
-  Modal,
-  ActionIcon,
-  Tooltip,
-  Skeleton,
-  Alert,
-  Badge,
-  Box,
-  Collapse,
-  UnstyledButton,
-} from "@mantine/core";
-import { Button, Spinner } from "@heroui/react";
+import { Button, Spinner, Modal, TextField, Input, Label, TextArea, Tooltip, Skeleton, Alert } from "@heroui/react";
 // Inline SVG icons (avoids @tabler/icons-react dependency)
 const IconPlus = ({ size = 16 }) => (
   <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round"><path d="M12 5v14M5 12h14" /></svg>
@@ -65,30 +47,6 @@ const EMPTY_SECTION_FORM = {
 const EMPTY_ITEM_FORM = {
   text: "",
   sort_order: 0,
-};
-
-// ---------------------------------------------------------------------------
-// Styles
-// ---------------------------------------------------------------------------
-
-const modalStyles = {
-  header: { backgroundColor: "#12121A", borderBottom: "1px solid #252533" },
-  body: { backgroundColor: "#12121A" },
-  title: { color: "#F0EEE8", fontWeight: 700 },
-};
-
-const inputStyles = {
-  input: {
-    backgroundColor: "#1A1A24",
-    borderColor: "#252533",
-    color: "#F0EEE8",
-  },
-  label: { color: "#8B8B9E", fontWeight: 500, marginBottom: 4 },
-};
-
-const textareaStyles = {
-  ...inputStyles,
-  input: { ...inputStyles.input, minHeight: 80 },
 };
 
 // ---------------------------------------------------------------------------
@@ -348,385 +306,261 @@ export default function ChecklistAdmin() {
 
   // ---- Render ----
   return (
-    <Container size="lg" py="xl">
-      <Stack gap="lg">
+    <div className="max-w-5xl mx-auto py-8 px-4">
+      <div className="flex flex-col gap-6">
         {/* Header */}
-        <Group justify="space-between" align="center">
-          <Text fz="xl" fw={700} c="#F0EEE8">
+        <div className="flex items-center justify-between">
+          <span className="text-xl font-bold text-[#F0EEE8]">
             Checklist
-          </Text>
+          </span>
           {canEditContent && (
             <Button className="rounded-md bg-[#7C6FFF] text-white border-none" onPress={openCreateSectionModal}><IconPlus size={16} /> Add Section</Button>
           )}
-        </Group>
+        </div>
 
         {/* Success alert */}
         {successMsg && (
-          <Alert
-            icon={<IconCircleCheckFilled size={18} />}
-            color="green"
-            variant="light"
-            radius="md"
-            withCloseButton
-            onClose={() => setSuccessMsg(null)}
-          >
-            {successMsg}
+          <Alert status="success" className="flex items-center">
+            <Alert.Indicator />
+            <Alert.Content className="flex-1">
+              <Alert.Description>{successMsg}</Alert.Description>
+            </Alert.Content>
+            <button onClick={() => setSuccessMsg(null)} className="text-[#8B8B9E] ml-2">&#10005;</button>
           </Alert>
         )}
 
         {/* Error alert */}
         {error && (
-          <Alert
-            icon={<IconAlertCircle size={18} />}
-            color="red"
-            variant="light"
-            radius="md"
-            withCloseButton
-            onClose={() => setError(null)}
-          >
-            {error}
+          <Alert status="danger" className="flex items-center">
+            <Alert.Indicator />
+            <Alert.Content className="flex-1">
+              <Alert.Description>{error}</Alert.Description>
+            </Alert.Content>
+            <button onClick={() => setError(null)} className="text-[#8B8B9E] ml-2">&#10005;</button>
           </Alert>
         )}
 
         {/* Sections list */}
         {loading ? (
-          <Stack gap="sm">
+          <div className="flex flex-col gap-2">
             {Array.from({ length: 4 }).map((_, i) => (
-              <Skeleton key={i} height={64} radius="md" />
+              <Skeleton key={i} className="h-16 rounded-md" />
             ))}
-          </Stack>
+          </div>
         ) : sections.length === 0 ? (
-          <Paper
-            bg="#12121A"
-            radius="md"
-            p="xl"
-            style={{ border: "1px solid #252533" }}
-          >
-            <Stack align="center" gap="sm" py="xl">
-              <Text fz="sm" c="#8B8B9E">
+          <div className="bg-[#12121A] rounded-lg p-6 border border-[#252533]">
+            <div className="flex flex-col items-center gap-2 py-8">
+              <span className="text-sm text-[#8B8B9E]">
                 No sections found.{" "}
                 {canEditContent
                   ? 'Click "Add Section" to create one.'
                   : ""}
-              </Text>
-            </Stack>
-          </Paper>
+              </span>
+            </div>
+          </div>
         ) : (
-          <Stack gap="sm">
+          <div className="flex flex-col gap-2">
             {sections.map((section) => {
               const isExpanded = expandedSection === section.id;
               const items = section.items || [];
 
               return (
-                <Paper
+                <div
                   key={section.id}
-                  bg="#12121A"
-                  radius="md"
-                  style={{ border: "1px solid #252533", overflow: "hidden" }}
+                  className="bg-[#12121A] rounded-lg border border-[#252533] overflow-hidden"
                 >
                   {/* Section header row */}
-                  <UnstyledButton
+                  <button
                     onClick={() => toggleSection(section.id)}
-                    style={{
-                      display: "flex",
-                      alignItems: "center",
-                      width: "100%",
-                      padding: "12px 16px",
-                      gap: 12,
-                    }}
+                    className="flex items-center w-full px-4 py-3 gap-3 bg-transparent border-none cursor-pointer text-left"
                   >
                     {isExpanded ? (
                       <IconChevronDown size={16} color="#8B8B9E" />
                     ) : (
                       <IconChevronRight size={16} color="#8B8B9E" />
                     )}
-                    <Box
-                      style={{
-                        width: 10,
-                        height: 10,
-                        borderRadius: "50%",
-                        backgroundColor: section.color || "#8B8B9E",
-                        flexShrink: 0,
-                      }}
+                    <div
+                      className="w-2.5 h-2.5 rounded-full shrink-0"
+                      style={{ backgroundColor: section.color || "#8B8B9E" }}
                     />
-                    <Text fz="sm" fw={600} c="#F0EEE8" style={{ flex: 1 }}>
+                    <span className="text-sm font-semibold text-[#F0EEE8] flex-1">
                       {section.title}
-                    </Text>
-                    <Badge
-                      size="sm"
-                      variant="light"
-                      color="gray"
-                      radius="sm"
-                    >
+                    </span>
+                    <span className="text-xs px-2 py-0.5 rounded bg-[#252533] text-[#8B8B9E]">
                       {items.length} item{items.length !== 1 ? "s" : ""}
-                    </Badge>
+                    </span>
                     {(canEditContent || canDeleteContent) && (
-                      <Group gap={4} wrap="nowrap">
+                      <div className="flex items-center gap-1">
                         {canEditContent && (
-                          <Tooltip label="Edit Section" withArrow position="top">
-                            <ActionIcon
-                              variant="subtle"
-                              color="violet"
-                              radius="md"
-                              size="sm"
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                openEditSectionModal(section);
-                              }}
-                            >
+                          <Tooltip delay={0}>
+                            <Button isIconOnly size="sm" variant="ghost" className="text-[#A78BFA]" onPress={(e) => { e.stopPropagation?.(); openEditSectionModal(section); }}>
                               <IconPencil size={15} />
-                            </ActionIcon>
+                            </Button>
+                            <Tooltip.Content><p>Edit Section</p></Tooltip.Content>
                           </Tooltip>
                         )}
                         {canDeleteContent && (
-                          <Tooltip
-                            label="Delete Section"
-                            withArrow
-                            position="top"
-                          >
-                            <ActionIcon
-                              variant="subtle"
-                              color="red"
-                              radius="md"
-                              size="sm"
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                openDeleteSection(section);
-                              }}
-                            >
+                          <Tooltip delay={0}>
+                            <Button isIconOnly size="sm" variant="ghost" className="text-red-400" onPress={(e) => { e.stopPropagation?.(); openDeleteSection(section); }}>
                               <IconTrash size={15} />
-                            </ActionIcon>
+                            </Button>
+                            <Tooltip.Content><p>Delete Section</p></Tooltip.Content>
                           </Tooltip>
                         )}
-                      </Group>
+                      </div>
                     )}
-                  </UnstyledButton>
+                  </button>
 
                   {/* Expanded items */}
-                  <Collapse in={isExpanded}>
-                    <Box
-                      style={{
-                        borderTop: "1px solid #252533",
-                        backgroundColor: "#0E0E16",
-                      }}
+                  {isExpanded && (
+                    <div
+                      className="border-t border-[#252533] bg-[#0E0E16]"
                     >
                       {items.length === 0 ? (
-                        <Text fz="sm" c="#8B8B9E" p="md" ta="center">
+                        <span className="text-sm text-[#8B8B9E] p-4 block text-center">
                           No items in this section.
-                        </Text>
+                        </span>
                       ) : (
-                        <Stack gap={0}>
+                        <div className="flex flex-col">
                           {items.map((item) => (
-                            <Group
+                            <div
                               key={item.id}
-                              px="md"
-                              py="sm"
-                              gap="sm"
-                              wrap="nowrap"
-                              style={{
-                                borderBottom: "1px solid #1E1E2A",
-                              }}
+                              className="flex items-center gap-2 px-4 py-3 border-b border-[#1E1E2A]"
                             >
-                              <Text
-                                fz="sm"
-                                c="#F0EEE8"
-                                style={{ flex: 1 }}
-                                lineClamp={2}
+                              <span
+                                className="text-sm text-[#F0EEE8] flex-1 line-clamp-2"
                               >
                                 {item.text}
-                              </Text>
+                              </span>
                               {(canEditContent || canDeleteContent) && (
-                                <Group gap={4} wrap="nowrap" style={{ flexShrink: 0 }}>
+                                <div className="flex items-center gap-1 shrink-0">
                                   {canEditContent && (
-                                    <Tooltip
-                                      label="Edit Item"
-                                      withArrow
-                                      position="top"
-                                    >
-                                      <ActionIcon
-                                        variant="subtle"
-                                        color="violet"
-                                        radius="md"
-                                        size="sm"
-                                        onClick={() => openEditItemModal(item)}
-                                      >
+                                    <Tooltip delay={0}>
+                                      <Button isIconOnly size="sm" variant="ghost" className="text-[#A78BFA]" onPress={() => openEditItemModal(item)}>
                                         <IconPencil size={15} />
-                                      </ActionIcon>
+                                      </Button>
+                                      <Tooltip.Content><p>Edit Item</p></Tooltip.Content>
                                     </Tooltip>
                                   )}
                                   {canDeleteContent && (
-                                    <Tooltip
-                                      label="Delete Item"
-                                      withArrow
-                                      position="top"
-                                    >
-                                      <ActionIcon
-                                        variant="subtle"
-                                        color="red"
-                                        radius="md"
-                                        size="sm"
-                                        onClick={() => openDeleteItem(item)}
-                                      >
+                                    <Tooltip delay={0}>
+                                      <Button isIconOnly size="sm" variant="ghost" className="text-red-400" onPress={() => openDeleteItem(item)}>
                                         <IconTrash size={15} />
-                                      </ActionIcon>
+                                      </Button>
+                                      <Tooltip.Content><p>Delete Item</p></Tooltip.Content>
                                     </Tooltip>
                                   )}
-                                </Group>
+                                </div>
                               )}
-                            </Group>
+                            </div>
                           ))}
-                        </Stack>
+                        </div>
                       )}
 
                       {/* Add Item button */}
                       {canEditContent && (
-                        <Box p="md">
+                        <div className="p-4">
                           <Button size="sm" className="rounded-md bg-[#7C6FFF22] text-[#A78BFA] border-none" onPress={() => openCreateItemModal(section.id)}><IconPlus size={14} /> Add Item</Button>
-                        </Box>
+                        </div>
                       )}
-                    </Box>
-                  </Collapse>
-                </Paper>
+                    </div>
+                  )}
+                </div>
               );
             })}
-          </Stack>
+          </div>
         )}
-      </Stack>
+      </div>
 
       {/* ---- Section Create / Edit Modal ---- */}
-      <Modal
-        opened={sectionModalOpened}
-        onClose={closeSectionModal}
-        title={editingSection ? "Edit Section" : "New Section"}
-        centered
-        size="md"
-        radius="md"
-        styles={modalStyles}
-      >
-        <Stack gap="md">
-          {sectionFormError && (
-            <Alert
-              icon={<IconAlertCircle size={16} />}
-              color="red"
-              variant="light"
-              radius="md"
-            >
-              {sectionFormError}
-            </Alert>
-          )}
+      <Modal.Backdrop variant="opaque" isKeyboardDismissDisabled={false} isOpen={sectionModalOpened} onOpenChange={(open) => { if (!open) closeSectionModal(); }}>
+        <Modal.Container>
+          <Modal.Dialog className="sm:max-w-md" style={{ backgroundColor: "#12121A", border: "1px solid #252533" }}>
+            <Modal.CloseTrigger />
+            <Modal.Header style={{ borderBottom: "1px solid #252533" }}>
+              <Modal.Heading style={{ color: "#F0EEE8", fontWeight: 700, fontFamily: "'JetBrains Mono', monospace" }}>{editingSection ? "Edit Section" : "New Section"}</Modal.Heading>
+            </Modal.Header>
+            <Modal.Body>
+              <div className="flex flex-col gap-4">
+                {sectionFormError && (
+                  <Alert status="danger" className="flex items-center">
+                    <Alert.Indicator />
+                    <Alert.Content className="flex-1">
+                      <Alert.Description>{sectionFormError}</Alert.Description>
+                    </Alert.Content>
+                  </Alert>
+                )}
 
-          <TextInput
-            label="Title"
-            placeholder="Enter section title..."
-            value={sectionForm.title}
-            onChange={(e) =>
-              updateSectionField("title", e.currentTarget.value)
-            }
-            radius="md"
-            styles={inputStyles}
-          />
+                <TextField className="w-full" name="title" onChange={(val) => updateSectionField("title", val)}>
+                  <Label className="text-[#8B8B9E] text-[11px] tracking-wider mb-1" style={{ fontFamily: "'JetBrains Mono', monospace" }}>Title</Label>
+                  <Input value={sectionForm.title} placeholder="Enter section title..." className="bg-[#1A1A24] border border-[#252533] text-[#F0EEE8] rounded-md" style={{ fontFamily: "'JetBrains Mono', monospace" }} />
+                </TextField>
 
-          <Group gap="md" align="flex-end">
-            <TextInput
-              label="Color (hex)"
-              placeholder="#7C6FFF"
-              value={sectionForm.color}
-              onChange={(e) =>
-                updateSectionField("color", e.currentTarget.value)
-              }
-              radius="md"
-              styles={{
-                ...inputStyles,
-                root: { flex: 1 },
-              }}
-            />
-            <Box
-              style={{
-                width: 36,
-                height: 36,
-                borderRadius: 8,
-                backgroundColor: sectionForm.color || "#8B8B9E",
-                border: "1px solid #252533",
-                flexShrink: 0,
-              }}
-            />
-          </Group>
+                <div className="flex items-end gap-3">
+                  <TextField className="flex-1" name="color" onChange={(val) => updateSectionField("color", val)}>
+                    <Label className="text-[#8B8B9E] text-[11px] tracking-wider mb-1" style={{ fontFamily: "'JetBrains Mono', monospace" }}>Color (hex)</Label>
+                    <Input value={sectionForm.color} placeholder="#7C6FFF" className="bg-[#1A1A24] border border-[#252533] text-[#F0EEE8] rounded-md" style={{ fontFamily: "'JetBrains Mono', monospace" }} />
+                  </TextField>
+                  <div className="w-9 h-9 rounded-lg border border-[#252533] shrink-0" style={{ backgroundColor: sectionForm.color || "#8B8B9E" }} />
+                </div>
 
-          <TextInput
-            label="Sort Order"
-            placeholder="0"
-            type="number"
-            value={String(sectionForm.sort_order)}
-            onChange={(e) =>
-              updateSectionField("sort_order", e.currentTarget.value)
-            }
-            radius="md"
-            styles={inputStyles}
-          />
-
-          {/* Actions */}
-          <Group justify="flex-end" gap="sm" mt="sm">
-            <Button variant="ghost" className="rounded-md text-[#8B8B9E]" onPress={closeSectionModal} isDisabled={savingSection}>Cancel</Button>
-            <Button className="rounded-md bg-[#7C6FFF] text-white border-none" onPress={handleSaveSection} isPending={savingSection}>{({isPending}) => <>{isPending && <Spinner color="current" size="sm" />}{isPending ? "Saving..." : (editingSection ? "Save Changes" : "Create Section")}</>}</Button>
-          </Group>
-        </Stack>
-      </Modal>
+                <TextField className="w-full" name="sort_order" onChange={(val) => updateSectionField("sort_order", val)}>
+                  <Label className="text-[#8B8B9E] text-[11px] tracking-wider mb-1" style={{ fontFamily: "'JetBrains Mono', monospace" }}>Sort Order</Label>
+                  <Input type="number" value={String(sectionForm.sort_order)} placeholder="0" className="bg-[#1A1A24] border border-[#252533] text-[#F0EEE8] rounded-md" style={{ fontFamily: "'JetBrains Mono', monospace" }} />
+                </TextField>
+              </div>
+            </Modal.Body>
+            <Modal.Footer>
+              {/* Actions */}
+              <div className="flex items-center justify-end gap-2 mt-2">
+                <Button variant="ghost" className="rounded-md text-[#8B8B9E]" onPress={closeSectionModal} isDisabled={savingSection}>Cancel</Button>
+                <Button className="rounded-md bg-[#7C6FFF] text-white border-none" onPress={handleSaveSection} isPending={savingSection}>{({isPending}) => <>{isPending && <Spinner color="current" size="sm" />}{isPending ? "Saving..." : (editingSection ? "Save Changes" : "Create Section")}</>}</Button>
+              </div>
+            </Modal.Footer>
+          </Modal.Dialog>
+        </Modal.Container>
+      </Modal.Backdrop>
 
       {/* ---- Item Create / Edit Modal ---- */}
-      <Modal
-        opened={itemModalOpened}
-        onClose={closeItemModal}
-        title={editingItem ? "Edit Item" : "New Item"}
-        centered
-        size="md"
-        radius="md"
-        styles={modalStyles}
-      >
-        <Stack gap="md">
-          {itemFormError && (
-            <Alert
-              icon={<IconAlertCircle size={16} />}
-              color="red"
-              variant="light"
-              radius="md"
-            >
-              {itemFormError}
-            </Alert>
-          )}
+      <Modal.Backdrop variant="opaque" isKeyboardDismissDisabled={false} isOpen={itemModalOpened} onOpenChange={(open) => { if (!open) closeItemModal(); }}>
+        <Modal.Container>
+          <Modal.Dialog className="sm:max-w-md" style={{ backgroundColor: "#12121A", border: "1px solid #252533" }}>
+            <Modal.CloseTrigger />
+            <Modal.Header style={{ borderBottom: "1px solid #252533" }}>
+              <Modal.Heading style={{ color: "#F0EEE8", fontWeight: 700, fontFamily: "'JetBrains Mono', monospace" }}>{editingItem ? "Edit Item" : "New Item"}</Modal.Heading>
+            </Modal.Header>
+            <Modal.Body>
+              <div className="flex flex-col gap-4">
+                {itemFormError && (
+                  <Alert status="danger" className="flex items-center">
+                    <Alert.Indicator />
+                    <Alert.Content className="flex-1">
+                      <Alert.Description>{itemFormError}</Alert.Description>
+                    </Alert.Content>
+                  </Alert>
+                )}
 
-          <Textarea
-            label="Text"
-            placeholder="Enter checklist item text..."
-            value={itemForm.text}
-            onChange={(e) =>
-              updateItemField("text", e.currentTarget.value)
-            }
-            autosize
-            minRows={2}
-            maxRows={6}
-            radius="md"
-            styles={textareaStyles}
-          />
+                <div>
+                  <label className="text-[#8B8B9E] text-xs font-medium mb-1 block" style={{ fontFamily: "'JetBrains Mono', monospace" }}>Text</label>
+                  <TextArea value={itemForm.text} onChange={(e) => updateItemField("text", e.target.value)} placeholder="Enter checklist item text..." className="w-full bg-[#1A1A24] border border-[#252533] text-[#F0EEE8] rounded-md min-h-[80px]" style={{ fontFamily: "'JetBrains Mono', monospace" }} />
+                </div>
 
-          <TextInput
-            label="Sort Order"
-            placeholder="0"
-            type="number"
-            value={String(itemForm.sort_order)}
-            onChange={(e) =>
-              updateItemField("sort_order", e.currentTarget.value)
-            }
-            radius="md"
-            styles={inputStyles}
-          />
-
-          {/* Actions */}
-          <Group justify="flex-end" gap="sm" mt="sm">
-            <Button variant="ghost" className="rounded-md text-[#8B8B9E]" onPress={closeItemModal} isDisabled={savingItem}>Cancel</Button>
-            <Button className="rounded-md bg-[#7C6FFF] text-white border-none" onPress={handleSaveItem} isPending={savingItem}>{({isPending}) => <>{isPending && <Spinner color="current" size="sm" />}{isPending ? "Saving..." : (editingItem ? "Save Changes" : "Create Item")}</>}</Button>
-          </Group>
-        </Stack>
-      </Modal>
+                <TextField className="w-full" name="sort_order" onChange={(val) => updateItemField("sort_order", val)}>
+                  <Label className="text-[#8B8B9E] text-[11px] tracking-wider mb-1" style={{ fontFamily: "'JetBrains Mono', monospace" }}>Sort Order</Label>
+                  <Input type="number" value={String(itemForm.sort_order)} placeholder="0" className="bg-[#1A1A24] border border-[#252533] text-[#F0EEE8] rounded-md" style={{ fontFamily: "'JetBrains Mono', monospace" }} />
+                </TextField>
+              </div>
+            </Modal.Body>
+            <Modal.Footer>
+              {/* Actions */}
+              <div className="flex items-center justify-end gap-2 mt-2">
+                <Button variant="ghost" className="rounded-md text-[#8B8B9E]" onPress={closeItemModal} isDisabled={savingItem}>Cancel</Button>
+                <Button className="rounded-md bg-[#7C6FFF] text-white border-none" onPress={handleSaveItem} isPending={savingItem}>{({isPending}) => <>{isPending && <Spinner color="current" size="sm" />}{isPending ? "Saving..." : (editingItem ? "Save Changes" : "Create Item")}</>}</Button>
+              </div>
+            </Modal.Footer>
+          </Modal.Dialog>
+        </Modal.Container>
+      </Modal.Backdrop>
 
       {/* ---- Delete Confirmation Modal ---- */}
       <ConfirmDeleteModal
@@ -746,6 +580,6 @@ export default function ChecklistAdmin() {
         }
         loading={deleting}
       />
-    </Container>
+    </div>
   );
 }

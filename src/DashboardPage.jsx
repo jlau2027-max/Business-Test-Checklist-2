@@ -1,13 +1,10 @@
 import { useState, useEffect } from "react";
-import {
-  Container, Badge, Text, Group, Paper, Progress,
-  Box, Stack, Alert,
-} from "@mantine/core";
 import { Button } from "@heroui/react";
 import { SignInButton } from "@clerk/react";
 import { useAuth } from "./AuthContext.jsx";
 import LoginButton from "./LoginButton.jsx";
 import Sidebar from "./Sidebar.jsx";
+import ProgressBar from "./components/ProgressBar.jsx";
 import {
   getUserAttempts,
   computeCategoryStats,
@@ -43,19 +40,19 @@ function formatTime(ms) {
 
 function StatCard({ label, value, sub, color = "#7C6FFF" }) {
   return (
-    <Paper bg="#12121A" radius="lg" p="lg" style={{ border: "1px solid #252533", flex: 1, minWidth: 160 }}>
-      <Text fz={11} ff="'JetBrains Mono', monospace" c="#55556A" lts={1} mb={4}>
+    <div className="bg-[#12121A] rounded-lg p-4" style={{ border: "1px solid #252533", flex: 1, minWidth: 160 }}>
+      <span className="block text-[#55556A] mb-1" style={{ fontSize: 11, fontFamily: "'JetBrains Mono', monospace", letterSpacing: 1 }}>
         {label}
-      </Text>
-      <Text fz={28} fw={800} c={color} ff="'JetBrains Mono', monospace">
+      </span>
+      <span className="block font-extrabold" style={{ fontSize: 28, color, fontFamily: "'JetBrains Mono', monospace" }}>
         {value}
-      </Text>
+      </span>
       {sub && (
-        <Text fz={12} c="#8B8B9E" mt={2}>
+        <span className="block text-[#8B8B9E] mt-0.5" style={{ fontSize: 12 }}>
           {sub}
-        </Text>
+        </span>
       )}
-    </Paper>
+    </div>
   );
 }
 
@@ -85,11 +82,11 @@ export default function DashboardPage() {
   if (authLoading) return null;
 
   return (
-    <Box mih="100vh" bg="#09090F" style={{ fontFamily: "'Inter', sans-serif", color: "#F0EEE8" }}>
+    <div className="min-h-screen" style={{ backgroundColor: "#09090F", fontFamily: "'Inter', sans-serif", color: "#F0EEE8" }}>
       <Sidebar activeSubject="dashboard" sidebarOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
 
       {/* Header */}
-      <Box
+      <div
         style={{
           position: "sticky",
           top: 0,
@@ -100,8 +97,8 @@ export default function DashboardPage() {
           borderBottom: "1px solid rgba(255,255,255,0.04)",
         }}
       >
-        <Container size="lg" py="sm">
-          <Group justify="center" mb={4} style={{ position: "relative" }}>
+        <div className="max-w-4xl mx-auto py-2 px-4">
+          <div className="flex items-center justify-center mb-1" style={{ position: "relative" }}>
             <Button
               isIconOnly
               variant="outline"
@@ -120,41 +117,40 @@ export default function DashboardPage() {
                 <line x1="3" y1="18" x2="21" y2="18"/>
               </svg>
             </Button>
-            <Badge
-              variant="light"
-              size="sm"
-              tt="uppercase"
-              fw={700}
-              ff="'JetBrains Mono', monospace"
-              style={{ letterSpacing: 2, backgroundColor: "#7C6FFF18", color: "#A78BFA", border: "none" }}
+            <span
+              className="text-xs px-2 py-0.5 rounded uppercase font-bold"
+              style={{ letterSpacing: 2, backgroundColor: "#7C6FFF18", color: "#A78BFA", border: "none", fontFamily: "'JetBrains Mono', monospace" }}
             >
               Analytics
-            </Badge>
+            </span>
             <LoginButton />
-          </Group>
-          <Text ta="center" fw={800} fz={{ base: 22, sm: 30 }} c="#F0EEE8" style={{ letterSpacing: -0.5 }}>
+          </div>
+          <span
+            className="text-center block font-extrabold text-[#F0EEE8]"
+            style={{ fontSize: "clamp(22px, 4vw, 30px)", letterSpacing: -0.5 }}
+          >
             Your Dashboard
-          </Text>
-          <Text ta="center" fz="xs" c="#55556A" mb="sm">
+          </span>
+          <span className="text-center block text-xs text-[#55556A] mb-2">
             Track your revision progress and performance
-          </Text>
-        </Container>
-      </Box>
+          </span>
+        </div>
+      </div>
 
-      <Container size="lg" py="xl" px="md">
+      <div className="max-w-4xl mx-auto py-6 px-3">
         {!user ? (
           /* Guest prompt */
-          <Paper bg="#12121A" radius="lg" p="xl" style={{ border: "1px solid #252533", textAlign: "center" }}>
+          <div className="bg-[#12121A] rounded-lg p-6 text-center" style={{ border: "1px solid #252533" }}>
             <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#55556A" strokeWidth="1.5" strokeLinecap="round" style={{ marginBottom: 16 }}>
               <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
               <circle cx="12" cy="7" r="4"/>
             </svg>
-            <Text fz="lg" fw={700} c="#F0EEE8" mb="xs">
+            <span className="font-bold text-lg text-[#F0EEE8] block mb-1">
               Sign in to view your analytics
-            </Text>
-            <Text fz="sm" c="#8B8B9E" mb="lg" maw={400} mx="auto">
+            </span>
+            <span className="text-sm text-[#8B8B9E] block mb-4 mx-auto" style={{ maxWidth: 400 }}>
               Track your accuracy per topic, review wrong answers, and see time spent on each question.
-            </Text>
+            </span>
             <SignInButton mode="modal">
               <Button
                 render={(props) => <button {...props} />}
@@ -164,27 +160,27 @@ export default function DashboardPage() {
                 Sign In
               </Button>
             </SignInButton>
-          </Paper>
+          </div>
         ) : loading ? (
-          <Text ta="center" c="#55556A" py="xl">Loading your analytics...</Text>
+          <span className="text-center block text-[#55556A] py-6">Loading your analytics...</span>
         ) : attempts.length === 0 ? (
-          <Paper bg="#12121A" radius="lg" p="xl" style={{ border: "1px solid #252533", textAlign: "center" }}>
-            <Text fz="lg" fw={700} c="#F0EEE8" mb="xs">
+          <div className="bg-[#12121A] rounded-lg p-6 text-center" style={{ border: "1px solid #252533" }}>
+            <span className="font-bold text-lg text-[#F0EEE8] block mb-1">
               No data yet
-            </Text>
-            <Text fz="sm" c="#8B8B9E" mb="lg">
+            </span>
+            <span className="text-sm text-[#8B8B9E] block mb-4">
               Start answering questions on the Revision Hub to see your analytics here.
-            </Text>
+            </span>
             <a href="/business/checklist" style={{ textDecoration: "none" }}>
               <Button className="rounded-md bg-[#7C6FFF] text-white border-none font-semibold">
                 Go to Revision Hub
               </Button>
             </a>
-          </Paper>
+          </div>
         ) : (
-          <Stack gap="xl">
+          <div className="flex flex-col gap-8">
             {/* Overview Cards */}
-            <Group gap="md" grow style={{ flexWrap: "wrap" }}>
+            <div className="flex gap-4 grow flex-wrap">
               <StatCard
                 label="TOTAL ATTEMPTS"
                 value={overall.totalAttempts}
@@ -209,108 +205,105 @@ export default function DashboardPage() {
                 sub="across all questions"
                 color="#A78BFA"
               />
-            </Group>
+            </div>
 
             {/* Category Breakdown */}
-            <Paper bg="#12121A" radius="lg" p="lg" style={{ border: "1px solid #252533" }}>
-              <Text fz={11} ff="'JetBrains Mono', monospace" c="#55556A" lts={1} mb="md">
+            <div className="bg-[#12121A] rounded-lg p-4" style={{ border: "1px solid #252533" }}>
+              <span className="block text-[#55556A] mb-4" style={{ fontSize: 11, fontFamily: "'JetBrains Mono', monospace", letterSpacing: 1 }}>
                 PERFORMANCE BY TOPIC
-              </Text>
-              <Stack gap="md">
+              </span>
+              <div className="flex flex-col gap-4">
                 {categoryStats
                   .sort((a, b) => b.totalAttempts - a.totalAttempts)
                   .map((cat) => {
                     const color = CAT_COLORS[cat.category] || "#7C6FFF";
                     const pct = cat.mcqAccuracy ?? cat.writtenAvg ?? 0;
                     return (
-                      <Box key={cat.category}>
-                        <Group justify="space-between" mb={4}>
-                          <Group gap={8}>
-                            <Box style={{ width: 10, height: 10, borderRadius: 3, backgroundColor: color }} />
-                            <Text fz={13} c="#F0EEE8" fw={600}>{cat.category}</Text>
-                          </Group>
-                          <Group gap="xs">
+                      <div key={cat.category}>
+                        <div className="flex items-center justify-between mb-1">
+                          <div className="flex items-center gap-2">
+                            <div style={{ width: 10, height: 10, borderRadius: 3, backgroundColor: color }} />
+                            <span className="text-[#F0EEE8] font-semibold" style={{ fontSize: 13 }}>{cat.category}</span>
+                          </div>
+                          <div className="flex items-center gap-1">
                             {cat.mcqAccuracy != null && (
-                              <Badge size="xs" ff="'JetBrains Mono', monospace" style={{ backgroundColor: color + "22", color, border: "none" }}>
+                              <span className="text-xs px-1.5 py-0.5 rounded" style={{ backgroundColor: color + "22", color, border: "none", fontFamily: "'JetBrains Mono', monospace" }}>
                                 MCQ: {cat.mcqAccuracy}%
-                              </Badge>
+                              </span>
                             )}
                             {cat.writtenAvg != null && (
-                              <Badge size="xs" ff="'JetBrains Mono', monospace" style={{ backgroundColor: color + "22", color, border: "none" }}>
+                              <span className="text-xs px-1.5 py-0.5 rounded" style={{ backgroundColor: color + "22", color, border: "none", fontFamily: "'JetBrains Mono', monospace" }}>
                                 Written: {cat.writtenAvg}%
-                              </Badge>
+                              </span>
                             )}
-                            <Text fz={11} c="#55556A" ff="'JetBrains Mono', monospace">
+                            <span className="text-[#55556A]" style={{ fontSize: 11, fontFamily: "'JetBrains Mono', monospace" }}>
                               {cat.totalAttempts} attempt{cat.totalAttempts !== 1 ? "s" : ""} · avg {formatTime(cat.avgTimeMs)}
-                            </Text>
-                          </Group>
-                        </Group>
-                        <Progress
+                            </span>
+                          </div>
+                        </div>
+                        <ProgressBar
                           value={pct}
-                          color={pct >= 75 ? "green" : pct >= 40 ? "yellow" : "red"}
-                          size="sm"
-                          radius="xl"
-                          styles={{ root: { background: "#1E1E2A" } }}
+                          color={pct >= 75 ? "#34D399" : pct >= 40 ? "#FBBF24" : "#F87171"}
                         />
-                      </Box>
+                      </div>
                     );
                   })}
-              </Stack>
-            </Paper>
+              </div>
+            </div>
 
             {/* Wrong Answers */}
             {wrongAnswers.length > 0 && (
-              <Paper bg="#12121A" radius="lg" p="lg" style={{ border: "1px solid #252533" }}>
-                <Text fz={11} ff="'JetBrains Mono', monospace" c="#55556A" lts={1} mb="md">
+              <div className="bg-[#12121A] rounded-lg p-4" style={{ border: "1px solid #252533" }}>
+                <span className="block text-[#55556A] mb-4" style={{ fontSize: 11, fontFamily: "'JetBrains Mono', monospace", letterSpacing: 1 }}>
                   QUESTIONS TO REVIEW ({wrongAnswers.length})
-                </Text>
-                <Stack gap="sm">
+                </span>
+                <div className="flex flex-col gap-2">
                   {wrongAnswers.slice(0, 20).map((a, i) => (
-                    <Paper key={a.id || i} bg="#1A1A24" radius="md" p="sm" style={{ border: "1px solid #252533" }}>
-                      <Group gap={8} mb={4} style={{ flexWrap: "wrap" }}>
-                        <Badge
-                          size="xs"
-                          ff="'JetBrains Mono', monospace"
+                    <div key={a.id || i} className="bg-[#1A1A24] rounded-md p-2" style={{ border: "1px solid #252533" }}>
+                      <div className="flex gap-2 flex-wrap mb-1">
+                        <span
+                          className="text-xs px-1.5 py-0.5 rounded"
                           style={{
                             backgroundColor: a.isCorrect === false ? "#F8717122" : "#FBBF2422",
                             color: a.isCorrect === false ? "#F87171" : "#FBBF24",
                             border: "none",
+                            fontFamily: "'JetBrains Mono', monospace",
                           }}
                         >
                           {a.questionType === "mcq" ? "MCQ — Wrong" : `${a.score}/${a.maxMarks}`}
-                        </Badge>
-                        <Badge
-                          size="xs"
-                          ff="'JetBrains Mono', monospace"
+                        </span>
+                        <span
+                          className="text-xs px-1.5 py-0.5 rounded"
                           style={{
                             backgroundColor: (CAT_COLORS[a.category] || "#7C6FFF") + "22",
                             color: CAT_COLORS[a.category] || "#7C6FFF",
                             border: "none",
+                            fontFamily: "'JetBrains Mono', monospace",
                           }}
                         >
                           {a.category}
-                        </Badge>
+                        </span>
                         {a.timeSpentMs > 0 && (
-                          <Text fz={10} c="#55556A" ff="'JetBrains Mono', monospace" ml="auto">
+                          <span className="text-[#55556A] ml-auto" style={{ fontSize: 10, fontFamily: "'JetBrains Mono', monospace" }}>
                             {formatTime(a.timeSpentMs)}
-                          </Text>
+                          </span>
                         )}
-                      </Group>
-                      <Text fz={13} c="#B0ADA6" lh={1.5}>
+                      </div>
+                      <span className="text-[#B0ADA6]" style={{ fontSize: 13, lineHeight: 1.5 }}>
                         {a.questionId}
-                      </Text>
-                    </Paper>
+                      </span>
+                    </div>
                   ))}
-                </Stack>
-              </Paper>
+                </div>
+              </div>
             )}
 
             {/* Recent Activity */}
-            <Paper bg="#12121A" radius="lg" p="lg" style={{ border: "1px solid #252533" }}>
-              <Text fz={11} ff="'JetBrains Mono', monospace" c="#55556A" lts={1} mb="md">
+            <div className="bg-[#12121A] rounded-lg p-4" style={{ border: "1px solid #252533" }}>
+              <span className="block text-[#55556A] mb-4" style={{ fontSize: 11, fontFamily: "'JetBrains Mono', monospace", letterSpacing: 1 }}>
                 RECENT ACTIVITY
-              </Text>
-              <Stack gap="xs">
+              </span>
+              <div className="flex flex-col gap-1">
                 {attempts.slice(0, 20).map((a, i) => {
                   const color = CAT_COLORS[a.category] || "#7C6FFF";
                   const isGood = a.questionType === "mcq"
@@ -318,36 +311,36 @@ export default function DashboardPage() {
                     : a.score != null && a.maxMarks != null && a.score / a.maxMarks >= 0.5;
 
                   return (
-                    <Group key={a.id || i} gap="sm" py={4} style={{ borderBottom: "1px solid #1A1A24" }}>
-                      <Box style={{
+                    <div key={a.id || i} className="flex items-center gap-2 py-1" style={{ borderBottom: "1px solid #1A1A24" }}>
+                      <div style={{
                         width: 8, height: 8, borderRadius: "50%",
                         backgroundColor: isGood ? "#34D399" : "#F87171",
                         flexShrink: 0,
                       }} />
-                      <Badge size="xs" ff="'JetBrains Mono', monospace" style={{ backgroundColor: color + "22", color, border: "none", flexShrink: 0 }}>
+                      <span className="text-xs px-1.5 py-0.5 rounded" style={{ backgroundColor: color + "22", color, border: "none", fontFamily: "'JetBrains Mono', monospace", flexShrink: 0 }}>
                         {a.questionType.toUpperCase()}
-                      </Badge>
-                      <Text fz={12} c="#8B8B9E" style={{ flex: 1 }} truncate>
+                      </span>
+                      <span className="text-[#8B8B9E] truncate" style={{ fontSize: 12, flex: 1 }}>
                         {a.category} — {a.questionId}
-                      </Text>
-                      <Text fz={11} c="#55556A" ff="'JetBrains Mono', monospace" style={{ flexShrink: 0 }}>
+                      </span>
+                      <span className="text-[#55556A]" style={{ fontSize: 11, fontFamily: "'JetBrains Mono', monospace", flexShrink: 0 }}>
                         {a.questionType === "mcq"
                           ? (a.isCorrect ? "Correct" : "Wrong")
                           : (a.score != null ? `${a.score}/${a.maxMarks}` : "—")}
-                      </Text>
+                      </span>
                       {a.timeSpentMs > 0 && (
-                        <Text fz={10} c="#55556A" ff="'JetBrains Mono', monospace" style={{ flexShrink: 0 }}>
+                        <span className="text-[#55556A]" style={{ fontSize: 10, fontFamily: "'JetBrains Mono', monospace", flexShrink: 0 }}>
                           {formatTime(a.timeSpentMs)}
-                        </Text>
+                        </span>
                       )}
-                    </Group>
+                    </div>
                   );
                 })}
-              </Stack>
-            </Paper>
-          </Stack>
+              </div>
+            </div>
+          </div>
         )}
-      </Container>
+      </div>
 
       {/* Floating support button */}
       <a
@@ -380,6 +373,6 @@ export default function DashboardPage() {
           <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" style={{ transition: "fill 0.25s ease" }} />
         </svg>
       </a>
-    </Box>
+    </div>
   );
 }

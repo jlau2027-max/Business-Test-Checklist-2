@@ -1,4 +1,3 @@
-import { Box, Text } from "@mantine/core";
 import { Button } from "@heroui/react";
 import { useAuth } from "./AuthContext.jsx";
 
@@ -21,7 +20,7 @@ export default function Sidebar({ activeSubject, sidebarOpen, onClose }) {
     <>
       {/* Sidebar overlay (mobile) */}
       {sidebarOpen && (
-        <Box
+        <div
           onClick={onClose}
           style={{
             position: "fixed", inset: 0, zIndex: 199,
@@ -31,7 +30,7 @@ export default function Sidebar({ activeSubject, sidebarOpen, onClose }) {
       )}
 
       {/* Sidebar */}
-      <Box
+      <div
         style={{
           position: "fixed",
           top: 0,
@@ -48,9 +47,9 @@ export default function Sidebar({ activeSubject, sidebarOpen, onClose }) {
           transition: "left 0.25s ease",
         }}
       >
-        <Text fz={11} ff="'JetBrains Mono', monospace" c="#55556A" lts={1} mb={4} px={8}>
+        <span className="text-[#55556A] mb-1 px-2" style={{ fontSize: 11, fontFamily: "'JetBrains Mono', monospace", letterSpacing: 1 }}>
           SUBJECTS
-        </Text>
+        </span>
         {items.map(s => {
           const active = activeSubject === s.subject;
           const color = SUBJECT_COLORS[s.subject] || "#7C6FFF";
@@ -79,11 +78,11 @@ export default function Sidebar({ activeSubject, sidebarOpen, onClose }) {
           );
         })}
 
-        <Box style={{ flex: 1 }} />
-        <Text fz={10} c="#33334A" ff="'JetBrains Mono', monospace" ta="center">
+        <div style={{ flex: 1 }} />
+        <span className="text-center block" style={{ fontSize: 10, color: "#33334A", fontFamily: "'JetBrains Mono', monospace" }}>
           More subjects coming soon
-        </Text>
-      </Box>
+        </span>
+      </div>
     </>
   );
 }

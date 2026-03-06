@@ -1,4 +1,3 @@
-import { Container, Text, Paper, Stack } from "@mantine/core";
 import { Button } from "@heroui/react";
 import { useAuth } from "../AuthContext.jsx";
 
@@ -9,35 +8,35 @@ export default function AdminGuard({ children }) {
 
   if (!user) {
     return (
-      <Container size="sm" py={120}>
-        <Paper bg="#12121A" radius="lg" p="xl" style={{ border: "1px solid #252533", textAlign: "center" }}>
-          <Stack align="center" gap="md">
-            <Text fz={48}>🔒</Text>
-            <Text fz="xl" fw={700} c="#F0EEE8">Sign In Required</Text>
-            <Text fz="sm" c="#8B8B9E">You need to sign in to access the admin panel.</Text>
+      <div className="max-w-lg mx-auto py-[120px] px-4">
+        <div className="bg-[#12121A] rounded-lg p-8 border border-[#252533] text-center">
+          <div className="flex flex-col items-center gap-4">
+            <span className="text-5xl">🔒</span>
+            <span className="text-xl font-bold text-[#F0EEE8]">Sign In Required</span>
+            <span className="text-sm text-[#8B8B9E]">You need to sign in to access the admin panel.</span>
             <a href="/business/checklist" style={{ textDecoration: "none" }}>
               <Button className="rounded-md bg-[#7C6FFF22] text-[#A78BFA] border-none">Go Home</Button>
             </a>
-          </Stack>
-        </Paper>
-      </Container>
+          </div>
+        </div>
+      </div>
     );
   }
 
   if (!isAdmin) {
     return (
-      <Container size="sm" py={120}>
-        <Paper bg="#12121A" radius="lg" p="xl" style={{ border: "1px solid #252533", textAlign: "center" }}>
-          <Stack align="center" gap="md">
-            <Text fz={48}>🚫</Text>
-            <Text fz="xl" fw={700} c="#F0EEE8">Access Denied</Text>
-            <Text fz="sm" c="#8B8B9E">You don't have permission to access the admin panel.</Text>
+      <div className="max-w-lg mx-auto py-[120px] px-4">
+        <div className="bg-[#12121A] rounded-lg p-8 border border-[#252533] text-center">
+          <div className="flex flex-col items-center gap-4">
+            <span className="text-5xl">🚫</span>
+            <span className="text-xl font-bold text-[#F0EEE8]">Access Denied</span>
+            <span className="text-sm text-[#8B8B9E]">You don't have permission to access the admin panel.</span>
             <a href="/business/checklist" style={{ textDecoration: "none" }}>
               <Button className="rounded-md bg-[#7C6FFF22] text-[#A78BFA] border-none">Go Home</Button>
             </a>
-          </Stack>
-        </Paper>
-      </Container>
+          </div>
+        </div>
+      </div>
     );
   }
 

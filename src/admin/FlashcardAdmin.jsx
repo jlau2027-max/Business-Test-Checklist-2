@@ -1,23 +1,5 @@
 import { useState, useEffect, useCallback } from "react";
-import {
-  Box,
-  Group,
-  Paper,
-  Text,
-  Stack,
-  TextInput,
-  Textarea,
-  ColorInput,
-  Modal,
-  Badge,
-  ActionIcon,
-  Skeleton,
-  Alert,
-  Tooltip,
-  ScrollArea,
-  Table,
-} from "@mantine/core";
-import { Button, Spinner } from "@heroui/react";
+import { Button, Spinner, Modal, TextField, Input, Label, TextArea, Table, Tooltip, Skeleton, Alert } from "@heroui/react";
 import { useAuth } from "../AuthContext.jsx";
 import {
   fetchFlashcardTopics,
@@ -34,31 +16,9 @@ import ConfirmDeleteModal from "./components/ConfirmDeleteModal.jsx";
 // ---------------------------------------------------------------------------
 // Style constants
 // ---------------------------------------------------------------------------
-const BG = "#12121A";
-const BORDER = "#252533";
 const TEXT_COLOR = "#F0EEE8";
 const MUTED = "#8B8B9E";
-const INPUT_BG = "#1A1A24";
 const DEFAULT_COLOR = "#7C6FFF";
-
-const panelStyle = {
-  backgroundColor: BG,
-  border: `1px solid ${BORDER}`,
-  borderRadius: 12,
-  display: "flex",
-  flexDirection: "column",
-};
-
-const modalStyles = {
-  header: { backgroundColor: BG, borderBottom: `1px solid ${BORDER}` },
-  body: { backgroundColor: BG },
-  title: { color: TEXT_COLOR, fontWeight: 700 },
-};
-
-const inputStyles = {
-  input: { backgroundColor: INPUT_BG, borderColor: BORDER, color: TEXT_COLOR },
-  label: { color: TEXT_COLOR, marginBottom: 4 },
-};
 
 // ---------------------------------------------------------------------------
 // Helpers
@@ -83,16 +43,14 @@ function Toast({ message, type, onClose }) {
   if (!message) return null;
   return (
     <Alert
-      color={type === "error" ? "red" : "green"}
-      radius="md"
-      withCloseButton
-      onClose={onClose}
-      styles={{
-        root: { backgroundColor: type === "error" ? "#2A1215" : "#122A1A", border: `1px solid ${type === "error" ? "#5C2020" : "#1A4028"}` },
-        message: { color: TEXT_COLOR },
-      }}
+      status={type === "error" ? "danger" : "success"}
+      className={type === "error" ? "bg-[#2A1215] border border-[#5C2020]" : "bg-[#122A1A] border border-[#1A4028]"}
     >
-      {message}
+      <Alert.Indicator />
+      <Alert.Content className="flex-1">
+        <Alert.Description className="text-[#F0EEE8]">{message}</Alert.Description>
+      </Alert.Content>
+      <button onClick={onClose} className="text-[#8B8B9E] ml-2 hover:text-white">✕</button>
     </Alert>
   );
 }
@@ -151,73 +109,65 @@ function TopicModal({ opened, onClose, topic, onSave }) {
   }
 
   return (
-    <Modal
-      opened={opened}
-      onClose={onClose}
-      title={isEdit ? "Edit Topic" : "Create Topic"}
-      centered
-      radius="md"
-      styles={modalStyles}
-    >
-      <form onSubmit={handleSubmit}>
-        <Stack gap="md">
-          {error && (
-            <Alert color="red" radius="md" styles={{ root: { backgroundColor: "#2A1215", border: "1px solid #5C2020" }, message: { color: TEXT_COLOR } }}>
-              {error}
-            </Alert>
-          )}
-          <TextInput
-            label="Label"
-            placeholder="e.g. Ratio Analysis"
-            value={label}
-            onChange={(e) => setLabel(e.currentTarget.value)}
-            required
-            radius="md"
-            styles={inputStyles}
-          />
-          <TextInput
-            label="ID"
-            placeholder="Auto-generated from label"
-            value={id}
-            onChange={(e) => !isEdit && setId(e.currentTarget.value)}
-            readOnly={isEdit}
-            required
-            radius="md"
-            styles={{
-              ...inputStyles,
-              input: {
-                ...inputStyles.input,
-                ...(isEdit ? { opacity: 0.5, cursor: "not-allowed" } : {}),
-              },
-            }}
-          />
-          <ColorInput
-            label="Color"
-            value={color}
-            onChange={setColor}
-            format="hex"
-            radius="md"
-            styles={{
-              ...inputStyles,
-              dropdown: { backgroundColor: BG, borderColor: BORDER },
-            }}
-          />
-          <Group justify="flex-end" gap="sm" mt="xs">
-            <Button variant="ghost" className="rounded-md text-[#8B8B9E]" onPress={onClose} isDisabled={saving}>
-              Cancel
-            </Button>
-            <Button type="submit" className="rounded-md bg-[#7C6FFF] text-white border-none" isPending={saving}>
-              {({isPending}) => (
-                <>
-                  {isPending && <Spinner color="current" size="sm" />}
-                  {isPending ? "Saving..." : (isEdit ? "Save Changes" : "Create Topic")}
-                </>
-              )}
-            </Button>
-          </Group>
-        </Stack>
-      </form>
-    </Modal>
+    <Modal.Backdrop variant="opaque" isKeyboardDismissDisabled={false} isOpen={opened} onOpenChange={(open) => { if (!open) onClose(); }}>
+      <Modal.Container>
+        <Modal.Dialog className="sm:max-w-md" style={{ backgroundColor: "#12121A", border: "1px solid #252533" }}>
+          <Modal.CloseTrigger />
+          <Modal.Header style={{ borderBottom: "1px solid #252533" }}>
+            <Modal.Heading style={{ color: TEXT_COLOR, fontWeight: 700, fontFamily: "'JetBrains Mono', monospace" }}>
+              {isEdit ? "Edit Topic" : "Create Topic"}
+            </Modal.Heading>
+          </Modal.Header>
+          <Modal.Body>
+            <form onSubmit={handleSubmit}>
+              <div className="flex flex-col gap-4">
+                {error && (
+                  <Alert status="danger" className="bg-[#2A1215] border border-[#5C2020]">
+                    <Alert.Indicator />
+                    <Alert.Content>
+                      <Alert.Description className="text-[#F0EEE8]">{error}</Alert.Description>
+                    </Alert.Content>
+                  </Alert>
+                )}
+                <TextField className="w-full" name="label" onChange={(val) => setLabel(val)}>
+                  <Label className="text-[#8B8B9E] text-[11px] tracking-wider mb-1" style={{ fontFamily: "'JetBrains Mono', monospace" }}>Label</Label>
+                  <Input value={label} placeholder="e.g. Ratio Analysis" className="bg-[#1A1A24] border border-[#252533] text-[#F0EEE8] rounded-md" style={{ fontFamily: "'JetBrains Mono', monospace" }} />
+                </TextField>
+                <TextField className="w-full" name="id" isReadOnly={isEdit} onChange={(val) => { if (!isEdit) setId(val); }}>
+                  <Label className="text-[#8B8B9E] text-[11px] tracking-wider mb-1" style={{ fontFamily: "'JetBrains Mono', monospace" }}>ID</Label>
+                  <Input
+                    value={id}
+                    placeholder="Auto-generated from label"
+                    className={`bg-[#1A1A24] border border-[#252533] text-[#F0EEE8] rounded-md ${isEdit ? "opacity-50 cursor-not-allowed" : ""}`}
+                    style={{ fontFamily: "'JetBrains Mono', monospace" }}
+                  />
+                </TextField>
+                <div className="flex items-end gap-3">
+                  <TextField className="flex-1" name="color" onChange={setColor}>
+                    <Label className="text-[#8B8B9E] text-[11px] tracking-wider mb-1" style={{ fontFamily: "'JetBrains Mono', monospace" }}>Color</Label>
+                    <Input value={color} placeholder="#7C6FFF" className="bg-[#1A1A24] border border-[#252533] text-[#F0EEE8] rounded-md" style={{ fontFamily: "'JetBrains Mono', monospace" }} />
+                  </TextField>
+                  <div className="w-9 h-9 rounded-lg border border-[#252533] shrink-0" style={{ backgroundColor: color || "#8B8B9E" }} />
+                </div>
+                <div className="flex items-center justify-end gap-2 mt-1">
+                  <Button variant="ghost" className="rounded-md text-[#8B8B9E]" onPress={onClose} isDisabled={saving}>
+                    Cancel
+                  </Button>
+                  <Button type="submit" className="rounded-md bg-[#7C6FFF] text-white border-none" isPending={saving}>
+                    {({isPending}) => (
+                      <>
+                        {isPending && <Spinner color="current" size="sm" />}
+                        {isPending ? "Saving..." : (isEdit ? "Save Changes" : "Create Topic")}
+                      </>
+                    )}
+                  </Button>
+                </div>
+              </div>
+            </form>
+          </Modal.Body>
+        </Modal.Dialog>
+      </Modal.Container>
+    </Modal.Backdrop>
   );
 }
 
@@ -273,67 +223,63 @@ function CardModal({ opened, onClose, card, topicId, onSave }) {
   }
 
   return (
-    <Modal
-      opened={opened}
-      onClose={onClose}
-      title={isEdit ? "Edit Card" : "Create Card"}
-      centered
-      radius="md"
-      size="lg"
-      styles={modalStyles}
-    >
-      <form onSubmit={handleSubmit}>
-        <Stack gap="md">
-          {error && (
-            <Alert color="red" radius="md" styles={{ root: { backgroundColor: "#2A1215", border: "1px solid #5C2020" }, message: { color: TEXT_COLOR } }}>
-              {error}
-            </Alert>
-          )}
-          <TextInput
-            label="Term"
-            placeholder="e.g. Net Present Value"
-            value={term}
-            onChange={(e) => setTerm(e.currentTarget.value)}
-            required
-            radius="md"
-            styles={inputStyles}
-          />
-          <Textarea
-            label="Definition"
-            placeholder="Enter the definition..."
-            value={definition}
-            onChange={(e) => setDefinition(e.currentTarget.value)}
-            required
-            radius="md"
-            minRows={3}
-            autosize
-            maxRows={8}
-            styles={inputStyles}
-          />
-          <TextInput
-            label="Formula (optional)"
-            placeholder="e.g. NPV = Sum of PV of cash flows - initial investment"
-            value={formula}
-            onChange={(e) => setFormula(e.currentTarget.value)}
-            radius="md"
-            styles={inputStyles}
-          />
-          <Group justify="flex-end" gap="sm" mt="xs">
-            <Button variant="ghost" className="rounded-md text-[#8B8B9E]" onPress={onClose} isDisabled={saving}>
-              Cancel
-            </Button>
-            <Button type="submit" className="rounded-md bg-[#7C6FFF] text-white border-none" isPending={saving}>
-              {({isPending}) => (
-                <>
-                  {isPending && <Spinner color="current" size="sm" />}
-                  {isPending ? "Saving..." : (isEdit ? "Save Changes" : "Create Card")}
-                </>
-              )}
-            </Button>
-          </Group>
-        </Stack>
-      </form>
-    </Modal>
+    <Modal.Backdrop variant="opaque" isKeyboardDismissDisabled={false} isOpen={opened} onOpenChange={(open) => { if (!open) onClose(); }}>
+      <Modal.Container>
+        <Modal.Dialog className="sm:max-w-lg" style={{ backgroundColor: "#12121A", border: "1px solid #252533" }}>
+          <Modal.CloseTrigger />
+          <Modal.Header style={{ borderBottom: "1px solid #252533" }}>
+            <Modal.Heading style={{ color: TEXT_COLOR, fontWeight: 700, fontFamily: "'JetBrains Mono', monospace" }}>
+              {isEdit ? "Edit Card" : "Create Card"}
+            </Modal.Heading>
+          </Modal.Header>
+          <Modal.Body>
+            <form onSubmit={handleSubmit}>
+              <div className="flex flex-col gap-4">
+                {error && (
+                  <Alert status="danger" className="bg-[#2A1215] border border-[#5C2020]">
+                    <Alert.Indicator />
+                    <Alert.Content>
+                      <Alert.Description className="text-[#F0EEE8]">{error}</Alert.Description>
+                    </Alert.Content>
+                  </Alert>
+                )}
+                <TextField className="w-full" name="term" onChange={(val) => setTerm(val)}>
+                  <Label className="text-[#8B8B9E] text-[11px] tracking-wider mb-1" style={{ fontFamily: "'JetBrains Mono', monospace" }}>Term</Label>
+                  <Input value={term} placeholder="e.g. Net Present Value" className="bg-[#1A1A24] border border-[#252533] text-[#F0EEE8] rounded-md" style={{ fontFamily: "'JetBrains Mono', monospace" }} />
+                </TextField>
+                <div>
+                  <label className="text-[#8B8B9E] text-xs font-medium mb-1 block" style={{ fontFamily: "'JetBrains Mono', monospace" }}>Definition</label>
+                  <TextArea
+                    value={definition}
+                    onChange={(e) => setDefinition(e.target.value)}
+                    placeholder="Enter the definition..."
+                    className="w-full bg-[#1A1A24] border border-[#252533] text-[#F0EEE8] rounded-md min-h-[80px]"
+                    rows={3}
+                  />
+                </div>
+                <TextField className="w-full" name="formula" onChange={(val) => setFormula(val)}>
+                  <Label className="text-[#8B8B9E] text-[11px] tracking-wider mb-1" style={{ fontFamily: "'JetBrains Mono', monospace" }}>Formula (optional)</Label>
+                  <Input value={formula} placeholder="e.g. NPV = Sum of PV of cash flows - initial investment" className="bg-[#1A1A24] border border-[#252533] text-[#F0EEE8] rounded-md" style={{ fontFamily: "'JetBrains Mono', monospace" }} />
+                </TextField>
+                <div className="flex items-center justify-end gap-2 mt-1">
+                  <Button variant="ghost" className="rounded-md text-[#8B8B9E]" onPress={onClose} isDisabled={saving}>
+                    Cancel
+                  </Button>
+                  <Button type="submit" className="rounded-md bg-[#7C6FFF] text-white border-none" isPending={saving}>
+                    {({isPending}) => (
+                      <>
+                        {isPending && <Spinner color="current" size="sm" />}
+                        {isPending ? "Saving..." : (isEdit ? "Save Changes" : "Create Card")}
+                      </>
+                    )}
+                  </Button>
+                </div>
+              </div>
+            </form>
+          </Modal.Body>
+        </Modal.Dialog>
+      </Modal.Container>
+    </Modal.Backdrop>
   );
 }
 
@@ -520,44 +466,29 @@ export default function FlashcardAdmin() {
   // Render
   // ---------------------------------------------------------------------------
   return (
-    <Box>
+    <div>
       {/* Toast */}
       {toast.message && (
-        <Box mb="md">
+        <div className="mb-4">
           <Toast message={toast.message} type={toast.type} onClose={() => setToast({ message: "", type: "" })} />
-        </Box>
+        </div>
       )}
 
       {/* Two-panel layout */}
-      <Box
-        style={{
-          display: "flex",
-          gap: 16,
-          alignItems: "flex-start",
-          minHeight: 500,
-          flexWrap: "wrap",
-        }}
+      <div
+        className="flex gap-4 items-start flex-wrap"
+        style={{ minHeight: 500 }}
       >
         {/* ---- LEFT PANEL: Topics ---- */}
-        <Paper
-          style={{
-            ...panelStyle,
-            width: 320,
-            minWidth: 280,
-            flexShrink: 0,
-          }}
-          p={0}
+        <div
+          className="bg-[#12121A] rounded-xl border border-[#252533] flex flex-col"
+          style={{ width: 320, minWidth: 280, flexShrink: 0 }}
         >
           {/* Header */}
-          <Group
-            justify="space-between"
-            px="md"
-            py="sm"
-            style={{ borderBottom: `1px solid ${BORDER}` }}
-          >
-            <Text fw={700} fz="md" c={TEXT_COLOR}>
+          <div className="flex items-center justify-between px-4 py-3" style={{ borderBottom: "1px solid #252533" }}>
+            <span className="font-bold text-base text-[#F0EEE8]">
               Topics
-            </Text>
+            </span>
             {canEditContent && (
               <Button
                 size="sm"
@@ -570,136 +501,107 @@ export default function FlashcardAdmin() {
                 <IconPlus /> Add Topic
               </Button>
             )}
-          </Group>
+          </div>
 
           {/* Topic list */}
-          <ScrollArea style={{ flex: 1 }} offsetScrollbars>
-            <Stack gap={0} p="xs">
+          <div className="flex-1 overflow-auto">
+            <div className="flex flex-col p-2">
               {topicsLoading ? (
                 Array.from({ length: 5 }).map((_, i) => (
-                  <Skeleton key={i} height={48} radius="md" mb={6} />
+                  <Skeleton key={i} className="h-12 rounded-md mb-1.5" />
                 ))
               ) : topics.length === 0 ? (
-                <Text fz="sm" c={MUTED} ta="center" py="xl">
+                <span className="text-sm text-[#8B8B9E] text-center py-8">
                   No topics yet.
-                </Text>
+                </span>
               ) : (
                 topics.map((topic) => {
                   const isSelected = topic.id === selectedTopicId;
                   return (
-                    <Paper
+                    <div
                       key={topic.id}
-                      px="sm"
-                      py={10}
-                      radius="md"
-                      style={{
-                        cursor: "pointer",
-                        backgroundColor: isSelected ? "#1E1E30" : "transparent",
-                        border: isSelected ? `1px solid #7C6FFF44` : "1px solid transparent",
-                        transition: "background-color 0.15s, border-color 0.15s",
-                      }}
-                      onMouseEnter={(e) => {
-                        if (!isSelected) e.currentTarget.style.backgroundColor = "#16161F";
-                      }}
-                      onMouseLeave={(e) => {
-                        if (!isSelected) e.currentTarget.style.backgroundColor = "transparent";
-                      }}
+                      className={`px-3 py-2.5 rounded-lg cursor-pointer transition-colors ${isSelected ? "bg-[#1E1E30] border border-[#7C6FFF44]" : "border border-transparent hover:bg-[#16161F]"}`}
                       onClick={() => setSelectedTopicId(topic.id)}
                     >
-                      <Group justify="space-between" wrap="nowrap" gap="xs">
-                        <Group gap="sm" wrap="nowrap" style={{ minWidth: 0, flex: 1 }}>
+                      <div className="flex items-center justify-between flex-nowrap gap-1">
+                        <div className="flex items-center gap-2 flex-nowrap min-w-0 flex-1">
                           {/* Color dot */}
-                          <Box
+                          <div
+                            className="shrink-0"
                             style={{
                               width: 10,
                               height: 10,
                               borderRadius: "50%",
                               backgroundColor: topic.color || DEFAULT_COLOR,
-                              flexShrink: 0,
                             }}
                           />
-                          <Text
-                            fz="sm"
-                            c={TEXT_COLOR}
-                            fw={isSelected ? 600 : 400}
-                            truncate="end"
-                            style={{ minWidth: 0 }}
+                          <span
+                            className={`text-sm text-[#F0EEE8] truncate min-w-0 ${isSelected ? "font-semibold" : "font-normal"}`}
                           >
                             {topic.label}
-                          </Text>
-                          <Badge
-                            size="sm"
-                            variant="light"
-                            color="gray"
-                            radius="sm"
-                            style={{ flexShrink: 0 }}
-                          >
+                          </span>
+                          <span className="text-xs px-2 py-0.5 rounded bg-[#252533] text-[#8B8B9E] shrink-0">
                             {topic.card_count ?? 0}
-                          </Badge>
-                        </Group>
+                          </span>
+                        </div>
 
                         {/* Action buttons */}
-                        <Group gap={4} wrap="nowrap" style={{ flexShrink: 0 }}>
+                        <div className="flex items-center gap-1 flex-nowrap shrink-0">
                           {canEditContent && (
-                            <Tooltip label="Edit topic" withArrow>
-                              <ActionIcon
+                            <Tooltip delay={0}>
+                              <Button
+                                isIconOnly
                                 size="sm"
-                                variant="subtle"
-                                color="gray"
-                                onClick={(e) => {
-                                  e.stopPropagation();
+                                variant="ghost"
+                                className="text-[#8B8B9E]"
+                                onPress={(e) => {
                                   setEditingTopic(topic);
                                   setTopicModalOpen(true);
                                 }}
+                                onClick={(e) => e.stopPropagation()}
                               >
                                 <IconPencil />
-                              </ActionIcon>
+                              </Button>
+                              <Tooltip.Content><p>Edit topic</p></Tooltip.Content>
                             </Tooltip>
                           )}
                           {canDeleteContent && (
-                            <Tooltip label="Delete topic" withArrow>
-                              <ActionIcon
+                            <Tooltip delay={0}>
+                              <Button
+                                isIconOnly
                                 size="sm"
-                                variant="subtle"
-                                color="red"
-                                onClick={(e) => {
-                                  e.stopPropagation();
+                                variant="ghost"
+                                className="text-[#8B8B9E]"
+                                onPress={() => {
                                   setDeleteTarget({ type: "topic", item: topic });
                                 }}
+                                onClick={(e) => e.stopPropagation()}
                               >
                                 <IconTrash />
-                              </ActionIcon>
+                              </Button>
+                              <Tooltip.Content><p>Delete topic</p></Tooltip.Content>
                             </Tooltip>
                           )}
-                        </Group>
-                      </Group>
-                    </Paper>
+                        </div>
+                      </div>
+                    </div>
                   );
                 })
               )}
-            </Stack>
-          </ScrollArea>
-        </Paper>
+            </div>
+          </div>
+        </div>
 
         {/* ---- RIGHT PANEL: Cards ---- */}
-        <Paper
-          style={{
-            ...panelStyle,
-            flex: 1,
-            minWidth: 360,
-          }}
-          p={0}
+        <div
+          className="bg-[#12121A] rounded-xl border border-[#252533] flex flex-col flex-1"
+          style={{ minWidth: 360 }}
         >
           {/* Header */}
-          <Group
-            justify="space-between"
-            px="md"
-            py="sm"
-            style={{ borderBottom: `1px solid ${BORDER}` }}
-          >
-            <Text fw={700} fz="md" c={TEXT_COLOR}>
+          <div className="flex items-center justify-between px-4 py-3" style={{ borderBottom: "1px solid #252533" }}>
+            <span className="font-bold text-base text-[#F0EEE8]">
               {selectedTopic ? `${selectedTopic.label} Cards` : "Cards"}
-            </Text>
+            </span>
             {canEditContent && selectedTopic && (
               <Button
                 size="sm"
@@ -712,30 +614,30 @@ export default function FlashcardAdmin() {
                 <IconPlus /> Add Card
               </Button>
             )}
-          </Group>
+          </div>
 
           {/* Content */}
-          <ScrollArea style={{ flex: 1 }} offsetScrollbars>
+          <div className="flex-1 overflow-auto">
             {!selectedTopic ? (
               /* Placeholder when no topic is selected */
-              <Stack align="center" justify="center" gap="sm" py={80}>
+              <div className="flex flex-col items-center justify-center gap-2 py-20">
                 <IconCards />
-                <Text fz="sm" c={MUTED} ta="center">
+                <span className="text-sm text-[#8B8B9E] text-center">
                   Select a topic to view its flashcards.
-                </Text>
-              </Stack>
+                </span>
+              </div>
             ) : cardsLoading ? (
-              <Stack gap="xs" p="md">
+              <div className="flex flex-col gap-2 p-4">
                 {Array.from({ length: 4 }).map((_, i) => (
-                  <Skeleton key={i} height={44} radius="md" />
+                  <Skeleton key={i} className="h-11 rounded-md" />
                 ))}
-              </Stack>
+              </div>
             ) : cards.length === 0 ? (
-              <Stack align="center" justify="center" gap="sm" py={80}>
+              <div className="flex flex-col items-center justify-center gap-2 py-20">
                 <IconCards />
-                <Text fz="sm" c={MUTED} ta="center">
+                <span className="text-sm text-[#8B8B9E] text-center">
                   No cards in this topic yet.
-                </Text>
+                </span>
                 {canEditContent && (
                   <Button
                     size="sm"
@@ -748,106 +650,84 @@ export default function FlashcardAdmin() {
                     <IconPlus /> Add First Card
                   </Button>
                 )}
-              </Stack>
+              </div>
             ) : (
-              <Box p="xs">
-                <Table
-                  highlightOnHover
-                  verticalSpacing="sm"
-                  horizontalSpacing="md"
-                  styles={{
-                    table: { borderCollapse: "separate", borderSpacing: 0 },
-                    thead: { borderBottom: `1px solid ${BORDER}` },
-                    th: {
-                      color: MUTED,
-                      fontSize: 11,
-                      fontWeight: 600,
-                      textTransform: "uppercase",
-                      letterSpacing: 0.5,
-                      borderBottom: `1px solid ${BORDER}`,
-                      padding: "8px 12px",
-                    },
-                    td: {
-                      color: TEXT_COLOR,
-                      fontSize: 13,
-                      borderBottom: `1px solid ${BORDER}22`,
-                      padding: "10px 12px",
-                    },
-                    tr: {
-                      "&[data-hover]:hover": {
-                        backgroundColor: "#16161F",
-                      },
-                    },
-                  }}
-                >
-                  <Table.Thead>
-                    <Table.Tr>
-                      <Table.Th>Term</Table.Th>
-                      <Table.Th>Definition</Table.Th>
-                      <Table.Th>Formula</Table.Th>
-                      <Table.Th style={{ width: 80, textAlign: "right" }}>Actions</Table.Th>
-                    </Table.Tr>
-                  </Table.Thead>
-                  <Table.Tbody>
-                    {cards.map((card) => (
-                      <Table.Tr key={card.id}>
-                        <Table.Td style={{ fontWeight: 500, whiteSpace: "nowrap" }}>
-                          {card.term}
-                        </Table.Td>
-                        <Table.Td>
-                          <Text fz="xs" c={MUTED} lineClamp={2}>
-                            {truncate(card.definition, 120)}
-                          </Text>
-                        </Table.Td>
-                        <Table.Td>
-                          {card.formula ? (
-                            <Text fz="xs" c="#A78BFA" ff="'JetBrains Mono', monospace">
-                              {truncate(card.formula, 60)}
-                            </Text>
-                          ) : (
-                            <Text fz="xs" c="#55556A">--</Text>
-                          )}
-                        </Table.Td>
-                        <Table.Td>
-                          <Group gap={4} justify="flex-end" wrap="nowrap">
-                            {canEditContent && (
-                              <Tooltip label="Edit card" withArrow>
-                                <ActionIcon
-                                  size="sm"
-                                  variant="subtle"
-                                  color="gray"
-                                  onClick={() => {
-                                    setEditingCard(card);
-                                    setCardModalOpen(true);
-                                  }}
-                                >
-                                  <IconPencil />
-                                </ActionIcon>
-                              </Tooltip>
-                            )}
-                            {canDeleteContent && (
-                              <Tooltip label="Delete card" withArrow>
-                                <ActionIcon
-                                  size="sm"
-                                  variant="subtle"
-                                  color="red"
-                                  onClick={() => setDeleteTarget({ type: "card", item: card })}
-                                >
-                                  <IconTrash />
-                                </ActionIcon>
-                              </Tooltip>
-                            )}
-                          </Group>
-                        </Table.Td>
-                      </Table.Tr>
-                    ))}
-                  </Table.Tbody>
+              <div className="p-2">
+                <Table className="w-full">
+                  <Table.ScrollContainer>
+                    <Table.Content>
+                      <Table.Header>
+                        <Table.Column className="text-[#8B8B9E] text-[11px] font-semibold uppercase tracking-wider">Term</Table.Column>
+                        <Table.Column className="text-[#8B8B9E] text-[11px] font-semibold uppercase tracking-wider">Definition</Table.Column>
+                        <Table.Column className="text-[#8B8B9E] text-[11px] font-semibold uppercase tracking-wider">Formula</Table.Column>
+                        <Table.Column className="text-[#8B8B9E] text-[11px] font-semibold uppercase tracking-wider text-right" style={{ width: 80 }}>Actions</Table.Column>
+                      </Table.Header>
+                      <Table.Body>
+                        {cards.map((card) => (
+                          <Table.Row key={card.id} className="hover:bg-[#16161F] border-b border-[#252533]/15">
+                            <Table.Cell className="text-[#F0EEE8] text-sm font-medium whitespace-nowrap">
+                              {card.term}
+                            </Table.Cell>
+                            <Table.Cell>
+                              <span className="text-xs text-[#8B8B9E] line-clamp-2">
+                                {truncate(card.definition, 120)}
+                              </span>
+                            </Table.Cell>
+                            <Table.Cell>
+                              {card.formula ? (
+                                <span className="text-xs text-[#A78BFA]" style={{ fontFamily: "'JetBrains Mono', monospace" }}>
+                                  {truncate(card.formula, 60)}
+                                </span>
+                              ) : (
+                                <span className="text-xs text-[#55556A]">--</span>
+                              )}
+                            </Table.Cell>
+                            <Table.Cell>
+                              <div className="flex items-center gap-1 flex-nowrap justify-end">
+                                {canEditContent && (
+                                  <Tooltip delay={0}>
+                                    <Button
+                                      isIconOnly
+                                      size="sm"
+                                      variant="ghost"
+                                      className="text-[#8B8B9E]"
+                                      onPress={() => {
+                                        setEditingCard(card);
+                                        setCardModalOpen(true);
+                                      }}
+                                    >
+                                      <IconPencil />
+                                    </Button>
+                                    <Tooltip.Content><p>Edit card</p></Tooltip.Content>
+                                  </Tooltip>
+                                )}
+                                {canDeleteContent && (
+                                  <Tooltip delay={0}>
+                                    <Button
+                                      isIconOnly
+                                      size="sm"
+                                      variant="ghost"
+                                      className="text-[#8B8B9E]"
+                                      onPress={() => setDeleteTarget({ type: "card", item: card })}
+                                    >
+                                      <IconTrash />
+                                    </Button>
+                                    <Tooltip.Content><p>Delete card</p></Tooltip.Content>
+                                  </Tooltip>
+                                )}
+                              </div>
+                            </Table.Cell>
+                          </Table.Row>
+                        ))}
+                      </Table.Body>
+                    </Table.Content>
+                  </Table.ScrollContainer>
                 </Table>
-              </Box>
+              </div>
             )}
-          </ScrollArea>
-        </Paper>
-      </Box>
+          </div>
+        </div>
+      </div>
 
       {/* ---- Modals ---- */}
       <TopicModal
@@ -877,6 +757,6 @@ export default function FlashcardAdmin() {
         }
         loading={deleteLoading}
       />
-    </Box>
+    </div>
   );
 }

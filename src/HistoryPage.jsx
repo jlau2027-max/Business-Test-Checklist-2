@@ -1,7 +1,4 @@
 import { useState, useEffect } from "react";
-import {
-  Container, Badge, Text, Group, Paper, Box, Collapse, Stack, Skeleton,
-} from "@mantine/core";
 import { Button, TextArea, Spinner } from "@heroui/react";
 import { fetchHistoryQuestions } from "./api/contentApi.js";
 import LoginButton from "./LoginButton.jsx";
@@ -771,33 +768,27 @@ function HistoryQuestion({ q, levelDescriptors, prefix }) {
   };
 
   return (
-    <Paper bg="#12121A" radius="lg" p="lg" mb="md" style={{ border: "1px solid #252533" }}>
+    <div className="bg-[#12121A] rounded-lg p-4 mb-3" style={{ border: "1px solid #252533" }}>
       {/* Question header */}
-      <Group mb="sm" align="flex-start" wrap="nowrap">
-        <Badge
-          size="lg"
-          radius="md"
-          ff="'JetBrains Mono', monospace"
-          fw={700}
-          style={{ backgroundColor: "#F8717118", color: "#F87171", border: "none", flexShrink: 0 }}
+      <div className="flex items-start gap-2 mb-2" style={{ flexWrap: "nowrap" }}>
+        <span
+          className="text-sm px-2 py-1 rounded-md font-bold"
+          style={{ backgroundColor: "#F8717118", color: "#F87171", border: "none", flexShrink: 0, fontFamily: "'JetBrains Mono', monospace" }}
         >
           Q{q.number}
-        </Badge>
-        <Badge
-          size="sm"
-          radius="md"
-          ff="'JetBrains Mono', monospace"
-          fw={600}
-          style={{ backgroundColor: "#8B5CF618", color: "#8B5CF6", border: "none", flexShrink: 0 }}
+        </span>
+        <span
+          className="text-xs px-1.5 py-0.5 rounded-md font-semibold"
+          style={{ backgroundColor: "#8B5CF618", color: "#8B5CF6", border: "none", flexShrink: 0, fontFamily: "'JetBrains Mono', monospace" }}
         >
           {q.marks} marks
-        </Badge>
-      </Group>
+        </span>
+      </div>
 
       {/* Question text */}
-      <Text fz={14} c="#F0EEE8" lh={1.7} mb="md" style={{ whiteSpace: "pre-line" }}>
+      <span className="block text-[#F0EEE8] mb-4" style={{ fontSize: 14, lineHeight: 1.7, whiteSpace: "pre-line" }}>
         {q.question}
-      </Text>
+      </span>
 
       {/* Answer textarea */}
       <TextArea
@@ -811,7 +802,7 @@ function HistoryQuestion({ q, levelDescriptors, prefix }) {
       />
 
       {/* Action buttons */}
-      <Group gap="sm" wrap="wrap">
+      <div className="flex items-center gap-2 flex-wrap">
         <Button
           size="sm"
           isPending={grading}
@@ -858,61 +849,59 @@ function HistoryQuestion({ q, levelDescriptors, prefix }) {
           </Button>
         )}
 
-        <Badge size="xs" variant="light" color="red" ff="'JetBrains Mono', monospace" ml="auto">
+        <span className="text-xs px-1.5 py-0.5 rounded ml-auto" style={{ backgroundColor: "rgba(248,113,113,0.1)", color: "#F87171", fontFamily: "'JetBrains Mono', monospace" }}>
           auto-saved
-        </Badge>
-      </Group>
+        </span>
+      </div>
 
       {/* AI Grade Result */}
       {gradeResult && (
-        <Paper bg="#1A1A24" radius="md" p="md" mt="md" style={{ border: "1px solid #252533" }}>
+        <div className="bg-[#1A1A24] rounded-md p-3 mt-3" style={{ border: "1px solid #252533" }}>
           {gradeResult.score !== null && (
-            <Group mb="xs">
-              <Badge
-                size="lg"
-                radius="md"
-                ff="'JetBrains Mono', monospace"
-                fw={700}
+            <div className="flex items-center mb-1">
+              <span
+                className="text-sm px-2 py-1 rounded-md font-bold"
                 style={{
                   backgroundColor: gradeResult.score >= gradeResult.maxMarks * 0.7 ? "#34D39922" : gradeResult.score >= gradeResult.maxMarks * 0.4 ? "#FBBF2422" : "#EF444422",
                   color: gradeResult.score >= gradeResult.maxMarks * 0.7 ? "#34D399" : gradeResult.score >= gradeResult.maxMarks * 0.4 ? "#FBBF24" : "#EF4444",
                   border: "none",
+                  fontFamily: "'JetBrains Mono', monospace",
                 }}
               >
                 {gradeResult.score} / {gradeResult.maxMarks}
-              </Badge>
-            </Group>
+              </span>
+            </div>
           )}
-          <Text fz={13} c="#B0ADA6" lh={1.7} style={{ whiteSpace: "pre-line" }}>
+          <span className="block text-[#B0ADA6]" style={{ fontSize: 13, lineHeight: 1.7, whiteSpace: "pre-line" }}>
             {gradeResult.feedback}
-          </Text>
-        </Paper>
+          </span>
+        </div>
       )}
 
       {/* Markscheme reveal */}
-      <Collapse in={revealed}>
-        <Box mt="md" pt="md" style={{ borderTop: "1px solid #252533" }}>
-          <Text fz={11} ff="'JetBrains Mono', monospace" c="#34D399" lts={1} mb="sm">
+      {revealed && (
+        <div className="mt-4 pt-4" style={{ borderTop: "1px solid #252533" }}>
+          <span className="block text-[#34D399] mb-2" style={{ fontSize: 11, fontFamily: "'JetBrains Mono', monospace", letterSpacing: 1 }}>
             MARKSCHEME
-          </Text>
-          <Text fz={13} c="#B0ADA6" lh={1.7} style={{ whiteSpace: "pre-line" }}>
+          </span>
+          <span className="block text-[#B0ADA6]" style={{ fontSize: 13, lineHeight: 1.7, whiteSpace: "pre-line" }}>
             {q.markscheme}
-          </Text>
-        </Box>
-      </Collapse>
+          </span>
+        </div>
+      )}
 
       {/* Level descriptors reveal */}
-      <Collapse in={levelsRevealed}>
-        <Box mt="md" pt="md" style={{ borderTop: "1px solid #252533" }}>
-          <Text fz={11} ff="'JetBrains Mono', monospace" c="#FBBF24" lts={1} mb="sm">
+      {levelsRevealed && (
+        <div className="mt-4 pt-4" style={{ borderTop: "1px solid #252533" }}>
+          <span className="block text-[#FBBF24] mb-2" style={{ fontSize: 11, fontFamily: "'JetBrains Mono', monospace", letterSpacing: 1 }}>
             LEVEL DESCRIPTORS
-          </Text>
-          <Text fz={13} c="#B0ADA6" lh={1.7} style={{ whiteSpace: "pre-line" }}>
+          </span>
+          <span className="block text-[#B0ADA6]" style={{ fontSize: 13, lineHeight: 1.7, whiteSpace: "pre-line" }}>
             {levelDescriptors}
-          </Text>
-        </Box>
-      </Collapse>
-    </Paper>
+          </span>
+        </div>
+      )}
+    </div>
   );
 }
 
@@ -988,12 +977,12 @@ export default function HistoryPage() {
   const loading = paper === "paper2" ? loadingP2 : loadingP3;
 
   return (
-    <Box mih="100vh" bg="#09090F" style={{ fontFamily: "'Inter', sans-serif", color: "#F0EEE8" }}>
+    <div className="min-h-screen" style={{ backgroundColor: "#09090F", fontFamily: "'Inter', sans-serif", color: "#F0EEE8" }}>
 
       <Sidebar activeSubject="history" sidebarOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
 
       {/* Header */}
-      <Box
+      <div
         style={{
           position: "sticky",
           top: 0,
@@ -1004,8 +993,8 @@ export default function HistoryPage() {
           borderBottom: "1px solid rgba(255,255,255,0.04)",
         }}
       >
-        <Container size="lg" py="sm">
-          <Group justify="center" mb={4} style={{ position: "relative" }}>
+        <div className="max-w-4xl mx-auto py-2 px-4">
+          <div className="flex items-center justify-center mb-1" style={{ position: "relative" }}>
             {/* Sidebar toggle */}
             <Button
               isIconOnly
@@ -1025,35 +1014,28 @@ export default function HistoryPage() {
                 <line x1="3" y1="18" x2="21" y2="18"/>
               </svg>
             </Button>
-            <Badge
-              variant="light"
-              size="sm"
-              tt="uppercase"
-              fw={700}
-              ff="'JetBrains Mono', monospace"
-              style={{ letterSpacing: 2, backgroundColor: "#F8717118", color: "#F87171", border: "none" }}
+            <span
+              className="text-xs px-2 py-0.5 rounded uppercase font-bold"
+              style={{ letterSpacing: 2, backgroundColor: "#F8717118", color: "#F87171", border: "none", fontFamily: "'JetBrains Mono', monospace" }}
             >
               IB HL History
-            </Badge>
+            </span>
             <LoginButton />
-          </Group>
-          <Text
-            ta="center"
-            fw={800}
-            fz={{ base: 22, sm: 30 }}
-            c="#F0EEE8"
-            style={{ letterSpacing: -0.5 }}
+          </div>
+          <span
+            className="text-center block font-extrabold text-[#F0EEE8]"
+            style={{ fontSize: "clamp(22px, 4vw, 30px)", letterSpacing: -0.5 }}
           >
             {paper === "paper2" ? "Paper 2 \u2014 Specimen" : "Paper 3 \u2014 Specimen"}
-          </Text>
-          <Text ta="center" fz="xs" c="#55556A" mb="sm">
+          </span>
+          <span className="text-center block text-xs text-[#55556A] mb-2">
             {paper === "paper2"
               ? `12 topics \u00B7 ${questions.length} questions \u00B7 ${totalMarks} marks total`
               : `18 topics \u00B7 ${questions.length} questions \u00B7 ${totalMarks} marks total`}
-          </Text>
+          </span>
 
           {/* Paper 2 / Paper 3 tabs */}
-          <Group justify="center" gap="xs" pb={4}>
+          <div className="flex items-center justify-center gap-1 pb-1">
             {[
               { key: "paper2", label: "Paper 2" },
               { key: "paper3", label: "Paper 3" },
@@ -1076,86 +1058,81 @@ export default function HistoryPage() {
                 {t.label}
               </Button>
             ))}
-          </Group>
-        </Container>
-      </Box>
+          </div>
+        </div>
+      </div>
 
       {/* Content */}
-      <Container size="lg" py="xl" px="md">
+      <div className="max-w-4xl mx-auto py-6 px-3">
         <div style={{ maxWidth: 1060, margin: "0 auto", padding: "0 0 40px" }}>
           {/* Exam info banner */}
-          <Paper bg="#12121A" radius="lg" p="lg" mb="xl" style={{ border: "1px solid #252533" }}>
-            <Text fz="sm" c="#F0EEE8" fw={600} mb={4}>
+          <div className="bg-[#12121A] rounded-lg p-4 mb-6" style={{ border: "1px solid #252533" }}>
+            <span className="text-sm text-[#F0EEE8] font-semibold block" style={{ marginBottom: 4 }}>
               {paper === "paper2"
                 ? "IB History HL/SL \u2014 Paper 2 Specimen"
                 : "IB History HL \u2014 Paper 3 Specimen (Africa and the Middle East)"}
-            </Text>
-            <Text fz="xs" c="#8B8B9E" lh={1.6}>
+            </span>
+            <span className="text-xs text-[#8B8B9E] block" style={{ lineHeight: 1.6 }}>
               {paper === "paper2"
                 ? "Answer two questions, each chosen from a different topic. Each question is worth 15 marks. The maximum mark for this paper is 30. Type your essay answers below \u2014 everything auto-saves. Use \"Solve\" for AI grading, \"Show Markscheme\" for the rubric, and \"Level Descriptors\" for the marking bands."
                 : "Answer three questions. Each question is worth 15 marks. The maximum mark for this paper is 45. 2 hours 30 minutes. HL only. Type your essay answers below \u2014 everything auto-saves. Use \"Solve\" for AI grading, \"Show Markscheme\" for the rubric, and \"Level Descriptors\" for the marking bands."}
-            </Text>
-            <Group mt="sm" gap="xs">
-              <Badge size="xs" variant="light" color="red" ff="'JetBrains Mono', monospace">
+            </span>
+            <div className="flex items-center gap-1 mt-2">
+              <span className="text-xs px-1.5 py-0.5 rounded" style={{ backgroundColor: "rgba(248,113,113,0.1)", color: "#F87171", fontFamily: "'JetBrains Mono', monospace" }}>
                 {questions.length} questions
-              </Badge>
-              <Badge size="xs" variant="light" color="violet" ff="'JetBrains Mono', monospace">
+              </span>
+              <span className="text-xs px-1.5 py-0.5 rounded" style={{ backgroundColor: "rgba(139,92,246,0.1)", color: "#8B5CF6", fontFamily: "'JetBrains Mono', monospace" }}>
                 {topics.length} topics
-              </Badge>
-              <Badge size="xs" variant="light" color="yellow" ff="'JetBrains Mono', monospace">
+              </span>
+              <span className="text-xs px-1.5 py-0.5 rounded" style={{ backgroundColor: "rgba(251,191,36,0.1)", color: "#FBBF24", fontFamily: "'JetBrains Mono', monospace" }}>
                 15 marks each
-              </Badge>
+              </span>
               {paper === "paper3" && (
-                <Badge size="xs" variant="light" color="cyan" ff="'JetBrains Mono', monospace">
+                <span className="text-xs px-1.5 py-0.5 rounded" style={{ backgroundColor: "rgba(34,211,238,0.1)", color: "#22D3EE", fontFamily: "'JetBrains Mono', monospace" }}>
                   HL only
-                </Badge>
+                </span>
               )}
-            </Group>
-          </Paper>
+            </div>
+          </div>
 
           {/* Questions grouped by topic */}
           {loading
             ? Array.from({ length: 4 }).map((_, i) => (
-                <Box key={i} mb="xl">
-                  <Skeleton height={14} width={200} mb="md" radius="sm" />
-                  <Stack gap="md">
+                <div key={i} className="mb-6">
+                  <div className="h-3.5 w-[200px] rounded-sm bg-[#252533] animate-pulse mb-4" />
+                  <div className="flex flex-col gap-4">
                     {Array.from({ length: 2 }).map((_, j) => (
-                      <Paper key={j} bg="#12121A" radius="lg" p="lg" mb="md" style={{ border: "1px solid #252533" }}>
-                        <Group mb="sm">
-                          <Skeleton height={24} width={40} radius="md" />
-                          <Skeleton height={20} width={70} radius="md" />
-                        </Group>
-                        <Skeleton height={16} mb="xs" radius="sm" />
-                        <Skeleton height={16} width="80%" mb="md" radius="sm" />
-                        <Skeleton height={160} radius="md" />
-                      </Paper>
+                      <div key={j} className="bg-[#12121A] rounded-lg p-4 mb-3" style={{ border: "1px solid #252533" }}>
+                        <div className="flex items-center gap-2 mb-2">
+                          <div className="h-6 w-[40px] rounded-md bg-[#252533] animate-pulse" />
+                          <div className="h-5 w-[70px] rounded-md bg-[#252533] animate-pulse" />
+                        </div>
+                        <div className="h-4 rounded-sm bg-[#252533] animate-pulse mb-1" />
+                        <div className="h-4 rounded-sm bg-[#252533] animate-pulse mb-4" style={{ width: "80%" }} />
+                        <div className="h-[160px] rounded-md bg-[#252533] animate-pulse" />
+                      </div>
                     ))}
-                  </Stack>
-                </Box>
+                  </div>
+                </div>
               ))
             : topics.map(topic => (
-                <Box key={topic} mb="xl">
-                  <Text
-                    fz={11}
-                    ff="'JetBrains Mono', monospace"
-                    c="#F87171"
-                    lts={1}
-                    mb="md"
-                    tt="uppercase"
-                    fw={700}
+                <div key={topic} className="mb-6">
+                  <span
+                    className="block text-[#F87171] font-bold uppercase mb-4"
+                    style={{ fontSize: 11, fontFamily: "'JetBrains Mono', monospace", letterSpacing: 1 }}
                   >
                     {topic}
-                  </Text>
-                  <Stack gap="md">
+                  </span>
+                  <div className="flex flex-col gap-4">
                     {questions.filter(q => q.topic === topic).map(q => (
                       <HistoryQuestion key={q.id} q={q} levelDescriptors={levelDesc} prefix={lsPrefix} />
                     ))}
-                  </Stack>
-                </Box>
+                  </div>
+                </div>
               ))
           }
         </div>
-      </Container>
+      </div>
 
       {/* Floating support button */}
       <a
@@ -1188,6 +1165,6 @@ export default function HistoryPage() {
           <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" style={{transition:"fill 0.25s ease"}}/>
         </svg>
       </a>
-    </Box>
+    </div>
   );
 }

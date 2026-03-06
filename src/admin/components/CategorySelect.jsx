@@ -1,4 +1,4 @@
-import { Select, Group, ColorSwatch, Text } from "@mantine/core";
+import { Select, ListBox, Label } from "@heroui/react";
 
 const DEFAULT_CATEGORIES = [
   { value: "Costs & Revenue", color: "#7C6FFF" },
@@ -13,30 +13,41 @@ const DEFAULT_CATEGORIES = [
   { value: "Sources of Finance", color: "#FB923C" },
 ];
 
-export default function CategorySelect({ value, onChange, categories, ...props }) {
+export default function CategorySelect({ value, onChange, categories, label, ...props }) {
   const cats = categories || DEFAULT_CATEGORIES;
-
-  const data = cats.map(c => ({
-    value: c.value || c.category,
-    label: c.value || c.category,
-  }));
 
   return (
     <Select
-      label="Category"
+      className="w-full"
       placeholder="Select category"
-      data={data}
-      value={value}
-      onChange={onChange}
-      searchable
-      clearable
-      radius="md"
-      styles={{
-        input: { backgroundColor: "#1A1A24", borderColor: "#252533", color: "#F0EEE8" },
-        dropdown: { backgroundColor: "#12121A", borderColor: "#252533" },
-        option: { color: "#F0EEE8", "&[data-selected]": { backgroundColor: "#7C6FFF" } },
-      }}
+      selectedKey={value || null}
+      onSelectionChange={(key) => onChange(key)}
       {...props}
-    />
+    >
+      <Label className="text-[#8B8B9E] text-[11px] tracking-wider mb-1" style={{ fontFamily: "'JetBrains Mono', monospace" }}>
+        {label || "Category"}
+      </Label>
+      <Select.Trigger className="bg-[#1A1A24] border border-[#252533] text-[#F0EEE8] rounded-md" style={{ fontFamily: "'JetBrains Mono', monospace" }}>
+        <Select.Value />
+        <Select.Indicator />
+      </Select.Trigger>
+      <Select.Popover className="bg-[#1A1A24] border border-[#252533]">
+        <ListBox>
+          {cats.map((c) => (
+            <ListBox.Item
+              key={c.value || c.category}
+              id={c.value || c.category}
+              textValue={c.value || c.category}
+              className="text-[#F0EEE8] text-xs"
+              style={{ fontFamily: "'JetBrains Mono', monospace" }}
+            >
+              <span className="inline-block w-2 h-2 rounded-full mr-2" style={{ backgroundColor: c.color }} />
+              {c.value || c.category}
+              <ListBox.ItemIndicator />
+            </ListBox.Item>
+          ))}
+        </ListBox>
+      </Select.Popover>
+    </Select>
   );
 }
