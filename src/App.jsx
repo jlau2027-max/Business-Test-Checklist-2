@@ -1,6 +1,6 @@
 import { useState, useEffect, createContext, useContext } from "react";
 import { Analytics } from "@vercel/analytics/react";
-import { Button, TextArea, Spinner, Alert, Checkbox, Tabs, RadioGroup, Radio } from "@heroui/react";
+import { Button, TextArea, Spinner, Alert, Checkbox, Tabs, RadioGroup, Radio, Accordion } from "@heroui/react";
 import ProgressBar from "./components/ProgressBar.jsx";
 import LoginButton from "./LoginButton.jsx";
 import Sidebar from "./Sidebar.jsx";
@@ -312,10 +312,11 @@ function ChecklistView() {
     return checklistSections.filter(s => !collapsed[s.id]).map(s => s.id);
   });
   const toggle = id => setChecked(p => { const next = { ...p, [id]: !p[id] }; saveLS("checklist_checked", next); return next; });
-  const handleAccordion = (value) => {
+  const handleAccordion = (keys) => {
+    const value = [...keys];
     setOpenSections(value);
     const collapsed = {};
-    checklistSections.forEach(s => { if (!value.includes(s.id)) collapsed[s.id] = true; });
+    checklistSections.forEach(s => { if (!keys.has(s.id)) collapsed[s.id] = true; });
     saveLS("checklist_collapsed", collapsed);
   };
   const totalItems = checklistSections.reduce((s,sec)=>s+sec.items.length,0);
@@ -339,27 +340,29 @@ function ChecklistView() {
       </div>
 
       {/* Sections */}
-      <div className="flex flex-col gap-3">
+      <Accordion
+        allowsMultipleExpanded
+        expandedKeys={openSections}
+        onExpandedChange={handleAccordion}
+        hideSeparator
+        className="flex flex-col gap-3"
+      >
         {checklistSections.map(section => {
           const sectionChecked = section.items.filter((_,i)=>checked[`${section.id}-${i}`]).length;
           const allDone = sectionChecked===section.items.length;
-          const isOpen = openSections.includes(section.id);
           return (
-            <div key={section.id} className="bg-[#12121A] rounded-md border border-[#252533]" style={{borderLeft: `4px solid ${section.color}`}}>
-              <button
-                onClick={() => {
-                  const next = isOpen ? openSections.filter(id => id !== section.id) : [...openSections, section.id];
-                  handleAccordion(next);
-                }}
-                className="w-full flex items-center gap-2 px-5 py-3.5 hover:bg-[#1A1A24] transition-colors cursor-pointer"
-                style={{background:"transparent", border:"none", textAlign:"left"}}
-              >
-                <span className="text-xs px-1.5 py-0.5 rounded font-bold" style={{backgroundColor: section.color + "22", color: section.color, fontFamily: "'JetBrains Mono', monospace"}}>{sectionChecked}/{section.items.length}</span>
-                <span className="text-sm font-semibold" style={{color: allDone ? section.color : "#F0EEE8"}}>{allDone && "✓ "}{section.title}</span>
-                <svg className="ml-auto shrink-0" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#55556A" strokeWidth="2" style={{transform: isOpen ? "rotate(180deg)" : "rotate(0deg)", transition:"transform 0.2s"}}><polyline points="6 9 12 15 18 9"/></svg>
-              </button>
-              {isOpen && (
-                <div className="px-5 pb-4 pt-1 border-t border-[#252533]">
+            <Accordion.Item key={section.id} id={section.id} className="bg-[#12121A] rounded-md border border-[#252533]" style={{borderLeft: `4px solid ${section.color}`}}>
+              <Accordion.Heading>
+                <Accordion.Trigger className="w-full flex items-center gap-2 px-5 py-3.5 hover:bg-[#1A1A24] transition-colors">
+                  <span className="text-xs px-1.5 py-0.5 rounded font-bold" style={{backgroundColor: section.color + "22", color: section.color, fontFamily: "'JetBrains Mono', monospace"}}>{sectionChecked}/{section.items.length}</span>
+                  <span className="text-sm font-semibold" style={{color: allDone ? section.color : "#F0EEE8"}}>{allDone && "✓ "}{section.title}</span>
+                  <Accordion.Indicator className="ml-auto shrink-0 text-[#55556A]">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polyline points="6 9 12 15 18 9"/></svg>
+                  </Accordion.Indicator>
+                </Accordion.Trigger>
+              </Accordion.Heading>
+              <Accordion.Panel>
+                <Accordion.Body className="px-5 pb-4 pt-1 border-t border-[#252533]">
                   <div className="flex flex-col gap-1">
                     {section.items.map((item,i) => {
                       const key = `${section.id}-${i}`;
@@ -388,12 +391,12 @@ function ChecklistView() {
                       );
                     })}
                   </div>
-                </div>
-              )}
-            </div>
+                </Accordion.Body>
+              </Accordion.Panel>
+            </Accordion.Item>
           );
         })}
-      </div>
+      </Accordion>
 
       <span className="text-center block text-xs text-[#55556A] mt-6">
         Click any item to mark it as revised ·{" "}
