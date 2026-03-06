@@ -1,3 +1,4 @@
+import { useState, useEffect } from "react";
 import { Button } from "@heroui/react";
 import { Show, SignInButton, SignUpButton } from "@clerk/react";
 import LoginButton from "./LoginButton.jsx";
@@ -6,7 +7,16 @@ import Grainient from "./components/Grainient.jsx";
 import ASCIIText from "./components/ASCIIText.jsx";
 
 export default function LandingPage() {
-  const isDark = document.documentElement.classList.contains("dark");
+  // Reactive theme detection — re-renders when .dark class toggles
+  const [isDark, setIsDark] = useState(() => document.documentElement.classList.contains("dark"));
+
+  useEffect(() => {
+    const observer = new MutationObserver(() => {
+      setIsDark(document.documentElement.classList.contains("dark"));
+    });
+    observer.observe(document.documentElement, { attributes: true, attributeFilter: ["class"] });
+    return () => observer.disconnect();
+  }, []);
 
   return (
     <div className="min-h-screen relative" style={{ fontFamily: "'JSans', sans-serif", color: "#F0EEE8" }}>
@@ -52,14 +62,14 @@ export default function LandingPage() {
         {/* Hero */}
         <div className="max-w-2xl mx-auto px-4 flex flex-col items-center" style={{ paddingTop: 100, paddingBottom: 120 }}>
           {/* ASCII art title */}
-          <div style={{ position: "relative", width: "100%", height: "clamp(140px, 22vw, 260px)", marginBottom: 8 }}>
+          <div style={{ position: "relative", width: "110%", maxWidth: "900px", height: "clamp(200px, 30vw, 380px)", marginBottom: 8 }}>
             <ASCIIText
-              text="IB Rev Hub"
-              enableWaves
-              asciiFontSize={9}
+              text="IB Revision Hub"
+              enableWaves={false}
+              asciiFontSize={8}
               textFontSize={200}
               textColor="#fdf9f3"
-              planeBaseHeight={8}
+              planeBaseHeight={10}
             />
           </div>
           <p
