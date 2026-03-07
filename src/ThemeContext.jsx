@@ -14,6 +14,7 @@ export const THEMES = {
     '--text-muted': '#55556A',
     '--text-dimmed': '#C8C4BC',
     '--header-bg': 'rgba(9, 9, 15, 0.85)',
+    '--header-border': 'rgba(255,255,255,0.04)',
     '--accent': '#7C6FFF',
     '--accent-soft': '#A78BFA',
     // Mantine dark scale
@@ -41,6 +42,7 @@ export const THEMES = {
     '--text-muted': '#76769A',
     '--text-dimmed': '#2E2E52',
     '--header-bg': 'rgba(242, 242, 250, 0.92)',
+    '--header-border': 'rgba(0,0,0,0.08)',
     '--accent': '#6450EE',
     '--accent-soft': '#8470EE',
     // Mantine dark scale (inverted for light mode)
@@ -57,30 +59,31 @@ export const THEMES = {
   },
   bold: {
     name: 'Bold',
-    '--bg-base': '#06000F',
-    '--bg-surface': '#0E0020',
-    '--bg-elevated': '#160030',
-    '--bg-overlay': '#1E003F',
-    '--border-subtle': '#320058',
-    '--border-active': '#520090',
-    '--text-primary': '#F5E8FF',
-    '--text-secondary': '#CC88FF',
-    '--text-muted': '#9955BB',
-    '--text-dimmed': '#DDBBFF',
-    '--header-bg': 'rgba(6, 0, 15, 0.92)',
-    '--accent': '#CC00FF',
-    '--accent-soft': '#9900EE',
-    // Mantine dark scale (deep purple)
-    '--mantine-color-dark-9': '#06000F',
-    '--mantine-color-dark-8': '#0E0020',
-    '--mantine-color-dark-7': '#160030',
-    '--mantine-color-dark-6': '#1E003F',
-    '--mantine-color-dark-5': '#320058',
-    '--mantine-color-dark-4': '#520090',
-    '--mantine-color-dark-3': '#9955BB',
-    '--mantine-color-dark-2': '#CC88FF',
-    '--mantine-color-dark-1': '#DDBBFF',
-    '--mantine-color-dark-0': '#F5E8FF',
+    '--bg-base': '#030008',
+    '--bg-surface': '#0A0018',
+    '--bg-elevated': '#120028',
+    '--bg-overlay': '#1A0038',
+    '--border-subtle': '#3D0066',
+    '--border-active': '#6B00B3',
+    '--text-primary': '#FFEEFF',
+    '--text-secondary': '#E066FF',
+    '--text-muted': '#B84DD9',
+    '--text-dimmed': '#F0B3FF',
+    '--header-bg': 'rgba(3, 0, 8, 0.95)',
+    '--header-border': 'rgba(255,255,255,0.06)',
+    '--accent': '#E600FF',
+    '--accent-soft': '#D633FF',
+    // Mantine dark scale (deep purple, bolder)
+    '--mantine-color-dark-9': '#030008',
+    '--mantine-color-dark-8': '#0A0018',
+    '--mantine-color-dark-7': '#120028',
+    '--mantine-color-dark-6': '#1A0038',
+    '--mantine-color-dark-5': '#3D0066',
+    '--mantine-color-dark-4': '#6B00B3',
+    '--mantine-color-dark-3': '#B84DD9',
+    '--mantine-color-dark-2': '#E066FF',
+    '--mantine-color-dark-1': '#F0B3FF',
+    '--mantine-color-dark-0': '#FFEEFF',
   },
 };
 
@@ -107,17 +110,9 @@ export function ThemeProvider({ children }) {
       if (key.startsWith('--')) root.style.setProperty(key, val);
     });
     root.setAttribute('data-theme', theme);
+    root.classList.remove('theme-original', 'theme-light', 'theme-bold');
+    root.classList.add(`theme-${theme}`);
   }, [theme]);
-
-  // Apply on first mount
-  useEffect(() => {
-    const vars = THEMES[theme] || THEMES.original;
-    const root = document.documentElement;
-    Object.entries(vars).forEach(([key, val]) => {
-      if (key.startsWith('--')) root.style.setProperty(key, val);
-    });
-    root.setAttribute('data-theme', theme);
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <ThemeCtx.Provider value={{ theme, setTheme }}>

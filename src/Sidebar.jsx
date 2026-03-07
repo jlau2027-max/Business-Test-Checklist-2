@@ -41,8 +41,8 @@ export default function Sidebar({ activeSubject, sidebarOpen, onClose }) {
           width: 220,
           height: "100vh",
           zIndex: 200,
-          backgroundColor: "#0D0D14",
-          borderRight: "1px solid #1A1A24",
+          backgroundColor: "var(--bg-base)",
+          borderRight: "1px solid var(--border-subtle)",
           display: "flex",
           flexDirection: "column",
           padding: "20px 12px",
@@ -50,7 +50,7 @@ export default function Sidebar({ activeSubject, sidebarOpen, onClose }) {
           transition: "left 0.25s ease",
         }}
       >
-        <Text fz={11} ff="'JetBrains Mono', monospace" c="#55556A" lts={1} mb={4} px={8}>
+        <Text fz={11} ff="'JetBrains Mono', monospace" c="var(--text-muted)" lts={1} mb={4} px={8}>
           SUBJECTS
         </Text>
         {items.map(s => {
@@ -66,7 +66,7 @@ export default function Sidebar({ activeSubject, sidebarOpen, onClose }) {
                 paddingLeft: 14,
                 fontFamily: "'JetBrains Mono', monospace",
                 backgroundColor: active ? color : "transparent",
-                color: active ? "#fff" : "#8B8B9E",
+                color: active ? "#fff" : "var(--text-secondary)",
                 border: active ? "none" : "1px solid transparent",
                 boxShadow: active ? `0 0 12px ${color}33` : "none",
               }}
@@ -82,7 +82,7 @@ export default function Sidebar({ activeSubject, sidebarOpen, onClose }) {
         })}
 
         <Box style={{ flex: 1 }} />
-        <Text fz={10} c="#33334A" ff="'JetBrains Mono', monospace" ta="center">
+        <Text fz={10} c="var(--text-muted)" ff="'JetBrains Mono', monospace" ta="center">
           More subjects coming soon
         </Text>
       </Box>

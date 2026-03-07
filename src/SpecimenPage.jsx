@@ -224,7 +224,7 @@ function SpecimenQuestion({ q }) {
   const minRows = q.marks >= 10 ? 16 : q.marks >= 4 ? 10 : 6;
 
   return (
-    <Paper bg="#12121A" radius="lg" p="lg" mb="md" style={{ border: "1px solid #252533" }}>
+    <Paper bg="var(--bg-surface)" radius="lg" p="lg" mb="md" style={{ border: "1px solid var(--border-subtle)" }}>
       {/* Question header */}
       <Group mb="sm" align="flex-start" wrap="nowrap">
         <Badge
@@ -248,7 +248,7 @@ function SpecimenQuestion({ q }) {
       </Group>
 
       {/* Question text */}
-      <Text fz={14} c="#F0EEE8" lh={1.7} mb="md" style={{ whiteSpace: "pre-line" }}>
+      <Text fz={14} c="var(--text-primary)" lh={1.7} mb="md" style={{ whiteSpace: "pre-line" }}>
         {q.question}
       </Text>
 
@@ -259,8 +259,8 @@ function SpecimenQuestion({ q }) {
         placeholder="Type your answer here..."
         rows={minRows}
         fullWidth
-        className="rounded-md mb-2 bg-[#09090F] border border-[#252533] text-[#F0EEE8] text-sm leading-[1.7] placeholder:text-[#55556A] focus:border-[#7C6FFF] p-3"
-        style={{ fontFamily: "'Inter', sans-serif", resize: "vertical" }}
+        className="rounded-md mb-2 text-sm leading-[1.7] p-3"
+        style={{ backgroundColor: 'var(--bg-base)', border: '1px solid var(--border-subtle)', color: 'var(--text-primary)', fontFamily: "'Inter', sans-serif", resize: "vertical" }}
       />
 
       {/* Action buttons */}
@@ -283,8 +283,8 @@ function SpecimenQuestion({ q }) {
           size="sm"
           variant="ghost"
           onPress={() => setRevealed((r) => !r)}
-          className={`rounded-md ${revealed ? "text-[#8B8B9E]" : "bg-[#8B5CF622] text-[#8B5CF6] border border-[#8B5CF644]"}`}
-          style={{ fontFamily: "'JetBrains Mono', monospace" }}
+          className={`rounded-md ${revealed ? "" : "border border-[#8B5CF644]"}`}
+          style={revealed ? { color: 'var(--text-secondary)', fontFamily: "'JetBrains Mono', monospace" } : { backgroundColor: '#8B5CF622', color: '#8B5CF6', fontFamily: "'JetBrains Mono', monospace" }}
         >
           {revealed ? "Hide Markscheme" : "Show Markscheme"}
         </Button>
@@ -294,7 +294,8 @@ function SpecimenQuestion({ q }) {
             size="sm"
             variant="ghost"
             onPress={handleClear}
-            className="rounded-md text-[#8B8B9E]"
+            className="rounded-md"
+            style={{ color: 'var(--text-secondary)' }}
             style={{ fontFamily: "'JetBrains Mono', monospace" }}
           >
             Clear
@@ -308,7 +309,7 @@ function SpecimenQuestion({ q }) {
 
       {/* AI Grade Result */}
       {gradeResult && (
-        <Paper bg="#1A1A24" radius="md" p="md" mt="md" style={{ border: "1px solid #252533" }}>
+        <Paper bg="var(--bg-elevated)" radius="md" p="md" mt="md" style={{ border: "1px solid var(--border-subtle)" }}>
           {gradeResult.score !== null && (
             <Group mb="xs">
               <Badge
@@ -334,7 +335,7 @@ function SpecimenQuestion({ q }) {
 
       {/* Markscheme reveal */}
       <Collapse in={revealed}>
-        <Box mt="md" pt="md" style={{ borderTop: "1px solid #252533" }}>
+        <Box mt="md" pt="md" style={{ borderTop: "1px solid var(--border-subtle)" }}>
           <Text fz={11} ff="'JetBrains Mono', monospace" c="#34D399" lts={1} mb="sm">
             MARKSCHEME
           </Text>
@@ -380,7 +381,7 @@ export default function SpecimenPage() {
   const totalMarks = SPECIMEN_QUESTIONS.reduce((sum, q) => sum + q.marks, 0);
 
   return (
-    <Box mih="100vh" bg="#09090F" style={{ fontFamily: "'Inter', sans-serif", color: "#F0EEE8" }}>
+    <Box mih="100vh" bg="var(--bg-base)" style={{ fontFamily: "'Inter', sans-serif", color: "var(--text-primary)" }}>
       <Sidebar activeSubject="business" sidebarOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
 
       {/* Header */}
@@ -389,10 +390,10 @@ export default function SpecimenPage() {
           position: "sticky",
           top: 0,
           zIndex: 100,
-          background: "rgba(9, 9, 15, 0.85)",
+          background: "var(--header-bg)",
           backdropFilter: "blur(12px)",
           WebkitBackdropFilter: "blur(12px)",
-          borderBottom: "1px solid rgba(255,255,255,0.04)",
+          borderBottom: "1px solid var(--header-border)",
         }}
       >
         <Container size="lg" py="sm">
@@ -402,8 +403,10 @@ export default function SpecimenPage() {
               isIconOnly
               variant="outline"
               onPress={() => setSidebarOpen(o => !o)}
-              className="rounded-md bg-transparent text-[#8B8B9E] border-[#252533] min-w-[auto] h-8 px-[10px]"
+              className="rounded-md bg-transparent min-w-[auto] h-8 px-[10px]"
               style={{
+                color: 'var(--text-secondary)',
+                borderColor: 'var(--border-subtle)',
                 position: "absolute",
                 left: 0,
                 top: "50%",
@@ -432,19 +435,20 @@ export default function SpecimenPage() {
             ta="center"
             fw={800}
             fz={{ base: 22, sm: 30 }}
-            c="#F0EEE8"
+            c="var(--text-primary)"
             style={{ letterSpacing: -0.5 }}
           >
             Specimen Paper
           </Text>
-          <Text ta="center" fz="xs" c="#55556A" mb="sm">
+          <Text ta="center" fz="xs" c="var(--text-muted)" mb="sm">
             Unit 3 — Finance · {totalMarks} marks total
           </Text>
           <Group justify="center">
             <a href="/business/checklist" style={{ textDecoration: "none" }}>
               <Button
                 size="sm"
-                className="rounded-full bg-[#1A1A24] text-[#8B8B9E] border border-[#252533]"
+                className="rounded-full"
+                style={{ backgroundColor: 'var(--bg-elevated)', color: 'var(--text-secondary)', border: '1px solid var(--border-subtle)' }}
                 style={{ fontFamily: "'JetBrains Mono', monospace" }}
               >
                 ← Back to Revision Hub
@@ -458,11 +462,11 @@ export default function SpecimenPage() {
       <Container size="lg" py="xl" px="md">
         <div style={{ maxWidth: 1060, margin: "0 auto", padding: "0 0 40px" }}>
           {/* Exam info banner */}
-          <Paper bg="#12121A" radius="lg" p="lg" mb="xl" style={{ border: "1px solid #252533" }}>
-            <Text fz="sm" c="#F0EEE8" fw={600} mb={4}>
+          <Paper bg="var(--bg-surface)" radius="lg" p="lg" mb="xl" style={{ border: "1px solid var(--border-subtle)" }}>
+            <Text fz="sm" c="var(--text-primary)" fw={600} mb={4}>
               Unit 3 Finance Test — February 2026
             </Text>
-            <Text fz="xs" c="#8B8B9E" lh={1.6}>
+            <Text fz="xs" c="var(--text-secondary)" lh={1.6}>
               Answer all questions. The maximum mark for this test is {totalMarks}. Type your answers in the boxes
               below — everything auto-saves. Use "Solve" for AI grading and "Show Markscheme" to reveal the rubric.
             </Text>
@@ -481,7 +485,7 @@ export default function SpecimenPage() {
             <Text fz={11} ff="'JetBrains Mono', monospace" c="#60A5FA" lts={1} mb="sm">
               CASE STUDY
             </Text>
-            <Text fz={14} c="#F0EEE8" fw={600} mb="xs">
+            <Text fz={14} c="var(--text-primary)" fw={600} mb="xs">
               NorthHaven Dairy (NHD)
             </Text>
             <Text fz={13} c="#B0ADA6" lh={1.7} style={{ whiteSpace: "pre-line" }}>
@@ -495,7 +499,7 @@ Recently, NHD has been considering investing in new automated bottling machines 
           <Stack gap="md">
             {loading
               ? Array.from({ length: 6 }).map((_, i) => (
-                  <Paper key={i} bg="#12121A" radius="lg" p="lg" mb="md" style={{ border: "1px solid #252533" }}>
+                  <Paper key={i} bg="var(--bg-surface)" radius="lg" p="lg" mb="md" style={{ border: "1px solid var(--border-subtle)" }}>
                     <Group mb="sm">
                       <Skeleton height={24} width={50} radius="md" />
                       <Skeleton height={20} width={70} radius="md" />
@@ -526,7 +530,7 @@ Recently, NHD has been considering investing in new automated bottling machines 
           width: 48,
           height: 48,
           borderRadius: "50%",
-          backgroundColor: "#7C6FFF",
+          backgroundColor: "var(--accent)",
           display: "flex",
           alignItems: "center",
           justifyContent: "center",

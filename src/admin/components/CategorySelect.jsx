@@ -32,9 +32,9 @@ export default function CategorySelect({ value, onChange, categories, ...props }
       clearable
       radius="md"
       styles={{
-        input: { backgroundColor: "#1A1A24", borderColor: "#252533", color: "#F0EEE8" },
-        dropdown: { backgroundColor: "#12121A", borderColor: "#252533" },
-        option: { color: "#F0EEE8", "&[data-selected]": { backgroundColor: "#7C6FFF" } },
+        input: { backgroundColor: "var(--bg-elevated)", borderColor: "var(--border-subtle)", color: "var(--text-primary)" },
+        dropdown: { backgroundColor: "var(--bg-surface)", borderColor: "var(--border-subtle)" },
+        option: { color: "var(--text-primary)", "&[data-selected]": { backgroundColor: "var(--accent)" } },
       }}
       {...props}
     />

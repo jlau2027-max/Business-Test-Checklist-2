@@ -14,6 +14,7 @@
   --text-muted: #55556A;
   --text-dimmed: #C8C4BC;
   --header-bg: rgba(9, 9, 15, 0.85);
+  --header-border: rgba(255,255,255,0.04);
   --accent: #7C6FFF;
   --accent-soft: #A78BFA;
 }
@@ -30,6 +31,11 @@ html, body, #root {
 
 *, *::before, *::after {
   box-sizing: border-box;
+}
+
+input::placeholder,
+textarea::placeholder {
+  color: var(--text-muted);
 }
 
 /* 3D Flashcard flip styles */
