@@ -1018,7 +1018,7 @@ export default function HistoryPage() {
               className="text-xs px-2 py-0.5 rounded-full uppercase font-bold"
               style={{ letterSpacing: 2, backgroundColor: "var(--color-danger-soft)", color: "var(--color-danger)", border: "none", fontFamily: "'JSans', sans-serif" }}
             >
-              IB HL History
+              IB History
             </span>
             <LoginButton />
           </div>
@@ -1027,11 +1027,6 @@ export default function HistoryPage() {
             style={{ fontSize: "clamp(22px, 4vw, 30px)", letterSpacing: -0.5 }}
           >
             {paper === "paper2" ? "Paper 2 \u2014 Specimen" : "Paper 3 \u2014 Specimen"}
-          </span>
-          <span className="text-center block text-xs text-[var(--text-muted)] mb-2">
-            {paper === "paper2"
-              ? `12 topics \u00B7 ${questions.length} questions \u00B7 ${totalMarks} marks total`
-              : `18 topics \u00B7 ${questions.length} questions \u00B7 ${totalMarks} marks total`}
           </span>
 
           {/* Paper 2 / Paper 3 tabs */}
@@ -1069,13 +1064,13 @@ export default function HistoryPage() {
           <Surface className="rounded-3xl p-4 mb-6">
             <span className="text-sm text-[var(--text-primary)] font-semibold block" style={{ marginBottom: 4 }}>
               {paper === "paper2"
-                ? "IB History HL/SL \u2014 Paper 2 Specimen"
-                : "IB History HL \u2014 Paper 3 Specimen (Africa and the Middle East)"}
+                ? "Paper 2 Specimen"
+                : "Paper 3 Specimen (Africa and the Middle East)"}
             </span>
             <span className="text-xs text-[var(--text-secondary)] block" style={{ lineHeight: 1.6 }}>
               {paper === "paper2"
                 ? "Answer two questions, each chosen from a different topic. Each question is worth 15 marks. The maximum mark for this paper is 30. Type your essay answers below \u2014 everything auto-saves. Use \"Solve\" for AI grading, \"Show Markscheme\" for the rubric, and \"Level Descriptors\" for the marking bands."
-                : "Answer three questions. Each question is worth 15 marks. The maximum mark for this paper is 45. 2 hours 30 minutes. HL only. Type your essay answers below \u2014 everything auto-saves. Use \"Solve\" for AI grading, \"Show Markscheme\" for the rubric, and \"Level Descriptors\" for the marking bands."}
+                : "Answer three questions. Each question is worth 15 marks. The maximum mark for this paper is 45. 2 hours 30 minutes. Type your essay answers below \u2014 everything auto-saves. Use \"Solve\" for AI grading, \"Show Markscheme\" for the rubric, and \"Level Descriptors\" for the marking bands."}
             </span>
             <div className="flex items-center gap-1 mt-2">
               <span className="text-xs px-1.5 py-0.5 rounded-full" style={{ backgroundColor: "rgba(248,113,113,0.1)", color: "var(--color-danger)", fontFamily: "'JSans', sans-serif" }}>
@@ -1087,11 +1082,6 @@ export default function HistoryPage() {
               <span className="text-xs px-1.5 py-0.5 rounded-full" style={{ backgroundColor: "rgba(251,191,36,0.1)", color: "var(--color-warning)", fontFamily: "'JSans', sans-serif" }}>
                 15 marks each
               </span>
-              {paper === "paper3" && (
-                <span className="text-xs px-1.5 py-0.5 rounded-full" style={{ backgroundColor: "var(--accent-secondary-soft)", color: "var(--accent-secondary)", fontFamily: "'JSans', sans-serif" }}>
-                  HL only
-                </span>
-              )}
             </div>
           </Surface>
 

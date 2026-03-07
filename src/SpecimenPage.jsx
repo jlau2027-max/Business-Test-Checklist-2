@@ -409,7 +409,7 @@ export default function SpecimenPage() {
               className="text-xs px-2 py-0.5 rounded-full uppercase font-bold"
               style={{ letterSpacing: 2, backgroundColor: "var(--accent-secondary-soft)", color: "var(--accent-secondary)", border: "none", fontFamily: "'JSans', sans-serif" }}
             >
-              IB HL Business Management
+              IB Business Management
             </span>
             <LoginButton />
           </div>
@@ -418,9 +418,6 @@ export default function SpecimenPage() {
             style={{ fontSize: "clamp(22px, 4vw, 30px)", letterSpacing: -0.5 }}
           >
             Specimen Paper
-          </span>
-          <span className="text-center block text-xs text-[var(--text-muted)] mb-2">
-            Unit 3 — Finance · {totalMarks} marks total
           </span>
           <div className="flex items-center justify-center">
             <a href="/business/checklist" style={{ textDecoration: "none" }}>
@@ -442,7 +439,7 @@ export default function SpecimenPage() {
           {/* Exam info banner */}
           <Surface className="rounded-3xl p-4 mb-6">
             <span className="text-sm text-[var(--text-primary)] font-semibold block" style={{ marginBottom: 4 }}>
-              Unit 3 Finance Test — February 2026
+              Finance Test — February 2026
             </span>
             <span className="text-xs text-[var(--text-secondary)] block" style={{ lineHeight: 1.6 }}>
               Answer all questions. The maximum mark for this test is {totalMarks}. Type your answers in the boxes
