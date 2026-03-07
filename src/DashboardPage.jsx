@@ -43,15 +43,15 @@ function formatTime(ms) {
 
 function StatCard({ label, value, sub, color = "#7C6FFF" }) {
   return (
-    <Paper bg="#12121A" radius="lg" p="lg" style={{ border: "1px solid #252533", flex: 1, minWidth: 160 }}>
-      <Text fz={11} ff="'JetBrains Mono', monospace" c="#55556A" lts={1} mb={4}>
+    <Paper bg="var(--bg-surface)" radius="lg" p="lg" style={{ border: "1px solid var(--border-subtle)", flex: 1, minWidth: 160 }}>
+      <Text fz={11} ff="'JetBrains Mono', monospace" c="var(--text-muted)" lts={1} mb={4}>
         {label}
       </Text>
       <Text fz={28} fw={800} c={color} ff="'JetBrains Mono', monospace">
         {value}
       </Text>
       {sub && (
-        <Text fz={12} c="#8B8B9E" mt={2}>
+        <Text fz={12} c="var(--text-secondary)" mt={2}>
           {sub}
         </Text>
       )}
@@ -85,7 +85,7 @@ export default function DashboardPage() {
   if (authLoading) return null;
 
   return (
-    <Box mih="100vh" bg="#09090F" style={{ fontFamily: "'Inter', sans-serif", color: "#F0EEE8" }}>
+    <Box mih="100vh" bg="var(--bg-base)" style={{ fontFamily: "'Inter', sans-serif", color: "var(--text-primary)" }}>
       <Sidebar activeSubject="dashboard" sidebarOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
 
       {/* Header */}
@@ -94,10 +94,10 @@ export default function DashboardPage() {
           position: "sticky",
           top: 0,
           zIndex: 100,
-          background: "rgba(9, 9, 15, 0.85)",
+          background: "var(--header-bg)",
           backdropFilter: "blur(12px)",
           WebkitBackdropFilter: "blur(12px)",
-          borderBottom: "1px solid rgba(255,255,255,0.04)",
+          borderBottom: "1px solid var(--header-border)",
         }}
       >
         <Container size="lg" py="sm">
@@ -106,8 +106,10 @@ export default function DashboardPage() {
               isIconOnly
               variant="outline"
               onPress={() => setSidebarOpen(o => !o)}
-              className="rounded-md bg-transparent text-[#8B8B9E] border-[#252533] min-w-[auto] h-8 px-[10px]"
+              className="rounded-md bg-transparent min-w-[auto] h-8 px-[10px]"
               style={{
+                color: 'var(--text-secondary)',
+                borderColor: 'var(--border-subtle)',
                 position: "absolute",
                 left: 0,
                 top: "50%",
@@ -126,16 +128,16 @@ export default function DashboardPage() {
               tt="uppercase"
               fw={700}
               ff="'JetBrains Mono', monospace"
-              style={{ letterSpacing: 2, backgroundColor: "#7C6FFF18", color: "#A78BFA", border: "none" }}
+              style={{ letterSpacing: 2, backgroundColor: "color-mix(in srgb, var(--accent) 10%, transparent)", color: "var(--accent-soft)", border: "none" }}
             >
               Analytics
             </Badge>
             <LoginButton />
           </Group>
-          <Text ta="center" fw={800} fz={{ base: 22, sm: 30 }} c="#F0EEE8" style={{ letterSpacing: -0.5 }}>
+          <Text ta="center" fw={800} fz={{ base: 22, sm: 30 }} c="var(--text-primary)" style={{ letterSpacing: -0.5 }}>
             Your Dashboard
           </Text>
-          <Text ta="center" fz="xs" c="#55556A" mb="sm">
+          <Text ta="center" fz="xs" c="var(--text-muted)" mb="sm">
             Track your revision progress and performance
           </Text>
         </Container>
@@ -144,39 +146,40 @@ export default function DashboardPage() {
       <Container size="lg" py="xl" px="md">
         {!user ? (
           /* Guest prompt */
-          <Paper bg="#12121A" radius="lg" p="xl" style={{ border: "1px solid #252533", textAlign: "center" }}>
-            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#55556A" strokeWidth="1.5" strokeLinecap="round" style={{ marginBottom: 16 }}>
+          <Paper bg="var(--bg-surface)" radius="lg" p="xl" style={{ border: "1px solid var(--border-subtle)", textAlign: "center" }}>
+            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="var(--text-muted)" strokeWidth="1.5" strokeLinecap="round" style={{ marginBottom: 16 }}>
               <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
               <circle cx="12" cy="7" r="4"/>
             </svg>
-            <Text fz="lg" fw={700} c="#F0EEE8" mb="xs">
+            <Text fz="lg" fw={700} c="var(--text-primary)" mb="xs">
               Sign in to view your analytics
             </Text>
-            <Text fz="sm" c="#8B8B9E" mb="lg" maw={400} mx="auto">
+            <Text fz="sm" c="var(--text-secondary)" mb="lg" maw={400} mx="auto">
               Track your accuracy per topic, review wrong answers, and see time spent on each question.
             </Text>
             <SignInButton mode="modal">
               <Button
                 render={(props) => <button {...props} />}
                 size="md"
-                className="rounded-md bg-[#7C6FFF] text-white border-none font-semibold"
+                className="rounded-md text-white border-none font-semibold"
+                style={{ backgroundColor: 'var(--accent)' }}
               >
                 Sign In
               </Button>
             </SignInButton>
           </Paper>
         ) : loading ? (
-          <Text ta="center" c="#55556A" py="xl">Loading your analytics...</Text>
+          <Text ta="center" c="var(--text-muted)" py="xl">Loading your analytics...</Text>
         ) : attempts.length === 0 ? (
-          <Paper bg="#12121A" radius="lg" p="xl" style={{ border: "1px solid #252533", textAlign: "center" }}>
-            <Text fz="lg" fw={700} c="#F0EEE8" mb="xs">
+          <Paper bg="var(--bg-surface)" radius="lg" p="xl" style={{ border: "1px solid var(--border-subtle)", textAlign: "center" }}>
+            <Text fz="lg" fw={700} c="var(--text-primary)" mb="xs">
               No data yet
             </Text>
-            <Text fz="sm" c="#8B8B9E" mb="lg">
+            <Text fz="sm" c="var(--text-secondary)" mb="lg">
               Start answering questions on the Revision Hub to see your analytics here.
             </Text>
             <a href="/business/checklist" style={{ textDecoration: "none" }}>
-              <Button className="rounded-md bg-[#7C6FFF] text-white border-none font-semibold">
+              <Button className="rounded-md text-white border-none font-semibold" style={{ backgroundColor: 'var(--accent)' }}>
                 Go to Revision Hub
               </Button>
             </a>

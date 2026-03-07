@@ -586,21 +586,37 @@ async function requireAuth(request, env, allowedRoles) {
 
 // ─── Public Content API (D1) ──────────────────────────────────────────────
 
-async function handleGetFlashcardTopics(env) {
-  const { results } = await env.CONTENT_DB.prepare(
-    `SELECT ft.*, COUNT(f.id) as card_count
+async function handleGetFlashcardTopics(url, env) {
+  const unit = url?.searchParams?.get("unit");
+  const subject = url?.searchParams?.get("subject");
+  const whereParts = [];
+  const bindings = [];
+  if (unit) { whereParts.push("ft.unit = ?"); bindings.push(unit); }
+  if (subject) { whereParts.push("ft.subject = ?"); bindings.push(subject); }
+  const whereClause = whereParts.length ? " WHERE " + whereParts.join(" AND ") : "";
+  let joinExtra = "";
+  if (unit) { joinExtra += " AND (f.unit IS NULL OR f.unit = ?)"; bindings.push(unit); }
+  if (subject) { joinExtra += " AND (f.subject IS NULL OR f.subject = ?)"; bindings.push(subject); }
+  const sql = `SELECT ft.*, COUNT(f.id) as card_count
      FROM flashcard_topics ft
-     LEFT JOIN flashcards f ON f.topic_id = ft.id
-     GROUP BY ft.id
-     ORDER BY ft.sort_order`
-  ).all();
+     LEFT JOIN flashcards f ON f.topic_id = ft.id${joinExtra}
+     ${whereClause}
+     GROUP BY ft.id ORDER BY ft.sort_order`;
+  const { results } = bindings.length
+    ? await env.CONTENT_DB.prepare(sql).bind(...bindings).all()
+    : await env.CONTENT_DB.prepare(sql).all();
   return jsonCached(results);
 }
 
-async function handleGetFlashcards(topicId, env) {
-  const { results } = await env.CONTENT_DB.prepare(
-    `SELECT * FROM flashcards WHERE topic_id = ? ORDER BY sort_order`
-  ).bind(topicId).all();
+async function handleGetFlashcards(topicId, url, env) {
+  const unit = url?.searchParams?.get("unit");
+  const subject = url?.searchParams?.get("subject");
+  let sql = `SELECT * FROM flashcards WHERE topic_id = ?`;
+  const bindings = [topicId];
+  if (unit) { sql += ` AND unit = ?`; bindings.push(unit); }
+  if (subject) { sql += ` AND subject = ?`; bindings.push(subject); }
+  sql += ` ORDER BY sort_order`;
+  const { results } = await env.CONTENT_DB.prepare(sql).bind(...bindings).all();
   return jsonCached(results);
 }
 
@@ -609,8 +625,16 @@ async function handleGetMcq(url, env) {
   const bindings = [];
   const category = url.searchParams.get("category");
   const difficulty = url.searchParams.get("difficulty");
+  const unit = url.searchParams.get("unit");
+  const subject = url.searchParams.get("subject");
   if (category) { sql += ` AND category = ?`; bindings.push(category); }
+  if (subject && !category) {
+    const subjectCategory = subject.charAt(0).toUpperCase() + subject.slice(1);
+    sql += ` AND category = ?`;
+    bindings.push(subjectCategory);
+  }
   if (difficulty) { sql += ` AND difficulty = ?`; bindings.push(difficulty); }
+  if (unit) { sql += ` AND unit = ?`; bindings.push(unit); }
   sql += ` ORDER BY sort_order`;
   const { results } = await env.CONTENT_DB.prepare(sql).bind(...bindings).all();
   return jsonCached(results);
@@ -622,9 +646,17 @@ async function handleGetWritten(url, env) {
   const type = url.searchParams.get("type");
   const category = url.searchParams.get("category");
   const difficulty = url.searchParams.get("difficulty");
+  const unit = url.searchParams.get("unit");
+  const subject = url.searchParams.get("subject");
   if (type) { sql += ` AND question_type = ?`; bindings.push(type); }
   if (category) { sql += ` AND category = ?`; bindings.push(category); }
+  if (subject && !category) {
+    const subjectCategory = subject.charAt(0).toUpperCase() + subject.slice(1);
+    sql += ` AND category = ?`;
+    bindings.push(subjectCategory);
+  }
   if (difficulty) { sql += ` AND difficulty = ?`; bindings.push(difficulty); }
+  if (unit) { sql += ` AND unit = ?`; bindings.push(unit); }
   sql += ` ORDER BY sort_order`;
   const { results } = await env.CONTENT_DB.prepare(sql).bind(...bindings).all();
   return jsonCached(results);
@@ -640,10 +672,19 @@ async function handleGetHistory(url, env) {
   return jsonCached(results);
 }
 
-async function handleGetChecklist(env) {
-  const { results: sections } = await env.CONTENT_DB.prepare(
-    `SELECT * FROM checklist_sections ORDER BY sort_order`
-  ).all();
+async function handleGetChecklist(url, env) {
+  const unit = url?.searchParams?.get("unit");
+  const subject = url?.searchParams?.get("subject");
+  let sectionsSql = `SELECT * FROM checklist_sections`;
+  const sectionsBindings = [];
+  const parts = [];
+  if (unit) { parts.push("unit = ?"); sectionsBindings.push(unit); }
+  if (subject) { parts.push("subject = ?"); sectionsBindings.push(subject); }
+  if (parts.length) sectionsSql += " WHERE " + parts.join(" AND ");
+  sectionsSql += ` ORDER BY sort_order`;
+  const { results: sections } = sectionsBindings.length
+    ? await env.CONTENT_DB.prepare(sectionsSql).bind(...sectionsBindings).all()
+    : await env.CONTENT_DB.prepare(sectionsSql).all();
   const { results: items } = await env.CONTENT_DB.prepare(
     `SELECT * FROM checklist_items ORDER BY sort_order`
   ).all();
@@ -702,13 +743,15 @@ async function handleAdminFlashcardTopicsPost(request, env) {
   const body = await request.json();
   const id = body.id || slugify(body.label || body.title || "topic");
   const sort_order = body.sort_order ?? await getNextSortOrder(env, "flashcard_topics");
+  const unit = body.unit || null;
+  const subject = body.subject || null;
   await env.CONTENT_DB.prepare(
-    `INSERT INTO flashcard_topics (id, label, color, sort_order) VALUES (?, ?, ?, ?)`
-  ).bind(id, body.label, body.color || '#7C6FFF', sort_order).run();
+    `INSERT INTO flashcard_topics (id, label, color, sort_order, unit, subject) VALUES (?, ?, ?, ?, ?, ?)`
+  ).bind(id, body.label, body.color || '#7C6FFF', sort_order, unit, subject).run();
   return json({ ok: true, id }, 201);
 }
 
-const FIELDS_FLASHCARD_TOPICS = ["label", "color", "sort_order"];
+const FIELDS_FLASHCARD_TOPICS = ["label", "color", "sort_order", "unit", "subject"];
 
 async function handleAdminFlashcardTopicsPut(id, request, env) {
   const body = await request.json();
@@ -737,13 +780,15 @@ async function handleAdminFlashcardTopicsDelete(id, env) {
 async function handleAdminFlashcardsPost(request, env) {
   const body = await request.json();
   const sort_order = body.sort_order ?? await getNextSortOrder(env, "flashcards", "topic_id = ?", [body.topic_id]);
+  const unit = body.unit || null;
+  const subject = body.subject || null;
   const result = await env.CONTENT_DB.prepare(
-    `INSERT INTO flashcards (topic_id, term, definition, formula, sort_order) VALUES (?, ?, ?, ?, ?)`
-  ).bind(body.topic_id, body.term, body.definition, body.formula || null, sort_order).run();
+    `INSERT INTO flashcards (topic_id, term, definition, formula, sort_order, unit, subject) VALUES (?, ?, ?, ?, ?, ?, ?)`
+  ).bind(body.topic_id, body.term, body.definition, body.formula || null, sort_order, unit, subject).run();
   return json({ ok: true, id: result.meta.last_row_id }, 201);
 }
 
-const FIELDS_FLASHCARDS = ["topic_id", "term", "definition", "formula", "sort_order"];
+const FIELDS_FLASHCARDS = ["topic_id", "term", "definition", "formula", "sort_order", "unit", "subject"];
 
 async function handleAdminFlashcardsPut(id, request, env) {
   const body = await request.json();
@@ -773,18 +818,19 @@ async function handleAdminMcqPost(request, env) {
   const body = await request.json();
   const id = body.id || await getNextId(env, "mcq_questions", "mcq");
   const sort_order = body.sort_order ?? await getNextSortOrder(env, "mcq_questions");
+  const unit = body.unit || null;
   await env.CONTENT_DB.prepare(
-    `INSERT INTO mcq_questions (id, category, difficulty, question_text, option_a, option_b, option_c, option_d, correct_option, explanation, sort_order)
-     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
+    `INSERT INTO mcq_questions (id, category, difficulty, question_text, option_a, option_b, option_c, option_d, correct_option, explanation, sort_order, unit)
+     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
   ).bind(
     id, body.category || null, body.difficulty || null, body.question_text,
     body.option_a, body.option_b, body.option_c, body.option_d,
-    body.correct_option, body.explanation || null, sort_order
+    body.correct_option, body.explanation || null, sort_order, unit
   ).run();
   return json({ ok: true, id }, 201);
 }
 
-const FIELDS_MCQ = ["category", "difficulty", "question_text", "option_a", "option_b", "option_c", "option_d", "correct_option", "explanation", "sort_order"];
+const FIELDS_MCQ = ["category", "difficulty", "question_text", "option_a", "option_b", "option_c", "option_d", "correct_option", "explanation", "sort_order", "unit"];
 
 async function handleAdminMcqPut(id, request, env) {
   const body = await request.json();
@@ -815,17 +861,18 @@ async function handleAdminWrittenPost(request, env) {
   const prefix = body.question_type === "specimen" ? "spec" : body.question_type === "ten_marker" ? "tm" : "wr";
   const id = body.id || await getNextId(env, "written_questions", prefix);
   const sort_order = body.sort_order ?? await getNextSortOrder(env, "written_questions");
+  const unit = body.unit || null;
   await env.CONTENT_DB.prepare(
-    `INSERT INTO written_questions (id, category, difficulty, question_type, marks, question_text, mark_scheme, label, sort_order)
-     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`
+    `INSERT INTO written_questions (id, category, difficulty, question_type, marks, question_text, mark_scheme, label, sort_order, unit)
+     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
   ).bind(
     id, body.category || null, body.difficulty || null, body.question_type || 'short_answer',
-    body.marks || null, body.question_text, body.mark_scheme || null, body.label || null, sort_order
+    body.marks || null, body.question_text, body.mark_scheme || null, body.label || null, sort_order, unit
   ).run();
   return json({ ok: true, id }, 201);
 }
 
-const FIELDS_WRITTEN = ["category", "difficulty", "question_type", "marks", "question_text", "mark_scheme", "label", "sort_order"];
+const FIELDS_WRITTEN = ["category", "difficulty", "question_type", "marks", "question_text", "mark_scheme", "label", "sort_order", "unit"];
 
 async function handleAdminWrittenPut(id, request, env) {
   const body = await request.json();
@@ -896,13 +943,15 @@ async function handleAdminChecklistSectionsPost(request, env) {
   const body = await request.json();
   const id = body.id || slugify(body.title || "section");
   const sort_order = body.sort_order ?? await getNextSortOrder(env, "checklist_sections");
+  const unit = body.unit || null;
+  const subject = body.subject || null;
   await env.CONTENT_DB.prepare(
-    `INSERT INTO checklist_sections (id, title, color, sort_order) VALUES (?, ?, ?, ?)`
-  ).bind(id, body.title, body.color || '#7C6FFF', sort_order).run();
+    `INSERT INTO checklist_sections (id, title, color, sort_order, unit, subject) VALUES (?, ?, ?, ?, ?, ?)`
+  ).bind(id, body.title, body.color || '#7C6FFF', sort_order, unit, subject).run();
   return json({ ok: true, id }, 201);
 }
 
-const FIELDS_CHECKLIST_SECTIONS = ["title", "color", "sort_order"];
+const FIELDS_CHECKLIST_SECTIONS = ["title", "color", "sort_order", "unit", "subject"];
 
 async function handleAdminChecklistSectionsPut(id, request, env) {
   const body = await request.json();
@@ -1104,12 +1153,12 @@ export default {
     // ── Public Content API (no auth) ────────────────────────────────────
 
     if (method === "GET" && path === "/api/content/flashcard-topics") {
-      return handleGetFlashcardTopics(env);
+      return handleGetFlashcardTopics(url, env);
     }
 
     const flashcardsMatch = path.match(/^\/api\/content\/flashcards\/([^/]+)$/);
     if (method === "GET" && flashcardsMatch) {
-      return handleGetFlashcards(flashcardsMatch[1], env);
+      return handleGetFlashcards(flashcardsMatch[1], url, env);
     }
 
     if (method === "GET" && path === "/api/content/mcq") {
@@ -1125,7 +1174,7 @@ export default {
     }
 
     if (method === "GET" && path === "/api/content/checklist") {
-      return handleGetChecklist(env);
+      return handleGetChecklist(url, env);
     }
 
     if (method === "GET" && path === "/api/content/colors") {

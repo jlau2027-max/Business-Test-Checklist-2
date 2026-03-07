@@ -771,7 +771,7 @@ function HistoryQuestion({ q, levelDescriptors, prefix }) {
   };
 
   return (
-    <Paper bg="#12121A" radius="lg" p="lg" mb="md" style={{ border: "1px solid #252533" }}>
+    <Paper bg="var(--bg-surface)" radius="lg" p="lg" mb="md" style={{ border: "1px solid var(--border-subtle)" }}>
       {/* Question header */}
       <Group mb="sm" align="flex-start" wrap="nowrap">
         <Badge
@@ -795,7 +795,7 @@ function HistoryQuestion({ q, levelDescriptors, prefix }) {
       </Group>
 
       {/* Question text */}
-      <Text fz={14} c="#F0EEE8" lh={1.7} mb="md" style={{ whiteSpace: "pre-line" }}>
+      <Text fz={14} c="var(--text-primary)" lh={1.7} mb="md" style={{ whiteSpace: "pre-line" }}>
         {q.question}
       </Text>
 
@@ -806,8 +806,8 @@ function HistoryQuestion({ q, levelDescriptors, prefix }) {
         placeholder="Type your essay answer here..."
         rows={16}
         fullWidth
-        className="rounded-md mb-2 bg-[#09090F] border border-[#252533] text-[#F0EEE8] text-sm leading-[1.7] placeholder:text-[#55556A] focus:border-[#F87171] p-3"
-        style={{ fontFamily: "'Inter', sans-serif", resize: "vertical" }}
+        className="rounded-md mb-2 text-sm leading-[1.7] p-3"
+        style={{ fontFamily: "'Inter', sans-serif", resize: "vertical", backgroundColor: 'var(--bg-base)', border: '1px solid var(--border-subtle)', color: 'var(--text-primary)' }}
       />
 
       {/* Action buttons */}
@@ -830,8 +830,8 @@ function HistoryQuestion({ q, levelDescriptors, prefix }) {
           size="sm"
           variant="ghost"
           onPress={() => setRevealed((r) => !r)}
-          className={`rounded-md ${revealed ? "text-[#8B8B9E]" : "bg-[#8B5CF622] text-[#8B5CF6] border border-[#8B5CF644]"}`}
-          style={{ fontFamily: "'JetBrains Mono', monospace" }}
+          className={`rounded-md ${revealed ? "" : "border border-[#8B5CF644]"}`}
+          style={revealed ? { color: 'var(--text-secondary)', fontFamily: "'JetBrains Mono', monospace" } : { backgroundColor: '#8B5CF622', color: '#8B5CF6', fontFamily: "'JetBrains Mono', monospace" }}
         >
           {revealed ? "Hide Markscheme" : "Show Markscheme"}
         </Button>
@@ -840,8 +840,8 @@ function HistoryQuestion({ q, levelDescriptors, prefix }) {
           size="sm"
           variant="ghost"
           onPress={() => setLevelsRevealed((r) => !r)}
-          className={`rounded-md ${levelsRevealed ? "text-[#8B8B9E]" : "bg-[#FBBF2422] text-[#FBBF24] border border-[#FBBF2444]"}`}
-          style={{ fontFamily: "'JetBrains Mono', monospace" }}
+          className={`rounded-md ${levelsRevealed ? "" : "border border-[#FBBF2444]"}`}
+          style={levelsRevealed ? { color: 'var(--text-secondary)', fontFamily: "'JetBrains Mono', monospace" } : { backgroundColor: '#FBBF2422', color: '#FBBF24', fontFamily: "'JetBrains Mono', monospace" }}
         >
           {levelsRevealed ? "Hide Levels" : "Level Descriptors"}
         </Button>
@@ -851,8 +851,8 @@ function HistoryQuestion({ q, levelDescriptors, prefix }) {
             size="sm"
             variant="ghost"
             onPress={handleClear}
-            className="rounded-md text-[#8B8B9E]"
-            style={{ fontFamily: "'JetBrains Mono', monospace" }}
+            className="rounded-md"
+            style={{ fontFamily: "'JetBrains Mono', monospace", color: 'var(--text-secondary)' }}
           >
             Clear
           </Button>
@@ -865,7 +865,7 @@ function HistoryQuestion({ q, levelDescriptors, prefix }) {
 
       {/* AI Grade Result */}
       {gradeResult && (
-        <Paper bg="#1A1A24" radius="md" p="md" mt="md" style={{ border: "1px solid #252533" }}>
+        <Paper bg="var(--bg-elevated)" radius="md" p="md" mt="md" style={{ border: "1px solid var(--border-subtle)" }}>
           {gradeResult.score !== null && (
             <Group mb="xs">
               <Badge
@@ -891,7 +891,7 @@ function HistoryQuestion({ q, levelDescriptors, prefix }) {
 
       {/* Markscheme reveal */}
       <Collapse in={revealed}>
-        <Box mt="md" pt="md" style={{ borderTop: "1px solid #252533" }}>
+        <Box mt="md" pt="md" style={{ borderTop: "1px solid var(--border-subtle)" }}>
           <Text fz={11} ff="'JetBrains Mono', monospace" c="#34D399" lts={1} mb="sm">
             MARKSCHEME
           </Text>
@@ -903,7 +903,7 @@ function HistoryQuestion({ q, levelDescriptors, prefix }) {
 
       {/* Level descriptors reveal */}
       <Collapse in={levelsRevealed}>
-        <Box mt="md" pt="md" style={{ borderTop: "1px solid #252533" }}>
+        <Box mt="md" pt="md" style={{ borderTop: "1px solid var(--border-subtle)" }}>
           <Text fz={11} ff="'JetBrains Mono', monospace" c="#FBBF24" lts={1} mb="sm">
             LEVEL DESCRIPTORS
           </Text>
@@ -1001,7 +1001,7 @@ export default function HistoryPage() {
           background: "var(--header-bg)",
           backdropFilter: "blur(12px)",
           WebkitBackdropFilter: "blur(12px)",
-          borderBottom: "1px solid rgba(255,255,255,0.04)",
+          borderBottom: "1px solid var(--header-border)",
         }}
       >
         <Container size="lg" py="sm">
@@ -1011,8 +1011,10 @@ export default function HistoryPage() {
               isIconOnly
               variant="outline"
               onPress={() => setSidebarOpen(o => !o)}
-              className="rounded-md bg-transparent text-[#8B8B9E] border-[#252533] min-w-[auto] h-8 px-[10px]"
+              className="rounded-md bg-transparent min-w-[auto] h-8 px-[10px]"
               style={{
+                color: 'var(--text-secondary)',
+                borderColor: 'var(--border-subtle)',
                 position: "absolute",
                 left: 0,
                 top: "50%",
@@ -1041,12 +1043,12 @@ export default function HistoryPage() {
             ta="center"
             fw={800}
             fz={{ base: 22, sm: 30 }}
-            c="#F0EEE8"
+            c="var(--text-primary)"
             style={{ letterSpacing: -0.5 }}
           >
             {paper === "paper2" ? "Paper 2 \u2014 Specimen" : "Paper 3 \u2014 Specimen"}
           </Text>
-          <Text ta="center" fz="xs" c="#55556A" mb="sm">
+          <Text ta="center" fz="xs" c="var(--text-muted)" mb="sm">
             {paper === "paper2"
               ? `12 topics \u00B7 ${questions.length} questions \u00B7 ${totalMarks} marks total`
               : `18 topics \u00B7 ${questions.length} questions \u00B7 ${totalMarks} marks total`}
@@ -1065,9 +1067,9 @@ export default function HistoryPage() {
                 className="rounded-md font-semibold text-[13px]"
                 style={{
                   fontFamily: "'JetBrains Mono', monospace",
-                  backgroundColor: paper === t.key ? "#F0EEE8" : "transparent",
-                  color: paper === t.key ? "#09090F" : "#55556A",
-                  border: paper === t.key ? "none" : "1px solid #252533",
+                  backgroundColor: paper === t.key ? "var(--text-primary)" : "transparent",
+                  color: paper === t.key ? "var(--bg-base)" : "var(--text-muted)",
+                  border: paper === t.key ? "none" : "1px solid var(--border-subtle)",
                   height: 34,
                   paddingLeft: 16,
                   paddingRight: 16,
@@ -1084,13 +1086,13 @@ export default function HistoryPage() {
       <Container size="lg" py="xl" px="md">
         <div style={{ maxWidth: 1060, margin: "0 auto", padding: "0 0 40px" }}>
           {/* Exam info banner */}
-          <Paper bg="#12121A" radius="lg" p="lg" mb="xl" style={{ border: "1px solid #252533" }}>
-            <Text fz="sm" c="#F0EEE8" fw={600} mb={4}>
+          <Paper bg="var(--bg-surface)" radius="lg" p="lg" mb="xl" style={{ border: "1px solid var(--border-subtle)" }}>
+            <Text fz="sm" c="var(--text-primary)" fw={600} mb={4}>
               {paper === "paper2"
                 ? "IB History HL/SL \u2014 Paper 2 Specimen"
                 : "IB History HL \u2014 Paper 3 Specimen (Africa and the Middle East)"}
             </Text>
-            <Text fz="xs" c="#8B8B9E" lh={1.6}>
+            <Text fz="xs" c="var(--text-secondary)" lh={1.6}>
               {paper === "paper2"
                 ? "Answer two questions, each chosen from a different topic. Each question is worth 15 marks. The maximum mark for this paper is 30. Type your essay answers below \u2014 everything auto-saves. Use \"Solve\" for AI grading, \"Show Markscheme\" for the rubric, and \"Level Descriptors\" for the marking bands."
                 : "Answer three questions. Each question is worth 15 marks. The maximum mark for this paper is 45. 2 hours 30 minutes. HL only. Type your essay answers below \u2014 everything auto-saves. Use \"Solve\" for AI grading, \"Show Markscheme\" for the rubric, and \"Level Descriptors\" for the marking bands."}
@@ -1120,7 +1122,7 @@ export default function HistoryPage() {
                   <Skeleton height={14} width={200} mb="md" radius="sm" />
                   <Stack gap="md">
                     {Array.from({ length: 2 }).map((_, j) => (
-                      <Paper key={j} bg="#12121A" radius="lg" p="lg" mb="md" style={{ border: "1px solid #252533" }}>
+                      <Paper key={j} bg="var(--bg-surface)" radius="lg" p="lg" mb="md" style={{ border: "1px solid var(--border-subtle)" }}>
                         <Group mb="sm">
                           <Skeleton height={24} width={40} radius="md" />
                           <Skeleton height={20} width={70} radius="md" />
@@ -1170,7 +1172,7 @@ export default function HistoryPage() {
           width: 48,
           height: 48,
           borderRadius: "50%",
-          backgroundColor: "#7C6FFF",
+          backgroundColor: "var(--accent)",
           display: "flex",
           alignItems: "center",
           justifyContent: "center",

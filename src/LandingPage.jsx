@@ -13,7 +13,7 @@ export default function LandingPage() {
           background: "var(--header-bg)",
           backdropFilter: "blur(12px)",
           WebkitBackdropFilter: "blur(12px)",
-          borderBottom: "1px solid rgba(255,255,255,0.04)",
+          borderBottom: "1px solid var(--header-border)",
         }}
       >
         <Container size="lg" py="sm">
@@ -24,7 +24,7 @@ export default function LandingPage() {
               tt="uppercase"
               fw={700}
               ff="'JetBrains Mono', monospace"
-              style={{ letterSpacing: 2, backgroundColor: "#7C6FFF18", color: "#A78BFA", border: "none" }}
+              style={{ letterSpacing: 2, backgroundColor: "color-mix(in srgb, var(--accent) 10%, transparent)", color: "var(--accent-soft)", border: "none" }}
             >
               IB Revision Hub
             </Badge>
@@ -38,13 +38,13 @@ export default function LandingPage() {
         <Text
           ta="center" fw={800}
           fz={{ base: 28, sm: 40 }}
-          c="#F0EEE8"
+          c="var(--text-primary)"
           style={{ letterSpacing: -1 }}
           mb="xs"
         >
           IB Revision Hub
         </Text>
-        <Text ta="center" fz="md" c="#8B8B9E" mb={40} maw={420} mx="auto">
+        <Text ta="center" fz="md" c="var(--text-secondary)" mb={40} maw={420} mx="auto">
           Flashcards, MCQs, written practice with AI grading, and more — built for IB students.
         </Text>
 
@@ -55,8 +55,8 @@ export default function LandingPage() {
               <Button
                 render={(props) => <button {...props} />}
                 size="md"
-                className="rounded-md bg-[#7C6FFF] text-white border-none text-[15px] font-semibold"
-                style={{ fontFamily: "'Inter', sans-serif" }}
+                className="rounded-md text-white border-none text-[15px] font-semibold"
+                style={{ backgroundColor: 'var(--accent)', fontFamily: "'Inter', sans-serif" }}
               >
                 Sign In
               </Button>
@@ -66,8 +66,8 @@ export default function LandingPage() {
                 render={(props) => <button {...props} />}
                 size="md"
                 variant="outline"
-                className="rounded-md bg-transparent text-[#A78BFA] border border-[#252533] text-[15px] font-semibold"
-                style={{ fontFamily: "'Inter', sans-serif" }}
+                className="rounded-md bg-transparent border text-[15px] font-semibold"
+                style={{ color: 'var(--accent-soft)', borderColor: 'var(--border-subtle)', fontFamily: "'Inter', sans-serif" }}
               >
                 Sign Up
               </Button>

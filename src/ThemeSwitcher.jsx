@@ -4,7 +4,7 @@ import { useTheme, THEMES } from './ThemeContext.jsx';
 const SWATCHES = {
   original: ['#09090F', '#7C6FFF', '#F0EEE8'],
   light:    ['#F2F2FA', '#6450EE', '#0D0D26'],
-  bold:     ['#06000F', '#CC00FF', '#F5E8FF'],
+  bold:     ['#030008', '#E600FF', '#FFEEFF'],
 };
 
 export default function ThemeSwitcher() {

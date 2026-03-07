@@ -51,8 +51,8 @@ export default function ShortAnswerQuestion({
   const scoreColor = grade >= 4 ? '#34D399' : grade >= 2 ? '#FBBF24' : '#F87171';
 
   return (
-    <Paper bg="#12121A" radius="lg" p="lg" style={{ border: '1px solid #252533' }}>
-      <Text fw={600} fz="md" c="#F0EEE8" mb="md">{question}</Text>
+    <Paper bg="var(--bg-surface)" radius="lg" p="lg" style={{ border: '1px solid var(--border-subtle)' }}>
+      <Text fw={600} fz="md" c="var(--text-primary)" mb="md">{question}</Text>
 
       <TextArea
         value={studentAnswer}
@@ -61,8 +61,8 @@ export default function ShortAnswerQuestion({
         disabled={submitted}
         rows={5}
         fullWidth
-        className="rounded-md bg-[#1A1A24] border border-[#252533] text-[#F0EEE8] text-sm leading-relaxed placeholder:text-[#55556A] focus:border-[#7C6FFF] p-3"
-        style={{ fontFamily: "'Inter', sans-serif", resize: "vertical" }}
+        className="rounded-md text-sm leading-relaxed p-3"
+        style={{ fontFamily: "'Inter', sans-serif", resize: "vertical", backgroundColor: 'var(--bg-elevated)', border: '1px solid var(--border-subtle)', color: 'var(--text-primary)' }}
       />
 
       {!submitted ? (
@@ -71,11 +71,11 @@ export default function ShortAnswerQuestion({
           isDisabled={loading || !studentAnswer.trim()}
           fullWidth
           isPending={loading}
-          className={`rounded-md mt-4 font-semibold border-none ${
-            studentAnswer.trim()
-              ? 'bg-gradient-to-br from-[#7C6FFF] to-[#A78BFA] text-white shadow-[0_4px_16px_#7C6FFF30]'
-              : 'bg-[#1E1E2A] text-[#55556A] shadow-none'
-          }`}
+          className="rounded-md mt-4 font-semibold border-none text-white"
+          style={{
+            background: studentAnswer.trim() ? 'linear-gradient(to bottom right, var(--accent), var(--accent-soft))' : 'var(--bg-overlay)',
+            color: studentAnswer.trim() ? '#fff' : 'var(--text-muted)',
+          }}
         >
           {({isPending}) => <>
             {isPending && <Spinner color="current" size="sm" />}
@@ -83,7 +83,7 @@ export default function ShortAnswerQuestion({
           </>}
         </Button>
       ) : (
-        <Button variant="ghost" className="mt-4 text-[#8B8B9E]" onPress={reset}>
+        <Button variant="ghost" className="mt-4" style={{ color: 'var(--text-secondary)' }} onPress={reset}>
           Try Again
         </Button>
       )}
@@ -109,7 +109,7 @@ export default function ShortAnswerQuestion({
             animated
             styles={{ section: { boxShadow: `0 0 8px ${scoreColor}40` } }}
           />
-          <Text fz="sm" c="#8B8B9E" lh={1.6}>{feedback}</Text>
+          <Text fz="sm" c="var(--text-secondary)" lh={1.6}>{feedback}</Text>
         </Alert>
       )}
     </Paper>

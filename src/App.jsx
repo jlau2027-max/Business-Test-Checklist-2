@@ -12,6 +12,8 @@ import { useAuth } from "./AuthContext.jsx";
 import { useAttemptTracker } from "./useAttemptTracker.js";
 import { syncToCloud } from "./stateSync.js";
 import { fetchFlashcardTopics, fetchFlashcards, fetchMcqQuestions, fetchWrittenQuestions, fetchChecklist, fetchCategoryColors } from "./api/contentApi.js";
+import { UNIT_CONFIG } from "./unitConfig.js";
+import UnitSelector from "./UnitSelector.jsx";
 
 // ─── localStorage helpers ──────────────────────────────────────────────────
 function loadLS(key, fallback) {
@@ -260,26 +262,31 @@ const FALLBACK_CONTENT = {
 const ContentCtx = createContext(FALLBACK_CONTENT);
 function useContent() { return useContext(ContentCtx); }
 
-async function fetchAppContent() {
+async function fetchAppContent(unit = null) {
+  const subject = "business";
   const [checklistRaw, mcqRaw, writtenRaw, colorsRaw, topicsRaw] = await Promise.all([
-    fetchChecklist(), fetchMcqQuestions(), fetchWrittenQuestions(), fetchCategoryColors(), fetchFlashcardTopics(),
+    fetchChecklist(subject, unit),
+    fetchMcqQuestions({ subject, unit }),
+    fetchWrittenQuestions({ subject, unit }),
+    fetchCategoryColors(subject, unit),
+    fetchFlashcardTopics(subject, unit),
   ]);
 
   // Checklist: API items are {id,text} objects → flatten to strings
-  const checklistSections = checklistRaw.map(sec => ({
+  const checklistSections = (checklistRaw || []).map(sec => ({
     ...sec,
     items: sec.items ? sec.items.map(item => typeof item === "string" ? item : item.text) : [],
   }));
 
   // MCQ: remap field names
-  const mcqQuestions = mcqRaw.map(q => ({
+  const mcqQuestions = (mcqRaw || []).map(q => ({
     id: q.id, cat: q.category, difficulty: q.difficulty, q: q.question_text,
     options: [q.option_a, q.option_b, q.option_c, q.option_d],
     answer: q.correct_option, explanation: q.explanation,
   }));
 
   // Written: remap + split by question_type
-  const allWritten = writtenRaw.map(q => ({
+  const allWritten = (writtenRaw || []).map(q => ({
     id: q.id, cat: q.category, difficulty: q.difficulty, marks: q.marks,
     q: q.question_text, modelAnswer: q.mark_scheme, _type: q.question_type,
   }));
@@ -288,14 +295,14 @@ async function fetchAppContent() {
 
   // Colors: array → object map
   const catColors = Array.isArray(colorsRaw)
-    ? Object.fromEntries(colorsRaw.map(c => [c.category, c.color]))
+    ? Object.fromEntries((colorsRaw || []).map(c => [c.category, c.color]))
     : colorsRaw;
 
   // Flashcards: fetch topics then cards per topic
-  const flashcardCategories = await Promise.all(topicsRaw.map(async t => {
+  const flashcardCategories = await Promise.all((topicsRaw || []).map(async t => {
     try {
-      const cards = await fetchFlashcards(t.id);
-      return { id: t.id, label: t.label, color: t.color, cards: cards.map(c => ({ term: c.term, def: c.definition, formula: c.formula })) };
+      const cards = await fetchFlashcards(t.id, subject, unit);
+      return { id: t.id, label: t.label, color: t.color, cards: (cards || []).map(c => ({ term: c.term, def: c.definition, formula: c.formula })) };
     } catch { return { id: t.id, label: t.label, color: t.color, cards: [] }; }
   }));
 
@@ -309,18 +316,19 @@ async function fetchAppContent() {
 // ─────────────────────────────────────────────────────────────────────────────
 
 function ChecklistView() {
-  const { checklistSections } = useContent();
-  const [checked, setChecked] = useState(() => loadLS("checklist_checked", {}));
+  const { checklistSections, activeUnit } = useContent();
+  const lsPrefix = `business_${activeUnit || "unit1"}_checklist`;
+  const [checked, setChecked] = useState(() => loadLS(`${lsPrefix}_checked`, {}));
   const [openSections, setOpenSections] = useState(() => {
-    const collapsed = loadLS("checklist_collapsed", {});
+    const collapsed = loadLS(`${lsPrefix}_collapsed`, {});
     return checklistSections.filter(s => !collapsed[s.id]).map(s => s.id);
   });
-  const toggle = id => setChecked(p => { const next = { ...p, [id]: !p[id] }; saveLS("checklist_checked", next); return next; });
+  const toggle = id => setChecked(p => { const next = { ...p, [id]: !p[id] }; saveLS(`${lsPrefix}_checked`, next); return next; });
   const handleAccordion = (value) => {
     setOpenSections(value);
     const collapsed = {};
     checklistSections.forEach(s => { if (!value.includes(s.id)) collapsed[s.id] = true; });
-    saveLS("checklist_collapsed", collapsed);
+    saveLS(`${lsPrefix}_collapsed`, collapsed);
   };
   const totalItems = checklistSections.reduce((s,sec)=>s+sec.items.length,0);
   const checkedCount = Object.values(checked).filter(Boolean).length;
@@ -331,17 +339,17 @@ function ChecklistView() {
     <div style={{maxWidth:1060,margin:"0 auto",padding:"0 0 40px"}}>
       {/* Progress card */}
       <Paper
-        bg="#12121A"
+        bg="var(--bg-surface)"
         radius="lg"
         p="xl"
         mb="xl"
         style={{
-          border: "1px solid #252533",
+          border: "1px solid var(--border-subtle)",
           boxShadow: "0 2px 8px rgba(0,0,0,0.2)",
         }}
       >
         <Group justify="space-between" mb="xs">
-          <Text fz="sm" c="#8B8B9E" ff="'JetBrains Mono', monospace">Overall Progress</Text>
+          <Text fz="sm" c="var(--text-secondary)" ff="'JetBrains Mono', monospace">Overall Progress</Text>
           <Text fz={24} fw={800} c={progColor}>{progress}%</Text>
         </Group>
         <Progress
@@ -350,10 +358,10 @@ function ChecklistView() {
           radius="xl"
           color={progColor}
           animated
-          styles={{ root: { background: "#1E1E2A" } }}
+          styles={{ root: { background: "var(--bg-overlay)" } }}
         />
         <Group justify="space-between" mt="sm">
-          <Text fz="xs" c="#55556A">{checkedCount} of {totalItems} topics covered</Text>
+          <Text fz="xs" c="var(--text-muted)">{checkedCount} of {totalItems} topics covered</Text>
           <Badge size="xs" variant="light" color="teal" ff="'JetBrains Mono', monospace">auto-saved</Badge>
         </Group>
       </Paper>
@@ -366,10 +374,10 @@ function ChecklistView() {
         variant="separated"
         radius="md"
         styles={{
-          item: { backgroundColor: "#12121A", border: "1px solid #252533", marginBottom: 12, "&[data-active]": { borderColor: "#35354A" } },
-          control: { padding: "14px 20px", "&:hover": { backgroundColor: "#1A1A24" } },
-          content: { padding: "4px 20px 16px", borderTop: "1px solid #252533" },
-          chevron: { color: "#55556A" },
+          item: { backgroundColor: "var(--bg-surface)", border: "1px solid var(--border-subtle)", marginBottom: 12, "&[data-active]": { borderColor: "var(--border-active)" } },
+          control: { padding: "14px 20px", "&:hover": { backgroundColor: "var(--bg-elevated)" } },
+          content: { padding: "4px 20px 16px", borderTop: "1px solid var(--border-subtle)" },
+          chevron: { color: "var(--text-muted)" },
         }}
       >
         {checklistSections.map(section => {
@@ -388,7 +396,7 @@ function ChecklistView() {
                   >
                     {sectionChecked}/{section.items.length}
                   </Badge>
-                  <Text fw={600} fz="sm" c={allDone ? section.color : "#F0EEE8"}>
+                  <Text fw={600} fz="sm" c={allDone ? section.color : "var(--text-primary)"}>
                     {allDone && "✓ "}{section.title}
                   </Text>
                 </Group>
@@ -408,8 +416,8 @@ function ChecklistView() {
                         color={section.color}
                         radius="sm"
                         styles={{
-                          root: { padding: "6px 4px", borderRadius: 8, cursor: "pointer", transition: "background 0.15s", "&:hover": { backgroundColor: "#1A1A24" } },
-                          label: { color: isChecked ? "#55556A" : isImportant ? "#FBBF24" : "#C8C4BC", textDecoration: isChecked ? "line-through" : "none", fontSize: 14, lineHeight: 1.5, cursor: "pointer" },
+                          root: { padding: "6px 4px", borderRadius: 8, cursor: "pointer", transition: "background 0.15s", "&:hover": { backgroundColor: "var(--bg-elevated)" } },
+                          label: { color: isChecked ? "var(--text-muted)" : isImportant ? "#FBBF24" : "var(--text-dimmed)", textDecoration: isChecked ? "line-through" : "none", fontSize: 14, lineHeight: 1.5, cursor: "pointer" },
                           input: { cursor: "pointer" },
                         }}
                       />
@@ -422,9 +430,9 @@ function ChecklistView() {
         })}
       </Accordion>
 
-      <Text ta="center" mt="lg" c="#55556A" fz="xs">
+      <Text ta="center" mt="lg" c="var(--text-muted)" fz="xs">
         Click any item to mark it as revised ·{" "}
-        <Text component="span" c="#7C6FFF" style={{cursor:"pointer"}} onClick={()=>{ setChecked({}); saveLS("checklist_checked", {}); }}>Reset all</Text>
+        <Text component="span" c="var(--accent)" style={{cursor:"pointer"}} onClick={()=>{ setChecked({}); saveLS(`${lsPrefix}_checked`, {}); }}>Reset all</Text>
       </Text>
     </div>
   );
@@ -438,34 +446,34 @@ function FlashCard({card, catColor}) {
         {/* Front */}
         <Paper
           className="flashcard-face"
-          bg="#1A1A24"
+          bg="var(--bg-elevated)"
           style={{
-            border: "1px solid #252533",
+            border: "1px solid var(--border-subtle)",
             boxShadow: "0 2px 8px rgba(0,0,0,0.3)",
             alignItems: "center",
             padding: 24,
             textAlign: "center",
           }}
         >
-          <Text fz={11} ff="'JetBrains Mono', monospace" c="#55556A" tt="uppercase" lts={2} mb="md">TERM</Text>
-          <Text fz={20} fw={700} c="#F0EEE8" lh={1.3}>{card.term}</Text>
-          <Text fz={11} c="#55556A" mt="lg">tap to reveal</Text>
+          <Text fz={11} ff="'JetBrains Mono', monospace" c="var(--text-muted)" tt="uppercase" lts={2} mb="md">TERM</Text>
+          <Text fz={20} fw={700} c="var(--text-primary)" lh={1.3}>{card.term}</Text>
+          <Text fz={11} c="var(--text-muted)" mt="lg">tap to reveal</Text>
         </Paper>
         {/* Back */}
         <Paper
           className="flashcard-face flashcard-back"
-          bg="#1A1A24"
+          bg="var(--bg-elevated)"
           style={{
-            border: "1px solid #252533",
+            border: "1px solid var(--border-subtle)",
             boxShadow: "0 2px 8px rgba(0,0,0,0.3)",
             padding: 20,
             overflowY: "auto",
           }}
         >
-          <Text fz={11} ff="'JetBrains Mono', monospace" c="#55556A" tt="uppercase" lts={2} mb="sm">DEFINITION</Text>
-          <Text fz={13} c="#C8C4BC" lh={1.65}>{card.def}</Text>
+          <Text fz={11} ff="'JetBrains Mono', monospace" c="var(--text-muted)" tt="uppercase" lts={2} mb="sm">DEFINITION</Text>
+          <Text fz={13} c="var(--text-dimmed)" lh={1.65}>{card.def}</Text>
           {card.formula && (
-            <Box mt="sm" p="sm" style={{ background: "#0D0D14", borderRadius: 8, borderLeft: `3px solid ${catColor}` }}>
+            <Box mt="sm" p="sm" style={{ background: "var(--bg-base)", borderRadius: 8, borderLeft: `3px solid ${catColor}` }}>
               <Text fz={10} ff="'JetBrains Mono', monospace" c={catColor} lts={1} mb={4}>FORMULA</Text>
               <Text fz={12} ff="'JetBrains Mono', monospace" c="#A9E6FF">{card.formula}</Text>
             </Box>
@@ -477,11 +485,12 @@ function FlashCard({card, catColor}) {
 }
 
 function FlashcardsView() {
-  const { flashcardCategories } = useContent();
-  const [activeCat,setActiveCat]=useState(()=>loadLS("fc_cat", flashcardCategories[0]?.id));
+  const { flashcardCategories, activeUnit } = useContent();
+  const fcLsKey = `business_${activeUnit || "unit1"}_fc_cat`;
+  const [activeCat,setActiveCat]=useState(()=>loadLS(fcLsKey, flashcardCategories[0]?.id));
   const [cardIdx,setCardIdx]=useState(0);
   const currentCat=flashcardCategories.find(c=>c.id===activeCat) || flashcardCategories[0];
-  if (!currentCat || !currentCat.cards || currentCat.cards.length === 0) return <Text ta="center" c="#55556A" py="xl">Loading flashcards…</Text>;
+  if (!currentCat || !currentCat.cards || currentCat.cards.length === 0) return <Text ta="center" c="var(--text-muted)" py="xl">Loading flashcards…</Text>;
   const currentCard=currentCat.cards[Math.min(cardIdx, currentCat.cards.length - 1)];
   return (
     <div style={{maxWidth:680,margin:"0 auto",padding:"0 0 40px"}}>
@@ -491,13 +500,13 @@ function FlashcardsView() {
           <Button
             key={cat.id}
             size="sm"
-            onPress={()=>{ setActiveCat(cat.id); saveLS("fc_cat", cat.id); setCardIdx(0); }}
+            onPress={()=>{ setActiveCat(cat.id); saveLS(fcLsKey, cat.id); setCardIdx(0); }}
             className="rounded-full text-xs"
             style={{
               fontFamily: "'JetBrains Mono', monospace",
-              backgroundColor: activeCat===cat.id ? cat.color : "#1A1A24",
-              color: activeCat===cat.id ? "#fff" : "#8B8B9E",
-              border: `1px solid ${activeCat===cat.id ? cat.color : "#252533"}`,
+              backgroundColor: activeCat===cat.id ? cat.color : "var(--bg-elevated)",
+              color: activeCat===cat.id ? "#fff" : "var(--text-secondary)",
+              border: `1px solid ${activeCat===cat.id ? cat.color : "var(--border-subtle)"}`,
             }}
           >
             {cat.label}
@@ -507,8 +516,8 @@ function FlashcardsView() {
 
       {/* Progress */}
       <Group justify="space-between" mb="md">
-        <Text fz="xs" c="#55556A" ff="'JetBrains Mono', monospace">{cardIdx+1} / {currentCat.cards.length} — {currentCat.label}</Text>
-        <Box style={{background:"#1A1A24",borderRadius:99,height:4,width:140,overflow:"hidden"}}>
+        <Text fz="xs" c="var(--text-muted)" ff="'JetBrains Mono', monospace">{cardIdx+1} / {currentCat.cards.length} — {currentCat.label}</Text>
+        <Box style={{background:"var(--bg-elevated)",borderRadius:99,height:4,width:140,overflow:"hidden"}}>
           <div style={{width:`${((cardIdx+1)/currentCat.cards.length)*100}%`,height:"100%",background:currentCat.color,borderRadius:99,transition:"width 0.3s"}}/>
         </Box>
       </Group>
@@ -523,7 +532,8 @@ function FlashcardsView() {
           size="md"
           isDisabled={cardIdx===0}
           onPress={()=>setCardIdx(i=>Math.max(0,i-1))}
-          className="rounded-md bg-[#1A1A24] border border-[#252533] text-[#8B8B9E] disabled:bg-[#12121A] disabled:border-[#1E1E2A]"
+          className="rounded-md disabled:opacity-60"
+          style={{ background: 'var(--bg-elevated)', border: '1px solid var(--border-subtle)', color: 'var(--text-secondary)' }}
         >
           Previous
         </Button>
@@ -533,13 +543,13 @@ function FlashcardsView() {
           onPress={()=>setCardIdx(i=>Math.min(currentCat.cards.length-1,i+1))}
           className="rounded-md border-none text-white"
           style={{
-            background: cardIdx===currentCat.cards.length-1 ? "#1E1E2A" : currentCat.color,
+            background: cardIdx===currentCat.cards.length-1 ? "var(--bg-overlay)" : currentCat.color,
           }}
         >
           Next
         </Button>
       </Group>
-      <Text ta="center" fz="xs" c="#55556A" mt="md">Tap any card to flip it</Text>
+      <Text ta="center" fz="xs" c="var(--text-muted)" mt="md">Tap any card to flip it</Text>
     </div>
   );
 }
@@ -551,24 +561,24 @@ function MCQItem({q, displayNum}) {
   const color=catColors[q.cat]||"#7C6FFF";
   const { recordAttempt, resetTimer } = useAttemptTracker(q.id, "mcq", q.cat, "business", q.difficulty);
   return (
-    <Paper bg="#1A1A24" radius="lg" mb="sm" style={{ border:"1px solid #252533", overflow:"hidden", transition:"all 0.2s" }}>
+    <Paper bg="var(--bg-elevated)" radius="lg" mb="sm" style={{ border:"1px solid var(--border-subtle)", overflow:"hidden", transition:"all 0.2s" }}>
       <div style={{borderLeft:`4px solid ${color}`,padding:"18px 20px"}}>
         <Group gap={8} mb="sm" style={{flexWrap:"wrap"}}>
           <Badge size="xs" ff="'JetBrains Mono', monospace" style={{backgroundColor:color,color:"#fff"}}>MCQ</Badge>
           <Badge size="xs" variant="light" ff="'JetBrains Mono', monospace" style={{backgroundColor:color+"22",color:color,border:"none"}}>{q.cat}</Badge>
-          <Badge size="xs" variant="light" ff="'JetBrains Mono', monospace" style={{backgroundColor:"#1E1E2A",color:"#8B8B9E",border:"none"}}>{q.difficulty}</Badge>
+          <Badge size="xs" variant="light" ff="'JetBrains Mono', monospace" style={{backgroundColor:"var(--bg-overlay)",color:"var(--text-secondary)",border:"none"}}>{q.difficulty}</Badge>
         </Group>
-        <Text fz={15} c="#F0EEE8" lh={1.6} fw={600}>Q{displayNum}. {q.q}</Text>
+        <Text fz={15} c="var(--text-primary)" lh={1.6} fw={600}>Q{displayNum}. {q.q}</Text>
       </div>
       <Stack gap={8} p="md" pt="sm">
         {q.options.map((opt,i) => {
           const isSelected=selected===i;
           const isCorrect=i===q.answer;
-          let bg="#12121A",border="#252533",tc="#C8C4BC";
-          if(confirmed){
+          let bg="var(--bg-surface)",border="var(--border-subtle)",tc="var(--text-dimmed)";
+            if(confirmed){
             if(isCorrect){bg="#34D399"+"22";border="#34D399";tc="#6EE7B7";}
             else if(isSelected&&!isCorrect){bg="#F87171"+"22";border="#F87171";tc="#FCA5A5";}
-          } else if(isSelected){bg=color+"22";border=color;tc="#F0EEE8";}
+          } else if(isSelected){bg=color+"22";border=color;tc="var(--text-primary)";}
           return (
             <Paper
               key={i}
@@ -581,12 +591,12 @@ function MCQItem({q, displayNum}) {
                 "&:hover": !confirmed && !isSelected ? {borderColor: color+"66"} : undefined,
               }}
               onMouseEnter={e=>{if(!confirmed&&!isSelected)e.currentTarget.style.borderColor=color+"66";}}
-              onMouseLeave={e=>{if(!confirmed&&!isSelected)e.currentTarget.style.borderColor="#252533";}}
+              onMouseLeave={e=>{if(!confirmed&&!isSelected)e.currentTarget.style.borderColor="var(--border-subtle)";}}
             >
               <Group gap="sm" wrap="nowrap">
                 <Box style={{
                   width:28,height:28,borderRadius:6,flexShrink:0,
-                  background:confirmed&&isCorrect?"#34D399":confirmed&&isSelected&&!isCorrect?"#F87171":isSelected?color:"#252533",
+                  background:confirmed&&isCorrect?"#34D399":confirmed&&isSelected&&!isCorrect?"#F87171":isSelected?color:"var(--border-subtle)",
                   display:"flex",alignItems:"center",justifyContent:"center",
                 }}>
                   <Text fz={11} ff="'JetBrains Mono', monospace" c="#fff" fw={700}>
@@ -605,8 +615,8 @@ function MCQItem({q, displayNum}) {
             onPress={()=>{if(selected!==null){setConfirmed(true);recordAttempt({userAnswer:selected,isCorrect:selected===q.answer});}}}
             className="rounded-md mt-1 font-semibold border-none"
             style={{
-              background: selected!==null ? color : "#1E1E2A",
-              color: selected===null ? "#55556A" : "#fff",
+              background: selected!==null ? color : "var(--bg-overlay)",
+              color: selected===null ? "var(--text-muted)" : "#fff",
             }}
           >
             Check Answer
@@ -623,8 +633,8 @@ function MCQItem({q, displayNum}) {
               title: { fontFamily: "'JetBrains Mono', monospace", fontSize: 12 },
             }}
           >
-            <Text fz="sm" c="#8B8B9E" lh={1.6}>{q.explanation}</Text>
-            <Button variant="ghost" size="sm" className="mt-2 text-[#8B8B9E]" onPress={()=>{setSelected(null);setConfirmed(false);resetTimer();}}>Try Again</Button>
+            <Text fz="sm" c="var(--text-secondary)" lh={1.6}>{q.explanation}</Text>
+            <Button variant="ghost" size="sm" className="mt-2" style={{ color: 'var(--text-secondary)' }} onPress={()=>{setSelected(null);setConfirmed(false);resetTimer();}}>Try Again</Button>
           </Alert>
         )}
       </Stack>
@@ -658,9 +668,9 @@ function PracticeView() {
               className="rounded-full"
               onPress={()=>setFilterCat(cat)}
               style={{
-                backgroundColor: active ? c : "#1A1A24",
-                color: active ? "#fff" : "#8B8B9E",
-                border: `1px solid ${active ? c : "#252533"}`,
+                backgroundColor: active ? c : "var(--bg-elevated)",
+                color: active ? "#fff" : "var(--text-secondary)",
+                border: `1px solid ${active ? c : "var(--border-subtle)"}`,
                 boxShadow: "none",
                 fontFamily: "'JetBrains Mono', monospace",
               }}
@@ -672,12 +682,12 @@ function PracticeView() {
       </Group>
 
       {/* Summary */}
-      <Text fz="xs" c="#55556A" ff="'JetBrains Mono', monospace" mb="lg">
+      <Text fz="xs" c="var(--text-muted)" ff="'JetBrains Mono', monospace" mb="lg">
         Showing {filtered.length} question{filtered.length!==1?"s":""}{filterCat!=="All"?` · ${filterCat}`:""}
       </Text>
 
       {filtered.length === 0 && (
-        <Text ta="center" py={40} c="#55556A" fz="sm">No questions match this filter.</Text>
+        <Text ta="center" py={40} c="var(--text-muted)" fz="sm">No questions match this filter.</Text>
       )}
 
       {filtered.map((q, i) => (
@@ -692,16 +702,17 @@ function PracticeView() {
 // ─────────────────────────────────────────────────────────────────────────────
 
 function WrittenPracticeItem({q, displayNum}) {
-  const { catColors } = useContent();
-  const [answer, setAnswer] = useState(() => loadLS(`written_ans_${q.id}`, ""));
+  const { catColors, activeUnit } = useContent();
+  const wrLsPrefix = `business_${activeUnit || "unit1"}_written`;
+  const [answer, setAnswer] = useState(() => loadLS(`${wrLsPrefix}_ans_${q.id}`, ""));
   const [revealed, setRevealed] = useState(false);
   const [grading, setGrading] = useState(false);
-  const [gradeResult, setGradeResult] = useState(() => loadLS(`written_grade_${q.id}`, null));
+  const [gradeResult, setGradeResult] = useState(() => loadLS(`${wrLsPrefix}_grade_${q.id}`, null));
   const color = catColors[q.cat] || "#7C6FFF";
   const { recordAttempt } = useAttemptTracker(q.id, "written", q.cat, "business", q.difficulty);
 
-  useEffect(() => { saveLS(`written_ans_${q.id}`, answer); }, [answer, q.id]);
-  useEffect(() => { saveLS(`written_grade_${q.id}`, gradeResult); }, [gradeResult, q.id]);
+  useEffect(() => { saveLS(`${wrLsPrefix}_ans_${q.id}`, answer); }, [answer, q.id, wrLsPrefix]);
+  useEffect(() => { saveLS(`${wrLsPrefix}_grade_${q.id}`, gradeResult); }, [gradeResult, q.id, wrLsPrefix]);
 
   const handleSolve = async () => {
     if (!answer.trim()) return;
@@ -738,14 +749,14 @@ function WrittenPracticeItem({q, displayNum}) {
     : "#8B8B9E";
 
   return (
-    <Paper bg="#1A1A24" radius="lg" mb="md" style={{border:"1px solid #252533", overflow:"hidden"}}>
+    <Paper bg="var(--bg-elevated)" radius="lg" mb="md" style={{border:"1px solid var(--border-subtle)", overflow:"hidden"}}>
       <div style={{borderLeft:`4px solid ${color}`, padding:"18px 20px"}}>
         <Group gap={8} mb="sm" style={{flexWrap:"wrap"}}>
           <Badge size="xs" ff="'JetBrains Mono', monospace" style={{backgroundColor:color+"22", color, border:"none"}}>{q.cat}</Badge>
-          <Badge size="xs" variant="light" ff="'JetBrains Mono', monospace" style={{backgroundColor:"#1E1E2A", color:"#8B8B9E", border:"none"}}>{q.difficulty}</Badge>
+          <Badge size="xs" variant="light" ff="'JetBrains Mono', monospace" style={{backgroundColor:"var(--bg-overlay)", color:"var(--text-secondary)", border:"none"}}>{q.difficulty}</Badge>
           <Badge size="xs" ff="'JetBrains Mono', monospace" ml="auto" style={{backgroundColor:"#2A2800", color:"#FBBF24", border:"1px solid #5A4A00"}}>[ {q.marks} marks ]</Badge>
         </Group>
-        <Text fz={15} c="#F0EEE8" lh={1.6} fw={600} style={{whiteSpace:"pre-line"}}>Q{displayNum}. {q.q}</Text>
+        <Text fz={15} c="var(--text-primary)" lh={1.6} fw={600} style={{whiteSpace:"pre-line"}}>Q{displayNum}. {q.q}</Text>
       </div>
 
       <div style={{padding:"12px 20px 16px"}}>
@@ -756,8 +767,8 @@ function WrittenPracticeItem({q, displayNum}) {
           rows={5}
           disabled={grading}
           fullWidth
-          className="rounded-md bg-[#12121A] border border-[#252533] text-[#F0EEE8] text-sm leading-relaxed placeholder:text-[#55556A] p-3 mb-2"
-          style={{ fontFamily: "'Inter', sans-serif", resize: "vertical" }}
+          className="rounded-md text-sm leading-relaxed p-3 mb-2"
+          style={{ backgroundColor: 'var(--bg-surface)', border: '1px solid var(--border-subtle)', color: 'var(--text-primary)', fontFamily: "'Inter', sans-serif", resize: "vertical" }}
         />
 
         <Group gap="sm">
@@ -768,7 +779,7 @@ function WrittenPracticeItem({q, displayNum}) {
             isPending={grading}
             isDisabled={!answer.trim() || grading}
             style={{
-              background: answer.trim() && !grading ? "#7C6FFF" : "#1E1E2A",
+              background: answer.trim() && !grading ? "var(--accent)" : "var(--bg-overlay)",
               fontFamily: "'JetBrains Mono', monospace",
             }}
           >
@@ -780,12 +791,9 @@ function WrittenPracticeItem({q, displayNum}) {
           <Button
             size="sm"
             variant="ghost"
-            className={revealed
-              ? "rounded-md text-[#8B8B9E]"
-              : "rounded-md"
-            }
+            className="rounded-md"
             onPress={()=>setRevealed(r=>!r)}
-            style={revealed ? { fontFamily: "'JetBrains Mono', monospace" } : {
+            style={revealed ? { fontFamily: "'JetBrains Mono', monospace", color: 'var(--text-secondary)' } : {
               backgroundColor: color + "22",
               color: color,
               border: `1px solid ${color}44`,
@@ -798,9 +806,9 @@ function WrittenPracticeItem({q, displayNum}) {
             <Button
               size="sm"
               variant="ghost"
-              className="rounded-md text-[#8B8B9E]"
-              style={{ fontFamily: "'JetBrains Mono', monospace" }}
-              onPress={()=>{ setAnswer(""); setGradeResult(null); saveLS(`written_ans_${q.id}`, ""); saveLS(`written_grade_${q.id}`, null); }}
+              className="rounded-md"
+              style={{ color: 'var(--text-secondary)', fontFamily: "'JetBrains Mono', monospace" }}
+              onPress={()=>{ setAnswer(""); setGradeResult(null); saveLS(`${wrLsPrefix}_ans_${q.id}`, ""); saveLS(`${wrLsPrefix}_grade_${q.id}`, null); }}
             >
               Clear
             </Button>
@@ -817,8 +825,8 @@ function WrittenPracticeItem({q, displayNum}) {
             title={gradeResult.score != null ? `AI Score: ${gradeResult.score}/${gradeResult.maxMarks || q.marks}` : "Grading Error"}
             styles={{
               root: {
-                backgroundColor: (gradeResult.score == null ? "#8B8B9E" : scoreColor) + "11",
-                border: `1px solid ${gradeResult.score == null ? "#8B8B9E" : scoreColor}44`,
+                backgroundColor: (gradeResult.score == null ? "var(--text-secondary)" : scoreColor) + "11",
+                border: `1px solid ${gradeResult.score == null ? "var(--text-secondary)" : scoreColor}44`,
               },
               title: { fontFamily: "'JetBrains Mono', monospace", fontSize: 12 },
             }}
@@ -831,15 +839,15 @@ function WrittenPracticeItem({q, displayNum}) {
                 radius="xl"
                 mb="sm"
                 animated
-                styles={{ root: { background: "#1E1E2A" } }}
+                styles={{ root: { background: "var(--bg-overlay)" } }}
               />
             )}
-            <Text fz="sm" c="#8B8B9E" lh={1.6}>{gradeResult.feedback}</Text>
+            <Text fz="sm" c="var(--text-secondary)" lh={1.6}>{gradeResult.feedback}</Text>
           </Alert>
         )}
 
         <Collapse in={revealed}>
-          <Box mt="md" pt="md" style={{borderTop:"1px solid #252533"}}>
+          <Box mt="md" pt="md" style={{borderTop:"1px solid var(--border-subtle)"}}>
             <Text fz={11} ff="'JetBrains Mono', monospace" c="#34D399" lts={1} mb="sm">MARKSCHEME</Text>
             <Text fz={13} c="#B0ADA6" lh={1.7} style={{whiteSpace:"pre-line"}}>{q.modelAnswer}</Text>
           </Box>
@@ -868,9 +876,9 @@ function WrittenPracticeView() {
 
   return (
     <div style={{maxWidth:1060, margin:"0 auto", padding:"0 0 40px"}}>
-      <Paper bg="#12121A" radius="lg" p="lg" mb="xl" style={{border:"1px solid #252533"}}>
-        <Text fz="sm" c="#F0EEE8" fw={600} mb={4}>Written Practice</Text>
-        <Text fz="xs" c="#8B8B9E" lh={1.5}>
+      <Paper bg="var(--bg-surface)" radius="lg" p="lg" mb="xl" style={{border:"1px solid var(--border-subtle)"}}>
+        <Text fz="sm" c="var(--text-primary)" fw={600} mb={4}>Written Practice</Text>
+        <Text fz="xs" c="var(--text-secondary)" lh={1.5}>
           Answer each question in the text box, then reveal the markscheme to compare.
         </Text>
       </Paper>
@@ -883,12 +891,12 @@ function WrittenPracticeView() {
           style={{
             flex: 1,
             height: 48,
-            backgroundColor: mode === "short" ? "#7C6FFF" : "#1A1A24",
-            color: mode === "short" ? "#fff" : "#8B8B9E",
-            border: `2px solid ${mode === "short" ? "#7C6FFF" : "#252533"}`,
+            backgroundColor: mode === "short" ? "var(--accent)" : "var(--bg-elevated)",
+            color: mode === "short" ? "#fff" : "var(--text-secondary)",
+            border: `2px solid ${mode === "short" ? "var(--accent)" : "var(--border-subtle)"}`,
             fontSize: 15,
             lineHeight: 1,
-            boxShadow: mode === "short" ? "0 0 16px #7C6FFF33" : "none",
+            boxShadow: mode === "short" ? "0 0 16px color-mix(in srgb, var(--accent) 20%, transparent)" : "none",
             fontFamily: "'JetBrains Mono', monospace",
           }}
         >
@@ -900,9 +908,9 @@ function WrittenPracticeView() {
           style={{
             flex: 1,
             height: 48,
-            backgroundColor: mode === "10mark" ? "#F87171" : "#1A1A24",
-            color: mode === "10mark" ? "#fff" : "#8B8B9E",
-            border: `2px solid ${mode === "10mark" ? "#F87171" : "#252533"}`,
+            backgroundColor: mode === "10mark" ? "#F87171" : "var(--bg-elevated)",
+            color: mode === "10mark" ? "#fff" : "var(--text-secondary)",
+            border: `2px solid ${mode === "10mark" ? "#F87171" : "var(--border-subtle)"}`,
             fontSize: 15,
             lineHeight: 1,
             boxShadow: mode === "10mark" ? "0 0 16px #F8717133" : "none",
@@ -917,7 +925,7 @@ function WrittenPracticeView() {
             className="rounded-md font-bold"
             style={{
               height: 48,
-              backgroundColor: "#1A1A24",
+              backgroundColor: "var(--bg-elevated)",
               color: "#2DD4BF",
               border: "2px solid #2DD4BF",
               fontSize: 15,
@@ -957,13 +965,13 @@ function WrittenPracticeView() {
         </Group>
       )}
 
-      <Text fz="xs" c="#55556A" ff="'JetBrains Mono', monospace" mb="lg">
+      <Text fz="xs" c="var(--text-muted)" ff="'JetBrains Mono', monospace" mb="lg">
         Showing {filtered.length} question{filtered.length!==1?"s":""}{mode === "short" && filterCat!=="All"?` · ${filterCat}`:""}
         {mode === "10mark" ? " · 10 Markers" : ""}
       </Text>
 
       {filtered.length === 0 && (
-        <Text ta="center" py={40} c="#55556A" fz="sm">No questions match this filter.</Text>
+        <Text ta="center" py={40} c="var(--text-muted)" fz="sm">No questions match this filter.</Text>
       )}
 
       {filtered.map((q, i) => (
@@ -971,6 +979,11 @@ function WrittenPracticeView() {
       ))}
     </div>
   );
+}
+
+const BUSINESS_UNIT_KEY = "business_active_unit";
+function getStoredBusinessUnit() {
+  try { return sessionStorage.getItem(BUSINESS_UNIT_KEY) || "unit1"; } catch { return "unit1"; }
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -984,19 +997,27 @@ export default function App({ initialTab = "checklist" }) {
     window.location.href = `/business/${urlMap[t] || t}`;
   };
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [activeUnit, setActiveUnit] = useState(getStoredBusinessUnit);
 
   // Content state — starts with hardcoded fallback, updates from API
   const [content, setContent] = useState(FALLBACK_CONTENT);
   useEffect(() => {
     let cancelled = false;
-    fetchAppContent()
+    fetchAppContent(activeUnit === "unit1" ? null : activeUnit)
       .then(data => { if (!cancelled) setContent(data); })
       .catch(err => console.warn("Content API unavailable, using fallback data:", err.message));
     return () => { cancelled = true; };
-  }, []);
+  }, [activeUnit]);
+
+  const currentUnit = UNIT_CONFIG.business.find((u) => u.id === activeUnit) || UNIT_CONFIG.business[0];
+  const handleUnitChange = (unitId) => {
+    try { sessionStorage.setItem(BUSINESS_UNIT_KEY, unitId); } catch (_) {}
+    setActiveUnit(unitId);
+    window.location.href = "/business/checklist";
+  };
 
   return (
-    <ContentCtx.Provider value={content}>
+    <ContentCtx.Provider value={{ ...content, activeUnit }}>
     <Box mih="100vh" style={{fontFamily:"'Inter', sans-serif",color:"var(--text-primary)",background:"var(--bg-base)"}}>
 
       <Sidebar activeSubject="business" sidebarOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
@@ -1008,7 +1029,7 @@ export default function App({ initialTab = "checklist" }) {
           background: "var(--header-bg)",
           backdropFilter: "blur(12px)",
           WebkitBackdropFilter: "blur(12px)",
-          borderBottom: "1px solid rgba(128,128,128,0.1)",
+          borderBottom: "1px solid var(--header-border)",
         }}
       >
         <Container size="lg" py="sm">
@@ -1018,8 +1039,10 @@ export default function App({ initialTab = "checklist" }) {
               isIconOnly
               variant="outline"
               onPress={() => setSidebarOpen(o => !o)}
-              className="rounded-md border-[#252533] text-[#8B8B9E] bg-transparent min-w-[auto] h-8 px-2.5"
+              className="rounded-md bg-transparent min-w-[auto] h-8 px-2.5"
               style={{
+                borderColor: 'var(--border-subtle)',
+                color: 'var(--text-secondary)',
                 position: "absolute",
                 left: 0,
                 top: "50%",
@@ -1038,23 +1061,33 @@ export default function App({ initialTab = "checklist" }) {
               tt="uppercase"
               fw={700}
               ff="'JetBrains Mono', monospace"
-              style={{ letterSpacing: 2, backgroundColor: "#7C6FFF18", color: "#A78BFA", border: "none" }}
+              style={{ letterSpacing: 2, backgroundColor: "color-mix(in srgb, var(--accent) 10%, transparent)", color: "var(--accent-soft)", border: "none" }}
             >
               IB HL Business Management
             </Badge>
+            {/* #region agent log */}
+            {(() => { try { fetch('http://127.0.0.1:7756/ingest/fda1bef3-c489-4aa0-8808-23f7b31bfe3e', { method: 'POST', headers: { 'Content-Type': 'application/json', 'X-Debug-Session-Id': '19536b' }, body: JSON.stringify({ sessionId: '19536b', location: 'App.jsx:header', message: 'App header rendering LoginButton', data: { path: window.location.pathname }, hypothesisId: 'C', timestamp: Date.now() }) }); } catch (_) {} return null; })()}
+            {/* #endregion */}
             <LoginButton />
           </Group>
           <Text
             ta="center" fw={800}
             fz={{ base: 22, sm: 30 }}
-            c="#F0EEE8"
+            c="var(--text-primary)"
             style={{ letterSpacing: -0.5 }}
           >
-            Finance Unit — Revision Hub
+            {currentUnit ? currentUnit.title : "Finance Unit"} — Revision Hub
           </Text>
-          <Text ta="center" fz="xs" c="#55556A" mb="sm">
-            Units 3.1–3.9 · 5.5 Breakeven · BMT Tools · {content.mcqQuestions.length} MCQs · {content.writtenQuestions.length} Written · {content.written10MarkQuestions.length} Extended
+          <Text ta="center" fz="xs" c="var(--text-muted)" mb="xs">
+            {currentUnit?.topics ?? "Units 3.1–3.9 · 5.5 Breakeven · BMT Tools"} · {content.mcqQuestions.length} MCQs · {content.writtenQuestions.length} Written · {content.written10MarkQuestions.length} Extended
           </Text>
+
+          <UnitSelector
+            units={UNIT_CONFIG.business}
+            activeUnitId={activeUnit}
+            onUnitChange={handleUnitChange}
+            accentColor="var(--accent)"
+          />
 
           <Group gap={4} grow>
             {[
@@ -1078,8 +1111,8 @@ export default function App({ initialTab = "checklist" }) {
                     fontSize: 13,
                     padding: "10px 4px 12px",
                     backgroundColor: "transparent",
-                    color: tab === t.value ? "#F0EEE8" : "#55556A",
-                    borderBottom: tab === t.value ? "3px solid #7C6FFF" : "3px solid transparent",
+                    color: tab === t.value ? "var(--text-primary)" : "var(--text-muted)",
+                    borderBottom: tab === t.value ? "3px solid var(--accent)" : "3px solid transparent",
                     borderTop: "none",
                     borderLeft: "none",
                     borderRight: "none",
@@ -1117,7 +1150,7 @@ export default function App({ initialTab = "checklist" }) {
           width: 48,
           height: 48,
           borderRadius: "50%",
-          backgroundColor: "#7C6FFF",
+          backgroundColor: "var(--accent)",
           display: "flex",
           alignItems: "center",
           justifyContent: "center",

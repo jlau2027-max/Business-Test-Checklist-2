@@ -11,6 +11,9 @@ import Sidebar from "./Sidebar.jsx";
 import { useAuth } from "./AuthContext.jsx";
 import { useAttemptTracker } from "./useAttemptTracker.js";
 import { syncToCloud } from "./stateSync.js";
+import { UNIT_CONFIG } from "./unitConfig.js";
+import UnitSelector from "./UnitSelector.jsx";
+import { fetchChecklist, fetchFlashcardTopics, fetchFlashcards, fetchMcqQuestions, fetchWrittenQuestions, fetchCategoryColors } from "./api/contentApi.js";
 
 function loadLS(key, fallback) {
   try { const v = localStorage.getItem(key); return v !== null ? JSON.parse(v) : fallback; }
@@ -270,25 +273,87 @@ const STATIC_CONTENT = {
   },
 };
 
-const ContentCtx = createContext(STATIC_CONTENT);
+const EMPTY_CONTENT = {
+  checklistSections: [],
+  flashcardCategories: [],
+  mcqQuestions: [],
+  writtenQuestions: [],
+  catColors: {},
+};
+
+async function fetchBiologyContent(unit) {
+  const [checklistRaw, mcqRaw, writtenRaw, colorsRaw, topicsRaw] = await Promise.all([
+    fetchChecklist("biology", unit),
+    fetchMcqQuestions({ subject: "biology", unit }),
+    fetchWrittenQuestions({ subject: "biology", unit }),
+    fetchCategoryColors("biology", unit),
+    fetchFlashcardTopics("biology", unit),
+  ]);
+  const checklistSections = (checklistRaw || []).map((sec) => ({
+    ...sec,
+    items: (sec.items || []).map((item) => (typeof item === "string" ? item : item?.text ?? "")),
+  }));
+  const mcqQuestions = (mcqRaw || []).map((q) => ({
+    id: q.id,
+    cat: q.category,
+    difficulty: q.difficulty,
+    q: q.question_text,
+    options: [q.option_a, q.option_b, q.option_c, q.option_d],
+    answer: q.correct_option,
+    explanation: q.explanation,
+  }));
+  const writtenQuestions = (writtenRaw || [])
+    .filter((q) => q.question_type === "short_answer")
+    .map((q) => ({
+      id: q.id,
+      cat: q.category,
+      difficulty: q.difficulty,
+      marks: q.marks,
+      q: q.question_text,
+      modelAnswer: q.mark_scheme,
+    }));
+  const catColors = Array.isArray(colorsRaw)
+    ? Object.fromEntries((colorsRaw || []).map((c) => [c.category, c.color]))
+    : colorsRaw || {};
+  const topics = topicsRaw || [];
+  const flashcardCategories = await Promise.all(
+    topics.map(async (t) => {
+      try {
+        const cards = await fetchFlashcards(t.id, "biology", unit);
+        return {
+          id: t.id,
+          label: t.label,
+          color: t.color,
+          cards: (cards || []).map((c) => ({ term: c.term, def: c.definition, formula: c.formula })),
+        };
+      } catch {
+        return { id: t.id, label: t.label, color: t.color, cards: [] };
+      }
+    })
+  );
+  return { checklistSections, flashcardCategories, mcqQuestions, writtenQuestions, catColors };
+}
+
+const ContentCtx = createContext({ ...STATIC_CONTENT, activeUnit: "unit1" });
 const useContent = () => useContext(ContentCtx);
 
 // ─────────────────────────────────────────────────────────────────────────────
 // CHECKLIST VIEW
 // ─────────────────────────────────────────────────────────────────────────────
 function ChecklistView() {
-  const { checklistSections } = useContent();
-  const [checked, setChecked] = useState(() => loadLS("bio_checklist_checked", {}));
+  const { checklistSections, activeUnit } = useContent();
+  const lsPrefix = `biology_${activeUnit}_checklist`;
+  const [checked, setChecked] = useState(() => loadLS(`${lsPrefix}_checked`, {}));
   const [openSections, setOpenSections] = useState(() => {
-    const collapsed = loadLS("bio_checklist_collapsed", {});
+    const collapsed = loadLS(`${lsPrefix}_collapsed`, {});
     return checklistSections.filter(s => !collapsed[s.id]).map(s => s.id);
   });
-  const toggle = id => setChecked(p => { const next = { ...p, [id]: !p[id] }; saveLS("bio_checklist_checked", next); return next; });
+  const toggle = id => setChecked(p => { const next = { ...p, [id]: !p[id] }; saveLS(`${lsPrefix}_checked`, next); return next; });
   const handleAccordion = (value) => {
     setOpenSections(value);
     const collapsed = {};
     checklistSections.forEach(s => { if (!value.includes(s.id)) collapsed[s.id] = true; });
-    saveLS("bio_checklist_collapsed", collapsed);
+    saveLS(`${lsPrefix}_collapsed`, collapsed);
   };
   const totalItems = checklistSections.reduce((s, sec) => s + sec.items.length, 0);
   const checkedCount = Object.values(checked).filter(Boolean).length;
@@ -297,24 +362,24 @@ function ChecklistView() {
 
   return (
     <div style={{ maxWidth: 1060, margin: "0 auto", padding: "0 0 40px" }}>
-      <Paper bg="#12121A" radius="lg" p="xl" mb="xl" style={{ border: "1px solid #252533", boxShadow: "0 2px 8px rgba(0,0,0,0.2)" }}>
+      <Paper bg="var(--bg-surface)" radius="lg" p="xl" mb="xl" style={{ border: "1px solid var(--border-subtle)", boxShadow: "0 2px 8px rgba(0,0,0,0.2)" }}>
         <Group justify="space-between" mb="xs">
-          <Text fz="sm" c="#8B8B9E" ff="'JetBrains Mono', monospace">Overall Progress</Text>
+          <Text fz="sm" c="var(--text-secondary)" ff="'JetBrains Mono', monospace">Overall Progress</Text>
           <Text fz={24} fw={800} c={progColor}>{progress}%</Text>
         </Group>
-        <Progress value={progress} size="md" radius="xl" color={progColor} animated styles={{ root: { background: "#1E1E2A" } }} />
+        <Progress value={progress} size="md" radius="xl" color={progColor} animated styles={{ root: { background: "var(--bg-overlay)" } }} />
         <Group justify="space-between" mt="sm">
-          <Text fz="xs" c="#55556A">{checkedCount} of {totalItems} topics covered</Text>
+          <Text fz="xs" c="var(--text-muted)">{checkedCount} of {totalItems} topics covered</Text>
           <Badge size="xs" variant="light" color="teal" ff="'JetBrains Mono', monospace">auto-saved</Badge>
         </Group>
       </Paper>
 
       <Accordion multiple value={openSections} onChange={handleAccordion} variant="separated" radius="md"
         styles={{
-          item: { backgroundColor: "#12121A", border: "1px solid #252533", marginBottom: 12 },
+          item: { backgroundColor: "var(--bg-surface)", border: "1px solid var(--border-subtle)", marginBottom: 12 },
           control: { padding: "14px 20px" },
-          content: { padding: "4px 20px 16px", borderTop: "1px solid #252533" },
-          chevron: { color: "#55556A" },
+          content: { padding: "4px 20px 16px", borderTop: "1px solid var(--border-subtle)" },
+          chevron: { color: "var(--text-muted)" },
         }}
       >
         {checklistSections.map(section => {
@@ -328,7 +393,7 @@ function ChecklistView() {
                     style={{ backgroundColor: section.color + "22", color: section.color, border: "none" }}>
                     {sectionChecked}/{section.items.length}
                   </Badge>
-                  <Text fw={600} fz="sm" c={allDone ? section.color : "#F0EEE8"}>
+                  <Text fw={600} fz="sm" c={allDone ? section.color : "var(--text-primary)"}>
                     {allDone && "✓ "}{section.title}
                   </Text>
                 </Group>
@@ -343,7 +408,7 @@ function ChecklistView() {
                       <Checkbox key={key} checked={!!isChecked} onChange={() => toggle(key)} label={item} color={section.color} radius="sm"
                         styles={{
                           root: { padding: "6px 4px", borderRadius: 8, cursor: "pointer", transition: "background 0.15s" },
-                          label: { color: isChecked ? "#55556A" : isAHL ? "#FBBF24" : "#C8C4BC", textDecoration: isChecked ? "line-through" : "none", fontSize: 14, lineHeight: 1.5, cursor: "pointer" },
+                          label: { color: isChecked ? "var(--text-muted)" : isAHL ? "#FBBF24" : "var(--text-dimmed)", textDecoration: isChecked ? "line-through" : "none", fontSize: 14, lineHeight: 1.5, cursor: "pointer" },
                           input: { cursor: "pointer" },
                         }}
                       />
@@ -356,9 +421,9 @@ function ChecklistView() {
         })}
       </Accordion>
 
-      <Text ta="center" mt="lg" c="#55556A" fz="xs">
+      <Text ta="center" mt="lg" c="var(--text-muted)" fz="xs">
         Click any item to mark it as revised ·{" "}
-        <Text component="span" c="#34D399" style={{ cursor: "pointer" }} onClick={() => { setChecked({}); saveLS("bio_checklist_checked", {}); }}>Reset all</Text>
+        <Text component="span" c="#34D399" style={{ cursor: "pointer" }} onClick={() => { setChecked({}); saveLS(`${lsPrefix}_checked`, {}); }}>Reset all</Text>
       </Text>
     </div>
   );
@@ -372,15 +437,15 @@ function FlashCard({ card, catColor }) {
   return (
     <div className="flashcard-container" onClick={() => setFlipped(f => !f)}>
       <div className={`flashcard-inner${flipped ? " flipped" : ""}`}>
-        <Paper className="flashcard-face" bg="#1A1A24"
-          style={{ border: "1px solid #252533", boxShadow: "0 2px 8px rgba(0,0,0,0.3)", alignItems: "center", padding: 24, textAlign: "center" }}>
-          <Text fz={11} ff="'JetBrains Mono', monospace" c="#55556A" tt="uppercase" lts={2} mb="md">TERM</Text>
-          <Text fz={20} fw={700} c="#F0EEE8" lh={1.3}>{card.term}</Text>
-          <Text fz={11} c="#55556A" mt="lg">tap to reveal</Text>
+        <Paper className="flashcard-face" bg="var(--bg-elevated)"
+          style={{ border: "1px solid var(--border-subtle)", boxShadow: "0 2px 8px rgba(0,0,0,0.3)", alignItems: "center", padding: 24, textAlign: "center" }}>
+          <Text fz={11} ff="'JetBrains Mono', monospace" c="var(--text-muted)" tt="uppercase" lts={2} mb="md">TERM</Text>
+          <Text fz={20} fw={700} c="var(--text-primary)" lh={1.3}>{card.term}</Text>
+          <Text fz={11} c="var(--text-muted)" mt="lg">tap to reveal</Text>
         </Paper>
-        <Paper className="flashcard-face flashcard-back" bg="#1A1A24"
-          style={{ border: "1px solid #252533", boxShadow: "0 2px 8px rgba(0,0,0,0.3)", padding: 20, overflowY: "auto" }}>
-          <Text fz={11} ff="'JetBrains Mono', monospace" c="#55556A" tt="uppercase" lts={2} mb="sm">DEFINITION</Text>
+        <Paper className="flashcard-face flashcard-back" bg="var(--bg-elevated)"
+          style={{ border: "1px solid var(--border-subtle)", boxShadow: "0 2px 8px rgba(0,0,0,0.3)", padding: 20, overflowY: "auto" }}>
+          <Text fz={11} ff="'JetBrains Mono', monospace" c="var(--text-muted)" tt="uppercase" lts={2} mb="sm">DEFINITION</Text>
           <Text fz={13} c="#C8C4BC" lh={1.65}>{card.def}</Text>
         </Paper>
       </div>
@@ -389,8 +454,9 @@ function FlashCard({ card, catColor }) {
 }
 
 function FlashcardsView() {
-  const { flashcardCategories } = useContent();
-  const [activeCat, setActiveCat] = useState(() => loadLS("bio_fc_cat", flashcardCategories[0]?.id));
+  const { flashcardCategories, activeUnit } = useContent();
+  const lsKey = `biology_${activeUnit}_fc_cat`;
+  const [activeCat, setActiveCat] = useState(() => loadLS(lsKey, flashcardCategories[0]?.id));
   const [cardIdx, setCardIdx] = useState(0);
   const currentCat = flashcardCategories.find(c => c.id === activeCat) || flashcardCategories[0];
   if (!currentCat || !currentCat.cards || currentCat.cards.length === 0) return <Text ta="center" c="#55556A" py="xl">Loading flashcards…</Text>;
@@ -400,9 +466,9 @@ function FlashcardsView() {
     <div style={{ maxWidth: 680, margin: "0 auto", padding: "0 0 40px" }}>
       <Group gap={8} mb="lg" style={{ flexWrap: "wrap" }}>
         {flashcardCategories.map(cat => (
-          <Button key={cat.id} size="sm" onPress={() => { setActiveCat(cat.id); saveLS("bio_fc_cat", cat.id); setCardIdx(0); }}
+          <Button key={cat.id} size="sm" onPress={() => { setActiveCat(cat.id); saveLS(lsKey, cat.id); setCardIdx(0); }}
             className="rounded-full text-xs"
-            style={{ fontFamily: "'JetBrains Mono', monospace", backgroundColor: activeCat === cat.id ? cat.color : "#1A1A24", color: activeCat === cat.id ? "#fff" : "#8B8B9E", border: `1px solid ${activeCat === cat.id ? cat.color : "#252533"}` }}>
+            style={{ fontFamily: "'JetBrains Mono', monospace", backgroundColor: activeCat === cat.id ? cat.color : "var(--bg-elevated)", color: activeCat === cat.id ? "#fff" : "var(--text-secondary)", border: `1px solid ${activeCat === cat.id ? cat.color : "var(--border-subtle)"}` }}>
             {cat.label}
           </Button>
         ))}
@@ -410,7 +476,7 @@ function FlashcardsView() {
 
       <Group justify="space-between" mb="md">
         <Text fz="xs" c="#55556A" ff="'JetBrains Mono', monospace">{cardIdx + 1} / {currentCat.cards.length} — {currentCat.label}</Text>
-        <Box style={{ background: "#1A1A24", borderRadius: 99, height: 4, width: 140, overflow: "hidden" }}>
+        <Box style={{ background: "var(--bg-elevated)", borderRadius: 99, height: 4, width: 140, overflow: "hidden" }}>
           <div style={{ width: `${((cardIdx + 1) / currentCat.cards.length) * 100}%`, height: "100%", background: currentCat.color, borderRadius: 99, transition: "width 0.3s" }} />
         </Box>
       </Group>
@@ -419,7 +485,8 @@ function FlashcardsView() {
 
       <Group grow gap="sm" mt="md">
         <Button variant="ghost" size="md" isDisabled={cardIdx === 0} onPress={() => setCardIdx(i => Math.max(0, i - 1))}
-          className="rounded-md bg-[#1A1A24] border border-[#252533] text-[#8B8B9E] disabled:bg-[#12121A] disabled:border-[#1E1E2A]">
+          className="rounded-md disabled:opacity-60"
+          style={{ background: 'var(--bg-elevated)', border: '1px solid var(--border-subtle)', color: 'var(--text-secondary)' }}>
           Previous
         </Button>
         <Button size="md" isDisabled={cardIdx === currentCat.cards.length - 1} onPress={() => setCardIdx(i => Math.min(currentCat.cards.length - 1, i + 1))}
@@ -444,31 +511,31 @@ function MCQItem({ q, displayNum }) {
   const { recordAttempt } = useAttemptTracker(q.id, "mcq", q.cat, "biology", q.difficulty);
 
   return (
-    <Paper bg="#1A1A24" radius="lg" mb="sm" style={{ border: "1px solid #252533", overflow: "hidden", transition: "all 0.2s" }}>
+    <Paper bg="var(--bg-elevated)" radius="lg" mb="sm" style={{ border: "1px solid var(--border-subtle)", overflow: "hidden", transition: "all 0.2s" }}>
       <div style={{ borderLeft: `4px solid ${color}`, padding: "18px 20px" }}>
         <Group gap={8} mb="sm" style={{ flexWrap: "wrap" }}>
           <Badge size="xs" ff="'JetBrains Mono', monospace" style={{ backgroundColor: color, color: "#fff" }}>MCQ</Badge>
           <Badge size="xs" variant="light" ff="'JetBrains Mono', monospace" style={{ backgroundColor: color + "22", color, border: "none" }}>{q.cat}</Badge>
-          <Badge size="xs" variant="light" ff="'JetBrains Mono', monospace" style={{ backgroundColor: "#1E1E2A", color: "#8B8B9E", border: "none" }}>{q.difficulty}</Badge>
+          <Badge size="xs" variant="light" ff="'JetBrains Mono', monospace" style={{ backgroundColor: "var(--bg-overlay)", color: "var(--text-secondary)", border: "none" }}>{q.difficulty}</Badge>
         </Group>
-        <Text fz={15} c="#F0EEE8" lh={1.6} fw={600}>Q{displayNum}. {q.q}</Text>
+        <Text fz={15} c="var(--text-primary)" lh={1.6} fw={600}>Q{displayNum}. {q.q}</Text>
       </div>
       <Stack gap={8} p="md" pt="sm">
         {q.options.map((opt, i) => {
           const isSelected = selected === i;
           const isCorrect = i === q.answer;
-          let bg = "#12121A", border = "#252533", tc = "#C8C4BC";
+          let bg = "var(--bg-surface)", border = "var(--border-subtle)", tc = "var(--text-dimmed)";
           if (confirmed) {
             if (isCorrect) { bg = "#34D399" + "22"; border = "#34D399"; tc = "#6EE7B7"; }
             else if (isSelected && !isCorrect) { bg = "#F87171" + "22"; border = "#F87171"; tc = "#FCA5A5"; }
-          } else if (isSelected) { bg = color + "22"; border = color; tc = "#F0EEE8"; }
+          } else if (isSelected) { bg = color + "22"; border = color; tc = "var(--text-primary)"; }
           return (
             <Paper key={i} p="sm" radius="md" onClick={() => { if (!confirmed) setSelected(i); }}
               style={{ background: bg, border: `1.5px solid ${border}`, cursor: confirmed ? "default" : "pointer", transition: "all 0.2s" }}
               onMouseEnter={e => { if (!confirmed && !isSelected) e.currentTarget.style.borderColor = color + "66"; }}
-              onMouseLeave={e => { if (!confirmed && !isSelected) e.currentTarget.style.borderColor = "#252533"; }}>
+              onMouseLeave={e => { if (!confirmed && !isSelected) e.currentTarget.style.borderColor = "var(--border-subtle)"; }}>
               <Group gap="sm" wrap="nowrap">
-                <Box style={{ width: 28, height: 28, borderRadius: 6, flexShrink: 0, background: confirmed && isCorrect ? "#34D399" : confirmed && isSelected && !isCorrect ? "#F87171" : isSelected ? color : "#252533", display: "flex", alignItems: "center", justifyContent: "center" }}>
+                <Box style={{ width: 28, height: 28, borderRadius: 6, flexShrink: 0, background: confirmed && isCorrect ? "#34D399" : confirmed && isSelected && !isCorrect ? "#F87171" : isSelected ? color : "var(--border-subtle)", display: "flex", alignItems: "center", justifyContent: "center" }}>
                   <Text fz={11} ff="'JetBrains Mono', monospace" c="#fff" fw={700}>
                     {confirmed && isCorrect ? "✓" : confirmed && isSelected && !isCorrect ? "✗" : String.fromCharCode(65 + i)}
                   </Text>
@@ -510,7 +577,7 @@ function PracticeView() {
           const active = filterCat === cat;
           return (
             <Button key={cat} size="sm" className="rounded-full" onPress={() => setFilterCat(cat)}
-              style={{ backgroundColor: active ? c : "#1A1A24", color: active ? "#fff" : "#8B8B9E", border: `1px solid ${active ? c : "#252533"}`, boxShadow: "none", fontFamily: "'JetBrains Mono', monospace" }}>
+              style={{ backgroundColor: active ? c : "var(--bg-elevated)", color: active ? "#fff" : "var(--text-secondary)", border: `1px solid ${active ? c : "var(--border-subtle)"}`, boxShadow: "none", fontFamily: "'JetBrains Mono', monospace" }}>
               {cat}
             </Button>
           );
@@ -531,16 +598,17 @@ function PracticeView() {
 // WRITTEN PRACTICE COMPONENTS
 // ─────────────────────────────────────────────────────────────────────────────
 function WrittenPracticeItem({ q, displayNum }) {
-  const { catColors } = useContent();
-  const [answer, setAnswer] = useState(() => loadLS(`bio_written_ans_${q.id}`, ""));
+  const { catColors, activeUnit } = useContent();
+  const lsPrefix = `biology_${activeUnit}_written`;
+  const [answer, setAnswer] = useState(() => loadLS(`${lsPrefix}_ans_${q.id}`, ""));
   const [revealed, setRevealed] = useState(false);
   const [grading, setGrading] = useState(false);
-  const [gradeResult, setGradeResult] = useState(() => loadLS(`bio_written_grade_${q.id}`, null));
+  const [gradeResult, setGradeResult] = useState(() => loadLS(`${lsPrefix}_grade_${q.id}`, null));
   const color = catColors[q.cat] || "#34D399";
   const { recordAttempt } = useAttemptTracker(q.id, "written", q.cat, "biology", q.difficulty);
 
-  useEffect(() => { saveLS(`bio_written_ans_${q.id}`, answer); }, [answer, q.id]);
-  useEffect(() => { saveLS(`bio_written_grade_${q.id}`, gradeResult); }, [gradeResult, q.id]);
+  useEffect(() => { saveLS(`${lsPrefix}_ans_${q.id}`, answer); }, [answer, q.id, lsPrefix]);
+  useEffect(() => { saveLS(`${lsPrefix}_grade_${q.id}`, gradeResult); }, [gradeResult, q.id, lsPrefix]);
 
   const handleSolve = async () => {
     if (!answer.trim()) return;
@@ -570,7 +638,7 @@ function WrittenPracticeItem({ q, displayNum }) {
   const scoreColor = gradeResult?.score != null ? scorePct >= 0.75 ? "#34D399" : scorePct >= 0.4 ? "#FBBF24" : "#F87171" : "#8B8B9E";
 
   return (
-    <Paper bg="#1A1A24" radius="lg" mb="md" style={{ border: "1px solid #252533", overflow: "hidden" }}>
+    <Paper bg="var(--bg-elevated)" radius="lg" mb="md" style={{ border: "1px solid var(--border-subtle)", overflow: "hidden" }}>
       <div style={{ borderLeft: `4px solid ${color}`, padding: "18px 20px" }}>
         <Group gap={8} mb="sm" style={{ flexWrap: "wrap" }}>
           <Badge size="xs" ff="'JetBrains Mono', monospace" style={{ backgroundColor: color + "22", color, border: "none" }}>{q.cat}</Badge>
@@ -582,22 +650,22 @@ function WrittenPracticeItem({ q, displayNum }) {
 
       <div style={{ padding: "12px 20px 16px" }}>
         <TextArea value={answer} onChange={(e) => setAnswer(e.target.value)} placeholder="Type your answer here..." rows={5} disabled={grading} fullWidth
-          className="rounded-md bg-[#12121A] border border-[#252533] text-[#F0EEE8] text-sm leading-relaxed placeholder:text-[#55556A] p-3 mb-2"
-          style={{ fontFamily: "'Inter', sans-serif", resize: "vertical" }} />
+          className="rounded-md text-sm leading-relaxed p-3 mb-2"
+          style={{ backgroundColor: 'var(--bg-surface)', border: '1px solid var(--border-subtle)', color: 'var(--text-primary)', fontFamily: "'Inter', sans-serif", resize: "vertical" }} />
 
         <Group gap="sm">
           <Button size="sm" className="rounded-md border-none font-semibold" onPress={handleSolve} isPending={grading}
             isDisabled={!answer.trim() || grading}
-            style={{ background: answer.trim() && !grading ? "#34D399" : "#1E1E2A", fontFamily: "'JetBrains Mono', monospace" }}>
+            style={{ background: answer.trim() && !grading ? "#34D399" : "var(--bg-overlay)", fontFamily: "'JetBrains Mono', monospace" }}>
             {({ isPending }) => <>{isPending && <Spinner color="current" size="sm" />}{isPending ? "Grading..." : "Solve"}</>}
           </Button>
-          <Button size="sm" variant="ghost" className={revealed ? "rounded-md text-[#8B8B9E]" : "rounded-md"} onPress={() => setRevealed(r => !r)}
-            style={revealed ? { fontFamily: "'JetBrains Mono', monospace" } : { backgroundColor: color + "22", color, border: `1px solid ${color}44`, fontFamily: "'JetBrains Mono', monospace" }}>
+          <Button size="sm" variant="ghost" className="rounded-md" onPress={() => setRevealed(r => !r)}
+            style={revealed ? { color: 'var(--text-secondary)', fontFamily: "'JetBrains Mono', monospace" } : { backgroundColor: color + "22", color, border: `1px solid ${color}44`, fontFamily: "'JetBrains Mono', monospace" }}>
             {revealed ? "Hide Markscheme" : "Show Markscheme"}
           </Button>
           {answer.trim() && !grading && (
-            <Button size="sm" variant="ghost" className="rounded-md text-[#8B8B9E]" style={{ fontFamily: "'JetBrains Mono', monospace" }}
-              onPress={() => { setAnswer(""); setGradeResult(null); saveLS(`bio_written_ans_${q.id}`, ""); saveLS(`bio_written_grade_${q.id}`, null); }}>
+            <Button size="sm" variant="ghost" className="rounded-md" style={{ fontFamily: "'JetBrains Mono', monospace", color: 'var(--text-secondary)' }}
+              onPress={() => { setAnswer(""); setGradeResult(null); saveLS(`${lsPrefix}_ans_${q.id}`, ""); saveLS(`${lsPrefix}_grade_${q.id}`, null); }}>
               Clear
             </Button>
           )}
@@ -608,18 +676,18 @@ function WrittenPracticeItem({ q, displayNum }) {
             color={gradeResult.score == null ? "gray" : scorePct >= 0.75 ? "green" : scorePct >= 0.4 ? "yellow" : "red"}
             title={gradeResult.score != null ? `AI Score: ${gradeResult.score}/${gradeResult.maxMarks || q.marks}` : "Grading Error"}
             styles={{
-              root: { backgroundColor: (gradeResult.score == null ? "#8B8B9E" : scoreColor) + "11", border: `1px solid ${gradeResult.score == null ? "#8B8B9E" : scoreColor}44` },
+              root: { backgroundColor: (gradeResult.score == null ? "var(--text-secondary)" : scoreColor) + "11", border: `1px solid ${gradeResult.score == null ? "var(--text-secondary)" : scoreColor}44` },
               title: { fontFamily: "'JetBrains Mono', monospace", fontSize: 12 },
             }}>
             {gradeResult.score != null && (
               <Progress value={scorePct * 100} color={scoreColor} size="sm" radius="xl" mb="sm" animated styles={{ root: { background: "#1E1E2A" } }} />
             )}
-            <Text fz="sm" c="#8B8B9E" lh={1.6}>{gradeResult.feedback}</Text>
+            <Text fz="sm" c="var(--text-secondary)" lh={1.6}>{gradeResult.feedback}</Text>
           </Alert>
         )}
 
         <Collapse in={revealed}>
-          <Box mt="md" pt="md" style={{ borderTop: "1px solid #252533" }}>
+          <Box mt="md" pt="md" style={{ borderTop: "1px solid var(--border-subtle)" }}>
             <Text fz={11} ff="'JetBrains Mono', monospace" c="#34D399" lts={1} mb="sm">MARKSCHEME</Text>
             <Text fz={13} c="#B0ADA6" lh={1.7} style={{ whiteSpace: "pre-line" }}>{q.modelAnswer}</Text>
           </Box>
@@ -637,9 +705,9 @@ function WrittenPracticeView() {
 
   return (
     <div style={{ maxWidth: 1060, margin: "0 auto", padding: "0 0 40px" }}>
-      <Paper bg="#12121A" radius="lg" p="lg" mb="xl" style={{ border: "1px solid #252533" }}>
-        <Text fz="sm" c="#F0EEE8" fw={600} mb={4}>Written Practice</Text>
-        <Text fz="xs" c="#8B8B9E" lh={1.5}>
+      <Paper bg="var(--bg-surface)" radius="lg" p="lg" mb="xl" style={{ border: "1px solid var(--border-subtle)" }}>
+        <Text fz="sm" c="var(--text-primary)" fw={600} mb={4}>Written Practice</Text>
+        <Text fz="xs" c="var(--text-secondary)" lh={1.5}>
           Answer each question in the text box, then use AI grading or reveal the markscheme to compare.
         </Text>
       </Paper>
@@ -650,7 +718,7 @@ function WrittenPracticeView() {
           const active = filterCat === cat;
           return (
             <Button key={cat} size="sm" className="rounded-full" onPress={() => setFilterCat(cat)}
-              style={{ backgroundColor: active ? c : "#1A1A24", color: active ? "#fff" : "#8B8B9E", border: `1px solid ${active ? c : "#252533"}`, boxShadow: "none", fontFamily: "'JetBrains Mono', monospace" }}>
+              style={{ backgroundColor: active ? c : "var(--bg-elevated)", color: active ? "#fff" : "var(--text-secondary)", border: `1px solid ${active ? c : "var(--border-subtle)"}`, boxShadow: "none", fontFamily: "'JetBrains Mono', monospace" }}>
               {cat}
             </Button>
           );
@@ -667,26 +735,66 @@ function WrittenPracticeView() {
   );
 }
 
+const BIOLOGY_UNIT_KEY = "biology_active_unit";
+function getStoredBiologyUnit() {
+  try { return sessionStorage.getItem(BIOLOGY_UNIT_KEY) || "unit1"; } catch { return "unit1"; }
+}
+
 // ─────────────────────────────────────────────────────────────────────────────
 // ROOT PAGE
 // ─────────────────────────────────────────────────────────────────────────────
 export default function BiologyPage({ initialTab = "checklist" }) {
   const [tab] = useState(initialTab);
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [activeUnit, setActiveUnit] = useState(getStoredBiologyUnit);
+  const [fetchedContent, setFetchedContent] = useState(null);
+  const [contentLoading, setContentLoading] = useState(false);
+
+  const currentUnit = UNIT_CONFIG.biology.find((u) => u.id === activeUnit) || UNIT_CONFIG.biology[0];
+  const content =
+    activeUnit === "unit1"
+      ? STATIC_CONTENT
+      : fetchedContent || EMPTY_CONTENT;
+
+  useEffect(() => {
+    if (activeUnit === "unit1") {
+      setFetchedContent(null);
+      return;
+    }
+    let cancelled = false;
+    setContentLoading(true);
+    fetchBiologyContent(activeUnit)
+      .then((data) => {
+        if (!cancelled) setFetchedContent(data);
+      })
+      .catch(() => {
+        if (!cancelled) setFetchedContent(EMPTY_CONTENT);
+      })
+      .finally(() => {
+        if (!cancelled) setContentLoading(false);
+      });
+    return () => { cancelled = true; };
+  }, [activeUnit]);
+
+  const handleUnitChange = (unitId) => {
+    try { sessionStorage.setItem(BIOLOGY_UNIT_KEY, unitId); } catch (_) {}
+    setActiveUnit(unitId);
+    window.location.href = "/biology/checklist";
+  };
 
   return (
-    <ContentCtx.Provider value={STATIC_CONTENT}>
+    <ContentCtx.Provider value={{ ...content, activeUnit }}>
       <Box mih="100vh" style={{ fontFamily: "'Inter', sans-serif", color: "var(--text-primary)", background: "var(--bg-base)" }}>
 
         <Sidebar activeSubject="biology" sidebarOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
 
         {/* Sticky header */}
-        <Box style={{ position: "sticky", top: 0, zIndex: 100, background: "var(--header-bg)", backdropFilter: "blur(12px)", WebkitBackdropFilter: "blur(12px)", borderBottom: "1px solid rgba(128,128,128,0.1)" }}>
+        <Box style={{ position: "sticky", top: 0, zIndex: 100, background: "var(--header-bg)", backdropFilter: "blur(12px)", WebkitBackdropFilter: "blur(12px)", borderBottom: "1px solid var(--header-border)" }}>
           <Container size="lg" py="sm">
             <Group justify="center" mb={4} style={{ position: "relative" }}>
               <Button isIconOnly variant="outline" onPress={() => setSidebarOpen(o => !o)}
-                className="rounded-md border-[#252533] text-[#8B8B9E] bg-transparent min-w-[auto] h-8 px-2.5"
-                style={{ position: "absolute", left: 0, top: "50%", transform: "translateY(-50%)" }}>
+                className="rounded-md bg-transparent min-w-[auto] h-8 px-2.5"
+                style={{ position: "absolute", left: 0, top: "50%", transform: "translateY(-50%)", borderColor: 'var(--border-subtle)', color: 'var(--text-secondary)' }}>
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
                   <line x1="3" y1="6" x2="21" y2="6" /><line x1="3" y1="12" x2="21" y2="12" /><line x1="3" y1="18" x2="21" y2="18" />
                 </svg>
@@ -704,6 +812,12 @@ export default function BiologyPage({ initialTab = "checklist" }) {
               C4.2 · C1.3 · C1.2 · {STATIC_CONTENT.mcqQuestions.length} MCQs · {STATIC_CONTENT.writtenQuestions.length} Written Questions
             </Text>
 
+            <UnitSelector
+              units={UNIT_CONFIG.biology}
+              activeUnitId={activeUnit}
+              onUnitChange={handleUnitChange}
+            />
+
             <Group gap={4} grow>
               {[
                 { value: "checklist", label: "Checklist", href: "/biology/checklist" },
@@ -713,7 +827,7 @@ export default function BiologyPage({ initialTab = "checklist" }) {
               ].map(t => (
                 <a key={t.value} href={t.href} style={{ flex: 1, textDecoration: "none" }}>
                   <Button fullWidth className="rounded-none font-semibold"
-                    style={{ fontSize: 13, padding: "10px 4px 12px", backgroundColor: "transparent", color: tab === t.value ? "#F0EEE8" : "#55556A", borderBottom: tab === t.value ? "3px solid #34D399" : "3px solid transparent", borderTop: "none", borderLeft: "none", borderRight: "none", borderRadius: 0, transition: "all 0.2s", fontFamily: "'Inter', sans-serif" }}>
+                    style={{ fontSize: 13, padding: "10px 4px 12px", backgroundColor: "transparent", color: tab === t.value ? "var(--text-primary)" : "var(--text-muted)", borderBottom: tab === t.value ? "3px solid #34D399" : "3px solid transparent", borderTop: "none", borderLeft: "none", borderRight: "none", borderRadius: 0, transition: "all 0.2s", fontFamily: "'Inter', sans-serif" }}>
                     {t.label}
                   </Button>
                 </a>

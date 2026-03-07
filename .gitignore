@@ -27,3 +27,5 @@ key.env
 
 # Environment variables
 key.env
+.env
+.env.local

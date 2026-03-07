@@ -1,7 +1,6 @@
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import { MantineProvider } from '@mantine/core'
-import { ClerkProvider } from '@clerk/react'
 import '@mantine/core/styles.css'
 import './index.css'
 import App from './App.jsx'
@@ -13,6 +12,8 @@ import AdminPage from './admin/AdminPage.jsx'
 import LandingPage from './LandingPage.jsx'
 import { AuthProvider, useAuth } from './AuthContext.jsx'
 import { ThemeProvider } from './ThemeContext.jsx'
+import ClerkThemeWrapper from './ClerkThemeWrapper.jsx'
+import ThemeSwitcher from './ThemeSwitcher.jsx'
 import theme from './theme.js'
 
 const PUBLISHABLE_KEY = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY || 'pk_live_Y2xlcmsuamFzcGVybGF1bHZsN3N0dWRlbnQuY29tJA'
@@ -63,22 +64,12 @@ function AuthGate({ children }) {
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-    <ClerkProvider
-      publishableKey={PUBLISHABLE_KEY}
-      afterSignOutUrl="/"
-      appearance={{
-        variables: {
-          colorPrimary: "#7C6FFF",
-          colorBackground: "#12121A",
-          colorInputBackground: "#1A1A24",
-          colorText: "#F0EEE8",
-          colorTextSecondary: "#8B8B9E",
-          borderRadius: "0.5rem",
-          fontFamily: "'Inter', sans-serif",
-        },
-      }}
-    >
-      <ThemeProvider>
+    <ThemeProvider>
+      {/* Appearance switcher outside Clerk tree so it always shows even when Clerk fails (e.g. wrong domain) */}
+      <div style={{ position: 'fixed', top: 12, right: 12, zIndex: 10000 }}>
+        <ThemeSwitcher />
+      </div>
+      <ClerkThemeWrapper publishableKey={PUBLISHABLE_KEY} afterSignOutUrl="/">
         <MantineProvider theme={theme} defaultColorScheme="dark">
           <AuthProvider>
             <AuthGate>
@@ -86,7 +77,7 @@ createRoot(document.getElementById('root')).render(
             </AuthGate>
           </AuthProvider>
         </MantineProvider>
-      </ThemeProvider>
-    </ClerkProvider>
+      </ClerkThemeWrapper>
+    </ThemeProvider>
   </StrictMode>,
 )
