@@ -1,10 +1,11 @@
-import { Modal, Button, Spinner } from "@heroui/react";
+import { Modal, Button } from "@heroui/react";
 
 export default function ConfirmDeleteModal({ opened, onClose, onConfirm, title, message, loading }) {
+  if (!opened) return null;
+
   return (
     <Modal.Backdrop
       variant="opaque"
-      isKeyboardDismissDisabled={false}
       isOpen={opened}
       onOpenChange={(open) => { if (!open) onClose(); }}
     >
@@ -22,13 +23,25 @@ export default function ConfirmDeleteModal({ opened, onClose, onConfirm, title, 
             </p>
           </Modal.Body>
           <Modal.Footer>
-            <Button variant="ghost" className="rounded-full text-[var(--text-secondary)]" onPress={onClose} isDisabled={loading}>Cancel</Button>
-            <Button variant="danger" className="rounded-full" onPress={onConfirm} isPending={loading}>
-              {({isPending}) => <>
-                {isPending && <Spinner color="current" size="sm" />}
-                {isPending ? "Deleting..." : "Delete"}
-              </>}
+            <Button variant="ghost" className="rounded-full text-[var(--text-secondary)]" onPress={onClose} isDisabled={loading}>
+              Cancel
             </Button>
+            <button
+              type="button"
+              onClick={onConfirm}
+              disabled={loading}
+              className="rounded-full px-4 py-2 text-sm font-semibold"
+              style={{
+                fontFamily: "'JSans', sans-serif",
+                backgroundColor: "var(--color-danger)",
+                color: "#fff",
+                opacity: loading ? 0.6 : 1,
+                cursor: loading ? "not-allowed" : "pointer",
+                border: "none",
+              }}
+            >
+              {loading ? "Deleting..." : "Delete"}
+            </button>
           </Modal.Footer>
         </Modal.Dialog>
       </Modal.Container>
