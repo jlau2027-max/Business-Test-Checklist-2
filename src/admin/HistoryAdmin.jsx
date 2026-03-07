@@ -450,7 +450,7 @@ export default function HistoryAdmin() {
               {/* Actions */}
               <div className="flex items-center justify-end gap-2 mt-2">
                 <Button variant="ghost" className="rounded-full text-[var(--text-secondary)]" onPress={closeModal} isDisabled={saving}>Cancel</Button>
-                <Button className="rounded-full bg-[var(--accent)] text-white border-none" onPress={handleSave} isPending={saving}>{({isPending}) => <>{isPending && <Spinner color="current" size="sm" />}{isPending ? "Saving..." : (editingQuestion ? "Save Changes" : "Create Question")}</>}</Button>
+                <button type="button" onClick={handleSave} disabled={saving} className="rounded-full px-4 py-2 text-sm font-semibold" style={{ fontFamily: "'JSans', sans-serif", backgroundColor: "var(--accent)", color: "#fff", border: "none", opacity: saving ? 0.6 : 1, cursor: saving ? "not-allowed" : "pointer" }}>{saving ? "Saving..." : (editingQuestion ? "Save Changes" : "Create Question")}</button>
               </div>
             </Modal.Footer>
           </Modal.Dialog>

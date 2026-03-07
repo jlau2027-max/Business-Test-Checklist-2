@@ -706,22 +706,15 @@ export default function WrittenAdmin() {
                 >
                   Cancel
                 </Button>
-                <Button
-                  className="rounded-full border-none font-semibold bg-gradient-to-br from-[var(--accent)] to-[var(--accent-secondary)] text-white shadow-[0_4px_16px_var(--accent-glow)]"
-                  onPress={handleSave}
-                  isPending={saving}
+                <button
+                  type="button"
+                  onClick={handleSave}
+                  disabled={saving}
+                  className="rounded-full px-4 py-2 text-sm font-semibold"
+                  style={{ fontFamily: "'JSans', sans-serif", background: "linear-gradient(to bottom right, var(--accent), var(--accent-secondary))", color: "#fff", border: "none", boxShadow: "0 4px 16px var(--accent-glow)", opacity: saving ? 0.6 : 1, cursor: saving ? "not-allowed" : "pointer" }}
                 >
-                  {({ isPending }) => (
-                    <>
-                      {isPending && <Spinner color="current" size="sm" />}
-                      {isPending
-                        ? "Saving..."
-                        : editing
-                          ? "Save Changes"
-                          : "Create Question"}
-                    </>
-                  )}
-                </Button>
+                  {saving ? "Saving..." : (editing ? "Save Changes" : "Create Question")}
+                </button>
               </div>
             </Modal.Footer>
           </Modal.Dialog>

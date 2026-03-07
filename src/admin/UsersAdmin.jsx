@@ -580,7 +580,7 @@ export default function UsersAdmin() {
             </Modal.Body>
             <Modal.Footer>
               <Button variant="outline" className="rounded-full border-[var(--border)] text-[var(--text-secondary)] bg-transparent" onPress={() => setEditModalOpened(false)} style={{ fontFamily: "'JSans', sans-serif", fontSize: 12 }}>Cancel</Button>
-              <Button className="rounded-full bg-[var(--accent)] text-[var(--text-primary)] border-none" onPress={handleEditSubmit} style={{ fontFamily: "'JSans', sans-serif", fontSize: 12 }}>Save Changes</Button>
+              <button type="button" onClick={handleEditSubmit} className="rounded-full px-4 py-2 text-xs font-semibold" style={{ fontFamily: "'JSans', sans-serif", backgroundColor: "var(--accent)", color: "var(--text-primary)", border: "none", cursor: "pointer" }}>Save Changes</button>
             </Modal.Footer>
           </Modal.Dialog>
         </Modal.Container>
@@ -627,17 +627,7 @@ export default function UsersAdmin() {
             </Modal.Body>
             <Modal.Footer>
               <Button variant="outline" className="rounded-full border-[var(--border)] text-[var(--text-secondary)] bg-transparent" onPress={() => setRoleModalOpened(false)} style={{ fontFamily: "'JSans', sans-serif", fontSize: 12 }}>Cancel</Button>
-              <Button className="rounded-full border-none" onPress={handleRoleSubmit} isDisabled={!selectedRole}
-                style={{
-                  backgroundColor: selectedRole ? "var(--accent-tertiary)" : "var(--border)",
-                  color: selectedRole ? "var(--text-primary)" : "var(--text-muted)",
-                  border: "none",
-                  fontFamily: "'JSans', sans-serif",
-                  fontSize: 12,
-                }}
-              >
-                Save Role
-              </Button>
+              <button type="button" onClick={handleRoleSubmit} disabled={!selectedRole} className="rounded-full px-4 py-2 text-xs font-semibold" style={{ fontFamily: "'JSans', sans-serif", backgroundColor: selectedRole ? "var(--accent-tertiary)" : "var(--border)", color: selectedRole ? "var(--text-primary)" : "var(--text-muted)", border: "none", cursor: selectedRole ? "pointer" : "not-allowed" }}>Save Role</button>
             </Modal.Footer>
           </Modal.Dialog>
         </Modal.Container>

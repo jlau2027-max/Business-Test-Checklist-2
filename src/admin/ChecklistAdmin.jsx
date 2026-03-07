@@ -513,7 +513,7 @@ export default function ChecklistAdmin() {
               {/* Actions */}
               <div className="flex items-center justify-end gap-2 mt-2">
                 <Button variant="ghost" className="rounded-full text-[var(--text-secondary)]" onPress={closeSectionModal} isDisabled={savingSection}>Cancel</Button>
-                <Button className="rounded-full bg-[var(--accent)] text-white border-none" onPress={handleSaveSection} isPending={savingSection}>{({isPending}) => <>{isPending && <Spinner color="current" size="sm" />}{isPending ? "Saving..." : (editingSection ? "Save Changes" : "Create Section")}</>}</Button>
+                <button type="button" onClick={handleSaveSection} disabled={savingSection} className="rounded-full px-4 py-2 text-sm font-semibold" style={{ fontFamily: "'JSans', sans-serif", backgroundColor: "var(--accent)", color: "#fff", border: "none", opacity: savingSection ? 0.6 : 1, cursor: savingSection ? "not-allowed" : "pointer" }}>{savingSection ? "Saving..." : (editingSection ? "Save Changes" : "Create Section")}</button>
               </div>
             </Modal.Footer>
           </Modal.Dialog>
@@ -554,7 +554,7 @@ export default function ChecklistAdmin() {
               {/* Actions */}
               <div className="flex items-center justify-end gap-2 mt-2">
                 <Button variant="ghost" className="rounded-full text-[var(--text-secondary)]" onPress={closeItemModal} isDisabled={savingItem}>Cancel</Button>
-                <Button className="rounded-full bg-[var(--accent)] text-white border-none" onPress={handleSaveItem} isPending={savingItem}>{({isPending}) => <>{isPending && <Spinner color="current" size="sm" />}{isPending ? "Saving..." : (editingItem ? "Save Changes" : "Create Item")}</>}</Button>
+                <button type="button" onClick={handleSaveItem} disabled={savingItem} className="rounded-full px-4 py-2 text-sm font-semibold" style={{ fontFamily: "'JSans', sans-serif", backgroundColor: "var(--accent)", color: "#fff", border: "none", opacity: savingItem ? 0.6 : 1, cursor: savingItem ? "not-allowed" : "pointer" }}>{savingItem ? "Saving..." : (editingItem ? "Save Changes" : "Create Item")}</button>
               </div>
             </Modal.Footer>
           </Modal.Dialog>

@@ -153,14 +153,7 @@ function TopicModal({ opened, onClose, topic, onSave }) {
                   <Button variant="ghost" className="rounded-full text-[var(--text-secondary)]" onPress={onClose} isDisabled={saving}>
                     Cancel
                   </Button>
-                  <Button type="submit" className="rounded-full bg-[var(--accent)] text-white border-none" isPending={saving}>
-                    {({isPending}) => (
-                      <>
-                        {isPending && <Spinner color="current" size="sm" />}
-                        {isPending ? "Saving..." : (isEdit ? "Save Changes" : "Create Topic")}
-                      </>
-                    )}
-                  </Button>
+                  <button type="submit" disabled={saving} className="rounded-full px-4 py-2 text-sm font-semibold" style={{ fontFamily: "'JSans', sans-serif", backgroundColor: "var(--accent)", color: "#fff", border: "none", opacity: saving ? 0.6 : 1, cursor: saving ? "not-allowed" : "pointer" }}>{saving ? "Saving..." : (isEdit ? "Save Changes" : "Create Topic")}</button>
                 </div>
               </div>
             </form>
@@ -265,14 +258,7 @@ function CardModal({ opened, onClose, card, topicId, onSave }) {
                   <Button variant="ghost" className="rounded-full text-[var(--text-secondary)]" onPress={onClose} isDisabled={saving}>
                     Cancel
                   </Button>
-                  <Button type="submit" className="rounded-full bg-[var(--accent)] text-white border-none" isPending={saving}>
-                    {({isPending}) => (
-                      <>
-                        {isPending && <Spinner color="current" size="sm" />}
-                        {isPending ? "Saving..." : (isEdit ? "Save Changes" : "Create Card")}
-                      </>
-                    )}
-                  </Button>
+                  <button type="submit" disabled={saving} className="rounded-full px-4 py-2 text-sm font-semibold" style={{ fontFamily: "'JSans', sans-serif", backgroundColor: "var(--accent)", color: "#fff", border: "none", opacity: saving ? 0.6 : 1, cursor: saving ? "not-allowed" : "pointer" }}>{saving ? "Saving..." : (isEdit ? "Save Changes" : "Create Card")}</button>
                 </div>
               </div>
             </form>
