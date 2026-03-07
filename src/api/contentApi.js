@@ -32,14 +32,24 @@ async function adminFetch(path, method = "GET", body = undefined) {
 // Public endpoints (no auth required)
 // ---------------------------------------------------------------------------
 
-export async function fetchFlashcardTopics() {
-  const res = await fetch(`${WORKER_URL}/api/content/flashcard-topics`);
+function contentQueryString(subject, unit) {
+  const params = new URLSearchParams();
+  if (subject) params.set("subject", subject);
+  if (unit) params.set("unit", unit);
+  const qs = params.toString();
+  return qs ? `?${qs}` : "";
+}
+
+export async function fetchFlashcardTopics(subject = null, unit = null) {
+  const qs = contentQueryString(subject, unit);
+  const res = await fetch(`${WORKER_URL}/api/content/flashcard-topics${qs}`);
   if (!res.ok) throw new Error(`Failed to fetch flashcard topics: ${res.status}`);
   return res.json();
 }
 
-export async function fetchFlashcards(topicId) {
-  const res = await fetch(`${WORKER_URL}/api/content/flashcards/${topicId}`);
+export async function fetchFlashcards(topicId, subject = null, unit = null) {
+  const qs = contentQueryString(subject, unit);
+  const res = await fetch(`${WORKER_URL}/api/content/flashcards/${encodeURIComponent(topicId)}${qs}`);
   if (!res.ok) throw new Error(`Failed to fetch flashcards: ${res.status}`);
   return res.json();
 }
@@ -48,6 +58,8 @@ export async function fetchMcqQuestions(filters = {}) {
   const params = new URLSearchParams();
   if (filters.category) params.set("category", filters.category);
   if (filters.difficulty) params.set("difficulty", filters.difficulty);
+  if (filters.subject) params.set("subject", filters.subject);
+  if (filters.unit) params.set("unit", filters.unit);
   const qs = params.toString();
   const res = await fetch(`${WORKER_URL}/api/content/mcq${qs ? `?${qs}` : ""}`);
   if (!res.ok) throw new Error(`Failed to fetch MCQ questions: ${res.status}`);
@@ -59,6 +71,8 @@ export async function fetchWrittenQuestions(filters = {}) {
   if (filters.type) params.set("type", filters.type);
   if (filters.category) params.set("category", filters.category);
   if (filters.difficulty) params.set("difficulty", filters.difficulty);
+  if (filters.subject) params.set("subject", filters.subject);
+  if (filters.unit) params.set("unit", filters.unit);
   const qs = params.toString();
   const res = await fetch(`${WORKER_URL}/api/content/written${qs ? `?${qs}` : ""}`);
   if (!res.ok) throw new Error(`Failed to fetch written questions: ${res.status}`);
@@ -74,14 +88,16 @@ export async function fetchHistoryQuestions(paper) {
   return res.json();
 }
 
-export async function fetchChecklist() {
-  const res = await fetch(`${WORKER_URL}/api/content/checklist`);
+export async function fetchChecklist(subject = null, unit = null) {
+  const qs = contentQueryString(subject, unit);
+  const res = await fetch(`${WORKER_URL}/api/content/checklist${qs}`);
   if (!res.ok) throw new Error(`Failed to fetch checklist: ${res.status}`);
   return res.json();
 }
 
-export async function fetchCategoryColors() {
-  const res = await fetch(`${WORKER_URL}/api/content/colors`);
+export async function fetchCategoryColors(subject = null, unit = null) {
+  const qs = contentQueryString(subject, unit);
+  const res = await fetch(`${WORKER_URL}/api/content/colors${qs}`);
   if (!res.ok) throw new Error(`Failed to fetch category colors: ${res.status}`);
   return res.json();
 }

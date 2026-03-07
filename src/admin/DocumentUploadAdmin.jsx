@@ -79,6 +79,7 @@ export default function DocumentUploadAdmin() {
   const [file, setFile] = useState(null);
   const [subject, setSubject] = useState("business");
   const [subjectCustom, setSubjectCustom] = useState("");
+  const [unit, setUnit] = useState("unit1");
   const [types, setTypes] = useState(CONTENT_TYPES.map((t) => t.key));
   const [generating, setGenerating] = useState(false);
   const [saving, setSaving] = useState(false);
@@ -149,6 +150,7 @@ export default function DocumentUploadAdmin() {
       const formData = new FormData();
       formData.append("file", file);
       formData.append("subject", subjectValue);
+      formData.append("unit", unit.trim() || "unit1");
       formData.append("types", JSON.stringify(types));
 
       const res = await fetch("/api/generate-from-doc", {
@@ -190,6 +192,7 @@ export default function DocumentUploadAdmin() {
     setError(null);
     try {
       const subjectLabel = subjectValue.charAt(0).toUpperCase() + subjectValue.slice(1);
+      const unitId = unit.trim() || "unit1";
 
       if (generatedTypes.includes("mcq") && generated.mcq?.length) {
         for (const q of generated.mcq) {
@@ -206,6 +209,7 @@ export default function DocumentUploadAdmin() {
             option_d: (options[3] || "").replace(/^D\.?\s*/i, "").trim() || "—",
             correct_option: correctIndex,
             explanation: q.explanation || "",
+            unit: unitId,
           });
         }
       }
@@ -220,6 +224,7 @@ export default function DocumentUploadAdmin() {
             question_text: w.question || "",
             mark_scheme: w.markScheme || w.mark_scheme || "",
             label: null,
+            unit: unitId,
           });
         }
       }
@@ -231,6 +236,7 @@ export default function DocumentUploadAdmin() {
             title: c.topic || "Generated",
             color: "#7C6FFF",
             sort_order: 0,
+            unit: unitId,
           });
           const sectionId = sectionRes?.id;
           if (sectionId && items.length) {
@@ -246,19 +252,20 @@ export default function DocumentUploadAdmin() {
       }
 
       if (generatedTypes.includes("flashcard") && generated.flashcard?.length) {
-        const topicId = slugify(`generated-${subjectValue}`);
+        const topicId = slugify(`generated-${subjectValue}-${unitId}`);
         let tid = topicId;
         try {
           const topicRes = await createFlashcardTopic({
             id: topicId,
             label: `Generated: ${subjectLabel}`,
             color: "#7C6FFF",
+            unit: unitId,
           });
           if (topicRes?.id) tid = topicRes.id;
         } catch (_) {
           // Topic may already exist
         }
-        const topics = await fetchFlashcardTopics();
+        const topics = await fetchFlashcardTopics(subjectValue, unitId);
         const topic = topics.find((t) => t.id === tid) || topics.find((t) => t.id === topicId) || topics[0];
         const topicIdFinal = topic?.id;
         if (topicIdFinal) {
@@ -268,6 +275,7 @@ export default function DocumentUploadAdmin() {
               term: f.front || "",
               definition: f.back || "",
               formula: null,
+              unit: unitId,
             });
           }
         }
@@ -279,7 +287,7 @@ export default function DocumentUploadAdmin() {
     } finally {
       setSaving(false);
     }
-  }, [generated, generatedTypes, subjectValue]);
+  }, [generated, generatedTypes, subjectValue, unit]);
 
   return (
     <Container size="lg" py="xl">
@@ -376,6 +384,21 @@ export default function DocumentUploadAdmin() {
                   />
                 )}
               </Group>
+            </Box>
+
+            <Box>
+              <Text fz="sm" fw={500} c="#8B8B9E" mb={4}>
+                Unit ID
+              </Text>
+              <TextInput
+                placeholder="e.g. unit1, unit4"
+                value={unit}
+                onChange={(e) => setUnit(e.currentTarget.value)}
+                size="sm"
+                radius="md"
+                styles={inputStyles}
+                style={{ maxWidth: 200 }}
+              />
             </Box>
 
             <Box>

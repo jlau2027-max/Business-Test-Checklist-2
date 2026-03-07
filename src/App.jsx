@@ -12,6 +12,8 @@ import { useAuth } from "./AuthContext.jsx";
 import { useAttemptTracker } from "./useAttemptTracker.js";
 import { syncToCloud } from "./stateSync.js";
 import { fetchFlashcardTopics, fetchFlashcards, fetchMcqQuestions, fetchWrittenQuestions, fetchChecklist, fetchCategoryColors } from "./api/contentApi.js";
+import { UNIT_CONFIG } from "./unitConfig.js";
+import UnitSelector from "./UnitSelector.jsx";
 
 // ─── localStorage helpers ──────────────────────────────────────────────────
 function loadLS(key, fallback) {
@@ -260,26 +262,31 @@ const FALLBACK_CONTENT = {
 const ContentCtx = createContext(FALLBACK_CONTENT);
 function useContent() { return useContext(ContentCtx); }
 
-async function fetchAppContent() {
+async function fetchAppContent(unit = null) {
+  const subject = "business";
   const [checklistRaw, mcqRaw, writtenRaw, colorsRaw, topicsRaw] = await Promise.all([
-    fetchChecklist(), fetchMcqQuestions(), fetchWrittenQuestions(), fetchCategoryColors(), fetchFlashcardTopics(),
+    fetchChecklist(subject, unit),
+    fetchMcqQuestions({ subject, unit }),
+    fetchWrittenQuestions({ subject, unit }),
+    fetchCategoryColors(subject, unit),
+    fetchFlashcardTopics(subject, unit),
   ]);
 
   // Checklist: API items are {id,text} objects → flatten to strings
-  const checklistSections = checklistRaw.map(sec => ({
+  const checklistSections = (checklistRaw || []).map(sec => ({
     ...sec,
     items: sec.items ? sec.items.map(item => typeof item === "string" ? item : item.text) : [],
   }));
 
   // MCQ: remap field names
-  const mcqQuestions = mcqRaw.map(q => ({
+  const mcqQuestions = (mcqRaw || []).map(q => ({
     id: q.id, cat: q.category, difficulty: q.difficulty, q: q.question_text,
     options: [q.option_a, q.option_b, q.option_c, q.option_d],
     answer: q.correct_option, explanation: q.explanation,
   }));
 
   // Written: remap + split by question_type
-  const allWritten = writtenRaw.map(q => ({
+  const allWritten = (writtenRaw || []).map(q => ({
     id: q.id, cat: q.category, difficulty: q.difficulty, marks: q.marks,
     q: q.question_text, modelAnswer: q.mark_scheme, _type: q.question_type,
   }));
@@ -288,14 +295,14 @@ async function fetchAppContent() {
 
   // Colors: array → object map
   const catColors = Array.isArray(colorsRaw)
-    ? Object.fromEntries(colorsRaw.map(c => [c.category, c.color]))
+    ? Object.fromEntries((colorsRaw || []).map(c => [c.category, c.color]))
     : colorsRaw;
 
   // Flashcards: fetch topics then cards per topic
-  const flashcardCategories = await Promise.all(topicsRaw.map(async t => {
+  const flashcardCategories = await Promise.all((topicsRaw || []).map(async t => {
     try {
-      const cards = await fetchFlashcards(t.id);
-      return { id: t.id, label: t.label, color: t.color, cards: cards.map(c => ({ term: c.term, def: c.definition, formula: c.formula })) };
+      const cards = await fetchFlashcards(t.id, subject, unit);
+      return { id: t.id, label: t.label, color: t.color, cards: (cards || []).map(c => ({ term: c.term, def: c.definition, formula: c.formula })) };
     } catch { return { id: t.id, label: t.label, color: t.color, cards: [] }; }
   }));
 
@@ -309,18 +316,19 @@ async function fetchAppContent() {
 // ─────────────────────────────────────────────────────────────────────────────
 
 function ChecklistView() {
-  const { checklistSections } = useContent();
-  const [checked, setChecked] = useState(() => loadLS("checklist_checked", {}));
+  const { checklistSections, activeUnit } = useContent();
+  const lsPrefix = `business_${activeUnit || "unit1"}_checklist`;
+  const [checked, setChecked] = useState(() => loadLS(`${lsPrefix}_checked`, {}));
   const [openSections, setOpenSections] = useState(() => {
-    const collapsed = loadLS("checklist_collapsed", {});
+    const collapsed = loadLS(`${lsPrefix}_collapsed`, {});
     return checklistSections.filter(s => !collapsed[s.id]).map(s => s.id);
   });
-  const toggle = id => setChecked(p => { const next = { ...p, [id]: !p[id] }; saveLS("checklist_checked", next); return next; });
+  const toggle = id => setChecked(p => { const next = { ...p, [id]: !p[id] }; saveLS(`${lsPrefix}_checked`, next); return next; });
   const handleAccordion = (value) => {
     setOpenSections(value);
     const collapsed = {};
     checklistSections.forEach(s => { if (!value.includes(s.id)) collapsed[s.id] = true; });
-    saveLS("checklist_collapsed", collapsed);
+    saveLS(`${lsPrefix}_collapsed`, collapsed);
   };
   const totalItems = checklistSections.reduce((s,sec)=>s+sec.items.length,0);
   const checkedCount = Object.values(checked).filter(Boolean).length;
@@ -424,7 +432,7 @@ function ChecklistView() {
 
       <Text ta="center" mt="lg" c="var(--text-muted)" fz="xs">
         Click any item to mark it as revised ·{" "}
-        <Text component="span" c="var(--accent)" style={{cursor:"pointer"}} onClick={()=>{ setChecked({}); saveLS("checklist_checked", {}); }}>Reset all</Text>
+        <Text component="span" c="var(--accent)" style={{cursor:"pointer"}} onClick={()=>{ setChecked({}); saveLS(`${lsPrefix}_checked`, {}); }}>Reset all</Text>
       </Text>
     </div>
   );
@@ -477,8 +485,9 @@ function FlashCard({card, catColor}) {
 }
 
 function FlashcardsView() {
-  const { flashcardCategories } = useContent();
-  const [activeCat,setActiveCat]=useState(()=>loadLS("fc_cat", flashcardCategories[0]?.id));
+  const { flashcardCategories, activeUnit } = useContent();
+  const fcLsKey = `business_${activeUnit || "unit1"}_fc_cat`;
+  const [activeCat,setActiveCat]=useState(()=>loadLS(fcLsKey, flashcardCategories[0]?.id));
   const [cardIdx,setCardIdx]=useState(0);
   const currentCat=flashcardCategories.find(c=>c.id===activeCat) || flashcardCategories[0];
   if (!currentCat || !currentCat.cards || currentCat.cards.length === 0) return <Text ta="center" c="var(--text-muted)" py="xl">Loading flashcards…</Text>;
@@ -491,7 +500,7 @@ function FlashcardsView() {
           <Button
             key={cat.id}
             size="sm"
-            onPress={()=>{ setActiveCat(cat.id); saveLS("fc_cat", cat.id); setCardIdx(0); }}
+            onPress={()=>{ setActiveCat(cat.id); saveLS(fcLsKey, cat.id); setCardIdx(0); }}
             className="rounded-full text-xs"
             style={{
               fontFamily: "'JetBrains Mono', monospace",
@@ -693,16 +702,17 @@ function PracticeView() {
 // ─────────────────────────────────────────────────────────────────────────────
 
 function WrittenPracticeItem({q, displayNum}) {
-  const { catColors } = useContent();
-  const [answer, setAnswer] = useState(() => loadLS(`written_ans_${q.id}`, ""));
+  const { catColors, activeUnit } = useContent();
+  const wrLsPrefix = `business_${activeUnit || "unit1"}_written`;
+  const [answer, setAnswer] = useState(() => loadLS(`${wrLsPrefix}_ans_${q.id}`, ""));
   const [revealed, setRevealed] = useState(false);
   const [grading, setGrading] = useState(false);
-  const [gradeResult, setGradeResult] = useState(() => loadLS(`written_grade_${q.id}`, null));
+  const [gradeResult, setGradeResult] = useState(() => loadLS(`${wrLsPrefix}_grade_${q.id}`, null));
   const color = catColors[q.cat] || "#7C6FFF";
   const { recordAttempt } = useAttemptTracker(q.id, "written", q.cat, "business", q.difficulty);
 
-  useEffect(() => { saveLS(`written_ans_${q.id}`, answer); }, [answer, q.id]);
-  useEffect(() => { saveLS(`written_grade_${q.id}`, gradeResult); }, [gradeResult, q.id]);
+  useEffect(() => { saveLS(`${wrLsPrefix}_ans_${q.id}`, answer); }, [answer, q.id, wrLsPrefix]);
+  useEffect(() => { saveLS(`${wrLsPrefix}_grade_${q.id}`, gradeResult); }, [gradeResult, q.id, wrLsPrefix]);
 
   const handleSolve = async () => {
     if (!answer.trim()) return;
@@ -798,7 +808,7 @@ function WrittenPracticeItem({q, displayNum}) {
               variant="ghost"
               className="rounded-md"
               style={{ color: 'var(--text-secondary)', fontFamily: "'JetBrains Mono', monospace" }}
-              onPress={()=>{ setAnswer(""); setGradeResult(null); saveLS(`written_ans_${q.id}`, ""); saveLS(`written_grade_${q.id}`, null); }}
+              onPress={()=>{ setAnswer(""); setGradeResult(null); saveLS(`${wrLsPrefix}_ans_${q.id}`, ""); saveLS(`${wrLsPrefix}_grade_${q.id}`, null); }}
             >
               Clear
             </Button>
@@ -971,6 +981,11 @@ function WrittenPracticeView() {
   );
 }
 
+const BUSINESS_UNIT_KEY = "business_active_unit";
+function getStoredBusinessUnit() {
+  try { return sessionStorage.getItem(BUSINESS_UNIT_KEY) || "unit1"; } catch { return "unit1"; }
+}
+
 // ─────────────────────────────────────────────────────────────────────────────
 // ROOT APP
 // ─────────────────────────────────────────────────────────────────────────────
@@ -982,19 +997,27 @@ export default function App({ initialTab = "checklist" }) {
     window.location.href = `/business/${urlMap[t] || t}`;
   };
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [activeUnit, setActiveUnit] = useState(getStoredBusinessUnit);
 
   // Content state — starts with hardcoded fallback, updates from API
   const [content, setContent] = useState(FALLBACK_CONTENT);
   useEffect(() => {
     let cancelled = false;
-    fetchAppContent()
+    fetchAppContent(activeUnit === "unit1" ? null : activeUnit)
       .then(data => { if (!cancelled) setContent(data); })
       .catch(err => console.warn("Content API unavailable, using fallback data:", err.message));
     return () => { cancelled = true; };
-  }, []);
+  }, [activeUnit]);
+
+  const currentUnit = UNIT_CONFIG.business.find((u) => u.id === activeUnit) || UNIT_CONFIG.business[0];
+  const handleUnitChange = (unitId) => {
+    try { sessionStorage.setItem(BUSINESS_UNIT_KEY, unitId); } catch (_) {}
+    setActiveUnit(unitId);
+    window.location.href = "/business/checklist";
+  };
 
   return (
-    <ContentCtx.Provider value={content}>
+    <ContentCtx.Provider value={{ ...content, activeUnit }}>
     <Box mih="100vh" style={{fontFamily:"'Inter', sans-serif",color:"var(--text-primary)",background:"var(--bg-base)"}}>
 
       <Sidebar activeSubject="business" sidebarOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
@@ -1053,11 +1076,18 @@ export default function App({ initialTab = "checklist" }) {
             c="var(--text-primary)"
             style={{ letterSpacing: -0.5 }}
           >
-            Finance Unit — Revision Hub
+            {currentUnit ? currentUnit.title : "Finance Unit"} — Revision Hub
           </Text>
-          <Text ta="center" fz="xs" c="var(--text-muted)" mb="sm">
-            Units 3.1–3.9 · 5.5 Breakeven · BMT Tools · {content.mcqQuestions.length} MCQs · {content.writtenQuestions.length} Written · {content.written10MarkQuestions.length} Extended
+          <Text ta="center" fz="xs" c="var(--text-muted)" mb="xs">
+            {currentUnit?.topics ?? "Units 3.1–3.9 · 5.5 Breakeven · BMT Tools"} · {content.mcqQuestions.length} MCQs · {content.writtenQuestions.length} Written · {content.written10MarkQuestions.length} Extended
           </Text>
+
+          <UnitSelector
+            units={UNIT_CONFIG.business}
+            activeUnitId={activeUnit}
+            onUnitChange={handleUnitChange}
+            accentColor="var(--accent)"
+          />
 
           <Group gap={4} grow>
             {[

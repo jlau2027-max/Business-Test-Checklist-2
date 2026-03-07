@@ -11,6 +11,9 @@ import Sidebar from "./Sidebar.jsx";
 import { useAuth } from "./AuthContext.jsx";
 import { useAttemptTracker } from "./useAttemptTracker.js";
 import { syncToCloud } from "./stateSync.js";
+import { UNIT_CONFIG } from "./unitConfig.js";
+import UnitSelector from "./UnitSelector.jsx";
+import { fetchChecklist, fetchFlashcardTopics, fetchFlashcards, fetchMcqQuestions, fetchWrittenQuestions, fetchCategoryColors } from "./api/contentApi.js";
 
 function loadLS(key, fallback) {
   try { const v = localStorage.getItem(key); return v !== null ? JSON.parse(v) : fallback; }
@@ -404,25 +407,87 @@ const STATIC_CONTENT = {
   },
 };
 
-const ContentCtx = createContext(STATIC_CONTENT);
+const EMPTY_CONTENT = {
+  checklistSections: [],
+  flashcardCategories: [],
+  mcqQuestions: [],
+  writtenQuestions: [],
+  catColors: {},
+};
+
+async function fetchBiologyContent(unit) {
+  const [checklistRaw, mcqRaw, writtenRaw, colorsRaw, topicsRaw] = await Promise.all([
+    fetchChecklist("biology", unit),
+    fetchMcqQuestions({ subject: "biology", unit }),
+    fetchWrittenQuestions({ subject: "biology", unit }),
+    fetchCategoryColors("biology", unit),
+    fetchFlashcardTopics("biology", unit),
+  ]);
+  const checklistSections = (checklistRaw || []).map((sec) => ({
+    ...sec,
+    items: (sec.items || []).map((item) => (typeof item === "string" ? item : item?.text ?? "")),
+  }));
+  const mcqQuestions = (mcqRaw || []).map((q) => ({
+    id: q.id,
+    cat: q.category,
+    difficulty: q.difficulty,
+    q: q.question_text,
+    options: [q.option_a, q.option_b, q.option_c, q.option_d],
+    answer: q.correct_option,
+    explanation: q.explanation,
+  }));
+  const writtenQuestions = (writtenRaw || [])
+    .filter((q) => q.question_type === "short_answer")
+    .map((q) => ({
+      id: q.id,
+      cat: q.category,
+      difficulty: q.difficulty,
+      marks: q.marks,
+      q: q.question_text,
+      modelAnswer: q.mark_scheme,
+    }));
+  const catColors = Array.isArray(colorsRaw)
+    ? Object.fromEntries((colorsRaw || []).map((c) => [c.category, c.color]))
+    : colorsRaw || {};
+  const topics = topicsRaw || [];
+  const flashcardCategories = await Promise.all(
+    topics.map(async (t) => {
+      try {
+        const cards = await fetchFlashcards(t.id, "biology", unit);
+        return {
+          id: t.id,
+          label: t.label,
+          color: t.color,
+          cards: (cards || []).map((c) => ({ term: c.term, def: c.definition, formula: c.formula })),
+        };
+      } catch {
+        return { id: t.id, label: t.label, color: t.color, cards: [] };
+      }
+    })
+  );
+  return { checklistSections, flashcardCategories, mcqQuestions, writtenQuestions, catColors };
+}
+
+const ContentCtx = createContext({ ...STATIC_CONTENT, activeUnit: "unit1" });
 const useContent = () => useContext(ContentCtx);
 
 // ─────────────────────────────────────────────────────────────────────────────
 // CHECKLIST VIEW
 // ─────────────────────────────────────────────────────────────────────────────
 function ChecklistView() {
-  const { checklistSections } = useContent();
-  const [checked, setChecked] = useState(() => loadLS("bio_checklist_checked", {}));
+  const { checklistSections, activeUnit } = useContent();
+  const lsPrefix = `biology_${activeUnit}_checklist`;
+  const [checked, setChecked] = useState(() => loadLS(`${lsPrefix}_checked`, {}));
   const [openSections, setOpenSections] = useState(() => {
-    const collapsed = loadLS("bio_checklist_collapsed", {});
+    const collapsed = loadLS(`${lsPrefix}_collapsed`, {});
     return checklistSections.filter(s => !collapsed[s.id]).map(s => s.id);
   });
-  const toggle = id => setChecked(p => { const next = { ...p, [id]: !p[id] }; saveLS("bio_checklist_checked", next); return next; });
+  const toggle = id => setChecked(p => { const next = { ...p, [id]: !p[id] }; saveLS(`${lsPrefix}_checked`, next); return next; });
   const handleAccordion = (value) => {
     setOpenSections(value);
     const collapsed = {};
     checklistSections.forEach(s => { if (!value.includes(s.id)) collapsed[s.id] = true; });
-    saveLS("bio_checklist_collapsed", collapsed);
+    saveLS(`${lsPrefix}_collapsed`, collapsed);
   };
   const totalItems = checklistSections.reduce((s, sec) => s + sec.items.length, 0);
   const checkedCount = Object.values(checked).filter(Boolean).length;
@@ -492,7 +557,7 @@ function ChecklistView() {
 
       <Text ta="center" mt="lg" c="var(--text-muted)" fz="xs">
         Click any item to mark it as revised ·{" "}
-        <Text component="span" c="#34D399" style={{ cursor: "pointer" }} onClick={() => { setChecked({}); saveLS("bio_checklist_checked", {}); }}>Reset all</Text>
+        <Text component="span" c="#34D399" style={{ cursor: "pointer" }} onClick={() => { setChecked({}); saveLS(`${lsPrefix}_checked`, {}); }}>Reset all</Text>
       </Text>
     </div>
   );
@@ -523,8 +588,9 @@ function FlashCard({ card, catColor }) {
 }
 
 function FlashcardsView() {
-  const { flashcardCategories } = useContent();
-  const [activeCat, setActiveCat] = useState(() => loadLS("bio_fc_cat", flashcardCategories[0]?.id));
+  const { flashcardCategories, activeUnit } = useContent();
+  const lsKey = `biology_${activeUnit}_fc_cat`;
+  const [activeCat, setActiveCat] = useState(() => loadLS(lsKey, flashcardCategories[0]?.id));
   const [cardIdx, setCardIdx] = useState(0);
   const currentCat = flashcardCategories.find(c => c.id === activeCat) || flashcardCategories[0];
   if (!currentCat || !currentCat.cards || currentCat.cards.length === 0) return <Text ta="center" c="#55556A" py="xl">Loading flashcards…</Text>;
@@ -534,7 +600,7 @@ function FlashcardsView() {
     <div style={{ maxWidth: 680, margin: "0 auto", padding: "0 0 40px" }}>
       <Group gap={8} mb="lg" style={{ flexWrap: "wrap" }}>
         {flashcardCategories.map(cat => (
-          <Button key={cat.id} size="sm" onPress={() => { setActiveCat(cat.id); saveLS("bio_fc_cat", cat.id); setCardIdx(0); }}
+          <Button key={cat.id} size="sm" onPress={() => { setActiveCat(cat.id); saveLS(lsKey, cat.id); setCardIdx(0); }}
             className="rounded-full text-xs"
             style={{ fontFamily: "'JetBrains Mono', monospace", backgroundColor: activeCat === cat.id ? cat.color : "var(--bg-elevated)", color: activeCat === cat.id ? "#fff" : "var(--text-secondary)", border: `1px solid ${activeCat === cat.id ? cat.color : "var(--border-subtle)"}` }}>
             {cat.label}
@@ -666,16 +732,17 @@ function PracticeView() {
 // WRITTEN PRACTICE COMPONENTS
 // ─────────────────────────────────────────────────────────────────────────────
 function WrittenPracticeItem({ q, displayNum }) {
-  const { catColors } = useContent();
-  const [answer, setAnswer] = useState(() => loadLS(`bio_written_ans_${q.id}`, ""));
+  const { catColors, activeUnit } = useContent();
+  const lsPrefix = `biology_${activeUnit}_written`;
+  const [answer, setAnswer] = useState(() => loadLS(`${lsPrefix}_ans_${q.id}`, ""));
   const [revealed, setRevealed] = useState(false);
   const [grading, setGrading] = useState(false);
-  const [gradeResult, setGradeResult] = useState(() => loadLS(`bio_written_grade_${q.id}`, null));
+  const [gradeResult, setGradeResult] = useState(() => loadLS(`${lsPrefix}_grade_${q.id}`, null));
   const color = catColors[q.cat] || "#34D399";
   const { recordAttempt } = useAttemptTracker(q.id, "written", q.cat, "biology", q.difficulty);
 
-  useEffect(() => { saveLS(`bio_written_ans_${q.id}`, answer); }, [answer, q.id]);
-  useEffect(() => { saveLS(`bio_written_grade_${q.id}`, gradeResult); }, [gradeResult, q.id]);
+  useEffect(() => { saveLS(`${lsPrefix}_ans_${q.id}`, answer); }, [answer, q.id, lsPrefix]);
+  useEffect(() => { saveLS(`${lsPrefix}_grade_${q.id}`, gradeResult); }, [gradeResult, q.id, lsPrefix]);
 
   const handleSolve = async () => {
     if (!answer.trim()) return;
@@ -732,7 +799,7 @@ function WrittenPracticeItem({ q, displayNum }) {
           </Button>
           {answer.trim() && !grading && (
             <Button size="sm" variant="ghost" className="rounded-md" style={{ fontFamily: "'JetBrains Mono', monospace", color: 'var(--text-secondary)' }}
-              onPress={() => { setAnswer(""); setGradeResult(null); saveLS(`bio_written_ans_${q.id}`, ""); saveLS(`bio_written_grade_${q.id}`, null); }}>
+              onPress={() => { setAnswer(""); setGradeResult(null); saveLS(`${lsPrefix}_ans_${q.id}`, ""); saveLS(`${lsPrefix}_grade_${q.id}`, null); }}>
               Clear
             </Button>
           )}
@@ -802,15 +869,55 @@ function WrittenPracticeView() {
   );
 }
 
+const BIOLOGY_UNIT_KEY = "biology_active_unit";
+function getStoredBiologyUnit() {
+  try { return sessionStorage.getItem(BIOLOGY_UNIT_KEY) || "unit1"; } catch { return "unit1"; }
+}
+
 // ─────────────────────────────────────────────────────────────────────────────
 // ROOT PAGE
 // ─────────────────────────────────────────────────────────────────────────────
 export default function BiologyPage({ initialTab = "checklist" }) {
   const [tab] = useState(initialTab);
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [activeUnit, setActiveUnit] = useState(getStoredBiologyUnit);
+  const [fetchedContent, setFetchedContent] = useState(null);
+  const [contentLoading, setContentLoading] = useState(false);
+
+  const currentUnit = UNIT_CONFIG.biology.find((u) => u.id === activeUnit) || UNIT_CONFIG.biology[0];
+  const content =
+    activeUnit === "unit1"
+      ? STATIC_CONTENT
+      : fetchedContent || EMPTY_CONTENT;
+
+  useEffect(() => {
+    if (activeUnit === "unit1") {
+      setFetchedContent(null);
+      return;
+    }
+    let cancelled = false;
+    setContentLoading(true);
+    fetchBiologyContent(activeUnit)
+      .then((data) => {
+        if (!cancelled) setFetchedContent(data);
+      })
+      .catch(() => {
+        if (!cancelled) setFetchedContent(EMPTY_CONTENT);
+      })
+      .finally(() => {
+        if (!cancelled) setContentLoading(false);
+      });
+    return () => { cancelled = true; };
+  }, [activeUnit]);
+
+  const handleUnitChange = (unitId) => {
+    try { sessionStorage.setItem(BIOLOGY_UNIT_KEY, unitId); } catch (_) {}
+    setActiveUnit(unitId);
+    window.location.href = "/biology/checklist";
+  };
 
   return (
-    <ContentCtx.Provider value={STATIC_CONTENT}>
+    <ContentCtx.Provider value={{ ...content, activeUnit }}>
       <Box mih="100vh" style={{ fontFamily: "'Inter', sans-serif", color: "var(--text-primary)", background: "var(--bg-base)" }}>
 
         <Sidebar activeSubject="biology" sidebarOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
@@ -833,11 +940,17 @@ export default function BiologyPage({ initialTab = "checklist" }) {
               <LoginButton />
             </Group>
             <Text ta="center" fw={800} fz={{ base: 22, sm: 30 }} c="var(--text-primary)" style={{ letterSpacing: -0.5 }}>
-              Unit 1: The Evolution of Life
+              {currentUnit ? `${currentUnit.label}: ${currentUnit.title}` : "Biology"}
             </Text>
-            <Text ta="center" fz="xs" c="var(--text-muted)" mb="sm">
-              A4.1 · D4.1 · A3.1 · A3.2 · {STATIC_CONTENT.mcqQuestions.length} MCQs · {STATIC_CONTENT.writtenQuestions.length} Written Questions
+            <Text ta="center" fz="xs" c="var(--text-muted)" mb="xs">
+              {currentUnit?.topics ?? ""} · {content.mcqQuestions.length} MCQs · {content.writtenQuestions.length} Written Questions
             </Text>
+
+            <UnitSelector
+              units={UNIT_CONFIG.biology}
+              activeUnitId={activeUnit}
+              onUnitChange={handleUnitChange}
+            />
 
             <Group gap={4} grow>
               {[
