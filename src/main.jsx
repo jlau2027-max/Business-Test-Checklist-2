@@ -13,6 +13,7 @@ import LandingPage from './LandingPage.jsx'
 import { AuthProvider, useAuth } from './AuthContext.jsx'
 import { ThemeProvider } from './ThemeContext.jsx'
 import ClerkThemeWrapper from './ClerkThemeWrapper.jsx'
+import ThemeSwitcher from './ThemeSwitcher.jsx'
 import theme from './theme.js'
 
 const PUBLISHABLE_KEY = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY || 'pk_live_Y2xlcmsuamFzcGVybGF1bHZsN3N0dWRlbnQuY29tJA'
@@ -64,6 +65,10 @@ function AuthGate({ children }) {
 createRoot(document.getElementById('root')).render(
   <StrictMode>
     <ThemeProvider>
+      {/* Appearance switcher outside Clerk tree so it always shows even when Clerk fails (e.g. wrong domain) */}
+      <div style={{ position: 'fixed', top: 12, right: 12, zIndex: 10000 }}>
+        <ThemeSwitcher />
+      </div>
       <ClerkThemeWrapper publishableKey={PUBLISHABLE_KEY} afterSignOutUrl="/">
         <MantineProvider theme={theme} defaultColorScheme="dark">
           <AuthProvider>

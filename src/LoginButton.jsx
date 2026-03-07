@@ -1,53 +1,37 @@
 import { Button } from "@heroui/react";
 import { Show, SignInButton, UserButton } from "@clerk/react";
 import { useAuth } from "./AuthContext.jsx";
-import ThemeSwitcher from "./ThemeSwitcher.jsx";
 
 export default function LoginButton() {
   const { isAdmin } = useAuth();
   return (
-    <>
+    <div
+      style={{
+        position: "absolute",
+        right: 0,
+        top: "50%",
+        transform: "translateY(-50%)",
+        display: "flex",
+        alignItems: "center",
+        gap: 8,
+      }}
+    >
       <Show when="signed-out">
-        <div
-          style={{
-            position: "absolute",
-            right: 0,
-            top: "50%",
-            transform: "translateY(-50%)",
-            display: "flex",
-            alignItems: "center",
-            gap: 8,
-          }}
-        >
-          <ThemeSwitcher />
-          <SignInButton mode="modal">
-            <Button
-              render={(props) => <button {...props} />}
-              size="sm"
-              variant="outline"
-              className="rounded-md text-[13px] font-semibold px-3 min-w-[auto] h-8 bg-transparent"
-              style={{ borderColor: 'var(--border-subtle)', color: 'var(--text-secondary)', fontFamily: "'Inter', sans-serif" }}
-            >
-              Sign In
-            </Button>
-          </SignInButton>
-        </div>
+        <SignInButton mode="modal">
+          <Button
+            render={(props) => <button {...props} />}
+            size="sm"
+            variant="outline"
+            className="rounded-md text-[13px] font-semibold px-3 min-w-[auto] h-8 bg-transparent"
+            style={{ borderColor: 'var(--border-subtle)', color: 'var(--text-secondary)', fontFamily: "'Inter', sans-serif" }}
+          >
+            Sign In
+          </Button>
+        </SignInButton>
       </Show>
 
       <Show when="signed-in">
-        <div
-          style={{
-            position: "absolute",
-            right: 0,
-            top: "50%",
-            transform: "translateY(-50%)",
-            display: "flex",
-            alignItems: "center",
-            gap: 8,
-          }}
-        >
-          <ThemeSwitcher />
-          <UserButton
+        <UserButton
             userProfileUrl="https://accounts.jasperlaulvl7student.com/user"
             userProfileMode="navigation"
             appearance={{
@@ -84,8 +68,7 @@ export default function LoginButton() {
               <UserButton.Action label="signOut" />
             </UserButton.MenuItems>
           </UserButton>
-        </div>
       </Show>
-    </>
+    </div>
   );
 }
