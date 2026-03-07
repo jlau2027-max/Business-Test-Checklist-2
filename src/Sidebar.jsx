@@ -5,6 +5,7 @@ import { useAuth } from "./AuthContext.jsx";
 const SUBJECT_COLORS = {
   business: "#7C6FFF",
   history: "#F87171",
+  biology: "#34D399",
   dashboard: "#A78BFA",
 };
 
@@ -14,6 +15,7 @@ export default function Sidebar({ activeSubject, sidebarOpen, onClose }) {
   const items = [
     { label: "Business", href: "/business/checklist", subject: "business" },
     { label: "History", href: "/history/specimen", subject: "history" },
+    { label: "Biology", href: "/biology/checklist", subject: "biology" },
     ...(user ? [{ label: "Dashboard", href: "/dashboard", subject: "dashboard" }] : []),
   ];
 

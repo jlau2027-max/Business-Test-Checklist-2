@@ -80,7 +80,7 @@ export default function LandingPage() {
         </Show>
 
         {/* Subject cards */}
-        <Group grow gap="md">
+        <Group grow gap="md" style={{ flexWrap: "wrap" }}>
           <Paper
             component="a"
             href="/business/checklist"
@@ -142,6 +142,38 @@ export default function LandingPage() {
             </Text>
             <Text fz="sm" c="#8B8B9E" lh={1.5}>
               Paper 2 & Paper 3 specimen questions with AI-powered grading
+            </Text>
+          </Paper>
+
+          <Paper
+            component="a"
+            href="/biology/checklist"
+            bg="#12121A"
+            radius="lg"
+            p="xl"
+            style={{
+              border: "1px solid #252533",
+              textDecoration: "none",
+              cursor: "pointer",
+              transition: "border-color 0.2s, box-shadow 0.2s",
+            }}
+            onMouseEnter={e => { e.currentTarget.style.borderColor = "#34D399"; e.currentTarget.style.boxShadow = "0 0 20px #34D39922"; }}
+            onMouseLeave={e => { e.currentTarget.style.borderColor = "#252533"; e.currentTarget.style.boxShadow = "none"; }}
+          >
+            <Badge
+              size="xs"
+              variant="light"
+              ff="'JetBrains Mono', monospace"
+              mb="sm"
+              style={{ backgroundColor: "#34D39918", color: "#34D399", border: "none" }}
+            >
+              HL / SL
+            </Badge>
+            <Text fz="lg" fw={700} c="#F0EEE8" mb={4}>
+              Biology
+            </Text>
+            <Text fz="sm" c="#8B8B9E" lh={1.5}>
+              Unit 1: Evolution of Life — checklist, flashcards, MCQs & written practice with AI grading
             </Text>
           </Paper>
         </Group>

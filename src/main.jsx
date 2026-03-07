@@ -7,6 +7,7 @@ import './index.css'
 import App from './App.jsx'
 import SpecimenPage from './SpecimenPage.jsx'
 import HistoryPage from './HistoryPage.jsx'
+import BiologyPage from './BiologyPage.jsx'
 import DashboardPage from './DashboardPage.jsx'
 import AdminPage from './admin/AdminPage.jsx'
 import LandingPage from './LandingPage.jsx'
@@ -36,6 +37,11 @@ if (path.startsWith('/business/')) {
     const tabMap = { checklist: 'checklist', flashcards: 'flashcards', 'multi-choice': 'practice', written: 'written' }
     pageProps = { initialTab: tabMap[sub] || 'checklist' }
   }
+} else if (path.startsWith('/biology/')) {
+  const sub = path.split('/')[2]
+  Page = BiologyPage
+  const tabMap = { checklist: 'checklist', flashcards: 'flashcards', 'multi-choice': 'practice', written: 'written' }
+  pageProps = { initialTab: tabMap[sub] || 'checklist' }
 } else if (path === '/history/specimen') {
   Page = HistoryPage
 } else if (path === '/dashboard') {
