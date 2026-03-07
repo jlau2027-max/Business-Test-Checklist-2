@@ -996,11 +996,11 @@ export default function App({ initialTab = "checklist" }) {
               </svg>
             </Button>
             <span className="text-xs px-2.5 py-1 rounded-full uppercase font-bold tracking-widest" style={{fontFamily: "'JSans', sans-serif", backgroundColor: "var(--accent-soft)", color: "var(--cat-investment)"}}>
-              IB HL Business Management
+              IB Business Management
             </span>
             <LoginButton />
           </div>
-          <h1 className="text-center font-extrabold text-[22px] sm:text-[30px] text-[var(--text-primary)] mb-3" style={{letterSpacing: -0.5}}>Finance Unit — Revision Hub</h1>
+          <h1 className="text-center font-extrabold text-[22px] sm:text-[30px] text-[var(--text-primary)] mb-3" style={{letterSpacing: -0.5}}>Finance Unit</h1>
 
           <Tabs variant="secondary" selectedKey={tab}>
             <Tabs.ListContainer>
