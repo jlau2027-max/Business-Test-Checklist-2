@@ -7,8 +7,10 @@ import WrittenAdmin from "./WrittenAdmin.jsx";
 import HistoryAdmin from "./HistoryAdmin.jsx";
 import ChecklistAdmin from "./ChecklistAdmin.jsx";
 import UsersAdmin from "./UsersAdmin.jsx";
+import DocumentUploadAdmin from "./DocumentUploadAdmin.jsx";
 
 const BUSINESS_TABS = [
+  { value: "upload-doc", label: "📄 Upload Document" },
   { value: "checklist", label: "Checklist" },
   { value: "flashcards", label: "Flashcards" },
   { value: "mcq", label: "MCQ" },
@@ -25,14 +27,14 @@ const USERS_TABS = [
 
 export default function AdminPage() {
   const [section, setSection] = useState("business");
-  const [activeTab, setActiveTab] = useState("checklist");
+  const [activeTab, setActiveTab] = useState("upload-doc");
 
   const tabs = section === "business" ? BUSINESS_TABS : section === "history" ? HISTORY_TABS : USERS_TABS;
 
   // Reset to first tab when switching sections
   const handleSectionChange = (val) => {
     setSection(val);
-    setActiveTab(val === "business" ? "checklist" : val === "history" ? "history" : "users");
+    setActiveTab(val === "business" ? "upload-doc" : val === "history" ? "history" : "users");
   };
 
   return (
@@ -132,6 +134,9 @@ export default function AdminPage() {
               ))}
             </Tabs.List>
 
+            <Tabs.Panel value="upload-doc">
+              <DocumentUploadAdmin />
+            </Tabs.Panel>
             <Tabs.Panel value="checklist">
               <ChecklistAdmin />
             </Tabs.Panel>
