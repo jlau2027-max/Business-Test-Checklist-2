@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
 import { Button } from "@heroui/react";
-import { Show, SignInButton, SignUpButton } from "@clerk/react";
-import LoginButton from "./LoginButton.jsx";
+import { Show, SignInButton } from "@clerk/react";
 import ElectricBorder from "./components/ElectricBorder.jsx";
 import Grainient from "./components/Grainient.jsx";
 import ASCIIText from "./components/ASCIIText.jsx";
@@ -50,15 +49,6 @@ export default function LandingPage() {
 
       {/* Content layer */}
       <div style={{ position: "relative", zIndex: 1 }}>
-        {/* Minimal header — just the login button */}
-        <div style={{ position: "sticky", top: 0, zIndex: 100 }}>
-          <div className="max-w-4xl mx-auto py-3 px-4">
-            <div className="flex items-center justify-end">
-              <LoginButton />
-            </div>
-          </div>
-        </div>
-
         {/* Hero */}
         <div className="max-w-2xl mx-auto px-4 flex flex-col items-center" style={{ paddingTop: 0, paddingBottom: 120 }}>
           {/* ASCII art title */}
@@ -117,49 +107,7 @@ export default function LandingPage() {
             </Show>
           </div>
 
-          {/* Auth prompt for signed-out users */}
-          <Show when="signed-out">
-            <div className="flex items-center justify-center gap-3" style={{ marginBottom: 64 }}>
-              <SignInButton mode="modal">
-                <Button
-                  render={(props) => <button {...props} />}
-                  size="md"
-                  className="rounded-full border-none text-[15px] font-semibold"
-                  style={{
-                    fontFamily: "'JSans', sans-serif",
-                    background: "rgba(255,255,255,0.15)",
-                    backdropFilter: "blur(12px)",
-                    WebkitBackdropFilter: "blur(12px)",
-                    color: "rgba(255,255,255,0.9)",
-                    border: "1px solid rgba(255,255,255,0.12)",
-                  }}
-                >
-                  Sign In
-                </Button>
-              </SignInButton>
-              <SignUpButton mode="modal">
-                <Button
-                  render={(props) => <button {...props} />}
-                  size="md"
-                  className="rounded-full border-none text-[15px] font-semibold"
-                  style={{
-                    fontFamily: "'JSans', sans-serif",
-                    background: "rgba(255,255,255,0.06)",
-                    backdropFilter: "blur(12px)",
-                    WebkitBackdropFilter: "blur(12px)",
-                    color: "rgba(255,255,255,0.6)",
-                    border: "1px solid rgba(255,255,255,0.08)",
-                  }}
-                >
-                  Sign Up
-                </Button>
-              </SignUpButton>
-            </div>
-          </Show>
-
-          <Show when="signed-in">
-            <div style={{ marginBottom: 64 }} />
-          </Show>
+          <div style={{ marginBottom: 64 }} />
 
           {/* Subject buttons */}
           <div className="flex flex-col sm:flex-row gap-8 w-full" style={{ maxWidth: 520 }}>
