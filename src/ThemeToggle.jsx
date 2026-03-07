@@ -3,7 +3,7 @@ import { Moon, Sun } from "lucide-react";
 import { flushSync } from "react-dom";
 
 export default function ThemeToggle({ className = "", duration = 400 }) {
-  const [isDark, setIsDark] = useState(true);
+  const [isDark, setIsDark] = useState(() => document.documentElement.classList.contains("dark"));
   const buttonRef = useRef(null);
 
   useEffect(() => {
