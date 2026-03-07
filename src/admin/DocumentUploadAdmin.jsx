@@ -237,6 +237,7 @@ export default function DocumentUploadAdmin() {
             color: "#7C6FFF",
             sort_order: 0,
             unit: unitId,
+            subject: subjectValue,
           });
           const sectionId = sectionRes?.id;
           if (sectionId && items.length) {
@@ -260,6 +261,7 @@ export default function DocumentUploadAdmin() {
             label: `Generated: ${subjectLabel}`,
             color: "#7C6FFF",
             unit: unitId,
+            subject: subjectValue,
           });
           if (topicRes?.id) tid = topicRes.id;
         } catch (_) {
@@ -276,6 +278,7 @@ export default function DocumentUploadAdmin() {
               definition: f.back || "",
               formula: null,
               unit: unitId,
+              subject: subjectValue,
             });
           }
         }
