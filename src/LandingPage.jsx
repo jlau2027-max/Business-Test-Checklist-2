@@ -73,25 +73,48 @@ export default function LandingPage() {
             />
           </div>
           <div className="flex justify-center" style={{ marginBottom: 28 }}>
-            <SignInButton mode="modal">
-              <Button
-                render={(props) => <button {...props} />}
-                size="md"
-                className="rounded-full border-none text-[15px] font-semibold"
-                style={{
-                  fontFamily: "'JSans', sans-serif",
-                  background: "rgba(255,255,255,0.15)",
-                  backdropFilter: "blur(12px)",
-                  WebkitBackdropFilter: "blur(12px)",
-                  color: "rgba(255,255,255,0.9)",
-                  border: "1px solid rgba(255,255,255,0.12)",
-                  paddingLeft: 28,
-                  paddingRight: 28,
-                }}
-              >
-                Sign In
-              </Button>
-            </SignInButton>
+            <Show when="signed-out">
+              <SignInButton mode="modal">
+                <Button
+                  render={(props) => <button {...props} />}
+                  size="md"
+                  className="rounded-full border-none text-[15px] font-semibold"
+                  style={{
+                    fontFamily: "'JSans', sans-serif",
+                    background: "rgba(255,255,255,0.15)",
+                    backdropFilter: "blur(12px)",
+                    WebkitBackdropFilter: "blur(12px)",
+                    color: "rgba(255,255,255,0.9)",
+                    border: "1px solid rgba(255,255,255,0.12)",
+                    paddingLeft: 28,
+                    paddingRight: 28,
+                  }}
+                >
+                  Sign In
+                </Button>
+              </SignInButton>
+            </Show>
+            <Show when="signed-in">
+              <a href="/business" style={{ textDecoration: "none" }}>
+                <Button
+                  render={(props) => <button {...props} />}
+                  size="md"
+                  className="rounded-full border-none text-[15px] font-semibold"
+                  style={{
+                    fontFamily: "'JSans', sans-serif",
+                    background: "rgba(255,255,255,0.15)",
+                    backdropFilter: "blur(12px)",
+                    WebkitBackdropFilter: "blur(12px)",
+                    color: "rgba(255,255,255,0.9)",
+                    border: "1px solid rgba(255,255,255,0.12)",
+                    paddingLeft: 28,
+                    paddingRight: 28,
+                  }}
+                >
+                  Go to Material
+                </Button>
+              </a>
+            </Show>
           </div>
 
           {/* Auth prompt for signed-out users */}
