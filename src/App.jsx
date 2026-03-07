@@ -1042,6 +1042,9 @@ export default function App({ initialTab = "checklist" }) {
             >
               IB HL Business Management
             </Badge>
+            {/* #region agent log */}
+            {(() => { try { fetch('http://127.0.0.1:7756/ingest/fda1bef3-c489-4aa0-8808-23f7b31bfe3e', { method: 'POST', headers: { 'Content-Type': 'application/json', 'X-Debug-Session-Id': '19536b' }, body: JSON.stringify({ sessionId: '19536b', location: 'App.jsx:header', message: 'App header rendering LoginButton', data: { path: window.location.pathname }, hypothesisId: 'C', timestamp: Date.now() }) }); } catch (_) {} return null; })()}
+            {/* #endregion */}
             <LoginButton />
           </Group>
           <Text

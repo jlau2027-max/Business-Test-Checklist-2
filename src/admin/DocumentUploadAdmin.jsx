@@ -86,6 +86,7 @@ export default function DocumentUploadAdmin() {
   const [successMsg, setSuccessMsg] = useState(null);
   const [generated, setGenerated] = useState(null);
   const [generatedTypes, setGeneratedTypes] = useState([]);
+  const [generationStats, setGenerationStats] = useState(null);
   const [previewOpen, setPreviewOpen] = useState({ mcq: true, written: true, checklist: true, flashcard: true });
   const [dragOver, setDragOver] = useState(false);
 
@@ -143,6 +144,7 @@ export default function DocumentUploadAdmin() {
     setGenerating(true);
     setError(null);
     setGenerated(null);
+    setGenerationStats(null);
     try {
       const formData = new FormData();
       formData.append("file", file);
@@ -156,17 +158,27 @@ export default function DocumentUploadAdmin() {
       const data = await res.json();
 
       if (!res.ok) {
-        throw new Error(data.error || `Request failed: ${res.status}`);
+        const msg = data.error || `Request failed: ${res.status}`;
+        if (msg.includes("scanned") || msg.includes("image-based")) {
+          throw new Error(`${msg} Try uploading a .txt file instead.`);
+        }
+        throw new Error(msg);
       }
       if (!data.success || !data.generated) {
-        throw new Error(data.error || "No content generated.");
+        const msg = data.error || "No content generated.";
+        if (msg.includes("scanned") || msg.includes("image-based")) {
+          throw new Error(`${msg} Try uploading a .txt file instead.`);
+        }
+        throw new Error(msg);
       }
       setGenerated(data.generated);
       setGeneratedTypes(types);
+      setGenerationStats(data.stats || null);
       setSuccessMsg(null);
     } catch (err) {
       setError(err.message || "Failed to generate content.");
       setGenerated(null);
+      setGenerationStats(null);
     } finally {
       setGenerating(false);
     }
@@ -405,6 +417,11 @@ export default function DocumentUploadAdmin() {
         {generated && (
           <Paper p="md" style={panelStyle}>
             <Stack gap="md">
+              {generationStats && (
+                <Text fz="xs" c="#8B8B9E">
+                  Processed {generationStats.chunksProcessed} chunks from {(generationStats.textLength / 1000).toFixed(1)}k characters
+                </Text>
+              )}
               <Group justify="space-between" wrap="wrap">
                 <Text fz="md" fw={600} c="#F0EEE8">
                   Preview generated content

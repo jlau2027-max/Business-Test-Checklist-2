@@ -1,9 +1,31 @@
 import { Button } from "@heroui/react";
-import { Show, SignInButton, UserButton } from "@clerk/react";
+import { Show, SignInButton, UserButton, useUser } from "@clerk/react";
 import { useAuth } from "./AuthContext.jsx";
 
 export default function LoginButton() {
-  const { isAdmin } = useAuth();
+  // #region agent log
+  try {
+    fetch('http://127.0.0.1:7756/ingest/fda1bef3-c489-4aa0-8808-23f7b31bfe3e', { method: 'POST', headers: { 'Content-Type': 'application/json', 'X-Debug-Session-Id': '19536b' }, body: JSON.stringify({ sessionId: '19536b', location: 'LoginButton.jsx:entry', message: 'LoginButton render start', data: {}, hypothesisId: 'B', timestamp: Date.now() }) }).catch(() => {});
+  } catch (_) {}
+  // #endregion
+  let authContext = null;
+  try {
+    authContext = useAuth();
+  } catch (e) {
+    // #region agent log
+    try {
+      fetch('http://127.0.0.1:7756/ingest/fda1bef3-c489-4aa0-8808-23f7b31bfe3e', { method: 'POST', headers: { 'Content-Type': 'application/json', 'X-Debug-Session-Id': '19536b' }, body: JSON.stringify({ sessionId: '19536b', location: 'LoginButton.jsx:useAuth', message: 'useAuth threw', data: { error: String(e && e.message) }, hypothesisId: 'B', timestamp: Date.now() }) }).catch(() => {});
+    } catch (_) {}
+    // #endregion
+    throw e;
+  }
+  const { isAdmin } = authContext;
+  const { isLoaded: clerkLoaded, isSignedIn: clerkSignedIn } = useUser();
+  // #region agent log
+  try {
+    fetch('http://127.0.0.1:7756/ingest/fda1bef3-c489-4aa0-8808-23f7b31bfe3e', { method: 'POST', headers: { 'Content-Type': 'application/json', 'X-Debug-Session-Id': '19536b' }, body: JSON.stringify({ sessionId: '19536b', location: 'LoginButton.jsx:state', message: 'LoginButton state', data: { isAdmin, clerkLoaded, clerkSignedIn }, hypothesisId: 'A,D', timestamp: Date.now() }) }).catch(() => {});
+  } catch (_) {}
+  // #endregion
   return (
     <div
       style={{
@@ -16,6 +38,20 @@ export default function LoginButton() {
         gap: 8,
       }}
     >
+      {!clerkLoaded ? (
+        <SignInButton mode="modal">
+          <Button
+            render={(props) => <button {...props} />}
+            size="sm"
+            variant="outline"
+            className="rounded-md text-[13px] font-semibold px-3 min-w-[auto] h-8 bg-transparent"
+            style={{ borderColor: 'var(--border-subtle)', color: 'var(--text-secondary)', fontFamily: "'Inter', sans-serif" }}
+          >
+            Sign In
+          </Button>
+        </SignInButton>
+      ) : (
+        <>
       <Show when="signed-out">
         <SignInButton mode="modal">
           <Button
@@ -69,6 +105,8 @@ export default function LoginButton() {
             </UserButton.MenuItems>
           </UserButton>
       </Show>
+        </>
+      )}
     </div>
   );
 }

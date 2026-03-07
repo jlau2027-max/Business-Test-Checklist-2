@@ -16,6 +16,11 @@ export function useAuth() {
 export function AuthProvider({ children }) {
   const { isLoaded, isSignedIn, user: clerkUser } = useUser();
   const { signOut } = useClerk();
+  // #region agent log
+  try {
+    fetch('http://127.0.0.1:7756/ingest/fda1bef3-c489-4aa0-8808-23f7b31bfe3e', { method: 'POST', headers: { 'Content-Type': 'application/json', 'X-Debug-Session-Id': '19536b' }, body: JSON.stringify({ sessionId: '19536b', location: 'AuthContext.jsx:AuthProvider', message: 'Clerk auth state', data: { isLoaded, isSignedIn, hasUser: !!clerkUser }, hypothesisId: 'A', timestamp: Date.now() }) }).catch(() => {});
+  } catch (_) {}
+  // #endregion
 
   const user = isSignedIn && clerkUser ? {
     uid: clerkUser.id,
