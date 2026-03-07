@@ -1,4 +1,5 @@
-import { Group, Button } from "@heroui/react";
+import { Group } from "@mantine/core";
+import { Button } from "@heroui/react";
 
 /**
  * Renders a row of pill buttons for unit selection.
