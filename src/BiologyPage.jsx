@@ -810,12 +810,12 @@ export default function BiologyPage({ initialTab = "checklist" }) {
 
   return (
     <ContentCtx.Provider value={STATIC_CONTENT}>
-      <Box mih="100vh" bg="#09090F" style={{ fontFamily: "'Inter', sans-serif", color: "#F0EEE8" }}>
+      <Box mih="100vh" style={{ fontFamily: "'Inter', sans-serif", color: "var(--text-primary)", background: "var(--bg-base)" }}>
 
         <Sidebar activeSubject="biology" sidebarOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
 
         {/* Sticky header */}
-        <Box style={{ position: "sticky", top: 0, zIndex: 100, background: "rgba(9, 9, 15, 0.85)", backdropFilter: "blur(12px)", WebkitBackdropFilter: "blur(12px)", borderBottom: "1px solid rgba(255,255,255,0.04)" }}>
+        <Box style={{ position: "sticky", top: 0, zIndex: 100, background: "var(--header-bg)", backdropFilter: "blur(12px)", WebkitBackdropFilter: "blur(12px)", borderBottom: "1px solid rgba(128,128,128,0.1)" }}>
           <Container size="lg" py="sm">
             <Group justify="center" mb={4} style={{ position: "relative" }}>
               <Button isIconOnly variant="outline" onPress={() => setSidebarOpen(o => !o)}

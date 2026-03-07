@@ -5,12 +5,12 @@ import LoginButton from "./LoginButton.jsx";
 
 export default function LandingPage() {
   return (
-    <Box mih="100vh" bg="#09090F" style={{ fontFamily: "'Inter', sans-serif", color: "#F0EEE8" }}>
+    <Box mih="100vh" style={{ fontFamily: "'Inter', sans-serif", color: "var(--text-primary)", background: "var(--bg-base)" }}>
       {/* Header */}
       <Box
         style={{
           position: "sticky", top: 0, zIndex: 100,
-          background: "rgba(9, 9, 15, 0.85)",
+          background: "var(--header-bg)",
           backdropFilter: "blur(12px)",
           WebkitBackdropFilter: "blur(12px)",
           borderBottom: "1px solid rgba(255,255,255,0.04)",
@@ -84,31 +84,26 @@ export default function LandingPage() {
           <Paper
             component="a"
             href="/business/checklist"
-            bg="#12121A"
             radius="lg"
             p="xl"
             style={{
-              border: "1px solid #252533",
+              background: "var(--bg-surface)",
+              border: "1px solid var(--border-subtle)",
               textDecoration: "none",
               cursor: "pointer",
               transition: "border-color 0.2s, box-shadow 0.2s",
             }}
             onMouseEnter={e => { e.currentTarget.style.borderColor = "#7C6FFF"; e.currentTarget.style.boxShadow = "0 0 20px #7C6FFF22"; }}
-            onMouseLeave={e => { e.currentTarget.style.borderColor = "#252533"; e.currentTarget.style.boxShadow = "none"; }}
+            onMouseLeave={e => { e.currentTarget.style.borderColor = "var(--border-subtle)"; e.currentTarget.style.boxShadow = "none"; }}
           >
-            <Badge
-              size="xs"
-              variant="light"
-              ff="'JetBrains Mono', monospace"
-              mb="sm"
-              style={{ backgroundColor: "#7C6FFF18", color: "#A78BFA", border: "none" }}
-            >
+            <Badge size="xs" variant="light" ff="'JetBrains Mono', monospace" mb="sm"
+              style={{ backgroundColor: "#7C6FFF18", color: "#A78BFA", border: "none" }}>
               HL
             </Badge>
-            <Text fz="lg" fw={700} c="#F0EEE8" mb={4}>
+            <Text fz="lg" fw={700} c="var(--text-primary)" mb={4}>
               Business Management
             </Text>
-            <Text fz="sm" c="#8B8B9E" lh={1.5}>
+            <Text fz="sm" c="var(--text-secondary)" lh={1.5}>
               Finance unit — checklist, flashcards, MCQs, written practice & specimen papers
             </Text>
           </Paper>
@@ -116,31 +111,26 @@ export default function LandingPage() {
           <Paper
             component="a"
             href="/history/specimen"
-            bg="#12121A"
             radius="lg"
             p="xl"
             style={{
-              border: "1px solid #252533",
+              background: "var(--bg-surface)",
+              border: "1px solid var(--border-subtle)",
               textDecoration: "none",
               cursor: "pointer",
               transition: "border-color 0.2s, box-shadow 0.2s",
             }}
             onMouseEnter={e => { e.currentTarget.style.borderColor = "#F87171"; e.currentTarget.style.boxShadow = "0 0 20px #F8717122"; }}
-            onMouseLeave={e => { e.currentTarget.style.borderColor = "#252533"; e.currentTarget.style.boxShadow = "none"; }}
+            onMouseLeave={e => { e.currentTarget.style.borderColor = "var(--border-subtle)"; e.currentTarget.style.boxShadow = "none"; }}
           >
-            <Badge
-              size="xs"
-              variant="light"
-              ff="'JetBrains Mono', monospace"
-              mb="sm"
-              style={{ backgroundColor: "#F8717118", color: "#F87171", border: "none" }}
-            >
+            <Badge size="xs" variant="light" ff="'JetBrains Mono', monospace" mb="sm"
+              style={{ backgroundColor: "#F8717118", color: "#F87171", border: "none" }}>
               HL / SL
             </Badge>
-            <Text fz="lg" fw={700} c="#F0EEE8" mb={4}>
+            <Text fz="lg" fw={700} c="var(--text-primary)" mb={4}>
               History
             </Text>
-            <Text fz="sm" c="#8B8B9E" lh={1.5}>
+            <Text fz="sm" c="var(--text-secondary)" lh={1.5}>
               Paper 2 & Paper 3 specimen questions with AI-powered grading
             </Text>
           </Paper>
@@ -148,31 +138,26 @@ export default function LandingPage() {
           <Paper
             component="a"
             href="/biology/checklist"
-            bg="#12121A"
             radius="lg"
             p="xl"
             style={{
-              border: "1px solid #252533",
+              background: "var(--bg-surface)",
+              border: "1px solid var(--border-subtle)",
               textDecoration: "none",
               cursor: "pointer",
               transition: "border-color 0.2s, box-shadow 0.2s",
             }}
             onMouseEnter={e => { e.currentTarget.style.borderColor = "#34D399"; e.currentTarget.style.boxShadow = "0 0 20px #34D39922"; }}
-            onMouseLeave={e => { e.currentTarget.style.borderColor = "#252533"; e.currentTarget.style.boxShadow = "none"; }}
+            onMouseLeave={e => { e.currentTarget.style.borderColor = "var(--border-subtle)"; e.currentTarget.style.boxShadow = "none"; }}
           >
-            <Badge
-              size="xs"
-              variant="light"
-              ff="'JetBrains Mono', monospace"
-              mb="sm"
-              style={{ backgroundColor: "#34D39918", color: "#34D399", border: "none" }}
-            >
+            <Badge size="xs" variant="light" ff="'JetBrains Mono', monospace" mb="sm"
+              style={{ backgroundColor: "#34D39918", color: "#34D399", border: "none" }}>
               HL / SL
             </Badge>
-            <Text fz="lg" fw={700} c="#F0EEE8" mb={4}>
+            <Text fz="lg" fw={700} c="var(--text-primary)" mb={4}>
               Biology
             </Text>
-            <Text fz="sm" c="#8B8B9E" lh={1.5}>
+            <Text fz="sm" c="var(--text-secondary)" lh={1.5}>
               Unit 1: Evolution of Life — checklist, flashcards, MCQs & written practice with AI grading
             </Text>
           </Paper>

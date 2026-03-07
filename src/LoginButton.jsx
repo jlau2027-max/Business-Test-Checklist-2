@@ -1,29 +1,37 @@
 import { Button } from "@heroui/react";
 import { Show, SignInButton, UserButton } from "@clerk/react";
 import { useAuth } from "./AuthContext.jsx";
+import ThemeSwitcher from "./ThemeSwitcher.jsx";
 
 export default function LoginButton() {
   const { isAdmin } = useAuth();
   return (
     <>
       <Show when="signed-out">
-        <SignInButton mode="modal">
-          <Button
-            render={(props) => <button {...props} />}
-            size="sm"
-            variant="outline"
-            className="rounded-md border-[#252533] text-[#8B8B9E] text-[13px] font-semibold px-3 min-w-[auto] h-8 bg-transparent"
-            style={{
-              position: "absolute",
-              right: 0,
-              top: "50%",
-              transform: "translateY(-50%)",
-              fontFamily: "'Inter', sans-serif",
-            }}
-          >
-            Sign In
-          </Button>
-        </SignInButton>
+        <div
+          style={{
+            position: "absolute",
+            right: 0,
+            top: "50%",
+            transform: "translateY(-50%)",
+            display: "flex",
+            alignItems: "center",
+            gap: 8,
+          }}
+        >
+          <ThemeSwitcher />
+          <SignInButton mode="modal">
+            <Button
+              render={(props) => <button {...props} />}
+              size="sm"
+              variant="outline"
+              className="rounded-md border-[#252533] text-[#8B8B9E] text-[13px] font-semibold px-3 min-w-[auto] h-8 bg-transparent"
+              style={{ fontFamily: "'Inter', sans-serif" }}
+            >
+              Sign In
+            </Button>
+          </SignInButton>
+        </div>
       </Show>
 
       <Show when="signed-in">
@@ -33,17 +41,18 @@ export default function LoginButton() {
             right: 0,
             top: "50%",
             transform: "translateY(-50%)",
+            display: "flex",
+            alignItems: "center",
+            gap: 8,
           }}
         >
+          <ThemeSwitcher />
           <UserButton
             userProfileUrl="https://accounts.jasperlaulvl7student.com/user"
             userProfileMode="navigation"
             appearance={{
               elements: {
-                avatarBox: {
-                  width: 32,
-                  height: 32,
-                },
+                avatarBox: { width: 32, height: 32 },
               },
             }}
           >

@@ -997,7 +997,7 @@ export default function App({ initialTab = "checklist" }) {
 
   return (
     <ContentCtx.Provider value={content}>
-    <Box mih="100vh" bg="#09090F" style={{fontFamily:"'Inter', sans-serif",color:"#F0EEE8"}}>
+    <Box mih="100vh" style={{fontFamily:"'Inter', sans-serif",color:"var(--text-primary)",background:"var(--bg-base)"}}>
 
       <Sidebar activeSubject="business" sidebarOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
 
@@ -1005,10 +1005,10 @@ export default function App({ initialTab = "checklist" }) {
       <Box
         style={{
           position: "sticky", top: 0, zIndex: 100,
-          background: "rgba(9, 9, 15, 0.85)",
+          background: "var(--header-bg)",
           backdropFilter: "blur(12px)",
           WebkitBackdropFilter: "blur(12px)",
-          borderBottom: "1px solid rgba(255,255,255,0.04)",
+          borderBottom: "1px solid rgba(128,128,128,0.1)",
         }}
       >
         <Container size="lg" py="sm">

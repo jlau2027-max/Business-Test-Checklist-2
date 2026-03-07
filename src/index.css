@@ -1,12 +1,31 @@
 @import "tailwindcss";
 @import "@heroui/styles";
 
+/* ── Theme CSS custom properties (defaults = original/dark) ── */
+:root {
+  --bg-base: #09090F;
+  --bg-surface: #12121A;
+  --bg-elevated: #1A1A24;
+  --bg-overlay: #1E1E2A;
+  --border-subtle: #252533;
+  --border-active: #35354A;
+  --text-primary: #F0EEE8;
+  --text-secondary: #8B8B9E;
+  --text-muted: #55556A;
+  --text-dimmed: #C8C4BC;
+  --header-bg: rgba(9, 9, 15, 0.85);
+  --accent: #7C6FFF;
+  --accent-soft: #A78BFA;
+}
+
 html, body, #root {
   margin: 0;
   padding: 0;
   width: 100%;
   min-height: 100vh;
-  background: #09090F;
+  background: var(--bg-base);
+  color: var(--text-primary);
+  transition: background 0.25s ease, color 0.25s ease;
 }
 
 *, *::before, *::after {
