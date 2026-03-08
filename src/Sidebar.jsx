@@ -82,8 +82,9 @@ export default function Sidebar({ activeSubject }) {
             display: "flex",
             alignItems: "center",
             justifyContent: collapsed ? "center" : "space-between",
-            padding: collapsed ? "0 0 20px" : "0 10px 20px",
-            minHeight: 24,
+            padding: collapsed ? "0" : "0 10px",
+            marginBottom: 20,
+            height: 40,
           }}
         >
           {!collapsed && (
@@ -94,12 +95,14 @@ export default function Sidebar({ activeSubject }) {
           <button
             onClick={() => setCollapsed(c => !c)}
             style={{
+              width: collapsed ? 40 : "auto",
+              height: 40,
               background: "none",
               border: "none",
               cursor: "pointer",
               color: "var(--text-muted)",
-              padding: 4,
-              borderRadius: 6,
+              padding: 0,
+              borderRadius: 10,
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
@@ -109,7 +112,7 @@ export default function Sidebar({ activeSubject }) {
             onMouseLeave={e => { e.currentTarget.style.color = "var(--text-muted)"; }}
             title={collapsed ? "Expand sidebar" : "Collapse sidebar"}
           >
-            {collapsed ? <ChevronsRight size={18} /> : <ChevronsLeft size={18} />}
+            {collapsed ? <ChevronsRight size={16} /> : <ChevronsLeft size={16} />}
           </button>
         </div>
 

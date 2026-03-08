@@ -141,19 +141,19 @@ export default function AdminPage() {
                 </Tabs.Tab>
                 <Tabs.Tab id="chemistry" className="font-semibold text-sm font-mono text-[var(--text-secondary)] data-[selected=true]:text-white rounded-full px-4 py-2">
                   Chemistry
-                  <Tabs.Indicator className="bg-[#8B5CF6] rounded-full" />
+                  <Tabs.Indicator className="bg-[#8B7EB5] rounded-full" />
                 </Tabs.Tab>
                 <Tabs.Tab id="physics" className="font-semibold text-sm font-mono text-[var(--text-secondary)] data-[selected=true]:text-white rounded-full px-4 py-2">
                   Physics
-                  <Tabs.Indicator className="bg-[#F59E0B] rounded-full" />
+                  <Tabs.Indicator className="bg-[#C4A36A] rounded-full" />
                 </Tabs.Tab>
                 <Tabs.Tab id="sports" className="font-semibold text-sm font-mono text-[var(--text-secondary)] data-[selected=true]:text-white rounded-full px-4 py-2">
                   Sports Sci
-                  <Tabs.Indicator className="bg-[#EF4444] rounded-full" />
+                  <Tabs.Indicator className="bg-[#B57A7A] rounded-full" />
                 </Tabs.Tab>
                 <Tabs.Tab id="economics" className="font-semibold text-sm font-mono text-[var(--text-secondary)] data-[selected=true]:text-white rounded-full px-4 py-2">
                   Economics
-                  <Tabs.Indicator className="bg-[#06B6D4] rounded-full" />
+                  <Tabs.Indicator className="bg-[#6BA3AD] rounded-full" />
                 </Tabs.Tab>
                 <Tabs.Tab id="users" className="font-semibold text-sm font-mono text-[var(--text-secondary)] data-[selected=true]:text-white rounded-full px-4 py-2">
                   Users
