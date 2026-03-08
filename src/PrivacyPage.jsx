@@ -31,14 +31,14 @@ export default function PrivacyPage() {
             <strong style={{ color: "var(--text-primary)", fontWeight: 600 }}>Effective date:</strong> 8 March 2026<br />
             <strong style={{ color: "var(--text-primary)", fontWeight: 600 }}>Entity:</strong> IBrev.org (&ldquo;IBrev&rdquo;, &ldquo;we&rdquo;, &ldquo;us&rdquo;)<br />
             <strong style={{ color: "var(--text-primary)", fontWeight: 600 }}>Support contact:</strong>{" "}
-            <a href="mailto:hollen@l.hollenji.com" style={link}>hollen@l.hollenji.com</a>
+            <a href="mailto:legal@ibrev.org" style={link}>legal@ibrev.org</a>
           </div>
         </div>
 
         {/* Intro */}
         <p style={{ ...text, marginBottom: 16 }}>
           IBrev is a web-based revision application for International Baccalaureate students, hosted at{" "}
-          <a href="https://jasperlaulvl7student.com" style={link}>jasperlaulvl7student.com</a>. The app can be used
+          <a href="https://ibrev.org" style={link}>ibrev.org</a> and <a href="https://jasperlaulvl7student.com" style={link}>jasperlaulvl7student.com</a>. The app can be used
           without an account. Optional sign-in is provided through Clerk and supports email, Apple, Google,
           and other third-party authentication providers.
         </p>
@@ -164,7 +164,7 @@ export default function PrivacyPage() {
         <p style={{ ...text, marginBottom: 16 }}>
           <strong>Account data:</strong> If you have an account, your revision data is retained while your
           account is active. You may request deletion of your account and associated data by contacting us
-          at <a href="mailto:hollen@l.hollenji.com" style={link}>hollen@l.hollenji.com</a>. Upon deletion, we will
+          at <a href="mailto:legal@ibrev.org" style={link}>legal@ibrev.org</a>. Upon deletion, we will
           remove your data from our cloud infrastructure within a reasonable timeframe. Clerk may retain
           certain authentication records in accordance with its own retention policies.
         </p>
@@ -193,7 +193,7 @@ export default function PrivacyPage() {
           We do not knowingly collect personal information beyond what is necessary for the app to function.
           If you are a parent or guardian and believe your child has provided personal information that
           concerns you, please contact us at{" "}
-          <a href="mailto:hollen@l.hollenji.com" style={link}>hollen@l.hollenji.com</a>.
+          <a href="mailto:legal@ibrev.org" style={link}>legal@ibrev.org</a>.
         </p>
 
         {/* 10 — International */}
@@ -221,7 +221,7 @@ export default function PrivacyPage() {
         <h2 style={{ fontSize: 22, fontWeight: 600, marginTop: 36, marginBottom: 12 }}>12) Contact</h2>
         <p style={{ ...text, marginBottom: 8 }}>Questions or requests:</p>
         <p style={{ marginBottom: 16 }}>
-          <strong><a href="mailto:hollen@l.hollenji.com" style={link}>hollen@l.hollenji.com</a></strong>
+          <strong><a href="mailto:legal@ibrev.org" style={link}>legal@ibrev.org</a></strong>
         </p>
 
         {/* Footer */}

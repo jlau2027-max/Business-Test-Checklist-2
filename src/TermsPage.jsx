@@ -31,7 +31,7 @@ export default function TermsPage() {
             <strong style={{ color: "var(--text-primary)", fontWeight: 600 }}>Effective date:</strong> 8 March 2026<br />
             <strong style={{ color: "var(--text-primary)", fontWeight: 600 }}>Operated by:</strong> IBrev.org (&ldquo;IBrev&rdquo;, &ldquo;we&rdquo;, &ldquo;us&rdquo;)<br />
             <strong style={{ color: "var(--text-primary)", fontWeight: 600 }}>Contact:</strong>{" "}
-            <a href="mailto:hollen@l.hollenji.com" style={link}>hollen@l.hollenji.com</a>
+            <a href="mailto:legal@ibrev.org" style={link}>legal@ibrev.org</a>
           </div>
         </div>
 
@@ -40,7 +40,7 @@ export default function TermsPage() {
           These Terms of Service (&ldquo;Terms&rdquo;) govern your access to and use of:
         </p>
         <ol style={{ ...text, paddingLeft: 22, marginBottom: 16, display: "flex", flexDirection: "column", gap: 4 }}>
-          <li>the IBrev website at <a href="https://jasperlaulvl7student.com" style={link}>jasperlaulvl7student.com</a> (the &ldquo;Website&rdquo;), and</li>
+          <li>the IBrev website at <a href="https://ibrev.org" style={link}>ibrev.org</a> and <a href="https://jasperlaulvl7student.com" style={link}>jasperlaulvl7student.com</a> (the &ldquo;Website&rdquo;), and</li>
           <li>the revision tools, content, and features available through the Website (collectively, the &ldquo;Services&rdquo;).</li>
         </ol>
         <p style={{ ...text, marginBottom: 40 }}>
@@ -199,7 +199,7 @@ export default function TermsPage() {
         <h2 style={{ fontSize: 22, fontWeight: 600, marginTop: 36, marginBottom: 12 }}>12) Support</h2>
         <p style={{ ...text, marginBottom: 16 }}>
           Support (if provided) is best-effort only, with no guaranteed response time. You may contact us
-          at <a href="mailto:hollen@l.hollenji.com" style={link}>hollen@l.hollenji.com</a>.
+          at <a href="mailto:legal@ibrev.org" style={link}>legal@ibrev.org</a>.
         </p>
 
         {/* 13 — Disclaimers */}
@@ -249,7 +249,7 @@ export default function TermsPage() {
         <p style={{ ...text, marginBottom: 12 }}>
           We may suspend or terminate your access to the Services if you materially violate these Terms.
           If you have an account, you may delete it at any time by contacting us at{" "}
-          <a href="mailto:hollen@l.hollenji.com" style={link}>hollen@l.hollenji.com</a>.
+          <a href="mailto:legal@ibrev.org" style={link}>legal@ibrev.org</a>.
         </p>
         <p style={{ ...text, marginBottom: 16 }}>
           Upon termination, your right to use the Services ceases. Provisions that by their nature should
@@ -261,7 +261,7 @@ export default function TermsPage() {
         <h2 style={{ fontSize: 22, fontWeight: 600, marginTop: 36, marginBottom: 12 }}>17) Notices and electronic communications</h2>
         <p style={{ ...text, marginBottom: 16 }}>
           You agree that IBrev may provide notices to you by posting them on the Website or by replying to
-          an email you send to <a href="mailto:hollen@l.hollenji.com" style={link}>hollen@l.hollenji.com</a>. Notices
+          an email you send to <a href="mailto:legal@ibrev.org" style={link}>legal@ibrev.org</a>. Notices
           are effective when posted (or when sent, if by email reply). You are responsible for keeping your
           own contact information current when communicating with us.
         </p>
@@ -290,7 +290,7 @@ export default function TermsPage() {
         <h3 style={{ fontSize: 16, fontWeight: 600, marginTop: 20, marginBottom: 8 }}>19.2 Opt-out right (14 days)</h3>
         <p style={{ ...text, marginBottom: 12 }}>
           You may opt out of this arbitration agreement by sending an email to{" "}
-          <a href="mailto:hollen@l.hollenji.com" style={link}>hollen@l.hollenji.com</a> within <strong>14 days</strong>{" "}
+          <a href="mailto:legal@ibrev.org" style={link}>legal@ibrev.org</a> within <strong>14 days</strong>{" "}
           of your first use of the Services (the &ldquo;Opt-Out Deadline&rdquo;).
         </p>
         <p style={{ ...text, marginBottom: 12 }}>
