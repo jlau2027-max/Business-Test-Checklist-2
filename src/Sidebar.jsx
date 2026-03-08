@@ -99,7 +99,7 @@ export default function Sidebar({ activeSubject }) {
             onMouseLeave={e => { e.currentTarget.style.color = "var(--text-muted)"; }}
             title="Expand sidebar"
           >
-            <span style={{ marginLeft: 6 }}><ChevronsRight size={16} /></span>
+            <span style={{ marginLeft: 12 }}><ChevronsRight size={16} /></span>
           </button>
         ) : (
           <div
@@ -186,7 +186,7 @@ export default function Sidebar({ activeSubject }) {
                   title={collapsed ? s.label : undefined}
                 >
                   {/* Icon */}
-                  <span style={{ width: 20, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, opacity: active ? 1 : 0.55, transition: "opacity 0.15s ease", marginLeft: collapsed ? 6 : 0 }}>
+                  <span style={{ width: 20, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, opacity: active ? 1 : 0.55, transition: "opacity 0.15s ease", marginLeft: collapsed ? 12 : 0 }}>
                     <s.Icon size={16} color={active ? s.color : "currentColor"} strokeWidth={2} />
                   </span>
                   {/* Label — hidden when collapsed */}
