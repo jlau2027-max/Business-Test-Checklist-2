@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { Button } from "@heroui/react";
 import Grainient from "./components/Grainient.jsx";
 import ASCIIText from "./components/ASCIIText.jsx";
 
@@ -66,24 +67,20 @@ export default function NotFoundPage() {
           The page you&rsquo;re looking for doesn&rsquo;t exist or has been moved.
         </p>
 
-        <a
-          href="/"
+        <Button
+          render={(props) => <a {...props} href="/" />}
+          variant="solid"
           style={{
             fontFamily: "'JSans', sans-serif",
             fontSize: 15, fontWeight: 600,
-            background: "rgba(255,255,255,0.12)",
-            color: "#fdf9f3",
-            border: "1px solid rgba(253,249,243,0.2)",
-            borderRadius: 10,
+            background: "#5E8A9C",
+            color: "#fff",
+            borderRadius: 9999,
             padding: "12px 28px",
-            textDecoration: "none",
-            transition: "background 0.15s ease",
           }}
-          onMouseEnter={e => { e.currentTarget.style.background = "rgba(255,255,255,0.2)"; }}
-          onMouseLeave={e => { e.currentTarget.style.background = "rgba(255,255,255,0.12)"; }}
         >
           &larr; Back to Home
-        </a>
+        </Button>
       </div>
     </div>
   );
