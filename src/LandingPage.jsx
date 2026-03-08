@@ -1,7 +1,6 @@
-import { useState, useEffect, useLayoutEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import { Show, SignInButton } from "@clerk/react";
 import { ArrowUpRight } from "lucide-react";
-import { gsap } from "gsap";
 import Grainient from "./components/Grainient.jsx";
 import RotatingText from "./components/RotatingText.jsx";
 import CardNav from "./components/CardNav.jsx";
@@ -16,37 +15,6 @@ export default function LandingPage() {
     });
     observer.observe(document.documentElement, { attributes: true, attributeFilter: ["class"] });
     return () => observer.disconnect();
-  }, []);
-
-  // ─── GSAP preload animation (first visit only) ─────────────────────────────
-  const titleRef = useRef(null);
-  const subtitleRef = useRef(null);
-  const navRef = useRef(null);
-
-  useLayoutEffect(() => {
-    const els = [titleRef.current, subtitleRef.current, navRef.current];
-    if (!els[0] || !els[1] || !els[2]) return;
-
-    // Repeat visit within same session — show instantly
-    if (sessionStorage.getItem("ibrev-landed")) {
-      gsap.set(els, { opacity: 1, y: 0, scale: 1 });
-      return;
-    }
-
-    // First visit — set hidden state, then animate in
-    gsap.set(titleRef.current, { opacity: 0, y: 20, scale: 0.97 });
-    gsap.set(subtitleRef.current, { opacity: 0, y: 20 });
-    gsap.set(navRef.current, { opacity: 0, y: 30 });
-
-    const tl = gsap.timeline({
-      onComplete: () => sessionStorage.setItem("ibrev-landed", "1"),
-    });
-
-    tl.to(titleRef.current, { opacity: 1, y: 0, scale: 1, duration: 0.7, ease: "power3.out" })
-      .to(subtitleRef.current, { opacity: 1, y: 0, duration: 0.6, ease: "power3.out" }, "-=0.4")
-      .to(navRef.current, { opacity: 1, y: 0, duration: 0.6, ease: "power3.out" }, "-=0.4");
-
-    return () => tl.kill();
   }, []);
 
   return (
@@ -84,7 +52,7 @@ export default function LandingPage() {
         {/* Hero */}
         <div className="mx-auto px-4 flex flex-col items-center" style={{ maxWidth: 1400, width: "100%" }}>
           {/* Title */}
-          <h1 ref={titleRef} style={{
+          <h1 style={{
             fontSize: "clamp(52px, 10vw, 96px)",
             fontWeight: 800,
             letterSpacing: -1.5,
@@ -95,7 +63,7 @@ export default function LandingPage() {
           }}>
             IBrev.org
           </h1>
-          <p ref={subtitleRef} style={{
+          <p style={{
             fontSize: "clamp(20px, 3vw, 30px)",
             fontWeight: 500,
             color: "rgba(253,249,243,0.6)",
@@ -119,7 +87,6 @@ export default function LandingPage() {
             />
           </p>
           {/* Subject groups — CardNav */}
-          <div ref={navRef}>
           <CardNav
             logoText="IB Subjects"
             items={[
@@ -190,7 +157,6 @@ export default function LandingPage() {
               </Show>
             }
           />
-          </div>
         </div>
       </div>
     </div>
