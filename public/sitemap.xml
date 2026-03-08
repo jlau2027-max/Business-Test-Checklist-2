@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <!-- Landing -->
+  <url><loc>https://ibrev.org/</loc><priority>1.0</priority><changefreq>weekly</changefreq></url>
+
+  <!-- Business -->
+  <url><loc>https://ibrev.org/business/checklist</loc><priority>0.8</priority><changefreq>weekly</changefreq></url>
+  <url><loc>https://ibrev.org/business/flashcards</loc><priority>0.8</priority><changefreq>weekly</changefreq></url>
+  <url><loc>https://ibrev.org/business/multi-choice</loc><priority>0.8</priority><changefreq>weekly</changefreq></url>
+  <url><loc>https://ibrev.org/business/written</loc><priority>0.8</priority><changefreq>weekly</changefreq></url>
+  <url><loc>https://ibrev.org/business/specimen</loc><priority>0.7</priority><changefreq>monthly</changefreq></url>
+
+  <!-- Biology -->
+  <url><loc>https://ibrev.org/biology/checklist</loc><priority>0.8</priority><changefreq>weekly</changefreq></url>
+  <url><loc>https://ibrev.org/biology/flashcards</loc><priority>0.8</priority><changefreq>weekly</changefreq></url>
+  <url><loc>https://ibrev.org/biology/multi-choice</loc><priority>0.8</priority><changefreq>weekly</changefreq></url>
+  <url><loc>https://ibrev.org/biology/written</loc><priority>0.8</priority><changefreq>weekly</changefreq></url>
+
+  <!-- Chemistry -->
+  <url><loc>https://ibrev.org/chemistry/checklist</loc><priority>0.6</priority><changefreq>monthly</changefreq></url>
+  <url><loc>https://ibrev.org/chemistry/flashcards</loc><priority>0.6</priority><changefreq>monthly</changefreq></url>
+  <url><loc>https://ibrev.org/chemistry/multi-choice</loc><priority>0.6</priority><changefreq>monthly</changefreq></url>
+  <url><loc>https://ibrev.org/chemistry/written</loc><priority>0.6</priority><changefreq>monthly</changefreq></url>
+
+  <!-- Physics -->
+  <url><loc>https://ibrev.org/physics/checklist</loc><priority>0.6</priority><changefreq>monthly</changefreq></url>
+  <url><loc>https://ibrev.org/physics/flashcards</loc><priority>0.6</priority><changefreq>monthly</changefreq></url>
+  <url><loc>https://ibrev.org/physics/multi-choice</loc><priority>0.6</priority><changefreq>monthly</changefreq></url>
+  <url><loc>https://ibrev.org/physics/written</loc><priority>0.6</priority><changefreq>monthly</changefreq></url>
+
+  <!-- Sports Science -->
+  <url><loc>https://ibrev.org/sports-science/checklist</loc><priority>0.6</priority><changefreq>monthly</changefreq></url>
+  <url><loc>https://ibrev.org/sports-science/flashcards</loc><priority>0.6</priority><changefreq>monthly</changefreq></url>
+  <url><loc>https://ibrev.org/sports-science/multi-choice</loc><priority>0.6</priority><changefreq>monthly</changefreq></url>
+  <url><loc>https://ibrev.org/sports-science/written</loc><priority>0.6</priority><changefreq>monthly</changefreq></url>
+
+  <!-- Economics -->
+  <url><loc>https://ibrev.org/economics/checklist</loc><priority>0.6</priority><changefreq>monthly</changefreq></url>
+  <url><loc>https://ibrev.org/economics/flashcards</loc><priority>0.6</priority><changefreq>monthly</changefreq></url>
+  <url><loc>https://ibrev.org/economics/multi-choice</loc><priority>0.6</priority><changefreq>monthly</changefreq></url>
+  <url><loc>https://ibrev.org/economics/written</loc><priority>0.6</priority><changefreq>monthly</changefreq></url>
+
+  <!-- History -->
+  <url><loc>https://ibrev.org/history/specimen</loc><priority>0.7</priority><changefreq>monthly</changefreq></url>
+
+  <!-- Legal -->
+  <url><loc>https://ibrev.org/privacy</loc><priority>0.3</priority><changefreq>yearly</changefreq></url>
+  <url><loc>https://ibrev.org/terms</loc><priority>0.3</priority><changefreq>yearly</changefreq></url>
+</urlset>

@@ -86,6 +86,41 @@ if (path.startsWith('/business/')) {
   Page = LandingPage
 }
 
+// ─── Dynamic page titles (SEO — Google executes JS) ────────────────────────
+const PAGE_TITLES = {
+  '/': 'IB Revision — IBrev.org',
+  '/dashboard': 'Dashboard — IBrev',
+  '/admin': 'Admin — IBrev',
+  '/privacy': 'Privacy Policy — IBrev',
+  '/terms': 'Terms of Service — IBrev',
+  '/history/specimen': 'IB History Specimen — IBrev',
+}
+const SUBJECT_LABELS = {
+  business: 'IB Business',
+  biology: 'IB Biology',
+  chemistry: 'IB Chemistry',
+  physics: 'IB Physics',
+  'sports-science': 'IB Sports Science',
+  economics: 'IB Economics',
+}
+const TAB_LABELS = {
+  checklist: 'Checklist',
+  flashcards: 'Flashcards',
+  'multi-choice': 'Multi-Choice',
+  written: 'Written',
+  specimen: 'Specimen',
+}
+if (PAGE_TITLES[path]) {
+  document.title = PAGE_TITLES[path]
+} else {
+  const [, subjectSlug, tabSlug] = path.split('/')
+  const subjectName = SUBJECT_LABELS[subjectSlug]
+  const tabName = TAB_LABELS[tabSlug]
+  if (subjectName && tabName) {
+    document.title = `${subjectName} ${tabName} — IBrev`
+  }
+}
+
 function AuthGate({ children }) {
   const { loading } = useAuth()
   // Don't block rendering — show the app while Clerk loads
