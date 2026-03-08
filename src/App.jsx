@@ -136,6 +136,10 @@ const SUBJECT_CONFIGS = {
     show10Marker: false,
     showSpecimen: false,
     lsPrefix: "econ_",
+    units: [
+      { value: "All", label: "All Units" },
+      { value: "1", label: "1" },
+    ],
     api: {
       fetchChecklist: economicsApi.fetchChecklist, fetchFlashcardTopics: economicsApi.fetchFlashcardTopics,
       fetchFlashcards: economicsApi.fetchFlashcards, fetchMcqQuestions: economicsApi.fetchMcqQuestions,
