@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Button } from "@heroui/react";
+import { Button, Tabs } from "@heroui/react";
 import { Show, SignInButton } from "@clerk/react";
 import Grainient from "./components/Grainient.jsx";
 import ASCIIText from "./components/ASCIIText.jsx";
@@ -108,66 +108,99 @@ export default function LandingPage() {
 
           <div style={{ marginBottom: 64 }} />
 
-          {/* Subject buttons */}
+          {/* Subject groups */}
           {(() => {
-            const subjects = [
-              { label: "Business", href: "/business/checklist", color: "#7BA3B5", subtitle: "Finance Unit" },
-              { label: "History", href: "/history/specimen", color: "#D4A572", subtitle: "Paper 2 & 3" },
-              { label: "Biology", href: "/biology/checklist", color: "#5BA88C", subtitle: "Unit 3 & 4" },
-              { label: "Chemistry", href: "/chemistry/checklist", color: "#8B5CF6", subtitle: "Work in Progress" },
-              { label: "Physics", href: "/physics/checklist", color: "#F59E0B", subtitle: "Work in Progress" },
-              { label: "Sports Science", href: "/sports-science/checklist", color: "#EF4444", subtitle: "Work in Progress" },
-              { label: "Economics", href: "/economics/checklist", color: "#06B6D4", subtitle: "Work in Progress" },
-            ];
+            const groups = {
+              "Group 3 — Individuals & Societies": [
+                { label: "Business", href: "/business/checklist", color: "#7BA3B5", subtitle: "Finance Unit" },
+                { label: "History", href: "/history/specimen", color: "#D4A572", subtitle: "Paper 2 & 3" },
+                { label: "Economics", href: "/economics/checklist", color: "#06B6D4", subtitle: "Work in Progress" },
+              ],
+              "Group 4 — Sciences": [
+                { label: "Biology", href: "/biology/checklist", color: "#5BA88C", subtitle: "Unit 3 & 4" },
+                { label: "Chemistry", href: "/chemistry/checklist", color: "#8B5CF6", subtitle: "Work in Progress" },
+                { label: "Physics", href: "/physics/checklist", color: "#F59E0B", subtitle: "Work in Progress" },
+                { label: "Sports Science", href: "/sports-science/checklist", color: "#EF4444", subtitle: "Work in Progress" },
+              ],
+            };
+            const tabStyle = {
+              fontFamily: "'JSans', sans-serif",
+              fontSize: 13,
+              fontWeight: 600,
+              letterSpacing: 0.3,
+            };
             return (
-              <div
-                className="w-full"
-                style={{
-                  maxWidth: 900,
-                  display: "grid",
-                  gridTemplateColumns: "repeat(4, 1fr)",
-                  gap: 12,
-                }}
-              >
-                {subjects.map((s) => (
-                  <a key={s.label} href={s.href} style={{ textDecoration: "none" }}>
-                    <Button
-                      render={(props) => <button {...props} />}
-                      size="lg"
-                      className="rounded-full w-full font-bold"
-                      style={{
-                        fontFamily: "'JSans', sans-serif",
-                        height: 72,
-                        background: s.color,
-                        border: "none",
-                        color: "#fff",
-                        display: "flex",
-                        flexDirection: "column",
-                        alignItems: "center",
-                        justifyContent: "center",
-                        gap: 3,
-                        padding: "10px 16px",
-                        boxShadow: `0 4px 24px ${s.color}50`,
-                        transition: "all 0.2s ease",
-                      }}
-                      onMouseEnter={(e) => {
-                        e.currentTarget.style.filter = "brightness(1.15)";
-                        e.currentTarget.style.boxShadow = `0 6px 32px ${s.color}70`;
-                        e.currentTarget.style.transform = "translateY(-1px)";
-                      }}
-                      onMouseLeave={(e) => {
-                        e.currentTarget.style.filter = "none";
-                        e.currentTarget.style.boxShadow = `0 4px 24px ${s.color}50`;
-                        e.currentTarget.style.transform = "none";
-                      }}
-                    >
-                      <span style={{ fontSize: 16, letterSpacing: -0.3, lineHeight: 1.2 }}>{s.label}</span>
-                      <span style={{ fontSize: 10, fontWeight: 500, textTransform: "uppercase", letterSpacing: 0.8, opacity: 0.7, lineHeight: 1 }}>
-                        {s.subtitle}
-                      </span>
-                    </Button>
-                  </a>
-                ))}
+              <div className="w-full" style={{ maxWidth: 700 }}>
+                <Tabs
+                  variant="primary"
+                  className="w-full"
+                  classNames={{
+                    tabList: "rounded-full gap-2 p-1",
+                    tab: "rounded-full px-5 py-2",
+                  }}
+                  style={{
+                    "--tabs-bg": "rgba(255,255,255,0.08)",
+                    fontFamily: "'JSans', sans-serif",
+                  }}
+                >
+                  {Object.entries(groups).map(([group, subjects]) => (
+                    <Tabs.Tab key={group} id={group} style={tabStyle}>
+                      {group}
+                    </Tabs.Tab>
+                  ))}
+                  {Object.entries(groups).map(([group, subjects]) => (
+                    <Tabs.Panel key={group} id={group}>
+                      <div
+                        style={{
+                          display: "grid",
+                          gridTemplateColumns: `repeat(${subjects.length}, 1fr)`,
+                          gap: 12,
+                          marginTop: 20,
+                        }}
+                      >
+                        {subjects.map((s) => (
+                          <a key={s.label} href={s.href} style={{ textDecoration: "none" }}>
+                            <Button
+                              render={(props) => <button {...props} />}
+                              size="lg"
+                              className="rounded-full w-full font-bold"
+                              style={{
+                                fontFamily: "'JSans', sans-serif",
+                                height: 72,
+                                background: s.color,
+                                border: "none",
+                                color: "#fff",
+                                display: "flex",
+                                flexDirection: "column",
+                                alignItems: "center",
+                                justifyContent: "center",
+                                gap: 3,
+                                padding: "10px 16px",
+                                boxShadow: `0 4px 24px ${s.color}50`,
+                                transition: "all 0.2s ease",
+                              }}
+                              onMouseEnter={(e) => {
+                                e.currentTarget.style.filter = "brightness(1.15)";
+                                e.currentTarget.style.boxShadow = `0 6px 32px ${s.color}70`;
+                                e.currentTarget.style.transform = "translateY(-1px)";
+                              }}
+                              onMouseLeave={(e) => {
+                                e.currentTarget.style.filter = "none";
+                                e.currentTarget.style.boxShadow = `0 4px 24px ${s.color}50`;
+                                e.currentTarget.style.transform = "none";
+                              }}
+                            >
+                              <span style={{ fontSize: 16, letterSpacing: -0.3, lineHeight: 1.2 }}>{s.label}</span>
+                              <span style={{ fontSize: 10, fontWeight: 500, textTransform: "uppercase", letterSpacing: 0.8, opacity: 0.7, lineHeight: 1 }}>
+                                {s.subtitle}
+                              </span>
+                            </Button>
+                          </a>
+                        ))}
+                      </div>
+                    </Tabs.Panel>
+                  ))}
+                </Tabs>
               </div>
             );
           })()}
