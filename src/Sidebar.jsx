@@ -68,7 +68,7 @@ export default function Sidebar({ activeSubject }) {
           borderRight: "1px solid var(--bg-input)",
           display: "flex",
           flexDirection: "column",
-          padding: collapsed ? "24px 0 20px" : "24px 14px 20px",
+          padding: collapsed ? "24px 6px 20px 0" : "24px 14px 20px",
           gap: 0,
           fontFamily: "'JSans', sans-serif",
           overflowY: "auto",
