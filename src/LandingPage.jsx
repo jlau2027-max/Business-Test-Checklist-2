@@ -110,112 +110,65 @@ export default function LandingPage() {
           <div style={{ marginBottom: 64 }} />
 
           {/* Subject buttons */}
-          <div className="flex flex-col sm:flex-row gap-8 w-full" style={{ maxWidth: 780 }}>
-            <a href="/business/checklist" className="flex-1" style={{ textDecoration: "none" }}>
-              <ElectricBorder
-                color="#7BA3B5"
-                speed={1}
-                chaos={0.12}
-                borderRadius={16}
-                style={{ borderRadius: 16, cursor: "pointer" }}
+          {(() => {
+            const subjects = [
+              { label: "Business", href: "/business/checklist", color: "#7BA3B5", subtitle: "Finance Unit" },
+              { label: "History", href: "/history/specimen", color: "#D4A572", subtitle: "Paper 2 & 3" },
+              { label: "Biology", href: "/biology/checklist", color: "#5BA88C", subtitle: "Paper 1 & 2" },
+              { label: "Chemistry", href: "/chemistry/checklist", color: "#8B5CF6", subtitle: "Work in Progress" },
+              { label: "Physics", href: "/physics/checklist", color: "#F59E0B", subtitle: "Work in Progress" },
+              { label: "Sports Science", href: "/sports-science/checklist", color: "#EF4444", subtitle: "Work in Progress" },
+              { label: "Economics", href: "/economics/checklist", color: "#06B6D4", subtitle: "Work in Progress" },
+            ];
+            return (
+              <div
+                className="w-full"
+                style={{
+                  maxWidth: 780,
+                  display: "grid",
+                  gridTemplateColumns: "repeat(2, 1fr)",
+                  gap: 16,
+                }}
               >
-                <div
-                  style={{
-                    padding: "28px 24px",
-                    background: "rgba(0,0,0,0.45)",
-                    backdropFilter: "blur(20px)",
-                    WebkitBackdropFilter: "blur(20px)",
-                    borderRadius: 16,
-                    textAlign: "center",
-                    border: "1px solid rgba(255,255,255,0.06)",
-                  }}
-                >
-                  <span
-                    className="block font-bold"
-                    style={{ fontSize: 20, letterSpacing: -0.5, marginBottom: 4, color: "rgba(255,255,255,0.92)" }}
-                  >
-                    Business
-                  </span>
-                  <span
-                    className="block"
-                    style={{ fontSize: 11, fontWeight: 500, textTransform: "uppercase", letterSpacing: 1, color: "rgba(255,255,255,0.4)" }}
-                  >
-                    Finance Unit
-                  </span>
-                </div>
-              </ElectricBorder>
-            </a>
-
-            <a href="/history/specimen" className="flex-1" style={{ textDecoration: "none" }}>
-              <ElectricBorder
-                color="#D4A572"
-                speed={1}
-                chaos={0.12}
-                borderRadius={16}
-                style={{ borderRadius: 16, cursor: "pointer" }}
-              >
-                <div
-                  style={{
-                    padding: "28px 24px",
-                    background: "rgba(0,0,0,0.45)",
-                    backdropFilter: "blur(20px)",
-                    WebkitBackdropFilter: "blur(20px)",
-                    borderRadius: 16,
-                    textAlign: "center",
-                    border: "1px solid rgba(255,255,255,0.06)",
-                  }}
-                >
-                  <span
-                    className="block font-bold"
-                    style={{ fontSize: 20, letterSpacing: -0.5, marginBottom: 4, color: "rgba(255,255,255,0.92)" }}
-                  >
-                    History
-                  </span>
-                  <span
-                    className="block"
-                    style={{ fontSize: 11, fontWeight: 500, textTransform: "uppercase", letterSpacing: 1, color: "rgba(255,255,255,0.4)" }}
-                  >
-                    Paper 2 & 3
-                  </span>
-                </div>
-              </ElectricBorder>
-            </a>
-
-            <a href="/biology/checklist" className="flex-1" style={{ textDecoration: "none" }}>
-              <ElectricBorder
-                color="#5BA88C"
-                speed={1}
-                chaos={0.12}
-                borderRadius={16}
-                style={{ borderRadius: 16, cursor: "pointer" }}
-              >
-                <div
-                  style={{
-                    padding: "28px 24px",
-                    background: "rgba(0,0,0,0.45)",
-                    backdropFilter: "blur(20px)",
-                    WebkitBackdropFilter: "blur(20px)",
-                    borderRadius: 16,
-                    textAlign: "center",
-                    border: "1px solid rgba(255,255,255,0.06)",
-                  }}
-                >
-                  <span
-                    className="block font-bold"
-                    style={{ fontSize: 20, letterSpacing: -0.5, marginBottom: 4, color: "rgba(255,255,255,0.92)" }}
-                  >
-                    Biology
-                  </span>
-                  <span
-                    className="block"
-                    style={{ fontSize: 11, fontWeight: 500, textTransform: "uppercase", letterSpacing: 1, color: "rgba(255,255,255,0.4)" }}
-                  >
-                    Paper 1 & 2
-                  </span>
-                </div>
-              </ElectricBorder>
-            </a>
-          </div>
+                {subjects.map((s) => (
+                  <a key={s.label} href={s.href} style={{ textDecoration: "none" }}>
+                    <ElectricBorder
+                      color={s.color}
+                      speed={1}
+                      chaos={0.12}
+                      borderRadius={16}
+                      style={{ borderRadius: 16, cursor: "pointer" }}
+                    >
+                      <div
+                        style={{
+                          padding: "28px 24px",
+                          background: "rgba(0,0,0,0.45)",
+                          backdropFilter: "blur(20px)",
+                          WebkitBackdropFilter: "blur(20px)",
+                          borderRadius: 16,
+                          textAlign: "center",
+                          border: "1px solid rgba(255,255,255,0.06)",
+                        }}
+                      >
+                        <span
+                          className="block font-bold"
+                          style={{ fontSize: 20, letterSpacing: -0.5, marginBottom: 4, color: "rgba(255,255,255,0.92)" }}
+                        >
+                          {s.label}
+                        </span>
+                        <span
+                          className="block"
+                          style={{ fontSize: 11, fontWeight: 500, textTransform: "uppercase", letterSpacing: 1, color: "rgba(255,255,255,0.4)" }}
+                        >
+                          {s.subtitle}
+                        </span>
+                      </div>
+                    </ElectricBorder>
+                  </a>
+                ))}
+              </div>
+            );
+          })()}
         </div>
       </div>
     </div>

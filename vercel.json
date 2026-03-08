@@ -2,13 +2,21 @@
   "redirects": [
     { "source": "/specimen", "destination": "/business/specimen", "statusCode": 301 },
     { "source": "/history", "destination": "/history/specimen", "statusCode": 301 },
-    { "source": "/biology", "destination": "/biology/checklist", "statusCode": 301 }
+    { "source": "/biology", "destination": "/biology/checklist", "statusCode": 301 },
+    { "source": "/chemistry", "destination": "/chemistry/checklist", "statusCode": 301 },
+    { "source": "/physics", "destination": "/physics/checklist", "statusCode": 301 },
+    { "source": "/sports-science", "destination": "/sports-science/checklist", "statusCode": 301 },
+    { "source": "/economics", "destination": "/economics/checklist", "statusCode": 301 }
   ],
   "rewrites": [
     { "source": "/api/:path*", "destination": "/api/:path*" },
     { "source": "/business/:path*", "destination": "/index.html" },
     { "source": "/history/:path*", "destination": "/index.html" },
     { "source": "/biology/:path*", "destination": "/index.html" },
+    { "source": "/chemistry/:path*", "destination": "/index.html" },
+    { "source": "/physics/:path*", "destination": "/index.html" },
+    { "source": "/sports-science/:path*", "destination": "/index.html" },
+    { "source": "/economics/:path*", "destination": "/index.html" },
     { "source": "/dashboard", "destination": "/index.html" },
     { "source": "/admin", "destination": "/index.html" }
   ]

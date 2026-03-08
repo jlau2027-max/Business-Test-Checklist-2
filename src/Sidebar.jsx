@@ -5,6 +5,10 @@ const SUBJECT_COLORS = {
   business: { solid: "var(--accent)", glow: "var(--accent-glow)" },
   history: { solid: "var(--accent-tertiary)", glow: "var(--accent-tertiary-soft)" },
   biology: { solid: "var(--color-success)", glow: "var(--color-success-soft)" },
+  chemistry: { solid: "#8B5CF6", glow: "#8B5CF640" },
+  physics: { solid: "#F59E0B", glow: "#F59E0B40" },
+  sports: { solid: "#EF4444", glow: "#EF444440" },
+  economics: { solid: "#06B6D4", glow: "#06B6D440" },
   dashboard: { solid: "var(--accent-secondary)", glow: "var(--accent-secondary-soft)" },
 };
 
@@ -15,6 +19,10 @@ export default function Sidebar({ activeSubject, sidebarOpen, onClose }) {
     { label: "Business", href: "/business/checklist", subject: "business" },
     { label: "History", href: "/history/specimen", subject: "history" },
     { label: "Biology", href: "/biology/checklist", subject: "biology" },
+    { label: "Chemistry", href: "/chemistry/checklist", subject: "chemistry" },
+    { label: "Physics", href: "/physics/checklist", subject: "physics" },
+    { label: "Sports Sci", href: "/sports-science/checklist", subject: "sports" },
+    { label: "Economics", href: "/economics/checklist", subject: "economics" },
     ...(user ? [{ label: "Dashboard", href: "/dashboard", subject: "dashboard" }] : []),
   ];
 

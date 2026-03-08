@@ -22,6 +22,10 @@ if (path === '/specimen') window.location.replace('/business/specimen')
 if (path === '/history') window.location.replace('/history/specimen')
 if (path === '/biology') window.location.replace('/biology/checklist')
 if (path === '/business') window.location.replace('/business/checklist')
+if (path === '/chemistry') window.location.replace('/chemistry/checklist')
+if (path === '/physics') window.location.replace('/physics/checklist')
+if (path === '/sports-science') window.location.replace('/sports-science/checklist')
+if (path === '/economics') window.location.replace('/economics/checklist')
 
 // Determine page and props
 let Page = LandingPage
@@ -47,6 +51,26 @@ if (path.startsWith('/business/')) {
     const tabMap = { checklist: 'checklist', flashcards: 'flashcards', 'multi-choice': 'practice', written: 'written' }
     pageProps = { initialTab: tabMap[sub] || 'checklist', subject: 'biology' }
   }
+} else if (path.startsWith('/chemistry/')) {
+  const sub = path.split('/')[2]
+  Page = App
+  const tabMap = { checklist: 'checklist', flashcards: 'flashcards', 'multi-choice': 'practice', written: 'written' }
+  pageProps = { initialTab: tabMap[sub] || 'checklist', subject: 'chemistry' }
+} else if (path.startsWith('/physics/')) {
+  const sub = path.split('/')[2]
+  Page = App
+  const tabMap = { checklist: 'checklist', flashcards: 'flashcards', 'multi-choice': 'practice', written: 'written' }
+  pageProps = { initialTab: tabMap[sub] || 'checklist', subject: 'physics' }
+} else if (path.startsWith('/sports-science/')) {
+  const sub = path.split('/')[2]
+  Page = App
+  const tabMap = { checklist: 'checklist', flashcards: 'flashcards', 'multi-choice': 'practice', written: 'written' }
+  pageProps = { initialTab: tabMap[sub] || 'checklist', subject: 'sports' }
+} else if (path.startsWith('/economics/')) {
+  const sub = path.split('/')[2]
+  Page = App
+  const tabMap = { checklist: 'checklist', flashcards: 'flashcards', 'multi-choice': 'practice', written: 'written' }
+  pageProps = { initialTab: tabMap[sub] || 'checklist', subject: 'economics' }
 } else if (path === '/dashboard') {
   Page = DashboardPage
 } else if (path === '/admin') {

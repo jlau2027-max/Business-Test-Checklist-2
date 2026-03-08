@@ -753,6 +753,18 @@ const ALLOWED_TABLES = [
   "biology_checklist_sections", "biology_checklist_items",
   "biology_flashcard_topics", "biology_flashcards",
   "biology_mcq_questions", "biology_written_questions", "biology_category_colors",
+  "chemistry_checklist_sections", "chemistry_checklist_items",
+  "chemistry_flashcard_topics", "chemistry_flashcards",
+  "chemistry_mcq_questions", "chemistry_written_questions", "chemistry_category_colors",
+  "physics_checklist_sections", "physics_checklist_items",
+  "physics_flashcard_topics", "physics_flashcards",
+  "physics_mcq_questions", "physics_written_questions", "physics_category_colors",
+  "sports_checklist_sections", "sports_checklist_items",
+  "sports_flashcard_topics", "sports_flashcards",
+  "sports_mcq_questions", "sports_written_questions", "sports_category_colors",
+  "economics_checklist_sections", "economics_checklist_items",
+  "economics_flashcard_topics", "economics_flashcards",
+  "economics_mcq_questions", "economics_written_questions", "economics_category_colors",
 ];
 
 async function getNextId(env, table, prefix) {
@@ -1332,6 +1344,18 @@ const REORDER_TABLES = [
   "biology_checklist_sections", "biology_checklist_items",
   "biology_flashcard_topics", "biology_flashcards",
   "biology_mcq_questions", "biology_written_questions", "biology_category_colors",
+  "chemistry_checklist_sections", "chemistry_checklist_items",
+  "chemistry_flashcard_topics", "chemistry_flashcards",
+  "chemistry_mcq_questions", "chemistry_written_questions", "chemistry_category_colors",
+  "physics_checklist_sections", "physics_checklist_items",
+  "physics_flashcard_topics", "physics_flashcards",
+  "physics_mcq_questions", "physics_written_questions", "physics_category_colors",
+  "sports_checklist_sections", "sports_checklist_items",
+  "sports_flashcard_topics", "sports_flashcards",
+  "sports_mcq_questions", "sports_written_questions", "sports_category_colors",
+  "economics_checklist_sections", "economics_checklist_items",
+  "economics_flashcard_topics", "economics_flashcards",
+  "economics_mcq_questions", "economics_written_questions", "economics_category_colors",
 ];
 
 async function handleAdminReorder(table, request, env) {
@@ -1368,6 +1392,236 @@ async function handleAdminColorsPut(request, env) {
     ).bind(body.category, body.color).run();
   }
   return json({ ok: true });
+}
+
+// ─── Subject Factory (Chemistry, Physics, Sports Science, Economics) ─────
+
+function createSubjectHandlers(tbl, idPre, defaultColor) {
+  // tbl = table prefix e.g. "chemistry_", idPre = id prefix e.g. "chem_"
+  const FIELDS_FT = ["label", "color", "sort_order", "unit"];
+  const FIELDS_FC = ["topic_id", "term", "definition", "formula", "sort_order"];
+  const FIELDS_MCQ = ["category", "difficulty", "question_text", "option_a", "option_b", "option_c", "option_d", "correct_option", "explanation", "sort_order", "unit"];
+  const FIELDS_WRITTEN = ["category", "difficulty", "question_type", "marks", "question_text", "mark_scheme", "label", "sort_order", "unit"];
+  const FIELDS_CS = ["title", "color", "sort_order", "unit"];
+  const FIELDS_CI = ["section_id", "text", "sort_order"];
+
+  function makeUpdate(table, allowedFields) {
+    return async (id, request, env) => {
+      const body = await request.json();
+      const fields = []; const values = [];
+      for (const [key, val] of Object.entries(body)) {
+        if (!allowedFields.includes(key)) continue;
+        fields.push(`${key} = ?`); values.push(val);
+      }
+      if (fields.length === 0) return json({ error: "No valid fields to update" }, 400);
+      values.push(id);
+      await env.CONTENT_DB.prepare(`UPDATE ${table} SET ${fields.join(", ")} WHERE id = ?`).bind(...values).run();
+      return json({ ok: true });
+    };
+  }
+
+  return {
+    // --- GET handlers ---
+    async getChecklist(env) {
+      const { results: sections } = await env.CONTENT_DB.prepare(`SELECT * FROM ${tbl}checklist_sections ORDER BY sort_order`).all();
+      const { results: items } = await env.CONTENT_DB.prepare(`SELECT * FROM ${tbl}checklist_items ORDER BY sort_order`).all();
+      return jsonCached(sections.map(s => ({ ...s, items: items.filter(i => i.section_id === s.id) })));
+    },
+    async getFlashcardTopics(env) {
+      const { results } = await env.CONTENT_DB.prepare(
+        `SELECT ft.*, COUNT(f.id) as card_count FROM ${tbl}flashcard_topics ft LEFT JOIN ${tbl}flashcards f ON f.topic_id = ft.id GROUP BY ft.id ORDER BY ft.sort_order`
+      ).all();
+      return jsonCached(results);
+    },
+    async getFlashcards(topicId, env) {
+      const { results } = await env.CONTENT_DB.prepare(`SELECT * FROM ${tbl}flashcards WHERE topic_id = ? ORDER BY sort_order`).bind(topicId).all();
+      return jsonCached(results);
+    },
+    async getMcq(url, env) {
+      let sql = `SELECT * FROM ${tbl}mcq_questions WHERE 1=1`; const bindings = [];
+      const category = url.searchParams.get("category"); const difficulty = url.searchParams.get("difficulty");
+      if (category) { sql += ` AND category = ?`; bindings.push(category); }
+      if (difficulty) { sql += ` AND difficulty = ?`; bindings.push(difficulty); }
+      sql += ` ORDER BY sort_order`;
+      const { results } = await env.CONTENT_DB.prepare(sql).bind(...bindings).all();
+      return jsonCached(results);
+    },
+    async getWritten(url, env) {
+      let sql = `SELECT * FROM ${tbl}written_questions WHERE 1=1`; const bindings = [];
+      const type = url.searchParams.get("type"); const category = url.searchParams.get("category"); const difficulty = url.searchParams.get("difficulty");
+      if (type) { sql += ` AND question_type = ?`; bindings.push(type); }
+      if (category) { sql += ` AND category = ?`; bindings.push(category); }
+      if (difficulty) { sql += ` AND difficulty = ?`; bindings.push(difficulty); }
+      sql += ` ORDER BY sort_order`;
+      const { results } = await env.CONTENT_DB.prepare(sql).bind(...bindings).all();
+      return jsonCached(results);
+    },
+    async getColors(env) {
+      const { results } = await env.CONTENT_DB.prepare(`SELECT * FROM ${tbl}category_colors`).all();
+      return jsonCached(results);
+    },
+
+    // --- Admin: Flashcard Topics ---
+    async ftPost(request, env) {
+      const body = await request.json();
+      const id = body.id || slugify(body.label || body.title || `${idPre}topic`);
+      const sort_order = body.sort_order ?? await getNextSortOrder(env, `${tbl}flashcard_topics`);
+      await env.CONTENT_DB.prepare(`INSERT INTO ${tbl}flashcard_topics (id, label, color, sort_order, unit) VALUES (?, ?, ?, ?, ?)`).bind(id, body.label, body.color || defaultColor, sort_order, body.unit || 'A').run();
+      return json({ ok: true, id }, 201);
+    },
+    ftPut: makeUpdate(`${tbl}flashcard_topics`, FIELDS_FT),
+    async ftDelete(id, env) { await env.CONTENT_DB.prepare(`DELETE FROM ${tbl}flashcard_topics WHERE id = ?`).bind(id).run(); return json({ ok: true }); },
+
+    // --- Admin: Flashcards ---
+    async fcPost(request, env) {
+      const body = await request.json();
+      const sort_order = body.sort_order ?? await getNextSortOrder(env, `${tbl}flashcards`, "topic_id = ?", [body.topic_id]);
+      const result = await env.CONTENT_DB.prepare(`INSERT INTO ${tbl}flashcards (topic_id, term, definition, formula, sort_order) VALUES (?, ?, ?, ?, ?)`).bind(body.topic_id, body.term, body.definition, body.formula || null, sort_order).run();
+      return json({ ok: true, id: result.meta.last_row_id }, 201);
+    },
+    fcPut: makeUpdate(`${tbl}flashcards`, FIELDS_FC),
+    async fcDelete(id, env) { await env.CONTENT_DB.prepare(`DELETE FROM ${tbl}flashcards WHERE id = ?`).bind(id).run(); return json({ ok: true }); },
+
+    // --- Admin: MCQ ---
+    async mcqPost(request, env) {
+      const body = await request.json();
+      const id = body.id || await getNextId(env, `${tbl}mcq_questions`, `${idPre}mcq`);
+      const sort_order = body.sort_order ?? await getNextSortOrder(env, `${tbl}mcq_questions`);
+      await env.CONTENT_DB.prepare(
+        `INSERT INTO ${tbl}mcq_questions (id, category, difficulty, question_text, option_a, option_b, option_c, option_d, correct_option, explanation, sort_order, unit) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
+      ).bind(id, body.category || null, body.difficulty || null, body.question_text, body.option_a, body.option_b, body.option_c, body.option_d, body.correct_option, body.explanation || null, sort_order, body.unit || 'A').run();
+      return json({ ok: true, id }, 201);
+    },
+    mcqPut: makeUpdate(`${tbl}mcq_questions`, FIELDS_MCQ),
+    async mcqDelete(id, env) { await env.CONTENT_DB.prepare(`DELETE FROM ${tbl}mcq_questions WHERE id = ?`).bind(id).run(); return json({ ok: true }); },
+
+    // --- Admin: Written ---
+    async wrPost(request, env) {
+      const body = await request.json();
+      const id = body.id || await getNextId(env, `${tbl}written_questions`, `${idPre}wr`);
+      const sort_order = body.sort_order ?? await getNextSortOrder(env, `${tbl}written_questions`);
+      await env.CONTENT_DB.prepare(
+        `INSERT INTO ${tbl}written_questions (id, category, difficulty, question_type, marks, question_text, mark_scheme, label, sort_order, unit) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
+      ).bind(id, body.category || null, body.difficulty || null, body.question_type || 'short_answer', body.marks || null, body.question_text, body.mark_scheme || null, body.label || null, sort_order, body.unit || 'A').run();
+      return json({ ok: true, id }, 201);
+    },
+    wrPut: makeUpdate(`${tbl}written_questions`, FIELDS_WRITTEN),
+    async wrDelete(id, env) { await env.CONTENT_DB.prepare(`DELETE FROM ${tbl}written_questions WHERE id = ?`).bind(id).run(); return json({ ok: true }); },
+
+    // --- Admin: Checklist Sections ---
+    async csPost(request, env) {
+      const body = await request.json();
+      const id = body.id || slugify(body.title || `${idPre}section`);
+      const sort_order = body.sort_order ?? await getNextSortOrder(env, `${tbl}checklist_sections`);
+      await env.CONTENT_DB.prepare(`INSERT INTO ${tbl}checklist_sections (id, title, color, sort_order, unit) VALUES (?, ?, ?, ?, ?)`).bind(id, body.title, body.color || defaultColor, sort_order, body.unit || 'A').run();
+      return json({ ok: true, id }, 201);
+    },
+    csPut: makeUpdate(`${tbl}checklist_sections`, FIELDS_CS),
+    async csDelete(id, env) { await env.CONTENT_DB.prepare(`DELETE FROM ${tbl}checklist_sections WHERE id = ?`).bind(id).run(); return json({ ok: true }); },
+
+    // --- Admin: Checklist Items ---
+    async ciPost(request, env) {
+      const body = await request.json();
+      const sort_order = body.sort_order ?? await getNextSortOrder(env, `${tbl}checklist_items`, "section_id = ?", [body.section_id]);
+      const result = await env.CONTENT_DB.prepare(`INSERT INTO ${tbl}checklist_items (section_id, text, sort_order) VALUES (?, ?, ?)`).bind(body.section_id, body.text, sort_order).run();
+      return json({ ok: true, id: result.meta.last_row_id }, 201);
+    },
+    ciPut: makeUpdate(`${tbl}checklist_items`, FIELDS_CI),
+    async ciDelete(id, env) { await env.CONTENT_DB.prepare(`DELETE FROM ${tbl}checklist_items WHERE id = ?`).bind(id).run(); return json({ ok: true }); },
+
+    // --- Admin: Colors ---
+    async colorsPut(request, env) {
+      const body = await request.json();
+      const existing = await env.CONTENT_DB.prepare(`SELECT category FROM ${tbl}category_colors WHERE category = ?`).bind(body.category).first();
+      if (existing) {
+        await env.CONTENT_DB.prepare(`UPDATE ${tbl}category_colors SET color = ? WHERE category = ?`).bind(body.color, body.category).run();
+      } else {
+        await env.CONTENT_DB.prepare(`INSERT INTO ${tbl}category_colors (category, color) VALUES (?, ?)`).bind(body.category, body.color).run();
+      }
+      return json({ ok: true });
+    },
+  };
+}
+
+const chemH = createSubjectHandlers("chemistry_", "chem_", "#8B5CF6");
+const physH = createSubjectHandlers("physics_", "phys_", "#F59E0B");
+const sportH = createSubjectHandlers("sports_", "sport_", "#EF4444");
+const econH = createSubjectHandlers("economics_", "econ_", "#06B6D4");
+
+function registerSubjectRoutes(slug, h, path, method, url, request, env) {
+  // Public GET routes
+  if (method === "GET" && path === `/api/content/${slug}-checklist`) return h.getChecklist(env);
+  if (method === "GET" && path === `/api/content/${slug}-flashcard-topics`) return h.getFlashcardTopics(env);
+  const fcMatch = path.match(new RegExp(`^/api/content/${slug}-flashcards/([^/]+)$`));
+  if (method === "GET" && fcMatch) return h.getFlashcards(fcMatch[1], env);
+  if (method === "GET" && path === `/api/content/${slug}-mcq`) return h.getMcq(url, env);
+  if (method === "GET" && path === `/api/content/${slug}-written`) return h.getWritten(url, env);
+  if (method === "GET" && path === `/api/content/${slug}-colors`) return h.getColors(env);
+  return null;
+}
+
+async function registerSubjectAdminRoutes(slug, h, path, method, request, env) {
+  // Flashcard Topics
+  if (path === `/api/admin/${slug}-flashcard-topics` && method === "POST") {
+    const auth = await requireAuth(request, env, EDIT_ROLES); if (auth.response) return auth.response;
+    return h.ftPost(request, env);
+  }
+  const ftMatch = path.match(new RegExp(`^/api/admin/${slug}-flashcard-topics/([^/]+)$`));
+  if (ftMatch && method === "PUT") { const auth = await requireAuth(request, env, EDIT_ROLES); if (auth.response) return auth.response; return h.ftPut(ftMatch[1], request, env); }
+  if (ftMatch && method === "DELETE") { const auth = await requireAuth(request, env, DELETE_ROLES); if (auth.response) return auth.response; return h.ftDelete(ftMatch[1], env); }
+
+  // Flashcards
+  if (path === `/api/admin/${slug}-flashcards` && method === "POST") {
+    const auth = await requireAuth(request, env, EDIT_ROLES); if (auth.response) return auth.response;
+    return h.fcPost(request, env);
+  }
+  const fcMatch = path.match(new RegExp(`^/api/admin/${slug}-flashcards/([^/]+)$`));
+  if (fcMatch && method === "PUT") { const auth = await requireAuth(request, env, EDIT_ROLES); if (auth.response) return auth.response; return h.fcPut(fcMatch[1], request, env); }
+  if (fcMatch && method === "DELETE") { const auth = await requireAuth(request, env, DELETE_ROLES); if (auth.response) return auth.response; return h.fcDelete(fcMatch[1], env); }
+
+  // MCQ
+  if (path === `/api/admin/${slug}-mcq` && method === "POST") {
+    const auth = await requireAuth(request, env, EDIT_ROLES); if (auth.response) return auth.response;
+    return h.mcqPost(request, env);
+  }
+  const mcqMatch = path.match(new RegExp(`^/api/admin/${slug}-mcq/([^/]+)$`));
+  if (mcqMatch && method === "PUT") { const auth = await requireAuth(request, env, EDIT_ROLES); if (auth.response) return auth.response; return h.mcqPut(mcqMatch[1], request, env); }
+  if (mcqMatch && method === "DELETE") { const auth = await requireAuth(request, env, DELETE_ROLES); if (auth.response) return auth.response; return h.mcqDelete(mcqMatch[1], env); }
+
+  // Written
+  if (path === `/api/admin/${slug}-written` && method === "POST") {
+    const auth = await requireAuth(request, env, EDIT_ROLES); if (auth.response) return auth.response;
+    return h.wrPost(request, env);
+  }
+  const wrMatch = path.match(new RegExp(`^/api/admin/${slug}-written/([^/]+)$`));
+  if (wrMatch && method === "PUT") { const auth = await requireAuth(request, env, EDIT_ROLES); if (auth.response) return auth.response; return h.wrPut(wrMatch[1], request, env); }
+  if (wrMatch && method === "DELETE") { const auth = await requireAuth(request, env, DELETE_ROLES); if (auth.response) return auth.response; return h.wrDelete(wrMatch[1], env); }
+
+  // Checklist Sections
+  if (path === `/api/admin/${slug}-checklist-sections` && method === "POST") {
+    const auth = await requireAuth(request, env, EDIT_ROLES); if (auth.response) return auth.response;
+    return h.csPost(request, env);
+  }
+  const csMatch = path.match(new RegExp(`^/api/admin/${slug}-checklist-sections/([^/]+)$`));
+  if (csMatch && method === "PUT") { const auth = await requireAuth(request, env, EDIT_ROLES); if (auth.response) return auth.response; return h.csPut(csMatch[1], request, env); }
+  if (csMatch && method === "DELETE") { const auth = await requireAuth(request, env, DELETE_ROLES); if (auth.response) return auth.response; return h.csDelete(csMatch[1], env); }
+
+  // Checklist Items
+  if (path === `/api/admin/${slug}-checklist-items` && method === "POST") {
+    const auth = await requireAuth(request, env, EDIT_ROLES); if (auth.response) return auth.response;
+    return h.ciPost(request, env);
+  }
+  const ciMatch = path.match(new RegExp(`^/api/admin/${slug}-checklist-items/([^/]+)$`));
+  if (ciMatch && method === "PUT") { const auth = await requireAuth(request, env, EDIT_ROLES); if (auth.response) return auth.response; return h.ciPut(ciMatch[1], request, env); }
+  if (ciMatch && method === "DELETE") { const auth = await requireAuth(request, env, DELETE_ROLES); if (auth.response) return auth.response; return h.ciDelete(ciMatch[1], env); }
+
+  // Colors
+  if (path === `/api/admin/${slug}-colors` && method === "PUT") {
+    const auth = await requireAuth(request, env, EDIT_ROLES); if (auth.response) return auth.response;
+    return h.colorsPut(request, env);
+  }
+
+  return null;
 }
 
 // ─── Router ───────────────────────────────────────────────────────────────
@@ -1517,6 +1771,12 @@ export default {
 
     if (method === "GET" && path === "/api/content/biology-colors") {
       return handleGetBiologyColors(env);
+    }
+
+    // ── New subjects (factory-based GET routes) ──────────────────────────
+    for (const [slug, h] of [["chemistry", chemH], ["physics", physH], ["sports-science", sportH], ["economics", econH]]) {
+      const result = registerSubjectRoutes(slug, h, path, method, url, request, env);
+      if (result) return result;
     }
 
     if (method === "GET" && path === "/api/content/checklist") {
@@ -1778,6 +2038,12 @@ export default {
         const auth = await requireAuth(request, env, EDIT_ROLES);
         if (auth.response) return auth.response;
         return handleAdminBioColorsPut(request, env);
+      }
+
+      // --- New subjects (factory-based admin routes) ---
+      for (const [slug, h] of [["chemistry", chemH], ["physics", physH], ["sports-science", sportH], ["economics", econH]]) {
+        const result = await registerSubjectAdminRoutes(slug, h, path, method, request, env);
+        if (result) return result;
       }
 
       // --- Checklist Sections ---

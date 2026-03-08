@@ -15,6 +15,7 @@ import {
   createBiologyFlashcard, updateBiologyFlashcard, deleteBiologyFlashcard,
   fetchBiologyMcqQuestions, createBiologyMcqQuestion, updateBiologyMcqQuestion, deleteBiologyMcqQuestion,
   fetchBiologyWrittenQuestions, createBiologyWrittenQuestion, updateBiologyWrittenQuestion, deleteBiologyWrittenQuestion,
+  chemistryApi, physicsApi, sportsApi, economicsApi,
 } from "../api/contentApi.js";
 
 const BUSINESS_TABS = [
@@ -36,7 +37,39 @@ const BIOLOGY_TABS = [
   { value: "biology", label: "Specimen Qs" },
 ];
 
+const CHEMISTRY_TABS = [
+  { value: "chem_checklist", label: "Checklist" },
+  { value: "chem_flashcards", label: "Flashcards" },
+  { value: "chem_mcq", label: "MCQ" },
+  { value: "chem_written", label: "Written" },
+];
+
+const PHYSICS_TABS = [
+  { value: "phys_checklist", label: "Checklist" },
+  { value: "phys_flashcards", label: "Flashcards" },
+  { value: "phys_mcq", label: "MCQ" },
+  { value: "phys_written", label: "Written" },
+];
+
+const SPORTS_TABS = [
+  { value: "sport_checklist", label: "Checklist" },
+  { value: "sport_flashcards", label: "Flashcards" },
+  { value: "sport_mcq", label: "MCQ" },
+  { value: "sport_written", label: "Written" },
+];
+
+const ECONOMICS_TABS = [
+  { value: "econ_checklist", label: "Checklist" },
+  { value: "econ_flashcards", label: "Flashcards" },
+  { value: "econ_mcq", label: "MCQ" },
+  { value: "econ_written", label: "Written" },
+];
+
 const BIOLOGY_WRITTEN_TYPES = [
+  { value: "short_answer", label: "Short Answer" },
+];
+
+const SHORT_ANSWER_ONLY = [
   { value: "short_answer", label: "Short Answer" },
 ];
 
@@ -55,11 +88,22 @@ export default function AdminPage() {
   const [section, setSection] = useState("business");
   const [activeTab, setActiveTab] = useState("checklist");
 
-  const tabs = section === "business" ? BUSINESS_TABS : section === "history" ? HISTORY_TABS : section === "biology" ? BIOLOGY_TABS : USERS_TABS;
+  const SECTION_TAB_MAP = {
+    business: { tabs: BUSINESS_TABS, defaultTab: "checklist" },
+    history: { tabs: HISTORY_TABS, defaultTab: "history" },
+    biology: { tabs: BIOLOGY_TABS, defaultTab: "bio_checklist" },
+    chemistry: { tabs: CHEMISTRY_TABS, defaultTab: "chem_checklist" },
+    physics: { tabs: PHYSICS_TABS, defaultTab: "phys_checklist" },
+    sports: { tabs: SPORTS_TABS, defaultTab: "sport_checklist" },
+    economics: { tabs: ECONOMICS_TABS, defaultTab: "econ_checklist" },
+    users: { tabs: USERS_TABS, defaultTab: "users" },
+  };
+
+  const { tabs, defaultTab } = SECTION_TAB_MAP[section] || SECTION_TAB_MAP.business;
 
   const handleSectionChange = (val) => {
     setSection(val);
-    setActiveTab(val === "business" ? "checklist" : val === "history" ? "history" : val === "biology" ? "bio_checklist" : "users");
+    setActiveTab(SECTION_TAB_MAP[val]?.defaultTab || "checklist");
   };
 
   return (
@@ -94,6 +138,22 @@ export default function AdminPage() {
                 <Tabs.Tab id="biology" className="font-semibold text-sm font-mono text-[var(--text-secondary)] data-[selected=true]:text-white rounded-full px-4 py-2">
                   Biology
                   <Tabs.Indicator className="bg-[var(--color-success)] rounded-full" />
+                </Tabs.Tab>
+                <Tabs.Tab id="chemistry" className="font-semibold text-sm font-mono text-[var(--text-secondary)] data-[selected=true]:text-white rounded-full px-4 py-2">
+                  Chemistry
+                  <Tabs.Indicator className="bg-[#8B5CF6] rounded-full" />
+                </Tabs.Tab>
+                <Tabs.Tab id="physics" className="font-semibold text-sm font-mono text-[var(--text-secondary)] data-[selected=true]:text-white rounded-full px-4 py-2">
+                  Physics
+                  <Tabs.Indicator className="bg-[#F59E0B] rounded-full" />
+                </Tabs.Tab>
+                <Tabs.Tab id="sports" className="font-semibold text-sm font-mono text-[var(--text-secondary)] data-[selected=true]:text-white rounded-full px-4 py-2">
+                  Sports Sci
+                  <Tabs.Indicator className="bg-[#EF4444] rounded-full" />
+                </Tabs.Tab>
+                <Tabs.Tab id="economics" className="font-semibold text-sm font-mono text-[var(--text-secondary)] data-[selected=true]:text-white rounded-full px-4 py-2">
+                  Economics
+                  <Tabs.Indicator className="bg-[#06B6D4] rounded-full" />
                 </Tabs.Tab>
                 <Tabs.Tab id="users" className="font-semibold text-sm font-mono text-[var(--text-secondary)] data-[selected=true]:text-white rounded-full px-4 py-2">
                   Users
@@ -184,6 +244,63 @@ export default function AdminPage() {
             <Tabs.Panel id="biology" className="pt-4">
               <BiologyAdmin />
             </Tabs.Panel>
+
+            {/* Chemistry */}
+            <Tabs.Panel id="chem_checklist" className="pt-4">
+              <ChecklistAdmin fetchChecklist={chemistryApi.fetchChecklist} createChecklistSection={chemistryApi.createChecklistSection} updateChecklistSection={chemistryApi.updateChecklistSection} deleteChecklistSection={chemistryApi.deleteChecklistSection} createChecklistItem={chemistryApi.createChecklistItem} updateChecklistItem={chemistryApi.updateChecklistItem} deleteChecklistItem={chemistryApi.deleteChecklistItem} />
+            </Tabs.Panel>
+            <Tabs.Panel id="chem_flashcards" className="pt-4">
+              <FlashcardAdmin fetchFlashcardTopics={chemistryApi.fetchFlashcardTopics} fetchFlashcards={chemistryApi.fetchFlashcards} createFlashcardTopic={chemistryApi.createFlashcardTopic} updateFlashcardTopic={chemistryApi.updateFlashcardTopic} deleteFlashcardTopic={chemistryApi.deleteFlashcardTopic} createFlashcard={chemistryApi.createFlashcard} updateFlashcard={chemistryApi.updateFlashcard} deleteFlashcard={chemistryApi.deleteFlashcard} />
+            </Tabs.Panel>
+            <Tabs.Panel id="chem_mcq" className="pt-4">
+              <McqAdmin fetchMcqQuestions={chemistryApi.fetchMcqQuestions} createMcqQuestion={chemistryApi.createMcqQuestion} updateMcqQuestion={chemistryApi.updateMcqQuestion} deleteMcqQuestion={chemistryApi.deleteMcqQuestion} />
+            </Tabs.Panel>
+            <Tabs.Panel id="chem_written" className="pt-4">
+              <WrittenAdmin fetchWrittenQuestions={chemistryApi.fetchWrittenQuestions} createWrittenQuestion={chemistryApi.createWrittenQuestion} updateWrittenQuestion={chemistryApi.updateWrittenQuestion} deleteWrittenQuestion={chemistryApi.deleteWrittenQuestion} questionTypes={SHORT_ANSWER_ONLY} />
+            </Tabs.Panel>
+
+            {/* Physics */}
+            <Tabs.Panel id="phys_checklist" className="pt-4">
+              <ChecklistAdmin fetchChecklist={physicsApi.fetchChecklist} createChecklistSection={physicsApi.createChecklistSection} updateChecklistSection={physicsApi.updateChecklistSection} deleteChecklistSection={physicsApi.deleteChecklistSection} createChecklistItem={physicsApi.createChecklistItem} updateChecklistItem={physicsApi.updateChecklistItem} deleteChecklistItem={physicsApi.deleteChecklistItem} />
+            </Tabs.Panel>
+            <Tabs.Panel id="phys_flashcards" className="pt-4">
+              <FlashcardAdmin fetchFlashcardTopics={physicsApi.fetchFlashcardTopics} fetchFlashcards={physicsApi.fetchFlashcards} createFlashcardTopic={physicsApi.createFlashcardTopic} updateFlashcardTopic={physicsApi.updateFlashcardTopic} deleteFlashcardTopic={physicsApi.deleteFlashcardTopic} createFlashcard={physicsApi.createFlashcard} updateFlashcard={physicsApi.updateFlashcard} deleteFlashcard={physicsApi.deleteFlashcard} />
+            </Tabs.Panel>
+            <Tabs.Panel id="phys_mcq" className="pt-4">
+              <McqAdmin fetchMcqQuestions={physicsApi.fetchMcqQuestions} createMcqQuestion={physicsApi.createMcqQuestion} updateMcqQuestion={physicsApi.updateMcqQuestion} deleteMcqQuestion={physicsApi.deleteMcqQuestion} />
+            </Tabs.Panel>
+            <Tabs.Panel id="phys_written" className="pt-4">
+              <WrittenAdmin fetchWrittenQuestions={physicsApi.fetchWrittenQuestions} createWrittenQuestion={physicsApi.createWrittenQuestion} updateWrittenQuestion={physicsApi.updateWrittenQuestion} deleteWrittenQuestion={physicsApi.deleteWrittenQuestion} questionTypes={SHORT_ANSWER_ONLY} />
+            </Tabs.Panel>
+
+            {/* Sports Science */}
+            <Tabs.Panel id="sport_checklist" className="pt-4">
+              <ChecklistAdmin fetchChecklist={sportsApi.fetchChecklist} createChecklistSection={sportsApi.createChecklistSection} updateChecklistSection={sportsApi.updateChecklistSection} deleteChecklistSection={sportsApi.deleteChecklistSection} createChecklistItem={sportsApi.createChecklistItem} updateChecklistItem={sportsApi.updateChecklistItem} deleteChecklistItem={sportsApi.deleteChecklistItem} />
+            </Tabs.Panel>
+            <Tabs.Panel id="sport_flashcards" className="pt-4">
+              <FlashcardAdmin fetchFlashcardTopics={sportsApi.fetchFlashcardTopics} fetchFlashcards={sportsApi.fetchFlashcards} createFlashcardTopic={sportsApi.createFlashcardTopic} updateFlashcardTopic={sportsApi.updateFlashcardTopic} deleteFlashcardTopic={sportsApi.deleteFlashcardTopic} createFlashcard={sportsApi.createFlashcard} updateFlashcard={sportsApi.updateFlashcard} deleteFlashcard={sportsApi.deleteFlashcard} />
+            </Tabs.Panel>
+            <Tabs.Panel id="sport_mcq" className="pt-4">
+              <McqAdmin fetchMcqQuestions={sportsApi.fetchMcqQuestions} createMcqQuestion={sportsApi.createMcqQuestion} updateMcqQuestion={sportsApi.updateMcqQuestion} deleteMcqQuestion={sportsApi.deleteMcqQuestion} />
+            </Tabs.Panel>
+            <Tabs.Panel id="sport_written" className="pt-4">
+              <WrittenAdmin fetchWrittenQuestions={sportsApi.fetchWrittenQuestions} createWrittenQuestion={sportsApi.createWrittenQuestion} updateWrittenQuestion={sportsApi.updateWrittenQuestion} deleteWrittenQuestion={sportsApi.deleteWrittenQuestion} questionTypes={SHORT_ANSWER_ONLY} />
+            </Tabs.Panel>
+
+            {/* Economics */}
+            <Tabs.Panel id="econ_checklist" className="pt-4">
+              <ChecklistAdmin fetchChecklist={economicsApi.fetchChecklist} createChecklistSection={economicsApi.createChecklistSection} updateChecklistSection={economicsApi.updateChecklistSection} deleteChecklistSection={economicsApi.deleteChecklistSection} createChecklistItem={economicsApi.createChecklistItem} updateChecklistItem={economicsApi.updateChecklistItem} deleteChecklistItem={economicsApi.deleteChecklistItem} />
+            </Tabs.Panel>
+            <Tabs.Panel id="econ_flashcards" className="pt-4">
+              <FlashcardAdmin fetchFlashcardTopics={economicsApi.fetchFlashcardTopics} fetchFlashcards={economicsApi.fetchFlashcards} createFlashcardTopic={economicsApi.createFlashcardTopic} updateFlashcardTopic={economicsApi.updateFlashcardTopic} deleteFlashcardTopic={economicsApi.deleteFlashcardTopic} createFlashcard={economicsApi.createFlashcard} updateFlashcard={economicsApi.updateFlashcard} deleteFlashcard={economicsApi.deleteFlashcard} />
+            </Tabs.Panel>
+            <Tabs.Panel id="econ_mcq" className="pt-4">
+              <McqAdmin fetchMcqQuestions={economicsApi.fetchMcqQuestions} createMcqQuestion={economicsApi.createMcqQuestion} updateMcqQuestion={economicsApi.updateMcqQuestion} deleteMcqQuestion={economicsApi.deleteMcqQuestion} />
+            </Tabs.Panel>
+            <Tabs.Panel id="econ_written" className="pt-4">
+              <WrittenAdmin fetchWrittenQuestions={economicsApi.fetchWrittenQuestions} createWrittenQuestion={economicsApi.createWrittenQuestion} updateWrittenQuestion={economicsApi.updateWrittenQuestion} deleteWrittenQuestion={economicsApi.deleteWrittenQuestion} questionTypes={SHORT_ANSWER_ONLY} />
+            </Tabs.Panel>
+
             <Tabs.Panel id="users" className="pt-4">
               <UsersAdmin />
             </Tabs.Panel>

@@ -383,3 +383,83 @@ export async function reorderContent(table, items) {
 export async function updateCategoryColor(category, color) {
   return adminFetch("/api/admin/colors", "PUT", { category, color });
 }
+
+// ---------------------------------------------------------------------------
+// Subject API Factory (Chemistry, Physics, Sports Science, Economics)
+// ---------------------------------------------------------------------------
+
+function createSubjectApi(slug) {
+  return {
+    // Public
+    fetchChecklist: async () => {
+      const res = await fetch(`${WORKER_URL}/api/content/${slug}-checklist`);
+      if (!res.ok) throw new Error(`Failed to fetch ${slug} checklist: ${res.status}`);
+      return res.json();
+    },
+    fetchFlashcardTopics: async () => {
+      const res = await fetch(`${WORKER_URL}/api/content/${slug}-flashcard-topics`);
+      if (!res.ok) throw new Error(`Failed to fetch ${slug} flashcard topics: ${res.status}`);
+      return res.json();
+    },
+    fetchFlashcards: async (topicId) => {
+      const res = await fetch(`${WORKER_URL}/api/content/${slug}-flashcards/${topicId}`);
+      if (!res.ok) throw new Error(`Failed to fetch ${slug} flashcards: ${res.status}`);
+      return res.json();
+    },
+    fetchMcqQuestions: async (filters = {}) => {
+      const params = new URLSearchParams();
+      if (filters.category) params.set("category", filters.category);
+      if (filters.difficulty) params.set("difficulty", filters.difficulty);
+      const qs = params.toString();
+      const res = await fetch(`${WORKER_URL}/api/content/${slug}-mcq${qs ? `?${qs}` : ""}`);
+      if (!res.ok) throw new Error(`Failed to fetch ${slug} MCQ: ${res.status}`);
+      return res.json();
+    },
+    fetchWrittenQuestions: async (filters = {}) => {
+      const params = new URLSearchParams();
+      if (filters.type) params.set("type", filters.type);
+      if (filters.category) params.set("category", filters.category);
+      if (filters.difficulty) params.set("difficulty", filters.difficulty);
+      const qs = params.toString();
+      const res = await fetch(`${WORKER_URL}/api/content/${slug}-written${qs ? `?${qs}` : ""}`);
+      if (!res.ok) throw new Error(`Failed to fetch ${slug} written: ${res.status}`);
+      return res.json();
+    },
+    fetchCategoryColors: async () => {
+      const res = await fetch(`${WORKER_URL}/api/content/${slug}-colors`);
+      if (!res.ok) throw new Error(`Failed to fetch ${slug} colors: ${res.status}`);
+      return res.json();
+    },
+    // Admin - Flashcard Topics
+    createFlashcardTopic: (data) => adminFetch(`/api/admin/${slug}-flashcard-topics`, "POST", data),
+    updateFlashcardTopic: (id, data) => adminFetch(`/api/admin/${slug}-flashcard-topics/${id}`, "PUT", data),
+    deleteFlashcardTopic: (id) => adminFetch(`/api/admin/${slug}-flashcard-topics/${id}`, "DELETE"),
+    // Admin - Flashcards
+    createFlashcard: (data) => adminFetch(`/api/admin/${slug}-flashcards`, "POST", data),
+    updateFlashcard: (id, data) => adminFetch(`/api/admin/${slug}-flashcards/${id}`, "PUT", data),
+    deleteFlashcard: (id) => adminFetch(`/api/admin/${slug}-flashcards/${id}`, "DELETE"),
+    // Admin - MCQ
+    createMcqQuestion: (data) => adminFetch(`/api/admin/${slug}-mcq`, "POST", data),
+    updateMcqQuestion: (id, data) => adminFetch(`/api/admin/${slug}-mcq/${id}`, "PUT", data),
+    deleteMcqQuestion: (id) => adminFetch(`/api/admin/${slug}-mcq/${id}`, "DELETE"),
+    // Admin - Written
+    createWrittenQuestion: (data) => adminFetch(`/api/admin/${slug}-written`, "POST", data),
+    updateWrittenQuestion: (id, data) => adminFetch(`/api/admin/${slug}-written/${id}`, "PUT", data),
+    deleteWrittenQuestion: (id) => adminFetch(`/api/admin/${slug}-written/${id}`, "DELETE"),
+    // Admin - Checklist Sections
+    createChecklistSection: (data) => adminFetch(`/api/admin/${slug}-checklist-sections`, "POST", data),
+    updateChecklistSection: (id, data) => adminFetch(`/api/admin/${slug}-checklist-sections/${id}`, "PUT", data),
+    deleteChecklistSection: (id) => adminFetch(`/api/admin/${slug}-checklist-sections/${id}`, "DELETE"),
+    // Admin - Checklist Items
+    createChecklistItem: (data) => adminFetch(`/api/admin/${slug}-checklist-items`, "POST", data),
+    updateChecklistItem: (id, data) => adminFetch(`/api/admin/${slug}-checklist-items/${id}`, "PUT", data),
+    deleteChecklistItem: (id) => adminFetch(`/api/admin/${slug}-checklist-items/${id}`, "DELETE"),
+    // Admin - Colors
+    updateCategoryColor: (category, color) => adminFetch(`/api/admin/${slug}-colors`, "PUT", { category, color }),
+  };
+}
+
+export const chemistryApi = createSubjectApi("chemistry");
+export const physicsApi = createSubjectApi("physics");
+export const sportsApi = createSubjectApi("sports-science");
+export const economicsApi = createSubjectApi("economics");
