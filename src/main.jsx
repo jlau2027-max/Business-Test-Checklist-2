@@ -13,6 +13,7 @@ import AdminPage from './admin/AdminPage.jsx'
 import LandingPage from './LandingPage.jsx'
 import PrivacyPage from './PrivacyPage.jsx'
 import TermsPage from './TermsPage.jsx'
+import NotFoundPage from './NotFoundPage.jsx'
 import Grainient from './components/Grainient.jsx'
 import { AuthProvider, useAuth } from './AuthContext.jsx'
 import ThemeToggle from './ThemeToggle.jsx'
@@ -85,8 +86,8 @@ if (path.startsWith('/business/')) {
 } else if (path === '/terms') {
   Page = TermsPage
 } else if (path !== '/') {
-  // Unknown path — show landing
-  Page = LandingPage
+  // Unknown path — 404
+  Page = NotFoundPage
 }
 
 // ─── Dynamic page titles (SEO — Google executes JS) ────────────────────────
@@ -126,7 +127,7 @@ if (PAGE_TITLES[path]) {
 
 // ─── Auth gating ─────────────────────────────────────────────────────────────
 const PUBLIC_PATHS = new Set(['/', '/privacy', '/terms'])
-const isPublicPage = PUBLIC_PATHS.has(path)
+const isPublicPage = PUBLIC_PATHS.has(path) || Page === NotFoundPage
 
 function SignInGate() {
   const [isDark, setIsDark] = useState(() => document.documentElement.classList.contains("dark"))
@@ -159,26 +160,32 @@ function SignInGate() {
         padding: "24px",
       }}>
         <div style={{
-          background: "rgba(255,255,255,0.95)",
+          background: isDark ? "rgba(30,35,44,0.92)" : "rgba(255,255,255,0.95)",
           borderRadius: 20, padding: "48px 40px", maxWidth: 400, width: "100%",
-          textAlign: "center", boxShadow: "0 8px 32px rgba(0,0,0,0.12)",
+          textAlign: "center",
+          boxShadow: isDark ? "0 8px 32px rgba(0,0,0,0.4)" : "0 8px 32px rgba(0,0,0,0.12)",
+          border: isDark ? "1px solid rgba(255,255,255,0.08)" : "none",
         }}>
           <div style={{
             width: 48, height: 48, borderRadius: 12,
-            background: "#5E8A9C15", display: "flex", alignItems: "center",
+            background: isDark ? "#5E8A9C20" : "#5E8A9C15",
+            display: "flex", alignItems: "center",
             justifyContent: "center", margin: "0 auto 20px",
           }}>
             <Lock size={22} color="#5E8A9C" />
           </div>
 
           <h1 style={{
-            fontSize: 24, fontWeight: 700, color: "#1a1a1a",
+            fontSize: 24, fontWeight: 700,
+            color: isDark ? "#e8e4de" : "#1a1a1a",
             marginBottom: 8, lineHeight: 1.3,
           }}>
             Sign in to IBrev
           </h1>
           <p style={{
-            fontSize: 15, color: "#666", lineHeight: 1.6, marginBottom: 28,
+            fontSize: 15,
+            color: isDark ? "#9a958d" : "#666",
+            lineHeight: 1.6, marginBottom: 28,
           }}>
             Create a free account to access revision content, flashcards, specimen papers, AI marking and progress tracking.
           </p>
@@ -202,7 +209,9 @@ function SignInGate() {
           <a
             href="/"
             style={{
-              fontSize: 13, color: "#888", textDecoration: "none",
+              fontSize: 13,
+              color: isDark ? "#7a756d" : "#888",
+              textDecoration: "none",
               fontWeight: 500,
             }}
           >
