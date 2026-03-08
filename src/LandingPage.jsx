@@ -134,36 +134,35 @@ export default function LandingPage() {
                     <Button
                       render={(props) => <button {...props} />}
                       size="lg"
-                      className="rounded-full w-full font-semibold"
+                      className="rounded-full w-full font-bold"
                       style={{
                         fontFamily: "'JSans', sans-serif",
-                        height: 56,
-                        background: `${s.color}20`,
-                        backdropFilter: "blur(16px)",
-                        WebkitBackdropFilter: "blur(16px)",
-                        border: `1px solid ${s.color}40`,
-                        color: "rgba(255,255,255,0.9)",
+                        height: 72,
+                        background: s.color,
+                        border: "none",
+                        color: "#fff",
                         display: "flex",
                         flexDirection: "column",
                         alignItems: "center",
                         justifyContent: "center",
-                        gap: 2,
-                        padding: "8px 12px",
+                        gap: 3,
+                        padding: "10px 16px",
+                        boxShadow: `0 4px 24px ${s.color}50`,
                         transition: "all 0.2s ease",
                       }}
                       onMouseEnter={(e) => {
-                        e.currentTarget.style.background = `${s.color}35`;
-                        e.currentTarget.style.borderColor = `${s.color}70`;
-                        e.currentTarget.style.boxShadow = `0 0 20px ${s.color}30`;
+                        e.currentTarget.style.filter = "brightness(1.15)";
+                        e.currentTarget.style.boxShadow = `0 6px 32px ${s.color}70`;
+                        e.currentTarget.style.transform = "translateY(-1px)";
                       }}
                       onMouseLeave={(e) => {
-                        e.currentTarget.style.background = `${s.color}20`;
-                        e.currentTarget.style.borderColor = `${s.color}40`;
-                        e.currentTarget.style.boxShadow = "none";
+                        e.currentTarget.style.filter = "none";
+                        e.currentTarget.style.boxShadow = `0 4px 24px ${s.color}50`;
+                        e.currentTarget.style.transform = "none";
                       }}
                     >
-                      <span style={{ fontSize: 14, letterSpacing: -0.3, lineHeight: 1.2 }}>{s.label}</span>
-                      <span style={{ fontSize: 9, fontWeight: 400, textTransform: "uppercase", letterSpacing: 0.8, opacity: 0.5, lineHeight: 1 }}>
+                      <span style={{ fontSize: 16, letterSpacing: -0.3, lineHeight: 1.2 }}>{s.label}</span>
+                      <span style={{ fontSize: 10, fontWeight: 500, textTransform: "uppercase", letterSpacing: 0.8, opacity: 0.7, lineHeight: 1 }}>
                         {s.subtitle}
                       </span>
                     </Button>
