@@ -52,7 +52,7 @@ export default function LandingPage() {
         <div className="max-w-2xl mx-auto px-4 flex flex-col items-center" style={{ paddingTop: 0, paddingBottom: 120 }}>
           {/* Title */}
           <h1 style={{
-            fontSize: "clamp(40px, 8vw, 72px)",
+            fontSize: "clamp(52px, 10vw, 96px)",
             fontWeight: 800,
             letterSpacing: -1.5,
             color: "#fdf9f3",
@@ -64,7 +64,7 @@ export default function LandingPage() {
             IB Revision
           </h1>
           <p style={{
-            fontSize: "clamp(16px, 2.5vw, 24px)",
+            fontSize: "clamp(20px, 3vw, 30px)",
             fontWeight: 500,
             color: "rgba(253,249,243,0.6)",
             textAlign: "center",
