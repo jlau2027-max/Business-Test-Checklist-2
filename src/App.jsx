@@ -1,4 +1,4 @@
-import { useState, useEffect, createContext, useContext } from "react";
+import { useState, useEffect, useMemo, createContext, useContext } from "react";
 import { Analytics } from "@vercel/analytics/react";
 import { Button, TextArea, Spinner, Alert, Checkbox, Tabs, RadioGroup, Radio, Accordion, Surface } from "@heroui/react";
 import ProgressBar from "./components/ProgressBar.jsx";
@@ -43,6 +43,13 @@ const SUBJECT_CONFIGS = {
     show10Marker: false,
     showSpecimen: false,
     lsPrefix: "bio_",
+    units: [
+      { value: "All", label: "All Units" },
+      { value: "A", label: "A" },
+      { value: "B", label: "B" },
+      { value: "C", label: "C" },
+      { value: "D", label: "D" },
+    ],
     api: {
       fetchChecklist: fetchBiologyChecklist, fetchFlashcardTopics: fetchBiologyFlashcardTopics,
       fetchFlashcards: fetchBiologyFlashcards, fetchMcqQuestions: fetchBiologyMcqQuestions,
@@ -315,13 +322,13 @@ async function fetchAppContent(api = SUBJECT_CONFIGS.business.api) {
   const mcqQuestions = mcqRaw.map(q => ({
     id: q.id, cat: q.category, difficulty: q.difficulty, q: q.question_text,
     options: [q.option_a, q.option_b, q.option_c, q.option_d],
-    answer: q.correct_option, explanation: q.explanation,
+    answer: q.correct_option, explanation: q.explanation, unit: q.unit,
   }));
 
   // Written: remap + split by question_type
   const allWritten = writtenRaw.map(q => ({
     id: q.id, cat: q.category, difficulty: q.difficulty, marks: q.marks,
-    q: q.question_text, modelAnswer: q.mark_scheme, _type: q.question_type,
+    q: q.question_text, modelAnswer: q.mark_scheme, _type: q.question_type, unit: q.unit,
   }));
   const writtenQuestions = allWritten.filter(q => q._type === "short_answer");
   const written10MarkQuestions = allWritten.filter(q => q._type === "ten_marker");
@@ -335,8 +342,8 @@ async function fetchAppContent(api = SUBJECT_CONFIGS.business.api) {
   const flashcardCategories = await Promise.all(topicsRaw.map(async t => {
     try {
       const cards = await api.fetchFlashcards(t.id);
-      return { id: t.id, label: t.label, color: t.color, cards: cards.map(c => ({ term: c.term, def: c.definition, formula: c.formula })) };
-    } catch { return { id: t.id, label: t.label, color: t.color, cards: [] }; }
+      return { id: t.id, label: t.label, color: t.color, unit: t.unit, cards: cards.map(c => ({ term: c.term, def: c.definition, formula: c.formula })) };
+    } catch { return { id: t.id, label: t.label, color: t.color, unit: t.unit, cards: [] }; }
   }));
 
   const allCats = ["All", ...Array.from(new Set(mcqQuestions.map(q => q.cat)))];
@@ -1002,6 +1009,10 @@ export default function App({ initialTab = "checklist", subject = "business" }) 
   };
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
+  // Unit filter (biology only)
+  const [unit, setUnit] = useState(() => loadLS(`${config.lsPrefix}unit_tab`, "All"));
+  useEffect(() => { saveLS(`${config.lsPrefix}unit_tab`, unit); }, [unit, config.lsPrefix]);
+
   // Content state — starts with hardcoded fallback (business) or empty (biology), updates from API
   const EMPTY_CONTENT = { checklistSections: [], flashcardCategories: [], mcqQuestions: [], writtenQuestions: [], written10MarkQuestions: [], catColors: {}, allCats: ["All"] };
   const [content, setContent] = useState(subject === "business" ? FALLBACK_CONTENT : EMPTY_CONTENT);
@@ -1013,9 +1024,23 @@ export default function App({ initialTab = "checklist", subject = "business" }) 
     return () => { cancelled = true; };
   }, [subject]);
 
+  // Filtered content by unit (passthrough when no units config or "All")
+  const filteredContent = useMemo(() => {
+    if (!config.units || unit === "All") return content;
+    return {
+      ...content,
+      checklistSections: content.checklistSections.filter(s => s.unit === unit),
+      flashcardCategories: content.flashcardCategories.filter(c => c.unit === unit),
+      mcqQuestions: content.mcqQuestions.filter(q => q.unit === unit),
+      writtenQuestions: content.writtenQuestions.filter(q => q.unit === unit),
+      written10MarkQuestions: content.written10MarkQuestions.filter(q => q.unit === unit),
+      allCats: ["All", ...Array.from(new Set(content.mcqQuestions.filter(q => q.unit === unit).map(q => q.cat)))],
+    };
+  }, [content, unit, config.units]);
+
   return (
     <SubjectConfigCtx.Provider value={config}>
-    <ContentCtx.Provider value={content}>
+    <ContentCtx.Provider value={filteredContent}>
     <div className="min-h-screen bg-[var(--bg-base)]" style={{fontFamily:"'JSans', sans-serif",color:"var(--text-primary)"}}>
 
       <Sidebar activeSubject={config.subject} sidebarOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
@@ -1084,6 +1109,32 @@ export default function App({ initialTab = "checklist", subject = "business" }) 
 
       {/* Content */}
       <div className="max-w-5xl mx-auto py-8 px-4">
+        {/* Unit filter (biology) */}
+        {config.units && (
+          <div className="flex gap-2 justify-center mb-6">
+            {config.units.map(u => {
+              const active = unit === u.value;
+              return (
+                <Button
+                  key={u.value}
+                  size="sm"
+                  className="rounded-full font-semibold"
+                  onPress={() => setUnit(u.value)}
+                  style={{
+                    backgroundColor: active ? config.accentColor : "var(--bg-input)",
+                    color: active ? "#fff" : "var(--text-secondary)",
+                    border: `1px solid ${active ? config.accentColor : "var(--border)"}`,
+                    boxShadow: active ? `0 0 12px ${config.accentGlow}` : "none",
+                    fontFamily: "'JSans', sans-serif",
+                    minWidth: u.value === "All" ? 90 : 40,
+                  }}
+                >
+                  {u.label}
+                </Button>
+              );
+            })}
+          </div>
+        )}
         {tab==="checklist" && <ChecklistView/>}
         {tab==="flashcards" && <FlashcardsView/>}
         {tab==="practice" && <PracticeView/>}

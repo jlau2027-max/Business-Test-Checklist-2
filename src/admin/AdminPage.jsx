@@ -40,6 +40,13 @@ const BIOLOGY_WRITTEN_TYPES = [
   { value: "short_answer", label: "Short Answer" },
 ];
 
+const BIOLOGY_UNITS = [
+  { value: "A", label: "A" },
+  { value: "B", label: "B" },
+  { value: "C", label: "C" },
+  { value: "D", label: "D" },
+];
+
 const USERS_TABS = [
   { value: "users", label: "User Management" },
 ];
@@ -161,6 +168,7 @@ export default function AdminPage() {
                 createMcqQuestion={createBiologyMcqQuestion}
                 updateMcqQuestion={updateBiologyMcqQuestion}
                 deleteMcqQuestion={deleteBiologyMcqQuestion}
+                units={BIOLOGY_UNITS}
               />
             </Tabs.Panel>
             <Tabs.Panel id="bio_written" className="pt-4">
@@ -170,6 +178,7 @@ export default function AdminPage() {
                 updateWrittenQuestion={updateBiologyWrittenQuestion}
                 deleteWrittenQuestion={deleteBiologyWrittenQuestion}
                 questionTypes={BIOLOGY_WRITTEN_TYPES}
+                units={BIOLOGY_UNITS}
               />
             </Tabs.Panel>
             <Tabs.Panel id="biology" className="pt-4">

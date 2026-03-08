@@ -1018,12 +1018,12 @@ async function handleAdminBioFlashcardTopicsPost(request, env) {
   const id = body.id || slugify(body.label || body.title || "bio-topic");
   const sort_order = body.sort_order ?? await getNextSortOrder(env, "biology_flashcard_topics");
   await env.CONTENT_DB.prepare(
-    `INSERT INTO biology_flashcard_topics (id, label, color, sort_order) VALUES (?, ?, ?, ?)`
-  ).bind(id, body.label, body.color || '#5BA88C', sort_order).run();
+    `INSERT INTO biology_flashcard_topics (id, label, color, sort_order, unit) VALUES (?, ?, ?, ?, ?)`
+  ).bind(id, body.label, body.color || '#5BA88C', sort_order, body.unit || 'A').run();
   return json({ ok: true, id }, 201);
 }
 
-const FIELDS_BIO_FT = ["label", "color", "sort_order"];
+const FIELDS_BIO_FT = ["label", "color", "sort_order", "unit"];
 
 async function handleAdminBioFlashcardTopicsPut(id, request, env) {
   const body = await request.json();
@@ -1089,17 +1089,17 @@ async function handleAdminBioMcqPost(request, env) {
   const id = body.id || await getNextId(env, "biology_mcq_questions", "bio_mcq");
   const sort_order = body.sort_order ?? await getNextSortOrder(env, "biology_mcq_questions");
   await env.CONTENT_DB.prepare(
-    `INSERT INTO biology_mcq_questions (id, category, difficulty, question_text, option_a, option_b, option_c, option_d, correct_option, explanation, sort_order)
-     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
+    `INSERT INTO biology_mcq_questions (id, category, difficulty, question_text, option_a, option_b, option_c, option_d, correct_option, explanation, sort_order, unit)
+     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
   ).bind(
     id, body.category || null, body.difficulty || null, body.question_text,
     body.option_a, body.option_b, body.option_c, body.option_d,
-    body.correct_option, body.explanation || null, sort_order
+    body.correct_option, body.explanation || null, sort_order, body.unit || 'A'
   ).run();
   return json({ ok: true, id }, 201);
 }
 
-const FIELDS_BIO_MCQ = ["category", "difficulty", "question_text", "option_a", "option_b", "option_c", "option_d", "correct_option", "explanation", "sort_order"];
+const FIELDS_BIO_MCQ = ["category", "difficulty", "question_text", "option_a", "option_b", "option_c", "option_d", "correct_option", "explanation", "sort_order", "unit"];
 
 async function handleAdminBioMcqPut(id, request, env) {
   const body = await request.json();
@@ -1130,16 +1130,16 @@ async function handleAdminBioWrittenPost(request, env) {
   const id = body.id || await getNextId(env, "biology_written_questions", "bio_wr");
   const sort_order = body.sort_order ?? await getNextSortOrder(env, "biology_written_questions");
   await env.CONTENT_DB.prepare(
-    `INSERT INTO biology_written_questions (id, category, difficulty, question_type, marks, question_text, mark_scheme, label, sort_order)
-     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`
+    `INSERT INTO biology_written_questions (id, category, difficulty, question_type, marks, question_text, mark_scheme, label, sort_order, unit)
+     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
   ).bind(
     id, body.category || null, body.difficulty || null, body.question_type || 'short_answer',
-    body.marks || null, body.question_text, body.mark_scheme || null, body.label || null, sort_order
+    body.marks || null, body.question_text, body.mark_scheme || null, body.label || null, sort_order, body.unit || 'A'
   ).run();
   return json({ ok: true, id }, 201);
 }
 
-const FIELDS_BIO_WRITTEN = ["category", "difficulty", "question_type", "marks", "question_text", "mark_scheme", "label", "sort_order"];
+const FIELDS_BIO_WRITTEN = ["category", "difficulty", "question_type", "marks", "question_text", "mark_scheme", "label", "sort_order", "unit"];
 
 async function handleAdminBioWrittenPut(id, request, env) {
   const body = await request.json();
@@ -1170,12 +1170,12 @@ async function handleAdminBioChecklistSectionsPost(request, env) {
   const id = body.id || slugify(body.title || "bio-section");
   const sort_order = body.sort_order ?? await getNextSortOrder(env, "biology_checklist_sections");
   await env.CONTENT_DB.prepare(
-    `INSERT INTO biology_checklist_sections (id, title, color, sort_order) VALUES (?, ?, ?, ?)`
-  ).bind(id, body.title, body.color || '#5BA88C', sort_order).run();
+    `INSERT INTO biology_checklist_sections (id, title, color, sort_order, unit) VALUES (?, ?, ?, ?, ?)`
+  ).bind(id, body.title, body.color || '#5BA88C', sort_order, body.unit || 'A').run();
   return json({ ok: true, id }, 201);
 }
 
-const FIELDS_BIO_CS = ["title", "color", "sort_order"];
+const FIELDS_BIO_CS = ["title", "color", "sort_order", "unit"];
 
 async function handleAdminBioChecklistSectionsPut(id, request, env) {
   const body = await request.json();

@@ -103,6 +103,7 @@ export default function WrittenAdmin({
   updateWrittenQuestion = updateWrittenQuestionDefault,
   deleteWrittenQuestion = deleteWrittenQuestionDefault,
   questionTypes = QUESTION_TYPES,
+  units = null,
 }) {
   const { canEditContent, canDeleteContent } = useAuth();
 
@@ -130,6 +131,7 @@ export default function WrittenAdmin({
   const [formLabel, setFormLabel] = useState("");
   const [formQuestion, setFormQuestion] = useState("");
   const [formMarkScheme, setFormMarkScheme] = useState("");
+  const [formUnit, setFormUnit] = useState("");
 
   // ---- Delete state ----
   const [deleteTarget, setDeleteTarget] = useState(null);
@@ -174,6 +176,7 @@ export default function WrittenAdmin({
     setFormLabel("");
     setFormQuestion("");
     setFormMarkScheme("");
+    setFormUnit("");
     setFormError(null);
     setModalOpen(true);
   }
@@ -187,6 +190,7 @@ export default function WrittenAdmin({
     setFormLabel(q.label || "");
     setFormQuestion(q.question_text || "");
     setFormMarkScheme(q.mark_scheme || "");
+    setFormUnit(q.unit || "");
     setFormError(null);
     setModalOpen(true);
   }
@@ -224,6 +228,7 @@ export default function WrittenAdmin({
       question_text: formQuestion.trim(),
       mark_scheme: formMarkScheme.trim(),
       label: formLabel.trim() || null,
+      ...(formUnit ? { unit: formUnit } : {}),
     };
 
     setSaving(true);
@@ -613,6 +618,25 @@ export default function WrittenAdmin({
                     </Tabs.ListContainer>
                   </Tabs>
                 </div>
+
+                {/* Unit (only when units prop provided) */}
+                {units && (
+                  <div>
+                    <span className="text-sm font-medium text-[var(--text-secondary)] mb-1 block">Unit</span>
+                    <Tabs variant="primary" selectedKey={formUnit} onSelectionChange={setFormUnit}>
+                      <Tabs.ListContainer>
+                        <Tabs.List aria-label="Unit selector" className="bg-[var(--bg-input)] border border-[var(--border)] rounded-lg p-0.5 w-full">
+                          {units.map(u => (
+                            <Tabs.Tab key={u.value} id={u.value} className="text-[var(--text-secondary)] text-sm font-medium px-4 py-2 data-[selected=true]:text-white rounded-full flex-1 text-center">
+                              {u.label}
+                              <Tabs.Indicator className="bg-[var(--accent)] rounded-full" />
+                            </Tabs.Tab>
+                          ))}
+                        </Tabs.List>
+                      </Tabs.ListContainer>
+                    </Tabs>
+                  </div>
+                )}
 
                 {/* Marks + Label (side by side) */}
                 <div className="grid grid-cols-2 gap-2">

@@ -81,6 +81,7 @@ const EMPTY_FORM = {
   option_d: "",
   correct_option: "0",
   explanation: "",
+  unit: "",
 };
 // ---------------------------------------------------------------------------
 // Helpers
@@ -100,6 +101,7 @@ export default function McqAdmin({
   createMcqQuestion = createMcqQuestionDefault,
   updateMcqQuestion = updateMcqQuestionDefault,
   deleteMcqQuestion = deleteMcqQuestionDefault,
+  units = null,
 }) {
   const { canEditContent, canDeleteContent } = useAuth();
   // ---- Data state ----
@@ -166,6 +168,7 @@ export default function McqAdmin({
       option_d: question.option_d || "",
       correct_option: String(question.correct_option ?? "0"),
       explanation: question.explanation || "",
+      unit: question.unit || "",
     });
     setFormError(null);
     setModalOpened(true);
@@ -205,6 +208,7 @@ export default function McqAdmin({
         option_d: form.option_d.trim(),
         correct_option: parseInt(form.correct_option, 10),
         explanation: form.explanation.trim(),
+        ...(form.unit ? { unit: form.unit } : {}),
       };
       if (editingQuestion) {
         await updateMcqQuestion(editingQuestion.id, payload);
@@ -413,7 +417,7 @@ export default function McqAdmin({
                   </Alert>
                 )}
                 {/* Category & Difficulty */}
-                <div className="grid grid-cols-2 gap-4">
+                <div className={`grid ${units ? "grid-cols-3" : "grid-cols-2"} gap-4`}>
                   <CategorySelect
                     value={form.category}
                     onChange={(val) => updateField("category", val)}
@@ -435,6 +439,23 @@ export default function McqAdmin({
                       </Tabs.ListContainer>
                     </Tabs>
                   </div>
+                  {units && (
+                    <div className="flex flex-col gap-1">
+                      <span className="text-sm font-medium text-[var(--text-secondary)]">Unit</span>
+                      <Tabs variant="primary" selectedKey={form.unit} onSelectionChange={(val) => updateField("unit", val)}>
+                        <Tabs.ListContainer>
+                          <Tabs.List aria-label="Unit selection" className="bg-[var(--bg-input)] rounded-lg p-0.5 w-full">
+                            {units.map(u => (
+                              <Tabs.Tab key={u.value} id={u.value} className="text-[var(--text-secondary)] text-sm px-3.5 py-1.5 data-[selected=true]:text-white rounded-full flex-1 text-center">
+                                {u.label}
+                                <Tabs.Indicator className="bg-[var(--accent)] rounded-full" />
+                              </Tabs.Tab>
+                            ))}
+                          </Tabs.List>
+                        </Tabs.ListContainer>
+                      </Tabs>
+                    </div>
+                  )}
                 </div>
                 {/* Question text */}
                 <div>
