@@ -151,11 +151,11 @@ export default function DashboardPage() {
               No data yet
             </span>
             <span className="text-sm text-[var(--text-secondary)] block mb-4">
-              Start answering questions on the Revision Hub to see your analytics here.
+              Start answering questions on IBrev to see your analytics here.
             </span>
             <a href="/business/checklist" style={{ textDecoration: "none" }}>
               <Button className="rounded-full bg-[var(--accent)] text-white border-none font-semibold">
-                Go to Revision Hub
+                Go to IBrev
               </Button>
             </a>
           </Surface>

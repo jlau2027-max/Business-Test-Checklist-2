@@ -390,7 +390,7 @@ export default function SpecimenPage() {
               className="text-xs px-2 py-0.5 rounded-full uppercase font-bold"
               style={{ letterSpacing: 2, backgroundColor: "var(--accent-secondary-soft)", color: "var(--accent-secondary)", border: "none", fontFamily: "'JSans', sans-serif" }}
             >
-              IB Business Management
+              IB Revision
             </span>
             <LoginButton />
           </div>
@@ -407,7 +407,7 @@ export default function SpecimenPage() {
                 className="rounded-full bg-[var(--bg-input)] text-[var(--text-secondary)] border border-[var(--border)]"
                 style={{ fontFamily: "'JSans', sans-serif" }}
               >
-                ← Back to Revision Hub
+                ← Back to IBrev
               </Button>
             </a>
           </div>
