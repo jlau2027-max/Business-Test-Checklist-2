@@ -2,14 +2,14 @@ import { useState, useEffect, useCallback } from "react";
 import { Button, Spinner, Modal, TextField, Input, Label, TextArea, Table, Tooltip, Skeleton, Alert, CloseButton } from "@heroui/react";
 import { useAuth } from "../AuthContext.jsx";
 import {
-  fetchFlashcardTopics,
-  fetchFlashcards,
-  createFlashcardTopic,
-  updateFlashcardTopic,
-  deleteFlashcardTopic,
-  createFlashcard,
-  updateFlashcard,
-  deleteFlashcard,
+  fetchFlashcardTopics as fetchFlashcardTopicsDefault,
+  fetchFlashcards as fetchFlashcardsDefault,
+  createFlashcardTopic as createFlashcardTopicDefault,
+  updateFlashcardTopic as updateFlashcardTopicDefault,
+  deleteFlashcardTopic as deleteFlashcardTopicDefault,
+  createFlashcard as createFlashcardDefault,
+  updateFlashcard as updateFlashcardDefault,
+  deleteFlashcard as deleteFlashcardDefault,
 } from "../api/contentApi.js";
 import ConfirmDeleteModal from "./components/ConfirmDeleteModal.jsx";
 
@@ -313,7 +313,16 @@ function IconCards() {
 // ---------------------------------------------------------------------------
 // Main Component
 // ---------------------------------------------------------------------------
-export default function FlashcardAdmin() {
+export default function FlashcardAdmin({
+  fetchFlashcardTopics = fetchFlashcardTopicsDefault,
+  fetchFlashcards = fetchFlashcardsDefault,
+  createFlashcardTopic = createFlashcardTopicDefault,
+  updateFlashcardTopic = updateFlashcardTopicDefault,
+  deleteFlashcardTopic = deleteFlashcardTopicDefault,
+  createFlashcard = createFlashcardDefault,
+  updateFlashcard = updateFlashcardDefault,
+  deleteFlashcard = deleteFlashcardDefault,
+}) {
   const { canEditContent, canDeleteContent } = useAuth();
 
   // --- Topics state ---

@@ -20,7 +20,7 @@ const path = window.location.pathname
 // Backward-compat redirects for old URLs
 if (path === '/specimen') window.location.replace('/business/specimen')
 if (path === '/history') window.location.replace('/history/specimen')
-if (path === '/biology') window.location.replace('/biology/specimen')
+if (path === '/biology') window.location.replace('/biology/checklist')
 if (path === '/business') window.location.replace('/business/checklist')
 
 // Determine page and props
@@ -38,8 +38,15 @@ if (path.startsWith('/business/')) {
   }
 } else if (path === '/history/specimen') {
   Page = HistoryPage
-} else if (path === '/biology/specimen') {
-  Page = BiologyPage
+} else if (path.startsWith('/biology/')) {
+  const sub = path.split('/')[2]
+  if (sub === 'specimen') {
+    Page = BiologyPage
+  } else {
+    Page = App
+    const tabMap = { checklist: 'checklist', flashcards: 'flashcards', 'multi-choice': 'practice', written: 'written' }
+    pageProps = { initialTab: tabMap[sub] || 'checklist', subject: 'biology' }
+  }
 } else if (path === '/dashboard') {
   Page = DashboardPage
 } else if (path === '/admin') {

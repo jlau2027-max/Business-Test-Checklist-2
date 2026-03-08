@@ -24,13 +24,13 @@ const IconChevronRight = ({ size = 16, color }) => (
 );
 import { useAuth } from "../AuthContext.jsx";
 import {
-  fetchChecklist,
-  createChecklistSection,
-  updateChecklistSection,
-  deleteChecklistSection,
-  createChecklistItem,
-  updateChecklistItem,
-  deleteChecklistItem,
+  fetchChecklist as fetchChecklistDefault,
+  createChecklistSection as createChecklistSectionDefault,
+  updateChecklistSection as updateChecklistSectionDefault,
+  deleteChecklistSection as deleteChecklistSectionDefault,
+  createChecklistItem as createChecklistItemDefault,
+  updateChecklistItem as updateChecklistItemDefault,
+  deleteChecklistItem as deleteChecklistItemDefault,
 } from "../api/contentApi.js";
 import ConfirmDeleteModal from "./components/ConfirmDeleteModal.jsx";
 
@@ -62,7 +62,15 @@ function truncate(str, max = 80) {
 // ChecklistAdmin Component
 // ---------------------------------------------------------------------------
 
-export default function ChecklistAdmin() {
+export default function ChecklistAdmin({
+  fetchChecklist = fetchChecklistDefault,
+  createChecklistSection = createChecklistSectionDefault,
+  updateChecklistSection = updateChecklistSectionDefault,
+  deleteChecklistSection = deleteChecklistSectionDefault,
+  createChecklistItem = createChecklistItemDefault,
+  updateChecklistItem = updateChecklistItemDefault,
+  deleteChecklistItem = deleteChecklistItemDefault,
+}) {
   const { canEditContent, canDeleteContent } = useAuth();
 
   // ---- Data state ----

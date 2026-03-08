@@ -7,7 +7,51 @@ import Sidebar from "./Sidebar.jsx";
 import { useAuth } from "./AuthContext.jsx";
 import { useAttemptTracker } from "./useAttemptTracker.js";
 import { syncToCloud } from "./stateSync.js";
-import { fetchFlashcardTopics, fetchFlashcards, fetchMcqQuestions, fetchWrittenQuestions, fetchChecklist, fetchCategoryColors } from "./api/contentApi.js";
+import {
+  fetchFlashcardTopics, fetchFlashcards, fetchMcqQuestions, fetchWrittenQuestions, fetchChecklist, fetchCategoryColors,
+  fetchBiologyFlashcardTopics, fetchBiologyFlashcards, fetchBiologyMcqQuestions, fetchBiologyWrittenQuestions, fetchBiologyChecklist, fetchBiologyCategoryColors,
+} from "./api/contentApi.js";
+
+// ─── Subject configuration ──────────────────────────────────────────────────
+const SUBJECT_CONFIGS = {
+  business: {
+    subject: "business",
+    label: "IB Business Management",
+    subtitle: "Finance Unit",
+    accentColor: "var(--accent)",
+    accentSoft: "var(--accent-soft)",
+    accentGlow: "var(--accent-glow)",
+    labelColor: "var(--cat-investment)",
+    basePath: "/business",
+    show10Marker: true,
+    showSpecimen: true,
+    lsPrefix: "",
+    api: {
+      fetchChecklist, fetchFlashcardTopics, fetchFlashcards,
+      fetchMcqQuestions, fetchWrittenQuestions, fetchCategoryColors,
+    },
+  },
+  biology: {
+    subject: "biology",
+    label: "IB Biology",
+    subtitle: "Biology Review",
+    accentColor: "var(--color-success)",
+    accentSoft: "var(--color-success-soft)",
+    accentGlow: "var(--color-success-soft)",
+    labelColor: "var(--color-success)",
+    basePath: "/biology",
+    show10Marker: false,
+    showSpecimen: false,
+    lsPrefix: "bio_",
+    api: {
+      fetchChecklist: fetchBiologyChecklist, fetchFlashcardTopics: fetchBiologyFlashcardTopics,
+      fetchFlashcards: fetchBiologyFlashcards, fetchMcqQuestions: fetchBiologyMcqQuestions,
+      fetchWrittenQuestions: fetchBiologyWrittenQuestions, fetchCategoryColors: fetchBiologyCategoryColors,
+    },
+  },
+};
+const SubjectConfigCtx = createContext(SUBJECT_CONFIGS.business);
+function useSubjectConfig() { return useContext(SubjectConfigCtx); }
 
 // ─── localStorage helpers ──────────────────────────────────────────────────
 function loadLS(key, fallback) {
@@ -256,9 +300,9 @@ const FALLBACK_CONTENT = {
 const ContentCtx = createContext(FALLBACK_CONTENT);
 function useContent() { return useContext(ContentCtx); }
 
-async function fetchAppContent() {
+async function fetchAppContent(api = SUBJECT_CONFIGS.business.api) {
   const [checklistRaw, mcqRaw, writtenRaw, colorsRaw, topicsRaw] = await Promise.all([
-    fetchChecklist(), fetchMcqQuestions(), fetchWrittenQuestions(), fetchCategoryColors(), fetchFlashcardTopics(),
+    api.fetchChecklist(), api.fetchMcqQuestions(), api.fetchWrittenQuestions(), api.fetchCategoryColors(), api.fetchFlashcardTopics(),
   ]);
 
   // Checklist: API items are {id,text} objects → flatten to strings
@@ -290,7 +334,7 @@ async function fetchAppContent() {
   // Flashcards: fetch topics then cards per topic
   const flashcardCategories = await Promise.all(topicsRaw.map(async t => {
     try {
-      const cards = await fetchFlashcards(t.id);
+      const cards = await api.fetchFlashcards(t.id);
       return { id: t.id, label: t.label, color: t.color, cards: cards.map(c => ({ term: c.term, def: c.definition, formula: c.formula })) };
     } catch { return { id: t.id, label: t.label, color: t.color, cards: [] }; }
   }));
@@ -306,18 +350,19 @@ async function fetchAppContent() {
 
 function ChecklistView() {
   const { checklistSections } = useContent();
-  const [checked, setChecked] = useState(() => loadLS("checklist_checked", {}));
+  const { lsPrefix } = useSubjectConfig();
+  const [checked, setChecked] = useState(() => loadLS(`${lsPrefix}checklist_checked`, {}));
   const [openSections, setOpenSections] = useState(() => {
-    const collapsed = loadLS("checklist_collapsed", {});
+    const collapsed = loadLS(`${lsPrefix}checklist_collapsed`, {});
     return checklistSections.filter(s => !collapsed[s.id]).map(s => s.id);
   });
-  const toggle = id => setChecked(p => { const next = { ...p, [id]: !p[id] }; saveLS("checklist_checked", next); return next; });
+  const toggle = id => setChecked(p => { const next = { ...p, [id]: !p[id] }; saveLS(`${lsPrefix}checklist_checked`, next); return next; });
   const handleAccordion = (keys) => {
     const value = [...keys];
     setOpenSections(value);
     const collapsed = {};
     checklistSections.forEach(s => { if (!keys.has(s.id)) collapsed[s.id] = true; });
-    saveLS("checklist_collapsed", collapsed);
+    saveLS(`${lsPrefix}checklist_collapsed`, collapsed);
   };
   const totalItems = checklistSections.reduce((s,sec)=>s+sec.items.length,0);
   const checkedCount = Object.values(checked).filter(Boolean).length;
@@ -400,7 +445,7 @@ function ChecklistView() {
 
       <span className="text-center block text-xs text-[var(--text-muted)] mt-6">
         Click any item to mark it as revised ·{" "}
-        <span className="text-[var(--accent)] cursor-pointer" onClick={()=>{ setChecked({}); saveLS("checklist_checked", {}); }}>Reset all</span>
+        <span className="text-[var(--accent)] cursor-pointer" onClick={()=>{ setChecked({}); saveLS(`${lsPrefix}checklist_checked`, {}); }}>Reset all</span>
       </span>
     </div>
   );
@@ -452,7 +497,8 @@ function FlashCard({card, catColor}) {
 
 function FlashcardsView() {
   const { flashcardCategories } = useContent();
-  const [activeCat,setActiveCat]=useState(()=>loadLS("fc_cat", flashcardCategories[0]?.id));
+  const { lsPrefix } = useSubjectConfig();
+  const [activeCat,setActiveCat]=useState(()=>loadLS(`${lsPrefix}fc_cat`, flashcardCategories[0]?.id));
   const [cardIdx,setCardIdx]=useState(0);
   const currentCat=flashcardCategories.find(c=>c.id===activeCat) || flashcardCategories[0];
   if (!currentCat || !currentCat.cards || currentCat.cards.length === 0) return <span className="text-center block text-[var(--text-muted)] py-8">Loading flashcards…</span>;
@@ -465,7 +511,7 @@ function FlashcardsView() {
           <Button
             key={cat.id}
             size="sm"
-            onPress={()=>{ setActiveCat(cat.id); saveLS("fc_cat", cat.id); setCardIdx(0); }}
+            onPress={()=>{ setActiveCat(cat.id); saveLS(`${lsPrefix}fc_cat`, cat.id); setCardIdx(0); }}
             className="rounded-full text-xs"
             style={{
               fontFamily: "'JSans', sans-serif",
@@ -522,10 +568,11 @@ function FlashcardsView() {
 
 function MCQItem({q, displayNum}) {
   const { catColors } = useContent();
+  const { subject } = useSubjectConfig();
   const [selected,setSelected]=useState(null);
   const [confirmed,setConfirmed]=useState(false);
   const color=catColors[q.cat]||"var(--accent)";
-  const { recordAttempt, resetTimer } = useAttemptTracker(q.id, "mcq", q.cat, "business", q.difficulty);
+  const { recordAttempt, resetTimer } = useAttemptTracker(q.id, "mcq", q.cat, subject, q.difficulty);
   return (
     <Surface variant="secondary" className="rounded-2xl mb-2 overflow-hidden" style={{ transition:"all 0.2s" }}>
       <div style={{borderLeft:`4px solid ${color}`,padding:"18px 20px"}}>
@@ -673,15 +720,16 @@ function PracticeView() {
 
 function WrittenPracticeItem({q, displayNum}) {
   const { catColors } = useContent();
-  const [answer, setAnswer] = useState(() => loadLS(`written_ans_${q.id}`, ""));
+  const { lsPrefix, subject } = useSubjectConfig();
+  const [answer, setAnswer] = useState(() => loadLS(`${lsPrefix}written_ans_${q.id}`, ""));
   const [revealed, setRevealed] = useState(false);
   const [grading, setGrading] = useState(false);
-  const [gradeResult, setGradeResult] = useState(() => loadLS(`written_grade_${q.id}`, null));
+  const [gradeResult, setGradeResult] = useState(() => loadLS(`${lsPrefix}written_grade_${q.id}`, null));
   const color = catColors[q.cat] || "var(--accent)";
-  const { recordAttempt } = useAttemptTracker(q.id, "written", q.cat, "business", q.difficulty);
+  const { recordAttempt } = useAttemptTracker(q.id, "written", q.cat, subject, q.difficulty);
 
-  useEffect(() => { saveLS(`written_ans_${q.id}`, answer); }, [answer, q.id]);
-  useEffect(() => { saveLS(`written_grade_${q.id}`, gradeResult); }, [gradeResult, q.id]);
+  useEffect(() => { saveLS(`${lsPrefix}written_ans_${q.id}`, answer); }, [answer, q.id]);
+  useEffect(() => { saveLS(`${lsPrefix}written_grade_${q.id}`, gradeResult); }, [gradeResult, q.id]);
 
   const handleSolve = async () => {
     if (!answer.trim()) return;
@@ -780,7 +828,7 @@ function WrittenPracticeItem({q, displayNum}) {
               variant="ghost"
               className="rounded-full text-[var(--text-secondary)]"
               style={{ fontFamily: "'JSans', sans-serif" }}
-              onPress={()=>{ setAnswer(""); setGradeResult(null); saveLS(`written_ans_${q.id}`, ""); saveLS(`written_grade_${q.id}`, null); }}
+              onPress={()=>{ setAnswer(""); setGradeResult(null); saveLS(`${lsPrefix}written_ans_${q.id}`, ""); saveLS(`${lsPrefix}written_grade_${q.id}`, null); }}
             >
               Clear
             </Button>
@@ -814,6 +862,7 @@ function WrittenPracticeItem({q, displayNum}) {
 
 function WrittenPracticeView() {
   const { writtenQuestions, written10MarkQuestions, catColors } = useContent();
+  const { show10Marker, showSpecimen, basePath } = useSubjectConfig();
   const [mode, setMode] = useState("short"); // "short" or "10mark"
   const [filterCat, setFilterCat] = useState("All");
 
@@ -857,40 +906,44 @@ function WrittenPracticeView() {
         >
           Short Answer
         </Button>
-        <Button
-          className="rounded-full font-bold"
-          onPress={()=>setMode("10mark")}
-          style={{
-            flex: 1,
-            height: 48,
-            backgroundColor: mode === "10mark" ? "var(--color-danger)" : "var(--bg-input)",
-            color: mode === "10mark" ? "#fff" : "var(--text-secondary)",
-            border: `2px solid ${mode === "10mark" ? "var(--color-danger)" : "var(--border)"}`,
-            fontSize: 15,
-            lineHeight: 1,
-            boxShadow: mode === "10mark" ? "0 0 16px var(--color-danger-soft)" : "none",
-            fontFamily: "'JSans', sans-serif",
-          }}
-        >
-          10 Marker
-        </Button>
-        <a href="/business/specimen" style={{ flex: 1, textDecoration: "none" }}>
+        {show10Marker && (
           <Button
-            fullWidth
             className="rounded-full font-bold"
+            onPress={()=>setMode("10mark")}
             style={{
+              flex: 1,
               height: 48,
-              backgroundColor: "var(--bg-input)",
-              color: "var(--cat-breakeven)",
-              border: "2px solid var(--accent-secondary)",
+              backgroundColor: mode === "10mark" ? "var(--color-danger)" : "var(--bg-input)",
+              color: mode === "10mark" ? "#fff" : "var(--text-secondary)",
+              border: `2px solid ${mode === "10mark" ? "var(--color-danger)" : "var(--border)"}`,
               fontSize: 15,
               lineHeight: 1,
+              boxShadow: mode === "10mark" ? "0 0 16px var(--color-danger-soft)" : "none",
               fontFamily: "'JSans', sans-serif",
             }}
           >
-            Specimen →
+            10 Marker
           </Button>
-        </a>
+        )}
+        {showSpecimen && (
+          <a href={`${basePath}/specimen`} style={{ flex: 1, textDecoration: "none" }}>
+            <Button
+              fullWidth
+              className="rounded-full font-bold"
+              style={{
+                height: 48,
+                backgroundColor: "var(--bg-input)",
+                color: "var(--cat-breakeven)",
+                border: "2px solid var(--accent-secondary)",
+                fontSize: 15,
+                lineHeight: 1,
+                fontFamily: "'JSans', sans-serif",
+              }}
+            >
+              Specimen →
+            </Button>
+          </a>
+        )}
       </div>
 
       {/* Category filter — only for short answer mode */}
@@ -939,30 +992,33 @@ function WrittenPracticeView() {
 // ─────────────────────────────────────────────────────────────────────────────
 // ROOT APP
 // ─────────────────────────────────────────────────────────────────────────────
-export default function App({ initialTab = "checklist" }) {
+export default function App({ initialTab = "checklist", subject = "business" }) {
+  const config = SUBJECT_CONFIGS[subject] || SUBJECT_CONFIGS.business;
   const { user } = useAuth();
   const [tab, setTab] = useState(initialTab);
   const switchTab = t => {
     const urlMap = { checklist: 'checklist', flashcards: 'flashcards', practice: 'multi-choice', written: 'written' };
-    window.location.href = `/business/${urlMap[t] || t}`;
+    window.location.href = `${config.basePath}/${urlMap[t] || t}`;
   };
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
-  // Content state — starts with hardcoded fallback, updates from API
-  const [content, setContent] = useState(FALLBACK_CONTENT);
+  // Content state — starts with hardcoded fallback (business) or empty (biology), updates from API
+  const EMPTY_CONTENT = { checklistSections: [], flashcardCategories: [], mcqQuestions: [], writtenQuestions: [], written10MarkQuestions: [], catColors: {}, allCats: ["All"] };
+  const [content, setContent] = useState(subject === "business" ? FALLBACK_CONTENT : EMPTY_CONTENT);
   useEffect(() => {
     let cancelled = false;
-    fetchAppContent()
+    fetchAppContent(config.api)
       .then(data => { if (!cancelled) setContent(data); })
       .catch(err => console.warn("Content API unavailable, using fallback data:", err.message));
     return () => { cancelled = true; };
-  }, []);
+  }, [subject]);
 
   return (
+    <SubjectConfigCtx.Provider value={config}>
     <ContentCtx.Provider value={content}>
     <div className="min-h-screen bg-[var(--bg-base)]" style={{fontFamily:"'JSans', sans-serif",color:"var(--text-primary)"}}>
 
-      <Sidebar activeSubject="business" sidebarOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
+      <Sidebar activeSubject={config.subject} sidebarOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
 
       {/* Sticky header with glassmorphism */}
       <div
@@ -995,21 +1051,21 @@ export default function App({ initialTab = "checklist" }) {
                 <line x1="3" y1="18" x2="21" y2="18"/>
               </svg>
             </Button>
-            <span className="text-xs px-2.5 py-1 rounded-full uppercase font-bold tracking-widest" style={{fontFamily: "'JSans', sans-serif", backgroundColor: "var(--accent-soft)", color: "var(--cat-investment)"}}>
-              IB Business Management
+            <span className="text-xs px-2.5 py-1 rounded-full uppercase font-bold tracking-widest" style={{fontFamily: "'JSans', sans-serif", backgroundColor: config.accentSoft, color: config.labelColor}}>
+              {config.label}
             </span>
             <LoginButton />
           </div>
-          <h1 className="text-center font-extrabold text-[22px] sm:text-[30px] text-[var(--text-primary)] mb-3" style={{letterSpacing: -0.5}}>Finance Unit</h1>
+          <h1 className="text-center font-extrabold text-[22px] sm:text-[30px] text-[var(--text-primary)] mb-3" style={{letterSpacing: -0.5}}>{config.subtitle}</h1>
 
           <Tabs variant="secondary" selectedKey={tab}>
             <Tabs.ListContainer>
               <Tabs.List aria-label="Content tabs" className="w-full">
                 {[
-                  { value: "checklist", label: "Checklist", href: "/business/checklist" },
-                  { value: "flashcards", label: "Flashcards", href: "/business/flashcards" },
-                  { value: "practice", label: "Multi-Choice", href: "/business/multi-choice" },
-                  { value: "written", label: "Written", href: "/business/written" },
+                  { value: "checklist", label: "Checklist", href: `${config.basePath}/checklist` },
+                  { value: "flashcards", label: "Flashcards", href: `${config.basePath}/flashcards` },
+                  { value: "practice", label: "Multi-Choice", href: `${config.basePath}/multi-choice` },
+                  { value: "written", label: "Written", href: `${config.basePath}/written` },
                 ].map(t => (
                   <Tabs.Tab key={t.value} id={t.value}
                     render={(domProps) => <a {...domProps} href={t.href} style={{textDecoration:"none", flex:1, textAlign:"center"}} />}
@@ -1017,7 +1073,7 @@ export default function App({ initialTab = "checklist" }) {
                     style={{fontFamily: "'JSans', sans-serif"}}
                   >
                     {t.label}
-                    <Tabs.Indicator className="bg-[var(--accent)]" />
+                    <Tabs.Indicator style={{backgroundColor: config.accentColor}} />
                   </Tabs.Tab>
                 ))}
               </Tabs.List>
@@ -1069,5 +1125,6 @@ export default function App({ initialTab = "checklist" }) {
       <Analytics />
     </div>
     </ContentCtx.Provider>
+    </SubjectConfigCtx.Provider>
   );
 }

@@ -8,6 +8,14 @@ import HistoryAdmin from "./HistoryAdmin.jsx";
 import BiologyAdmin from "./BiologyAdmin.jsx";
 import ChecklistAdmin from "./ChecklistAdmin.jsx";
 import UsersAdmin from "./UsersAdmin.jsx";
+import {
+  fetchBiologyChecklist, createBiologyChecklistSection, updateBiologyChecklistSection, deleteBiologyChecklistSection,
+  createBiologyChecklistItem, updateBiologyChecklistItem, deleteBiologyChecklistItem,
+  fetchBiologyFlashcardTopics, fetchBiologyFlashcards, createBiologyFlashcardTopic, updateBiologyFlashcardTopic, deleteBiologyFlashcardTopic,
+  createBiologyFlashcard, updateBiologyFlashcard, deleteBiologyFlashcard,
+  fetchBiologyMcqQuestions, createBiologyMcqQuestion, updateBiologyMcqQuestion, deleteBiologyMcqQuestion,
+  fetchBiologyWrittenQuestions, createBiologyWrittenQuestion, updateBiologyWrittenQuestion, deleteBiologyWrittenQuestion,
+} from "../api/contentApi.js";
 
 const BUSINESS_TABS = [
   { value: "checklist", label: "Checklist" },
@@ -21,7 +29,15 @@ const HISTORY_TABS = [
 ];
 
 const BIOLOGY_TABS = [
-  { value: "biology", label: "Biology Questions" },
+  { value: "bio_checklist", label: "Checklist" },
+  { value: "bio_flashcards", label: "Flashcards" },
+  { value: "bio_mcq", label: "MCQ" },
+  { value: "bio_written", label: "Written" },
+  { value: "biology", label: "Specimen Qs" },
+];
+
+const BIOLOGY_WRITTEN_TYPES = [
+  { value: "short_answer", label: "Short Answer" },
 ];
 
 const USERS_TABS = [
@@ -36,7 +52,7 @@ export default function AdminPage() {
 
   const handleSectionChange = (val) => {
     setSection(val);
-    setActiveTab(val === "business" ? "checklist" : val === "history" ? "history" : val === "biology" ? "biology" : "users");
+    setActiveTab(val === "business" ? "checklist" : val === "history" ? "history" : val === "biology" ? "bio_checklist" : "users");
   };
 
   return (
@@ -115,6 +131,46 @@ export default function AdminPage() {
             </Tabs.Panel>
             <Tabs.Panel id="history" className="pt-4">
               <HistoryAdmin />
+            </Tabs.Panel>
+            <Tabs.Panel id="bio_checklist" className="pt-4">
+              <ChecklistAdmin
+                fetchChecklist={fetchBiologyChecklist}
+                createChecklistSection={createBiologyChecklistSection}
+                updateChecklistSection={updateBiologyChecklistSection}
+                deleteChecklistSection={deleteBiologyChecklistSection}
+                createChecklistItem={createBiologyChecklistItem}
+                updateChecklistItem={updateBiologyChecklistItem}
+                deleteChecklistItem={deleteBiologyChecklistItem}
+              />
+            </Tabs.Panel>
+            <Tabs.Panel id="bio_flashcards" className="pt-4">
+              <FlashcardAdmin
+                fetchFlashcardTopics={fetchBiologyFlashcardTopics}
+                fetchFlashcards={fetchBiologyFlashcards}
+                createFlashcardTopic={createBiologyFlashcardTopic}
+                updateFlashcardTopic={updateBiologyFlashcardTopic}
+                deleteFlashcardTopic={deleteBiologyFlashcardTopic}
+                createFlashcard={createBiologyFlashcard}
+                updateFlashcard={updateBiologyFlashcard}
+                deleteFlashcard={deleteBiologyFlashcard}
+              />
+            </Tabs.Panel>
+            <Tabs.Panel id="bio_mcq" className="pt-4">
+              <McqAdmin
+                fetchMcqQuestions={fetchBiologyMcqQuestions}
+                createMcqQuestion={createBiologyMcqQuestion}
+                updateMcqQuestion={updateBiologyMcqQuestion}
+                deleteMcqQuestion={deleteBiologyMcqQuestion}
+              />
+            </Tabs.Panel>
+            <Tabs.Panel id="bio_written" className="pt-4">
+              <WrittenAdmin
+                fetchWrittenQuestions={fetchBiologyWrittenQuestions}
+                createWrittenQuestion={createBiologyWrittenQuestion}
+                updateWrittenQuestion={updateBiologyWrittenQuestion}
+                deleteWrittenQuestion={deleteBiologyWrittenQuestion}
+                questionTypes={BIOLOGY_WRITTEN_TYPES}
+              />
             </Tabs.Panel>
             <Tabs.Panel id="biology" className="pt-4">
               <BiologyAdmin />

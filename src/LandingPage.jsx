@@ -181,7 +181,7 @@ export default function LandingPage() {
               </ElectricBorder>
             </a>
 
-            <a href="/biology/specimen" className="flex-1" style={{ textDecoration: "none" }}>
+            <a href="/biology/checklist" className="flex-1" style={{ textDecoration: "none" }}>
               <ElectricBorder
                 color="#5BA88C"
                 speed={1}

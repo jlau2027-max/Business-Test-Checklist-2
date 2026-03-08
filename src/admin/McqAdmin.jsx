@@ -37,10 +37,10 @@ const IconCircleCheckFilled = ({ size = 16 }) => (
 );
 import { useAuth } from "../AuthContext.jsx";
 import {
-  fetchMcqQuestions,
-  createMcqQuestion,
-  updateMcqQuestion,
-  deleteMcqQuestion,
+  fetchMcqQuestions as fetchMcqQuestionsDefault,
+  createMcqQuestion as createMcqQuestionDefault,
+  updateMcqQuestion as updateMcqQuestionDefault,
+  deleteMcqQuestion as deleteMcqQuestionDefault,
 } from "../api/contentApi.js";
 import CategorySelect from "./components/CategorySelect.jsx";
 import DifficultyBadge from "./components/DifficultyBadge.jsx";
@@ -95,7 +95,12 @@ function getCategoryColor(category) {
 // ---------------------------------------------------------------------------
 // McqAdmin Component
 // ---------------------------------------------------------------------------
-export default function McqAdmin() {
+export default function McqAdmin({
+  fetchMcqQuestions = fetchMcqQuestionsDefault,
+  createMcqQuestion = createMcqQuestionDefault,
+  updateMcqQuestion = updateMcqQuestionDefault,
+  deleteMcqQuestion = deleteMcqQuestionDefault,
+}) {
   const { canEditContent, canDeleteContent } = useAuth();
   // ---- Data state ----
   const [questions, setQuestions] = useState([]);

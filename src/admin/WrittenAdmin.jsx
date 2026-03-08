@@ -18,10 +18,10 @@ import {
 } from "@heroui/react";
 import { useAuth } from "../AuthContext.jsx";
 import {
-  fetchWrittenQuestions,
-  createWrittenQuestion,
-  updateWrittenQuestion,
-  deleteWrittenQuestion,
+  fetchWrittenQuestions as fetchWrittenQuestionsDefault,
+  createWrittenQuestion as createWrittenQuestionDefault,
+  updateWrittenQuestion as updateWrittenQuestionDefault,
+  deleteWrittenQuestion as deleteWrittenQuestionDefault,
 } from "../api/contentApi.js";
 import ConfirmDeleteModal from "./components/ConfirmDeleteModal.jsx";
 import DifficultyBadge from "./components/DifficultyBadge.jsx";
@@ -97,7 +97,13 @@ function truncate(str, max = 90) {
 // WrittenAdmin Component
 // ---------------------------------------------------------------------------
 
-export default function WrittenAdmin() {
+export default function WrittenAdmin({
+  fetchWrittenQuestions = fetchWrittenQuestionsDefault,
+  createWrittenQuestion = createWrittenQuestionDefault,
+  updateWrittenQuestion = updateWrittenQuestionDefault,
+  deleteWrittenQuestion = deleteWrittenQuestionDefault,
+  questionTypes = QUESTION_TYPES,
+}) {
   const { canEditContent, canDeleteContent } = useAuth();
 
   // ---- Tab / filter state ----
@@ -291,7 +297,7 @@ export default function WrittenAdmin() {
             aria-label="Question type"
             className="bg-[var(--bg-input)] border border-[var(--border)] rounded-lg p-0.5"
           >
-            {QUESTION_TYPES.map((opt) => (
+            {questionTypes.map((opt) => (
               <Tabs.Tab
                 key={opt.value}
                 id={opt.value}
@@ -557,7 +563,7 @@ export default function WrittenAdmin() {
                         aria-label="Question type selector"
                         className="bg-[var(--bg-input)] border border-[var(--border)] rounded-lg p-0.5 w-full"
                       >
-                        {QUESTION_TYPES.map((opt) => (
+                        {questionTypes.map((opt) => (
                           <Tabs.Tab
                             key={opt.value}
                             id={opt.value}

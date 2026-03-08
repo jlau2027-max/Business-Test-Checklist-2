@@ -14,7 +14,7 @@ export default function Sidebar({ activeSubject, sidebarOpen, onClose }) {
   const items = [
     { label: "Business", href: "/business/checklist", subject: "business" },
     { label: "History", href: "/history/specimen", subject: "history" },
-    { label: "Biology", href: "/biology/specimen", subject: "biology" },
+    { label: "Biology", href: "/biology/checklist", subject: "biology" },
     ...(user ? [{ label: "Dashboard", href: "/dashboard", subject: "dashboard" }] : []),
   ];
 

@@ -650,6 +650,73 @@ async function handleGetBiology(url, env) {
   return jsonCached(results);
 }
 
+// ─── Biology Content GET handlers ────────────────────────────────────────
+
+async function handleGetBiologyFlashcardTopics(env) {
+  const { results } = await env.CONTENT_DB.prepare(
+    `SELECT ft.*, COUNT(f.id) as card_count
+     FROM biology_flashcard_topics ft
+     LEFT JOIN biology_flashcards f ON f.topic_id = ft.id
+     GROUP BY ft.id
+     ORDER BY ft.sort_order`
+  ).all();
+  return jsonCached(results);
+}
+
+async function handleGetBiologyFlashcards(topicId, env) {
+  const { results } = await env.CONTENT_DB.prepare(
+    `SELECT * FROM biology_flashcards WHERE topic_id = ? ORDER BY sort_order`
+  ).bind(topicId).all();
+  return jsonCached(results);
+}
+
+async function handleGetBiologyMcq(url, env) {
+  let sql = `SELECT * FROM biology_mcq_questions WHERE 1=1`;
+  const bindings = [];
+  const category = url.searchParams.get("category");
+  const difficulty = url.searchParams.get("difficulty");
+  if (category) { sql += ` AND category = ?`; bindings.push(category); }
+  if (difficulty) { sql += ` AND difficulty = ?`; bindings.push(difficulty); }
+  sql += ` ORDER BY sort_order`;
+  const { results } = await env.CONTENT_DB.prepare(sql).bind(...bindings).all();
+  return jsonCached(results);
+}
+
+async function handleGetBiologyWritten(url, env) {
+  let sql = `SELECT * FROM biology_written_questions WHERE 1=1`;
+  const bindings = [];
+  const type = url.searchParams.get("type");
+  const category = url.searchParams.get("category");
+  const difficulty = url.searchParams.get("difficulty");
+  if (type) { sql += ` AND question_type = ?`; bindings.push(type); }
+  if (category) { sql += ` AND category = ?`; bindings.push(category); }
+  if (difficulty) { sql += ` AND difficulty = ?`; bindings.push(difficulty); }
+  sql += ` ORDER BY sort_order`;
+  const { results } = await env.CONTENT_DB.prepare(sql).bind(...bindings).all();
+  return jsonCached(results);
+}
+
+async function handleGetBiologyChecklist(env) {
+  const { results: sections } = await env.CONTENT_DB.prepare(
+    `SELECT * FROM biology_checklist_sections ORDER BY sort_order`
+  ).all();
+  const { results: items } = await env.CONTENT_DB.prepare(
+    `SELECT * FROM biology_checklist_items ORDER BY sort_order`
+  ).all();
+  const sectionsWithItems = sections.map((s) => ({
+    ...s,
+    items: items.filter((i) => i.section_id === s.id),
+  }));
+  return jsonCached(sectionsWithItems);
+}
+
+async function handleGetBiologyColors(env) {
+  const { results } = await env.CONTENT_DB.prepare(
+    `SELECT * FROM biology_category_colors`
+  ).all();
+  return jsonCached(results);
+}
+
 async function handleGetChecklist(env) {
   const { results: sections } = await env.CONTENT_DB.prepare(
     `SELECT * FROM checklist_sections ORDER BY sort_order`
@@ -683,6 +750,9 @@ function slugify(text) {
 const ALLOWED_TABLES = [
   "flashcard_topics", "flashcards", "mcq_questions", "written_questions",
   "history_questions", "biology_questions", "checklist_sections", "checklist_items", "category_colors",
+  "biology_checklist_sections", "biology_checklist_items",
+  "biology_flashcard_topics", "biology_flashcards",
+  "biology_mcq_questions", "biology_written_questions", "biology_category_colors",
 ];
 
 async function getNextId(env, table, prefix) {
@@ -941,6 +1011,248 @@ async function handleAdminBiologyDelete(id, env) {
   return json({ ok: true });
 }
 
+// ─── Admin CRUD: Biology Flashcard Topics ─────────────────────────────────
+
+async function handleAdminBioFlashcardTopicsPost(request, env) {
+  const body = await request.json();
+  const id = body.id || slugify(body.label || body.title || "bio-topic");
+  const sort_order = body.sort_order ?? await getNextSortOrder(env, "biology_flashcard_topics");
+  await env.CONTENT_DB.prepare(
+    `INSERT INTO biology_flashcard_topics (id, label, color, sort_order) VALUES (?, ?, ?, ?)`
+  ).bind(id, body.label, body.color || '#5BA88C', sort_order).run();
+  return json({ ok: true, id }, 201);
+}
+
+const FIELDS_BIO_FT = ["label", "color", "sort_order"];
+
+async function handleAdminBioFlashcardTopicsPut(id, request, env) {
+  const body = await request.json();
+  const fields = [];
+  const values = [];
+  for (const [key, val] of Object.entries(body)) {
+    if (!FIELDS_BIO_FT.includes(key)) continue;
+    fields.push(`${key} = ?`);
+    values.push(val);
+  }
+  if (fields.length === 0) return json({ error: "No valid fields to update" }, 400);
+  values.push(id);
+  await env.CONTENT_DB.prepare(
+    `UPDATE biology_flashcard_topics SET ${fields.join(", ")} WHERE id = ?`
+  ).bind(...values).run();
+  return json({ ok: true });
+}
+
+async function handleAdminBioFlashcardTopicsDelete(id, env) {
+  await env.CONTENT_DB.prepare(`DELETE FROM biology_flashcard_topics WHERE id = ?`).bind(id).run();
+  return json({ ok: true });
+}
+
+// ─── Admin CRUD: Biology Flashcards ──────────────────────────────────────
+
+async function handleAdminBioFlashcardsPost(request, env) {
+  const body = await request.json();
+  const sort_order = body.sort_order ?? await getNextSortOrder(env, "biology_flashcards", "topic_id = ?", [body.topic_id]);
+  const result = await env.CONTENT_DB.prepare(
+    `INSERT INTO biology_flashcards (topic_id, term, definition, formula, sort_order) VALUES (?, ?, ?, ?, ?)`
+  ).bind(body.topic_id, body.term, body.definition, body.formula || null, sort_order).run();
+  return json({ ok: true, id: result.meta.last_row_id }, 201);
+}
+
+const FIELDS_BIO_FC = ["topic_id", "term", "definition", "formula", "sort_order"];
+
+async function handleAdminBioFlashcardsPut(id, request, env) {
+  const body = await request.json();
+  const fields = [];
+  const values = [];
+  for (const [key, val] of Object.entries(body)) {
+    if (!FIELDS_BIO_FC.includes(key)) continue;
+    fields.push(`${key} = ?`);
+    values.push(val);
+  }
+  if (fields.length === 0) return json({ error: "No valid fields to update" }, 400);
+  values.push(id);
+  await env.CONTENT_DB.prepare(
+    `UPDATE biology_flashcards SET ${fields.join(", ")} WHERE id = ?`
+  ).bind(...values).run();
+  return json({ ok: true });
+}
+
+async function handleAdminBioFlashcardsDelete(id, env) {
+  await env.CONTENT_DB.prepare(`DELETE FROM biology_flashcards WHERE id = ?`).bind(id).run();
+  return json({ ok: true });
+}
+
+// ─── Admin CRUD: Biology MCQ ─────────────────────────────────────────────
+
+async function handleAdminBioMcqPost(request, env) {
+  const body = await request.json();
+  const id = body.id || await getNextId(env, "biology_mcq_questions", "bio_mcq");
+  const sort_order = body.sort_order ?? await getNextSortOrder(env, "biology_mcq_questions");
+  await env.CONTENT_DB.prepare(
+    `INSERT INTO biology_mcq_questions (id, category, difficulty, question_text, option_a, option_b, option_c, option_d, correct_option, explanation, sort_order)
+     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
+  ).bind(
+    id, body.category || null, body.difficulty || null, body.question_text,
+    body.option_a, body.option_b, body.option_c, body.option_d,
+    body.correct_option, body.explanation || null, sort_order
+  ).run();
+  return json({ ok: true, id }, 201);
+}
+
+const FIELDS_BIO_MCQ = ["category", "difficulty", "question_text", "option_a", "option_b", "option_c", "option_d", "correct_option", "explanation", "sort_order"];
+
+async function handleAdminBioMcqPut(id, request, env) {
+  const body = await request.json();
+  const fields = [];
+  const values = [];
+  for (const [key, val] of Object.entries(body)) {
+    if (!FIELDS_BIO_MCQ.includes(key)) continue;
+    fields.push(`${key} = ?`);
+    values.push(val);
+  }
+  if (fields.length === 0) return json({ error: "No valid fields to update" }, 400);
+  values.push(id);
+  await env.CONTENT_DB.prepare(
+    `UPDATE biology_mcq_questions SET ${fields.join(", ")} WHERE id = ?`
+  ).bind(...values).run();
+  return json({ ok: true });
+}
+
+async function handleAdminBioMcqDelete(id, env) {
+  await env.CONTENT_DB.prepare(`DELETE FROM biology_mcq_questions WHERE id = ?`).bind(id).run();
+  return json({ ok: true });
+}
+
+// ─── Admin CRUD: Biology Written Questions ───────────────────────────────
+
+async function handleAdminBioWrittenPost(request, env) {
+  const body = await request.json();
+  const id = body.id || await getNextId(env, "biology_written_questions", "bio_wr");
+  const sort_order = body.sort_order ?? await getNextSortOrder(env, "biology_written_questions");
+  await env.CONTENT_DB.prepare(
+    `INSERT INTO biology_written_questions (id, category, difficulty, question_type, marks, question_text, mark_scheme, label, sort_order)
+     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`
+  ).bind(
+    id, body.category || null, body.difficulty || null, body.question_type || 'short_answer',
+    body.marks || null, body.question_text, body.mark_scheme || null, body.label || null, sort_order
+  ).run();
+  return json({ ok: true, id }, 201);
+}
+
+const FIELDS_BIO_WRITTEN = ["category", "difficulty", "question_type", "marks", "question_text", "mark_scheme", "label", "sort_order"];
+
+async function handleAdminBioWrittenPut(id, request, env) {
+  const body = await request.json();
+  const fields = [];
+  const values = [];
+  for (const [key, val] of Object.entries(body)) {
+    if (!FIELDS_BIO_WRITTEN.includes(key)) continue;
+    fields.push(`${key} = ?`);
+    values.push(val);
+  }
+  if (fields.length === 0) return json({ error: "No valid fields to update" }, 400);
+  values.push(id);
+  await env.CONTENT_DB.prepare(
+    `UPDATE biology_written_questions SET ${fields.join(", ")} WHERE id = ?`
+  ).bind(...values).run();
+  return json({ ok: true });
+}
+
+async function handleAdminBioWrittenDelete(id, env) {
+  await env.CONTENT_DB.prepare(`DELETE FROM biology_written_questions WHERE id = ?`).bind(id).run();
+  return json({ ok: true });
+}
+
+// ─── Admin CRUD: Biology Checklist Sections ──────────────────────────────
+
+async function handleAdminBioChecklistSectionsPost(request, env) {
+  const body = await request.json();
+  const id = body.id || slugify(body.title || "bio-section");
+  const sort_order = body.sort_order ?? await getNextSortOrder(env, "biology_checklist_sections");
+  await env.CONTENT_DB.prepare(
+    `INSERT INTO biology_checklist_sections (id, title, color, sort_order) VALUES (?, ?, ?, ?)`
+  ).bind(id, body.title, body.color || '#5BA88C', sort_order).run();
+  return json({ ok: true, id }, 201);
+}
+
+const FIELDS_BIO_CS = ["title", "color", "sort_order"];
+
+async function handleAdminBioChecklistSectionsPut(id, request, env) {
+  const body = await request.json();
+  const fields = [];
+  const values = [];
+  for (const [key, val] of Object.entries(body)) {
+    if (!FIELDS_BIO_CS.includes(key)) continue;
+    fields.push(`${key} = ?`);
+    values.push(val);
+  }
+  if (fields.length === 0) return json({ error: "No valid fields to update" }, 400);
+  values.push(id);
+  await env.CONTENT_DB.prepare(
+    `UPDATE biology_checklist_sections SET ${fields.join(", ")} WHERE id = ?`
+  ).bind(...values).run();
+  return json({ ok: true });
+}
+
+async function handleAdminBioChecklistSectionsDelete(id, env) {
+  await env.CONTENT_DB.prepare(`DELETE FROM biology_checklist_sections WHERE id = ?`).bind(id).run();
+  return json({ ok: true });
+}
+
+// ─── Admin CRUD: Biology Checklist Items ─────────────────────────────────
+
+async function handleAdminBioChecklistItemsPost(request, env) {
+  const body = await request.json();
+  const sort_order = body.sort_order ?? await getNextSortOrder(env, "biology_checklist_items", "section_id = ?", [body.section_id]);
+  const result = await env.CONTENT_DB.prepare(
+    `INSERT INTO biology_checklist_items (section_id, text, sort_order) VALUES (?, ?, ?)`
+  ).bind(body.section_id, body.text, sort_order).run();
+  return json({ ok: true, id: result.meta.last_row_id }, 201);
+}
+
+const FIELDS_BIO_CI = ["section_id", "text", "sort_order"];
+
+async function handleAdminBioChecklistItemsPut(id, request, env) {
+  const body = await request.json();
+  const fields = [];
+  const values = [];
+  for (const [key, val] of Object.entries(body)) {
+    if (!FIELDS_BIO_CI.includes(key)) continue;
+    fields.push(`${key} = ?`);
+    values.push(val);
+  }
+  if (fields.length === 0) return json({ error: "No valid fields to update" }, 400);
+  values.push(id);
+  await env.CONTENT_DB.prepare(
+    `UPDATE biology_checklist_items SET ${fields.join(", ")} WHERE id = ?`
+  ).bind(...values).run();
+  return json({ ok: true });
+}
+
+async function handleAdminBioChecklistItemsDelete(id, env) {
+  await env.CONTENT_DB.prepare(`DELETE FROM biology_checklist_items WHERE id = ?`).bind(id).run();
+  return json({ ok: true });
+}
+
+// ─── Admin: Biology Colors ───────────────────────────────────────────────
+
+async function handleAdminBioColorsPut(request, env) {
+  const body = await request.json();
+  const existing = await env.CONTENT_DB.prepare(
+    `SELECT category FROM biology_category_colors WHERE category = ?`
+  ).bind(body.category).first();
+  if (existing) {
+    await env.CONTENT_DB.prepare(
+      `UPDATE biology_category_colors SET color = ? WHERE category = ?`
+    ).bind(body.color, body.category).run();
+  } else {
+    await env.CONTENT_DB.prepare(
+      `INSERT INTO biology_category_colors (category, color) VALUES (?, ?)`
+    ).bind(body.category, body.color).run();
+  }
+  return json({ ok: true });
+}
+
 // ─── Admin CRUD: Checklist Sections ───────────────────────────────────────
 
 async function handleAdminChecklistSectionsPost(request, env) {
@@ -1017,6 +1329,9 @@ async function handleAdminChecklistItemsDelete(id, env) {
 const REORDER_TABLES = [
   "flashcard_topics", "flashcards", "mcq_questions", "written_questions",
   "history_questions", "biology_questions", "checklist_sections", "checklist_items", "category_colors",
+  "biology_checklist_sections", "biology_checklist_items",
+  "biology_flashcard_topics", "biology_flashcards",
+  "biology_mcq_questions", "biology_written_questions", "biology_category_colors",
 ];
 
 async function handleAdminReorder(table, request, env) {
@@ -1179,6 +1494,31 @@ export default {
       return handleGetBiology(url, env);
     }
 
+    if (method === "GET" && path === "/api/content/biology-checklist") {
+      return handleGetBiologyChecklist(env);
+    }
+
+    if (method === "GET" && path === "/api/content/biology-flashcard-topics") {
+      return handleGetBiologyFlashcardTopics(env);
+    }
+
+    const bioFlashcardsMatch = path.match(/^\/api\/content\/biology-flashcards\/([^/]+)$/);
+    if (method === "GET" && bioFlashcardsMatch) {
+      return handleGetBiologyFlashcards(bioFlashcardsMatch[1], env);
+    }
+
+    if (method === "GET" && path === "/api/content/biology-mcq") {
+      return handleGetBiologyMcq(url, env);
+    }
+
+    if (method === "GET" && path === "/api/content/biology-written") {
+      return handleGetBiologyWritten(url, env);
+    }
+
+    if (method === "GET" && path === "/api/content/biology-colors") {
+      return handleGetBiologyColors(env);
+    }
+
     if (method === "GET" && path === "/api/content/checklist") {
       return handleGetChecklist(env);
     }
@@ -1317,6 +1657,127 @@ export default {
         const auth = await requireAuth(request, env, DELETE_ROLES);
         if (auth.response) return auth.response;
         return handleAdminBiologyDelete(biDelMatch[1], env);
+      }
+
+      // --- Biology Flashcard Topics ---
+      if (path === "/api/admin/biology-flashcard-topics" && method === "POST") {
+        const auth = await requireAuth(request, env, EDIT_ROLES);
+        if (auth.response) return auth.response;
+        return handleAdminBioFlashcardTopicsPost(request, env);
+      }
+      const bioFtPut = path.match(/^\/api\/admin\/biology-flashcard-topics\/([^/]+)$/);
+      if (bioFtPut && method === "PUT") {
+        const auth = await requireAuth(request, env, EDIT_ROLES);
+        if (auth.response) return auth.response;
+        return handleAdminBioFlashcardTopicsPut(bioFtPut[1], request, env);
+      }
+      const bioFtDel = path.match(/^\/api\/admin\/biology-flashcard-topics\/([^/]+)$/);
+      if (bioFtDel && method === "DELETE") {
+        const auth = await requireAuth(request, env, DELETE_ROLES);
+        if (auth.response) return auth.response;
+        return handleAdminBioFlashcardTopicsDelete(bioFtDel[1], env);
+      }
+
+      // --- Biology Flashcards ---
+      if (path === "/api/admin/biology-flashcards" && method === "POST") {
+        const auth = await requireAuth(request, env, EDIT_ROLES);
+        if (auth.response) return auth.response;
+        return handleAdminBioFlashcardsPost(request, env);
+      }
+      const bioFcPut = path.match(/^\/api\/admin\/biology-flashcards\/([^/]+)$/);
+      if (bioFcPut && method === "PUT") {
+        const auth = await requireAuth(request, env, EDIT_ROLES);
+        if (auth.response) return auth.response;
+        return handleAdminBioFlashcardsPut(bioFcPut[1], request, env);
+      }
+      const bioFcDel = path.match(/^\/api\/admin\/biology-flashcards\/([^/]+)$/);
+      if (bioFcDel && method === "DELETE") {
+        const auth = await requireAuth(request, env, DELETE_ROLES);
+        if (auth.response) return auth.response;
+        return handleAdminBioFlashcardsDelete(bioFcDel[1], env);
+      }
+
+      // --- Biology MCQ ---
+      if (path === "/api/admin/biology-mcq" && method === "POST") {
+        const auth = await requireAuth(request, env, EDIT_ROLES);
+        if (auth.response) return auth.response;
+        return handleAdminBioMcqPost(request, env);
+      }
+      const bioMcqPut = path.match(/^\/api\/admin\/biology-mcq\/([^/]+)$/);
+      if (bioMcqPut && method === "PUT") {
+        const auth = await requireAuth(request, env, EDIT_ROLES);
+        if (auth.response) return auth.response;
+        return handleAdminBioMcqPut(bioMcqPut[1], request, env);
+      }
+      const bioMcqDel = path.match(/^\/api\/admin\/biology-mcq\/([^/]+)$/);
+      if (bioMcqDel && method === "DELETE") {
+        const auth = await requireAuth(request, env, DELETE_ROLES);
+        if (auth.response) return auth.response;
+        return handleAdminBioMcqDelete(bioMcqDel[1], env);
+      }
+
+      // --- Biology Written ---
+      if (path === "/api/admin/biology-written" && method === "POST") {
+        const auth = await requireAuth(request, env, EDIT_ROLES);
+        if (auth.response) return auth.response;
+        return handleAdminBioWrittenPost(request, env);
+      }
+      const bioWrPut = path.match(/^\/api\/admin\/biology-written\/([^/]+)$/);
+      if (bioWrPut && method === "PUT") {
+        const auth = await requireAuth(request, env, EDIT_ROLES);
+        if (auth.response) return auth.response;
+        return handleAdminBioWrittenPut(bioWrPut[1], request, env);
+      }
+      const bioWrDel = path.match(/^\/api\/admin\/biology-written\/([^/]+)$/);
+      if (bioWrDel && method === "DELETE") {
+        const auth = await requireAuth(request, env, DELETE_ROLES);
+        if (auth.response) return auth.response;
+        return handleAdminBioWrittenDelete(bioWrDel[1], env);
+      }
+
+      // --- Biology Checklist Sections ---
+      if (path === "/api/admin/biology-checklist-sections" && method === "POST") {
+        const auth = await requireAuth(request, env, EDIT_ROLES);
+        if (auth.response) return auth.response;
+        return handleAdminBioChecklistSectionsPost(request, env);
+      }
+      const bioCsPut = path.match(/^\/api\/admin\/biology-checklist-sections\/([^/]+)$/);
+      if (bioCsPut && method === "PUT") {
+        const auth = await requireAuth(request, env, EDIT_ROLES);
+        if (auth.response) return auth.response;
+        return handleAdminBioChecklistSectionsPut(bioCsPut[1], request, env);
+      }
+      const bioCsDel = path.match(/^\/api\/admin\/biology-checklist-sections\/([^/]+)$/);
+      if (bioCsDel && method === "DELETE") {
+        const auth = await requireAuth(request, env, DELETE_ROLES);
+        if (auth.response) return auth.response;
+        return handleAdminBioChecklistSectionsDelete(bioCsDel[1], env);
+      }
+
+      // --- Biology Checklist Items ---
+      if (path === "/api/admin/biology-checklist-items" && method === "POST") {
+        const auth = await requireAuth(request, env, EDIT_ROLES);
+        if (auth.response) return auth.response;
+        return handleAdminBioChecklistItemsPost(request, env);
+      }
+      const bioCiPut = path.match(/^\/api\/admin\/biology-checklist-items\/([^/]+)$/);
+      if (bioCiPut && method === "PUT") {
+        const auth = await requireAuth(request, env, EDIT_ROLES);
+        if (auth.response) return auth.response;
+        return handleAdminBioChecklistItemsPut(bioCiPut[1], request, env);
+      }
+      const bioCiDel = path.match(/^\/api\/admin\/biology-checklist-items\/([^/]+)$/);
+      if (bioCiDel && method === "DELETE") {
+        const auth = await requireAuth(request, env, DELETE_ROLES);
+        if (auth.response) return auth.response;
+        return handleAdminBioChecklistItemsDelete(bioCiDel[1], env);
+      }
+
+      // --- Biology Colors ---
+      if (path === "/api/admin/biology-colors" && method === "PUT") {
+        const auth = await requireAuth(request, env, EDIT_ROLES);
+        if (auth.response) return auth.response;
+        return handleAdminBioColorsPut(request, env);
       }
 
       // --- Checklist Sections ---

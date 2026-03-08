@@ -228,6 +228,147 @@ export async function deleteChecklistItem(id) {
 }
 
 // ---------------------------------------------------------------------------
+// Public endpoints - Biology Content (checklist, flashcards, MCQ, written)
+// ---------------------------------------------------------------------------
+
+export async function fetchBiologyChecklist() {
+  const res = await fetch(`${WORKER_URL}/api/content/biology-checklist`);
+  if (!res.ok) throw new Error(`Failed to fetch biology checklist: ${res.status}`);
+  return res.json();
+}
+
+export async function fetchBiologyFlashcardTopics() {
+  const res = await fetch(`${WORKER_URL}/api/content/biology-flashcard-topics`);
+  if (!res.ok) throw new Error(`Failed to fetch biology flashcard topics: ${res.status}`);
+  return res.json();
+}
+
+export async function fetchBiologyFlashcards(topicId) {
+  const res = await fetch(`${WORKER_URL}/api/content/biology-flashcards/${topicId}`);
+  if (!res.ok) throw new Error(`Failed to fetch biology flashcards: ${res.status}`);
+  return res.json();
+}
+
+export async function fetchBiologyMcqQuestions(filters = {}) {
+  const params = new URLSearchParams();
+  if (filters.category) params.set("category", filters.category);
+  if (filters.difficulty) params.set("difficulty", filters.difficulty);
+  const qs = params.toString();
+  const res = await fetch(`${WORKER_URL}/api/content/biology-mcq${qs ? `?${qs}` : ""}`);
+  if (!res.ok) throw new Error(`Failed to fetch biology MCQ: ${res.status}`);
+  return res.json();
+}
+
+export async function fetchBiologyWrittenQuestions(filters = {}) {
+  const params = new URLSearchParams();
+  if (filters.type) params.set("type", filters.type);
+  if (filters.category) params.set("category", filters.category);
+  if (filters.difficulty) params.set("difficulty", filters.difficulty);
+  const qs = params.toString();
+  const res = await fetch(`${WORKER_URL}/api/content/biology-written${qs ? `?${qs}` : ""}`);
+  if (!res.ok) throw new Error(`Failed to fetch biology written: ${res.status}`);
+  return res.json();
+}
+
+export async function fetchBiologyCategoryColors() {
+  const res = await fetch(`${WORKER_URL}/api/content/biology-colors`);
+  if (!res.ok) throw new Error(`Failed to fetch biology category colors: ${res.status}`);
+  return res.json();
+}
+
+// ---------------------------------------------------------------------------
+// Admin endpoints - Biology Flashcard Topics
+// ---------------------------------------------------------------------------
+
+export async function createBiologyFlashcardTopic(data) {
+  return adminFetch("/api/admin/biology-flashcard-topics", "POST", data);
+}
+export async function updateBiologyFlashcardTopic(id, data) {
+  return adminFetch(`/api/admin/biology-flashcard-topics/${id}`, "PUT", data);
+}
+export async function deleteBiologyFlashcardTopic(id) {
+  return adminFetch(`/api/admin/biology-flashcard-topics/${id}`, "DELETE");
+}
+
+// ---------------------------------------------------------------------------
+// Admin endpoints - Biology Flashcards
+// ---------------------------------------------------------------------------
+
+export async function createBiologyFlashcard(data) {
+  return adminFetch("/api/admin/biology-flashcards", "POST", data);
+}
+export async function updateBiologyFlashcard(id, data) {
+  return adminFetch(`/api/admin/biology-flashcards/${id}`, "PUT", data);
+}
+export async function deleteBiologyFlashcard(id) {
+  return adminFetch(`/api/admin/biology-flashcards/${id}`, "DELETE");
+}
+
+// ---------------------------------------------------------------------------
+// Admin endpoints - Biology MCQ
+// ---------------------------------------------------------------------------
+
+export async function createBiologyMcqQuestion(data) {
+  return adminFetch("/api/admin/biology-mcq", "POST", data);
+}
+export async function updateBiologyMcqQuestion(id, data) {
+  return adminFetch(`/api/admin/biology-mcq/${id}`, "PUT", data);
+}
+export async function deleteBiologyMcqQuestion(id) {
+  return adminFetch(`/api/admin/biology-mcq/${id}`, "DELETE");
+}
+
+// ---------------------------------------------------------------------------
+// Admin endpoints - Biology Written
+// ---------------------------------------------------------------------------
+
+export async function createBiologyWrittenQuestion(data) {
+  return adminFetch("/api/admin/biology-written", "POST", data);
+}
+export async function updateBiologyWrittenQuestion(id, data) {
+  return adminFetch(`/api/admin/biology-written/${id}`, "PUT", data);
+}
+export async function deleteBiologyWrittenQuestion(id) {
+  return adminFetch(`/api/admin/biology-written/${id}`, "DELETE");
+}
+
+// ---------------------------------------------------------------------------
+// Admin endpoints - Biology Checklist Sections
+// ---------------------------------------------------------------------------
+
+export async function createBiologyChecklistSection(data) {
+  return adminFetch("/api/admin/biology-checklist-sections", "POST", data);
+}
+export async function updateBiologyChecklistSection(id, data) {
+  return adminFetch(`/api/admin/biology-checklist-sections/${id}`, "PUT", data);
+}
+export async function deleteBiologyChecklistSection(id) {
+  return adminFetch(`/api/admin/biology-checklist-sections/${id}`, "DELETE");
+}
+
+// ---------------------------------------------------------------------------
+// Admin endpoints - Biology Checklist Items
+// ---------------------------------------------------------------------------
+
+export async function createBiologyChecklistItem(data) {
+  return adminFetch("/api/admin/biology-checklist-items", "POST", data);
+}
+export async function updateBiologyChecklistItem(id, data) {
+  return adminFetch(`/api/admin/biology-checklist-items/${id}`, "PUT", data);
+}
+export async function deleteBiologyChecklistItem(id) {
+  return adminFetch(`/api/admin/biology-checklist-items/${id}`, "DELETE");
+}
+
+// ---------------------------------------------------------------------------
+// Admin endpoints - Biology Colors
+// ---------------------------------------------------------------------------
+
+export async function updateBiologyCategoryColor(category, color) {
+  return adminFetch("/api/admin/biology-colors", "PUT", { category, color });
+}
+
+// ---------------------------------------------------------------------------
 // Admin endpoints - Reorder
 // ---------------------------------------------------------------------------
 
