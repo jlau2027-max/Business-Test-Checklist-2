@@ -99,7 +99,7 @@ export default function Sidebar({ activeSubject }) {
             onMouseLeave={e => { e.currentTarget.style.color = "var(--text-muted)"; }}
             title="Expand sidebar"
           >
-            <span style={{ marginLeft: 12 }}><ChevronsRight size={16} /></span>
+            <span style={{ marginRight: 12 }}><ChevronsRight size={16} /></span>
           </button>
         ) : (
           <div
