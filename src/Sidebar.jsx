@@ -4,7 +4,7 @@ import { useAuth } from "./AuthContext.jsx";
 import { House, Briefcase, Clock, TrendingUp, Leaf, FlaskConical, Atom, Activity, LayoutGrid, ChevronsLeft, ChevronsRight } from "lucide-react";
 
 const EXPANDED = 240;
-const COLLAPSED = 48;
+const COLLAPSED = 56;
 const LS_KEY = "sidebar_collapsed";
 
 const SECTIONS = [
@@ -68,7 +68,7 @@ export default function Sidebar({ activeSubject }) {
           borderRight: "1px solid var(--bg-input)",
           display: "flex",
           flexDirection: "column",
-          padding: collapsed ? "24px 8px 20px" : "24px 14px 20px",
+          padding: collapsed ? "24px 4px 20px" : "24px 14px 20px",
           gap: 0,
           fontFamily: "'JSans', sans-serif",
           overflowY: "auto",
