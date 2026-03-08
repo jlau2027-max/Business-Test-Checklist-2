@@ -139,6 +139,8 @@ const SUBJECT_CONFIGS = {
     units: [
       { value: "All", label: "All Units" },
       { value: "1", label: "1" },
+      { value: "2", label: "2" },
+      { value: "3", label: "3" },
     ],
     api: {
       fetchChecklist: economicsApi.fetchChecklist, fetchFlashcardTopics: economicsApi.fetchFlashcardTopics,
