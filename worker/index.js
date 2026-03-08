@@ -640,6 +640,16 @@ async function handleGetHistory(url, env) {
   return jsonCached(results);
 }
 
+async function handleGetBiology(url, env) {
+  let sql = `SELECT * FROM biology_questions WHERE 1=1`;
+  const bindings = [];
+  const paper = url.searchParams.get("paper");
+  if (paper) { sql += ` AND paper = ?`; bindings.push(paper); }
+  sql += ` ORDER BY sort_order`;
+  const { results } = await env.CONTENT_DB.prepare(sql).bind(...bindings).all();
+  return jsonCached(results);
+}
+
 async function handleGetChecklist(env) {
   const { results: sections } = await env.CONTENT_DB.prepare(
     `SELECT * FROM checklist_sections ORDER BY sort_order`
@@ -672,7 +682,7 @@ function slugify(text) {
 
 const ALLOWED_TABLES = [
   "flashcard_topics", "flashcards", "mcq_questions", "written_questions",
-  "history_questions", "checklist_sections", "checklist_items", "category_colors",
+  "history_questions", "biology_questions", "checklist_sections", "checklist_items", "category_colors",
 ];
 
 async function getNextId(env, table, prefix) {
@@ -890,6 +900,47 @@ async function handleAdminHistoryDelete(id, env) {
   return json({ ok: true });
 }
 
+// ─── Admin CRUD: Biology Questions ────────────────────────────────────────
+
+async function handleAdminBiologyPost(request, env) {
+  const body = await request.json();
+  const prefix = body.paper === "paper2" ? "bp2q" : "bp1q";
+  const id = body.id || await getNextId(env, "biology_questions", prefix);
+  const sort_order = body.sort_order ?? await getNextSortOrder(env, "biology_questions");
+  await env.CONTENT_DB.prepare(
+    `INSERT INTO biology_questions (id, paper, topic, question_number, question_text, marks, mark_scheme, sort_order)
+     VALUES (?, ?, ?, ?, ?, ?, ?, ?)`
+  ).bind(
+    id, body.paper || null, body.topic || null, body.question_number || null,
+    body.question_text, body.marks || 8, body.mark_scheme || null, sort_order
+  ).run();
+  return json({ ok: true, id }, 201);
+}
+
+const FIELDS_BIOLOGY = ["paper", "topic", "question_number", "question_text", "marks", "mark_scheme", "sort_order"];
+
+async function handleAdminBiologyPut(id, request, env) {
+  const body = await request.json();
+  const fields = [];
+  const values = [];
+  for (const [key, val] of Object.entries(body)) {
+    if (!FIELDS_BIOLOGY.includes(key)) continue;
+    fields.push(`${key} = ?`);
+    values.push(val);
+  }
+  if (fields.length === 0) return json({ error: "No valid fields to update" }, 400);
+  values.push(id);
+  await env.CONTENT_DB.prepare(
+    `UPDATE biology_questions SET ${fields.join(", ")} WHERE id = ?`
+  ).bind(...values).run();
+  return json({ ok: true });
+}
+
+async function handleAdminBiologyDelete(id, env) {
+  await env.CONTENT_DB.prepare(`DELETE FROM biology_questions WHERE id = ?`).bind(id).run();
+  return json({ ok: true });
+}
+
 // ─── Admin CRUD: Checklist Sections ───────────────────────────────────────
 
 async function handleAdminChecklistSectionsPost(request, env) {
@@ -965,7 +1016,7 @@ async function handleAdminChecklistItemsDelete(id, env) {
 
 const REORDER_TABLES = [
   "flashcard_topics", "flashcards", "mcq_questions", "written_questions",
-  "history_questions", "checklist_sections", "checklist_items", "category_colors",
+  "history_questions", "biology_questions", "checklist_sections", "checklist_items", "category_colors",
 ];
 
 async function handleAdminReorder(table, request, env) {
@@ -1124,6 +1175,10 @@ export default {
       return handleGetHistory(url, env);
     }
 
+    if (method === "GET" && path === "/api/content/biology") {
+      return handleGetBiology(url, env);
+    }
+
     if (method === "GET" && path === "/api/content/checklist") {
       return handleGetChecklist(env);
     }
@@ -1243,6 +1298,25 @@ export default {
         const auth = await requireAuth(request, env, DELETE_ROLES);
         if (auth.response) return auth.response;
         return handleAdminHistoryDelete(hiDelMatch[1], env);
+      }
+
+      // --- Biology ---
+      if (path === "/api/admin/biology" && method === "POST") {
+        const auth = await requireAuth(request, env, EDIT_ROLES);
+        if (auth.response) return auth.response;
+        return handleAdminBiologyPost(request, env);
+      }
+      const biPutMatch = path.match(/^\/api\/admin\/biology\/([^/]+)$/);
+      if (biPutMatch && method === "PUT") {
+        const auth = await requireAuth(request, env, EDIT_ROLES);
+        if (auth.response) return auth.response;
+        return handleAdminBiologyPut(biPutMatch[1], request, env);
+      }
+      const biDelMatch = path.match(/^\/api\/admin\/biology\/([^/]+)$/);
+      if (biDelMatch && method === "DELETE") {
+        const auth = await requireAuth(request, env, DELETE_ROLES);
+        if (auth.response) return auth.response;
+        return handleAdminBiologyDelete(biDelMatch[1], env);
       }
 
       // --- Checklist Sections ---
