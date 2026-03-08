@@ -370,7 +370,7 @@ export default function SpecimenPage() {
     <div className="min-h-screen" style={{ backgroundColor: "var(--bg-base)", fontFamily: "'JSans', sans-serif", color: "var(--text-primary)" }}>
       <Sidebar activeSubject="business" />
 
-      <div style={{ marginLeft: 240 }}>
+      <div style={{ marginLeft: "var(--sidebar-width, 240px)", transition: "margin-left 0.2s cubic-bezier(0.4, 0, 0.2, 1)" }}>
 
       {/* Header */}
       <div

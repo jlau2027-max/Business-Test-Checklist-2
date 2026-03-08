@@ -337,7 +337,7 @@ export default function BiologyPage() {
 
       <Sidebar activeSubject="biology" />
 
-      <div style={{ marginLeft: 240 }}>
+      <div style={{ marginLeft: "var(--sidebar-width, 240px)", transition: "margin-left 0.2s cubic-bezier(0.4, 0, 0.2, 1)" }}>
 
       {/* Header */}
       <div

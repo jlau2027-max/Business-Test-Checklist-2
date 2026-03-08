@@ -1,6 +1,11 @@
+import { useState, useEffect } from "react";
 import { Button } from "@heroui/react";
 import { useAuth } from "./AuthContext.jsx";
-import { House, Briefcase, Clock, TrendingUp, Leaf, FlaskConical, Atom, Activity, LayoutGrid } from "lucide-react";
+import { House, Briefcase, Clock, TrendingUp, Leaf, FlaskConical, Atom, Activity, LayoutGrid, ChevronsLeft, ChevronsRight } from "lucide-react";
+
+const EXPANDED = 240;
+const COLLAPSED = 64;
+const LS_KEY = "sidebar_collapsed";
 
 const SECTIONS = [
   {
@@ -29,6 +34,22 @@ const SECTIONS = [
 
 export default function Sidebar({ activeSubject }) {
   const { user } = useAuth();
+  const [collapsed, setCollapsed] = useState(() => {
+    try { return localStorage.getItem(LS_KEY) === "1"; } catch { return false; }
+  });
+
+  const width = collapsed ? COLLAPSED : EXPANDED;
+
+  // Sync CSS variable so page content can read it
+  useEffect(() => {
+    document.documentElement.style.setProperty("--sidebar-width", `${width}px`);
+    try { localStorage.setItem(LS_KEY, collapsed ? "1" : "0"); } catch {}
+  }, [collapsed, width]);
+
+  // Set initial value on mount
+  useEffect(() => {
+    document.documentElement.style.setProperty("--sidebar-width", `${width}px`);
+  }, []);
 
   const allSections = user
     ? [...SECTIONS, { items: [{ label: "Dashboard", href: "/dashboard", subject: "dashboard", Icon: LayoutGrid, color: "var(--accent)" }] }]
@@ -40,36 +61,62 @@ export default function Sidebar({ activeSubject }) {
           position: "fixed",
           top: 0,
           left: 0,
-          width: 240,
+          width,
           height: "100vh",
           zIndex: 200,
           backgroundColor: "var(--bg-base)",
           borderRight: "1px solid var(--bg-input)",
           display: "flex",
           flexDirection: "column",
-          padding: "24px 14px 20px",
+          padding: collapsed ? "24px 8px 20px" : "24px 14px 20px",
           gap: 0,
           fontFamily: "'JSans', sans-serif",
           overflowY: "auto",
+          overflowX: "hidden",
+          transition: "width 0.2s cubic-bezier(0.4, 0, 0.2, 1), padding 0.2s cubic-bezier(0.4, 0, 0.2, 1)",
         }}
       >
-        {/* Logo / brand */}
+        {/* Logo / brand + collapse toggle */}
         <div
           style={{
-            fontSize: 18,
-            fontWeight: 700,
-            letterSpacing: -0.5,
-            color: "var(--text-primary)",
-            padding: "0 10px 20px",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: collapsed ? "center" : "space-between",
+            padding: collapsed ? "0 0 20px" : "0 10px 20px",
+            minHeight: 24,
           }}
         >
-          IB Revision
+          {!collapsed && (
+            <span style={{ fontSize: 18, fontWeight: 700, letterSpacing: -0.5, color: "var(--text-primary)", whiteSpace: "nowrap" }}>
+              IB Revision
+            </span>
+          )}
+          <button
+            onClick={() => setCollapsed(c => !c)}
+            style={{
+              background: "none",
+              border: "none",
+              cursor: "pointer",
+              color: "var(--text-muted)",
+              padding: 4,
+              borderRadius: 6,
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              transition: "color 0.15s ease",
+            }}
+            onMouseEnter={e => { e.currentTarget.style.color = "var(--text-primary)"; }}
+            onMouseLeave={e => { e.currentTarget.style.color = "var(--text-muted)"; }}
+            title={collapsed ? "Expand sidebar" : "Collapse sidebar"}
+          >
+            {collapsed ? <ChevronsRight size={18} /> : <ChevronsLeft size={18} />}
+          </button>
         </div>
 
         {allSections.map((section, si) => (
           <div key={si}>
-            {/* Group heading */}
-            {section.heading && (
+            {/* Group heading — hidden when collapsed */}
+            {section.heading && !collapsed && (
               <span
                 style={{
                   display: "block",
@@ -79,10 +126,16 @@ export default function Sidebar({ activeSubject }) {
                   letterSpacing: 1.2,
                   color: "var(--text-muted)",
                   padding: "16px 10px 6px",
+                  whiteSpace: "nowrap",
+                  overflow: "hidden",
                 }}
               >
                 {section.heading}
               </span>
+            )}
+            {/* Thin divider when collapsed between groups */}
+            {section.heading && collapsed && (
+              <div style={{ height: 1, backgroundColor: "var(--bg-input)", margin: "10px 8px 8px" }} />
             )}
 
             {/* Items */}
@@ -92,25 +145,29 @@ export default function Sidebar({ activeSubject }) {
                 <Button
                   key={s.label}
                   render={(props) => <button {...props} />}
-                  className="w-full justify-start font-medium text-sm"
+                  className="w-full font-medium text-sm"
                   style={{
                     height: 40,
                     borderRadius: 10,
-                    paddingLeft: 10,
-                    gap: 10,
+                    paddingLeft: collapsed ? 0 : 10,
+                    gap: collapsed ? 0 : 10,
+                    justifyContent: collapsed ? "center" : "flex-start",
                     fontFamily: "'JSans', sans-serif",
                     backgroundColor: active ? "var(--bg-input)" : "transparent",
                     color: active ? "var(--text-primary)" : "var(--text-secondary)",
                     border: "none",
                     transition: "all 0.15s ease",
                   }}
+                  title={collapsed ? s.label : undefined}
                 >
                   {/* Icon */}
                   <span style={{ width: 20, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, opacity: active ? 1 : 0.55, transition: "opacity 0.15s ease" }}>
                     <s.Icon size={16} color={active ? s.color : "currentColor"} strokeWidth={2} />
                   </span>
-                  {s.label}
-                  {active && (
+                  {/* Label — hidden when collapsed */}
+                  {!collapsed && s.label}
+                  {/* Active indicator bar */}
+                  {active && !collapsed && (
                     <span
                       style={{
                         marginLeft: "auto",
