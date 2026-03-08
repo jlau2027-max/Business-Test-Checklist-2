@@ -113,7 +113,7 @@ export default function Sidebar({ activeSubject }) {
             }}
           >
             <span style={{ fontSize: 18, fontWeight: 700, letterSpacing: -0.5, color: "var(--text-primary)", whiteSpace: "nowrap" }}>
-              IB Revision
+              IBrev.org
             </span>
             <button
               onClick={() => setCollapsed(true)}
