@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
 import { Button } from "@heroui/react";
 import { Show, SignInButton } from "@clerk/react";
-import ElectricBorder from "./components/ElectricBorder.jsx";
 import Grainient from "./components/Grainient.jsx";
 import ASCIIText from "./components/ASCIIText.jsx";
 
@@ -124,46 +123,50 @@ export default function LandingPage() {
               <div
                 className="w-full"
                 style={{
-                  maxWidth: 780,
+                  maxWidth: 900,
                   display: "grid",
-                  gridTemplateColumns: "repeat(2, 1fr)",
-                  gap: 16,
+                  gridTemplateColumns: "repeat(4, 1fr)",
+                  gap: 12,
                 }}
               >
                 {subjects.map((s) => (
                   <a key={s.label} href={s.href} style={{ textDecoration: "none" }}>
-                    <ElectricBorder
-                      color={s.color}
-                      speed={1}
-                      chaos={0.12}
-                      borderRadius={16}
-                      style={{ borderRadius: 16, cursor: "pointer" }}
+                    <Button
+                      render={(props) => <button {...props} />}
+                      size="lg"
+                      className="rounded-full w-full font-semibold"
+                      style={{
+                        fontFamily: "'JSans', sans-serif",
+                        height: 56,
+                        background: `${s.color}20`,
+                        backdropFilter: "blur(16px)",
+                        WebkitBackdropFilter: "blur(16px)",
+                        border: `1px solid ${s.color}40`,
+                        color: "rgba(255,255,255,0.9)",
+                        display: "flex",
+                        flexDirection: "column",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        gap: 2,
+                        padding: "8px 12px",
+                        transition: "all 0.2s ease",
+                      }}
+                      onMouseEnter={(e) => {
+                        e.currentTarget.style.background = `${s.color}35`;
+                        e.currentTarget.style.borderColor = `${s.color}70`;
+                        e.currentTarget.style.boxShadow = `0 0 20px ${s.color}30`;
+                      }}
+                      onMouseLeave={(e) => {
+                        e.currentTarget.style.background = `${s.color}20`;
+                        e.currentTarget.style.borderColor = `${s.color}40`;
+                        e.currentTarget.style.boxShadow = "none";
+                      }}
                     >
-                      <div
-                        style={{
-                          padding: "28px 24px",
-                          background: "rgba(0,0,0,0.45)",
-                          backdropFilter: "blur(20px)",
-                          WebkitBackdropFilter: "blur(20px)",
-                          borderRadius: 16,
-                          textAlign: "center",
-                          border: "1px solid rgba(255,255,255,0.06)",
-                        }}
-                      >
-                        <span
-                          className="block font-bold"
-                          style={{ fontSize: 20, letterSpacing: -0.5, marginBottom: 4, color: "rgba(255,255,255,0.92)" }}
-                        >
-                          {s.label}
-                        </span>
-                        <span
-                          className="block"
-                          style={{ fontSize: 11, fontWeight: 500, textTransform: "uppercase", letterSpacing: 1, color: "rgba(255,255,255,0.4)" }}
-                        >
-                          {s.subtitle}
-                        </span>
-                      </div>
-                    </ElectricBorder>
+                      <span style={{ fontSize: 14, letterSpacing: -0.3, lineHeight: 1.2 }}>{s.label}</span>
+                      <span style={{ fontSize: 9, fontWeight: 400, textTransform: "uppercase", letterSpacing: 0.8, opacity: 0.5, lineHeight: 1 }}>
+                        {s.subtitle}
+                      </span>
+                    </Button>
                   </a>
                 ))}
               </div>
