@@ -36,7 +36,7 @@ export default function LoginButton() {
           }}
         >
           <UserButton
-            userProfileUrl="https://accounts.jasperlaulvl7student.com/user"
+            userProfileUrl="https://accounts.ibrev.org/user"
             userProfileMode="navigation"
             appearance={{
               elements: {
