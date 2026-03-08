@@ -167,6 +167,35 @@ export async function deleteHistoryQuestion(id) {
 }
 
 // ---------------------------------------------------------------------------
+// Public endpoints - Biology
+// ---------------------------------------------------------------------------
+
+export async function fetchBiologyQuestions(paper) {
+  const params = new URLSearchParams();
+  if (paper) params.set("paper", paper);
+  const qs = params.toString();
+  const res = await fetch(`${WORKER_URL}/api/content/biology${qs ? `?${qs}` : ""}`);
+  if (!res.ok) throw new Error(`Failed to fetch biology questions: ${res.status}`);
+  return res.json();
+}
+
+// ---------------------------------------------------------------------------
+// Admin endpoints - Biology
+// ---------------------------------------------------------------------------
+
+export async function createBiologyQuestion(data) {
+  return adminFetch("/api/admin/biology", "POST", data);
+}
+
+export async function updateBiologyQuestion(id, data) {
+  return adminFetch(`/api/admin/biology/${id}`, "PUT", data);
+}
+
+export async function deleteBiologyQuestion(id) {
+  return adminFetch(`/api/admin/biology/${id}`, "DELETE");
+}
+
+// ---------------------------------------------------------------------------
 // Admin endpoints - Checklist Sections
 // ---------------------------------------------------------------------------
 

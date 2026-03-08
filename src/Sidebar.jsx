@@ -4,6 +4,7 @@ import { useAuth } from "./AuthContext.jsx";
 const SUBJECT_COLORS = {
   business: { solid: "var(--accent)", glow: "var(--accent-glow)" },
   history: { solid: "var(--accent-tertiary)", glow: "var(--accent-tertiary-soft)" },
+  biology: { solid: "var(--color-success)", glow: "var(--color-success-soft)" },
   dashboard: { solid: "var(--accent-secondary)", glow: "var(--accent-secondary-soft)" },
 };
 
@@ -13,6 +14,7 @@ export default function Sidebar({ activeSubject, sidebarOpen, onClose }) {
   const items = [
     { label: "Business", href: "/business/checklist", subject: "business" },
     { label: "History", href: "/history/specimen", subject: "history" },
+    { label: "Biology", href: "/biology/specimen", subject: "biology" },
     ...(user ? [{ label: "Dashboard", href: "/dashboard", subject: "dashboard" }] : []),
   ];
 
@@ -79,9 +81,6 @@ export default function Sidebar({ activeSubject, sidebarOpen, onClose }) {
         })}
 
         <div style={{ flex: 1 }} />
-        <span className="text-center block" style={{ fontSize: 10, color: "var(--text-dim)", fontFamily: "'JSans', sans-serif" }}>
-          More subjects coming soon
-        </span>
       </div>
     </>
   );

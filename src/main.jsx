@@ -5,6 +5,7 @@ import './index.css'
 import App from './App.jsx'
 import SpecimenPage from './SpecimenPage.jsx'
 import HistoryPage from './HistoryPage.jsx'
+import BiologyPage from './BiologyPage.jsx'
 import DashboardPage from './DashboardPage.jsx'
 import AdminPage from './admin/AdminPage.jsx'
 import LandingPage from './LandingPage.jsx'
@@ -19,6 +20,7 @@ const path = window.location.pathname
 // Backward-compat redirects for old URLs
 if (path === '/specimen') window.location.replace('/business/specimen')
 if (path === '/history') window.location.replace('/history/specimen')
+if (path === '/biology') window.location.replace('/biology/specimen')
 if (path === '/business') window.location.replace('/business/checklist')
 
 // Determine page and props
@@ -36,6 +38,8 @@ if (path.startsWith('/business/')) {
   }
 } else if (path === '/history/specimen') {
   Page = HistoryPage
+} else if (path === '/biology/specimen') {
+  Page = BiologyPage
 } else if (path === '/dashboard') {
   Page = DashboardPage
 } else if (path === '/admin') {

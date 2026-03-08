@@ -1,0 +1,469 @@
+import { useState, useEffect, useCallback } from "react";
+import { Button, Spinner, Modal, TextField, Input, Label, TextArea, NumberField, Table, Tabs, Tooltip, Skeleton, Alert, CloseButton } from "@heroui/react";
+// Inline SVG icons
+const IconPlus = ({ size = 16 }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round"><path d="M12 5v14M5 12h14" /></svg>
+);
+const IconPencil = ({ size = 16 }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round"><path d="M4 20h4L18.5 9.5a2.828 2.828 0 0 0-4-4L4 16v4M13.5 6.5l4 4" /></svg>
+);
+const IconTrash = ({ size = 16 }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round"><path d="M4 7h16M10 11v6M14 11v6M5 7l1 12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2l1-12M9 7V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v3" /></svg>
+);
+import { useAuth } from "../AuthContext.jsx";
+import {
+  fetchBiologyQuestions,
+  createBiologyQuestion,
+  updateBiologyQuestion,
+  deleteBiologyQuestion,
+} from "../api/contentApi.js";
+import ConfirmDeleteModal from "./components/ConfirmDeleteModal.jsx";
+
+// ---------------------------------------------------------------------------
+// Constants
+// ---------------------------------------------------------------------------
+
+const PAPER_FILTER_OPTIONS = [
+  { value: "all", label: "All" },
+  { value: "paper1", label: "Paper 1" },
+  { value: "paper2", label: "Paper 2" },
+];
+
+const PAPER_FORM_OPTIONS = [
+  { value: "paper1", label: "Paper 1" },
+  { value: "paper2", label: "Paper 2" },
+];
+
+const PAPER_BADGE_CONFIG = {
+  paper1: { label: "P1", color: "green" },
+  paper2: { label: "P2", color: "blue" },
+};
+
+const EMPTY_FORM = {
+  paper: "paper1",
+  topic: "",
+  question_number: 1,
+  question_text: "",
+  marks: 8,
+  mark_scheme: "",
+  sort_order: 0,
+};
+
+// ---------------------------------------------------------------------------
+// Helpers
+// ---------------------------------------------------------------------------
+
+function truncate(str, max = 80) {
+  if (!str) return "";
+  return str.length > max ? str.slice(0, max) + "..." : str;
+}
+
+// ---------------------------------------------------------------------------
+// BiologyAdmin Component
+// ---------------------------------------------------------------------------
+
+export default function BiologyAdmin() {
+  const { canEditContent, canDeleteContent } = useAuth();
+
+  // ---- Data state ----
+  const [questions, setQuestions] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  // ---- Filter state ----
+  const [filterPaper, setFilterPaper] = useState("all");
+
+  // ---- Modal state ----
+  const [modalOpened, setModalOpened] = useState(false);
+  const [editingQuestion, setEditingQuestion] = useState(null);
+  const [form, setForm] = useState(EMPTY_FORM);
+  const [saving, setSaving] = useState(false);
+  const [formError, setFormError] = useState(null);
+  const [successMsg, setSuccessMsg] = useState(null);
+
+  // ---- Delete state ----
+  const [deleteTarget, setDeleteTarget] = useState(null);
+  const [deleting, setDeleting] = useState(false);
+
+  // ---- Load questions ----
+  const loadQuestions = useCallback(async () => {
+    setLoading(true);
+    setError(null);
+    try {
+      const paper = filterPaper !== "all" ? filterPaper : undefined;
+      const data = await fetchBiologyQuestions(paper);
+      setQuestions(data);
+    } catch (err) {
+      setError(err.message || "Failed to load questions");
+    } finally {
+      setLoading(false);
+    }
+  }, [filterPaper]);
+
+  useEffect(() => {
+    loadQuestions();
+  }, [loadQuestions]);
+
+  // ---- Clear success message after a delay ----
+  useEffect(() => {
+    if (!successMsg) return;
+    const t = setTimeout(() => setSuccessMsg(null), 3500);
+    return () => clearTimeout(t);
+  }, [successMsg]);
+
+  // ---- Form helpers ----
+  function updateField(field, value) {
+    setForm((prev) => ({ ...prev, [field]: value }));
+  }
+
+  function openCreateModal() {
+    setEditingQuestion(null);
+    setForm(EMPTY_FORM);
+    setFormError(null);
+    setModalOpened(true);
+  }
+
+  function openEditModal(question) {
+    setEditingQuestion(question);
+    setForm({
+      paper: question.paper || "paper1",
+      topic: question.topic || "",
+      question_number: question.question_number ?? 1,
+      question_text: question.question_text || "",
+      marks: question.marks ?? 8,
+      mark_scheme: question.mark_scheme || "",
+      sort_order: question.sort_order ?? 0,
+    });
+    setFormError(null);
+    setModalOpened(true);
+  }
+
+  function closeModal() {
+    setModalOpened(false);
+    setEditingQuestion(null);
+    setFormError(null);
+  }
+
+  // ---- Validation ----
+  function validate() {
+    if (!form.paper) return "Paper is required.";
+    if (!form.topic.trim()) return "Topic is required.";
+    if (!form.question_text.trim()) return "Question text is required.";
+    return null;
+  }
+
+  // ---- Save (create/update) ----
+  async function handleSave() {
+    const validationError = validate();
+    if (validationError) {
+      setFormError(validationError);
+      return;
+    }
+
+    setSaving(true);
+    setFormError(null);
+    try {
+      const payload = {
+        paper: form.paper,
+        topic: form.topic.trim(),
+        question_number: parseInt(form.question_number, 10) || 1,
+        question_text: form.question_text.trim(),
+        marks: parseInt(form.marks, 10) || 8,
+        mark_scheme: form.mark_scheme.trim(),
+        sort_order: parseInt(form.sort_order, 10) || 0,
+      };
+
+      if (editingQuestion) {
+        await updateBiologyQuestion(editingQuestion.id, payload);
+        setSuccessMsg("Question updated successfully.");
+      } else {
+        await createBiologyQuestion(payload);
+        setSuccessMsg("Question created successfully.");
+      }
+
+      closeModal();
+      await loadQuestions();
+    } catch (err) {
+      setFormError(err.message || "Failed to save question.");
+    } finally {
+      setSaving(false);
+    }
+  }
+
+  // ---- Delete ----
+  async function handleDelete() {
+    if (!deleteTarget) return;
+    setDeleting(true);
+    try {
+      await deleteBiologyQuestion(deleteTarget.id);
+      setDeleteTarget(null);
+      setSuccessMsg("Question deleted.");
+      await loadQuestions();
+    } catch (err) {
+      setError(err.message || "Failed to delete question.");
+      setDeleteTarget(null);
+    } finally {
+      setDeleting(false);
+    }
+  }
+
+  // ---- Render ----
+  return (
+    <div className="max-w-5xl mx-auto py-8 px-4">
+      <div className="flex flex-col gap-6">
+        {/* Header */}
+        <div className="flex items-center justify-between">
+          <span className="text-xl font-bold text-[var(--text-primary)]">
+            Biology Questions
+          </span>
+          {canEditContent && (
+            <Button className="rounded-full bg-[var(--color-success)] text-white border-none" onPress={openCreateModal}><IconPlus size={16} /> Add Question</Button>
+          )}
+        </div>
+
+        {/* Success alert */}
+        {successMsg && (
+          <Alert status="success">
+            <Alert.Indicator />
+            <Alert.Content className="flex-1">
+              <Alert.Description>{successMsg}</Alert.Description>
+            </Alert.Content>
+            <CloseButton onPress={() => setSuccessMsg(null)} className="text-[var(--text-secondary)] hover:text-white" />
+          </Alert>
+        )}
+
+        {/* Error alert */}
+        {error && (
+          <Alert status="danger">
+            <Alert.Indicator />
+            <Alert.Content className="flex-1">
+              <Alert.Description>{error}</Alert.Description>
+            </Alert.Content>
+            <CloseButton onPress={() => setError(null)} className="text-[var(--text-secondary)] hover:text-white" />
+          </Alert>
+        )}
+
+        {/* Filters */}
+        <div className="bg-[var(--bg-card)] rounded-lg p-4 border border-[var(--border)]">
+          <div className="flex flex-wrap items-center gap-4">
+            <div className="flex flex-col gap-1">
+              <span className="text-sm font-medium text-[var(--text-secondary)]">
+                Paper
+              </span>
+              <Tabs variant="primary" selectedKey={filterPaper} onSelectionChange={setFilterPaper}>
+                <Tabs.ListContainer>
+                  <Tabs.List aria-label="Paper filter" className="bg-[var(--bg-input)] rounded-lg p-0.5">
+                    {PAPER_FILTER_OPTIONS.map(opt => (
+                      <Tabs.Tab key={opt.value} id={opt.value} className="text-[var(--text-secondary)] text-sm px-3.5 py-1.5 data-[selected=true]:text-white rounded-full">
+                        {opt.label}
+                        <Tabs.Indicator className="bg-[var(--color-success)] rounded-full" />
+                      </Tabs.Tab>
+                    ))}
+                  </Tabs.List>
+                </Tabs.ListContainer>
+              </Tabs>
+            </div>
+            <div className="flex-1" />
+            <span className="text-sm text-[var(--text-secondary)] self-end">
+              {loading ? "Loading..." : `${questions.length} question${questions.length !== 1 ? "s" : ""}`}
+            </span>
+          </div>
+        </div>
+
+        {/* Questions table */}
+        <div className="bg-[var(--bg-card)] rounded-lg border border-[var(--border)] overflow-hidden">
+          {loading ? (
+            <div className="flex flex-col gap-2 p-4">
+              {Array.from({ length: 6 }).map((_, i) => (
+                <Skeleton key={i} className="h-12 rounded-sm" />
+              ))}
+            </div>
+          ) : questions.length === 0 ? (
+            <div className="flex flex-col items-center gap-2 py-8">
+              <span className="text-sm text-[var(--text-secondary)]">
+                No questions found. {canEditContent ? "Click \"Add Question\" to create one." : ""}
+              </span>
+            </div>
+          ) : (
+            <div className="overflow-auto">
+              <Table className="w-full">
+                <Table.ScrollContainer>
+                  <Table.Content>
+                    <Table.Header className="bg-[var(--bg-base)]">
+                      <Table.Column className="text-[var(--text-secondary)] text-xs font-semibold uppercase tracking-wider p-3.5 border-b border-[var(--border)]" style={{ width: 70 }}>Paper</Table.Column>
+                      <Table.Column className="text-[var(--text-secondary)] text-xs font-semibold uppercase tracking-wider p-3.5 border-b border-[var(--border)]" style={{ width: 160 }}>Topic</Table.Column>
+                      <Table.Column className="text-[var(--text-secondary)] text-xs font-semibold uppercase tracking-wider p-3.5 border-b border-[var(--border)]" style={{ width: 50 }}>Q#</Table.Column>
+                      <Table.Column className="text-[var(--text-secondary)] text-xs font-semibold uppercase tracking-wider p-3.5 border-b border-[var(--border)]">Question</Table.Column>
+                      <Table.Column className="text-[var(--text-secondary)] text-xs font-semibold uppercase tracking-wider p-3.5 border-b border-[var(--border)]" style={{ width: 60 }}>Marks</Table.Column>
+                      {(canEditContent || canDeleteContent) && (
+                        <Table.Column className="text-[var(--text-secondary)] text-xs font-semibold uppercase tracking-wider p-3.5 border-b border-[var(--border)] text-right" style={{ width: 90 }}>Actions</Table.Column>
+                      )}
+                    </Table.Header>
+                    <Table.Body>
+                      {questions.map((q) => {
+                        const badgeConfig = PAPER_BADGE_CONFIG[q.paper] || { label: q.paper, color: "gray" };
+                        return (
+                          <Table.Row key={q.id} className="hover:bg-[var(--bg-input)] border-b border-[var(--bg-elevated)]">
+                            <Table.Cell className="p-3.5">
+                              <span className="text-xs px-2 py-0.5 rounded-full text-white" style={{ backgroundColor: badgeConfig.color === "green" ? "var(--color-success)" : badgeConfig.color === "blue" ? "var(--accent)" : "var(--text-muted)" }}>
+                                {badgeConfig.label}
+                              </span>
+                            </Table.Cell>
+                            <Table.Cell className="p-3.5">
+                              <span className="text-xs text-[var(--text-primary)] line-clamp-1">
+                                {q.topic}
+                              </span>
+                            </Table.Cell>
+                            <Table.Cell className="p-3.5">
+                              <span className="text-sm text-[var(--text-primary)]">
+                                {q.question_number}
+                              </span>
+                            </Table.Cell>
+                            <Table.Cell className="p-3.5">
+                              <span className="text-sm text-[var(--text-primary)] line-clamp-1">
+                                {truncate(q.question_text)}
+                              </span>
+                            </Table.Cell>
+                            <Table.Cell className="p-3.5">
+                              <span className="text-sm text-[var(--text-secondary)]">
+                                {q.marks}
+                              </span>
+                            </Table.Cell>
+                            {(canEditContent || canDeleteContent) && (
+                              <Table.Cell className="p-3.5">
+                                <div className="flex items-center gap-1 justify-end flex-nowrap">
+                                  {canEditContent && (
+                                    <Tooltip delay={0}>
+                                      <Button isIconOnly size="sm" variant="ghost" className="text-[var(--color-success)]" onPress={() => openEditModal(q)}>
+                                        <IconPencil size={15} />
+                                      </Button>
+                                      <Tooltip.Content><p>Edit</p></Tooltip.Content>
+                                    </Tooltip>
+                                  )}
+                                  {canDeleteContent && (
+                                    <Tooltip delay={0}>
+                                      <Button isIconOnly size="sm" variant="ghost" className="text-red-400" onPress={() => setDeleteTarget(q)}>
+                                        <IconTrash size={15} />
+                                      </Button>
+                                      <Tooltip.Content><p>Delete</p></Tooltip.Content>
+                                    </Tooltip>
+                                  )}
+                                </div>
+                              </Table.Cell>
+                            )}
+                          </Table.Row>
+                        );
+                      })}
+                    </Table.Body>
+                  </Table.Content>
+                </Table.ScrollContainer>
+              </Table>
+            </div>
+          )}
+        </div>
+      </div>
+
+      {/* ---- Create / Edit Modal ---- */}
+      <Modal.Backdrop variant="opaque" isKeyboardDismissDisabled={false} isOpen={modalOpened} onOpenChange={(open) => { if (!open) closeModal(); }}>
+        <Modal.Container>
+          <Modal.Dialog className="sm:max-w-lg" style={{ backgroundColor: "var(--bg-card)", border: "1px solid var(--border)" }}>
+            <Modal.CloseTrigger />
+            <Modal.Header style={{ borderBottom: "1px solid var(--border)" }}>
+              <Modal.Heading style={{ color: "var(--text-primary)", fontWeight: 700 }}>{editingQuestion ? "Edit Question" : "New Biology Question"}</Modal.Heading>
+            </Modal.Header>
+            <Modal.Body>
+              <div className="flex flex-col gap-4">
+                {formError && (
+                  <Alert status="danger">
+                    <Alert.Indicator />
+                    <Alert.Content className="flex-1">
+                      <Alert.Description>{formError}</Alert.Description>
+                    </Alert.Content>
+                  </Alert>
+                )}
+
+                {/* Paper & Question Number */}
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="flex flex-col gap-1">
+                    <span className="text-sm font-medium text-[var(--text-secondary)]">
+                      Paper
+                    </span>
+                    <Tabs variant="primary" selectedKey={form.paper} onSelectionChange={(val) => updateField("paper", val)}>
+                      <Tabs.ListContainer>
+                        <Tabs.List aria-label="Paper" className="bg-[var(--bg-input)] rounded-lg p-0.5 w-full">
+                          {PAPER_FORM_OPTIONS.map(opt => (
+                            <Tabs.Tab key={opt.value} id={opt.value} className="text-[var(--text-secondary)] text-sm px-3.5 py-1.5 data-[selected=true]:text-white rounded-full flex-1">
+                              {opt.label}
+                              <Tabs.Indicator className="bg-[var(--color-success)] rounded-full" />
+                            </Tabs.Tab>
+                          ))}
+                        </Tabs.List>
+                      </Tabs.ListContainer>
+                    </Tabs>
+                  </div>
+                  <NumberField className="w-full" value={form.question_number} onChange={(val) => updateField("question_number", val)} minValue={1}>
+                    <Label className="text-[var(--text-secondary)] text-[11px] tracking-wider mb-1" style={{ fontFamily: "'JSans', sans-serif" }}>Question Number</Label>
+                    <NumberField.Group>
+                      <NumberField.DecrementButton />
+                      <NumberField.Input className="bg-[var(--bg-input)] border border-[var(--border)] text-[var(--text-primary)] rounded-full" />
+                      <NumberField.IncrementButton />
+                    </NumberField.Group>
+                  </NumberField>
+                </div>
+
+                {/* Topic */}
+                <TextField className="w-full" name="topic" onChange={(val) => updateField("topic", val)}>
+                  <Label className="text-[var(--text-secondary)] text-[11px] tracking-wider mb-1">Topic</Label>
+                  <Input value={form.topic} placeholder="e.g. Cell Biology, Genetics..." className="bg-[var(--bg-input)] border border-[var(--border)] text-[var(--text-primary)] rounded-full" />
+                </TextField>
+
+                {/* Question text */}
+                <div>
+                  <label className="text-[var(--text-secondary)] text-xs font-medium mb-1 block">Question</label>
+                  <TextArea value={form.question_text} onChange={(e) => updateField("question_text", e.target.value)} placeholder="Enter the question text..." className="w-full bg-[var(--bg-input)] border border-[var(--border)] text-[var(--text-primary)] rounded-2xl min-h-[80px]" rows={3} />
+                </div>
+
+                {/* Marks */}
+                <NumberField className="w-full" value={form.marks} onChange={(val) => updateField("marks", val)} minValue={1}>
+                  <Label className="text-[var(--text-secondary)] text-[11px] tracking-wider mb-1" style={{ fontFamily: "'JSans', sans-serif" }}>Marks</Label>
+                  <NumberField.Group>
+                    <NumberField.DecrementButton />
+                    <NumberField.Input className="bg-[var(--bg-input)] border border-[var(--border)] text-[var(--text-primary)] rounded-full" />
+                    <NumberField.IncrementButton />
+                  </NumberField.Group>
+                </NumberField>
+
+                {/* Mark Scheme */}
+                <div>
+                  <label className="text-[var(--text-secondary)] text-xs font-medium mb-1 block">Mark Scheme</label>
+                  <TextArea value={form.mark_scheme} onChange={(e) => updateField("mark_scheme", e.target.value)} placeholder="Enter the mark scheme..." className="w-full bg-[var(--bg-input)] border border-[var(--border)] text-[var(--text-primary)] rounded-2xl min-h-[120px]" rows={4} />
+                </div>
+              </div>
+            </Modal.Body>
+            <Modal.Footer>
+              {/* Actions */}
+              <div className="flex items-center justify-end gap-2 mt-2">
+                <Button variant="ghost" className="rounded-full text-[var(--text-secondary)]" onPress={closeModal} isDisabled={saving}>Cancel</Button>
+                <button type="button" onClick={handleSave} disabled={saving} className="rounded-full px-4 py-2 text-sm font-semibold" style={{ fontFamily: "'JSans', sans-serif", backgroundColor: "var(--color-success)", color: "#fff", border: "none", opacity: saving ? 0.6 : 1, cursor: saving ? "not-allowed" : "pointer" }}>{saving ? "Saving..." : (editingQuestion ? "Save Changes" : "Create Question")}</button>
+              </div>
+            </Modal.Footer>
+          </Modal.Dialog>
+        </Modal.Container>
+      </Modal.Backdrop>
+
+      {/* ---- Delete Confirmation Modal ---- */}
+      <ConfirmDeleteModal
+        opened={!!deleteTarget}
+        onClose={() => setDeleteTarget(null)}
+        onConfirm={handleDelete}
+        title="Delete Question"
+        message={
+          deleteTarget
+            ? `Are you sure you want to delete the question "${truncate(deleteTarget.question_text, 60)}"? This action cannot be undone.`
+            : undefined
+        }
+        loading={deleting}
+      />
+    </div>
+  );
+}

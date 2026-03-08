@@ -110,7 +110,7 @@ export default function LandingPage() {
           <div style={{ marginBottom: 64 }} />
 
           {/* Subject buttons */}
-          <div className="flex flex-col sm:flex-row gap-8 w-full" style={{ maxWidth: 520 }}>
+          <div className="flex flex-col sm:flex-row gap-8 w-full" style={{ maxWidth: 780 }}>
             <a href="/business/checklist" className="flex-1" style={{ textDecoration: "none" }}>
               <ElectricBorder
                 color="#7BA3B5"
@@ -176,6 +176,41 @@ export default function LandingPage() {
                     style={{ fontSize: 11, fontWeight: 500, textTransform: "uppercase", letterSpacing: 1, color: "rgba(255,255,255,0.4)" }}
                   >
                     Paper 2 & 3
+                  </span>
+                </div>
+              </ElectricBorder>
+            </a>
+
+            <a href="/biology/specimen" className="flex-1" style={{ textDecoration: "none" }}>
+              <ElectricBorder
+                color="#5BA88C"
+                speed={1}
+                chaos={0.12}
+                borderRadius={16}
+                style={{ borderRadius: 16, cursor: "pointer" }}
+              >
+                <div
+                  style={{
+                    padding: "28px 24px",
+                    background: "rgba(0,0,0,0.45)",
+                    backdropFilter: "blur(20px)",
+                    WebkitBackdropFilter: "blur(20px)",
+                    borderRadius: 16,
+                    textAlign: "center",
+                    border: "1px solid rgba(255,255,255,0.06)",
+                  }}
+                >
+                  <span
+                    className="block font-bold"
+                    style={{ fontSize: 20, letterSpacing: -0.5, marginBottom: 4, color: "rgba(255,255,255,0.92)" }}
+                  >
+                    Biology
+                  </span>
+                  <span
+                    className="block"
+                    style={{ fontSize: 11, fontWeight: 500, textTransform: "uppercase", letterSpacing: 1, color: "rgba(255,255,255,0.4)" }}
+                  >
+                    Paper 1 & 2
                   </span>
                 </div>
               </ElectricBorder>

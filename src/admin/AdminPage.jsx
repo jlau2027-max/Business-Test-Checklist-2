@@ -5,6 +5,7 @@ import FlashcardAdmin from "./FlashcardAdmin.jsx";
 import McqAdmin from "./McqAdmin.jsx";
 import WrittenAdmin from "./WrittenAdmin.jsx";
 import HistoryAdmin from "./HistoryAdmin.jsx";
+import BiologyAdmin from "./BiologyAdmin.jsx";
 import ChecklistAdmin from "./ChecklistAdmin.jsx";
 import UsersAdmin from "./UsersAdmin.jsx";
 
@@ -19,6 +20,10 @@ const HISTORY_TABS = [
   { value: "history", label: "History Questions" },
 ];
 
+const BIOLOGY_TABS = [
+  { value: "biology", label: "Biology Questions" },
+];
+
 const USERS_TABS = [
   { value: "users", label: "User Management" },
 ];
@@ -27,11 +32,11 @@ export default function AdminPage() {
   const [section, setSection] = useState("business");
   const [activeTab, setActiveTab] = useState("checklist");
 
-  const tabs = section === "business" ? BUSINESS_TABS : section === "history" ? HISTORY_TABS : USERS_TABS;
+  const tabs = section === "business" ? BUSINESS_TABS : section === "history" ? HISTORY_TABS : section === "biology" ? BIOLOGY_TABS : USERS_TABS;
 
   const handleSectionChange = (val) => {
     setSection(val);
-    setActiveTab(val === "business" ? "checklist" : val === "history" ? "history" : "users");
+    setActiveTab(val === "business" ? "checklist" : val === "history" ? "history" : val === "biology" ? "biology" : "users");
   };
 
   return (
@@ -62,6 +67,10 @@ export default function AdminPage() {
                 <Tabs.Tab id="history" className="font-semibold text-sm font-mono text-[var(--text-secondary)] data-[selected=true]:text-white rounded-full px-4 py-2">
                   History
                   <Tabs.Indicator className="bg-[var(--accent-tertiary)] rounded-full" />
+                </Tabs.Tab>
+                <Tabs.Tab id="biology" className="font-semibold text-sm font-mono text-[var(--text-secondary)] data-[selected=true]:text-white rounded-full px-4 py-2">
+                  Biology
+                  <Tabs.Indicator className="bg-[var(--color-success)] rounded-full" />
                 </Tabs.Tab>
                 <Tabs.Tab id="users" className="font-semibold text-sm font-mono text-[var(--text-secondary)] data-[selected=true]:text-white rounded-full px-4 py-2">
                   Users
@@ -106,6 +115,9 @@ export default function AdminPage() {
             </Tabs.Panel>
             <Tabs.Panel id="history" className="pt-4">
               <HistoryAdmin />
+            </Tabs.Panel>
+            <Tabs.Panel id="biology" className="pt-4">
+              <BiologyAdmin />
             </Tabs.Panel>
             <Tabs.Panel id="users" className="pt-4">
               <UsersAdmin />
