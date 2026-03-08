@@ -77,25 +77,11 @@ export default function Sidebar({ activeSubject }) {
         }}
       >
         {/* Logo / brand + collapse toggle */}
-        <div
-          style={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: collapsed ? "center" : "space-between",
-            padding: collapsed ? "0" : "0 10px",
-            marginBottom: 20,
-            height: 40,
-          }}
-        >
-          {!collapsed && (
-            <span style={{ fontSize: 18, fontWeight: 700, letterSpacing: -0.5, color: "var(--text-primary)", whiteSpace: "nowrap" }}>
-              IB Revision
-            </span>
-          )}
+        {collapsed ? (
           <button
-            onClick={() => setCollapsed(c => !c)}
+            onClick={() => setCollapsed(false)}
             style={{
-              width: collapsed ? 40 : "auto",
+              width: "100%",
               height: 40,
               background: "none",
               border: "none",
@@ -106,15 +92,51 @@ export default function Sidebar({ activeSubject }) {
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
+              marginBottom: 20,
               transition: "color 0.15s ease",
             }}
             onMouseEnter={e => { e.currentTarget.style.color = "var(--text-primary)"; }}
             onMouseLeave={e => { e.currentTarget.style.color = "var(--text-muted)"; }}
-            title={collapsed ? "Expand sidebar" : "Collapse sidebar"}
+            title="Expand sidebar"
           >
-            {collapsed ? <ChevronsRight size={16} /> : <ChevronsLeft size={16} />}
+            <ChevronsRight size={16} />
           </button>
-        </div>
+        ) : (
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "space-between",
+              padding: "0 10px",
+              marginBottom: 20,
+              height: 40,
+            }}
+          >
+            <span style={{ fontSize: 18, fontWeight: 700, letterSpacing: -0.5, color: "var(--text-primary)", whiteSpace: "nowrap" }}>
+              IB Revision
+            </span>
+            <button
+              onClick={() => setCollapsed(true)}
+              style={{
+                background: "none",
+                border: "none",
+                cursor: "pointer",
+                color: "var(--text-muted)",
+                padding: 4,
+                borderRadius: 6,
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                transition: "color 0.15s ease",
+              }}
+              onMouseEnter={e => { e.currentTarget.style.color = "var(--text-primary)"; }}
+              onMouseLeave={e => { e.currentTarget.style.color = "var(--text-muted)"; }}
+              title="Collapse sidebar"
+            >
+              <ChevronsLeft size={16} />
+            </button>
+          </div>
+        )}
 
         {allSections.map((section, si) => (
           <div key={si}>

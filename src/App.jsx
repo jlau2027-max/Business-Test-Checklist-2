@@ -5,6 +5,7 @@ import ProgressBar from "./components/ProgressBar.jsx";
 import LoginButton from "./LoginButton.jsx";
 import Sidebar from "./Sidebar.jsx";
 import { useAuth } from "./AuthContext.jsx";
+import { ListChecks, Layers, CircleDot, PenLine } from "lucide-react";
 import { useAttemptTracker } from "./useAttemptTracker.js";
 import { syncToCloud } from "./stateSync.js";
 import {
@@ -1141,17 +1142,20 @@ export default function App({ initialTab = "checklist", subject = "business" }) 
             <Tabs.ListContainer>
               <Tabs.List aria-label="Content tabs" className="w-full">
                 {[
-                  { value: "checklist", label: "Checklist", href: `${config.basePath}/checklist` },
-                  { value: "flashcards", label: "Flashcards", href: `${config.basePath}/flashcards` },
-                  { value: "practice", label: "Multi-Choice", href: `${config.basePath}/multi-choice` },
-                  { value: "written", label: "Written", href: `${config.basePath}/written` },
+                  { value: "checklist", label: "Checklist", href: `${config.basePath}/checklist`, Icon: ListChecks },
+                  { value: "flashcards", label: "Flashcards", href: `${config.basePath}/flashcards`, Icon: Layers },
+                  { value: "practice", label: "Multi-Choice", href: `${config.basePath}/multi-choice`, Icon: CircleDot },
+                  { value: "written", label: "Written", href: `${config.basePath}/written`, Icon: PenLine },
                 ].map(t => (
                   <Tabs.Tab key={t.value} id={t.value}
                     render={(domProps) => <a {...domProps} href={t.href} style={{textDecoration:"none", flex:1, textAlign:"center"}} />}
                     className="text-[13px] font-semibold py-2.5 text-[var(--text-muted)] data-[selected=true]:text-[var(--text-primary)]"
                     style={{fontFamily: "'JSans', sans-serif"}}
                   >
-                    {t.label}
+                    <span style={{ display: "inline-flex", alignItems: "center", gap: 6 }}>
+                      <t.Icon size={14} strokeWidth={2} />
+                      {t.label}
+                    </span>
                     <Tabs.Indicator style={{backgroundColor: config.accentColor}} />
                   </Tabs.Tab>
                 ))}
