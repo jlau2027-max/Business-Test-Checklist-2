@@ -92,8 +92,8 @@ export default function LandingPage() {
             items={[
               {
                 label: "Individuals & Societies",
-                bgColor: "rgba(255,255,255,0.08)",
-                textColor: "#fdf9f3",
+                bgColor: "#f5f3ef",
+                textColor: "#1a1a1a",
                 links: [
                   { label: "Business", href: "/business/checklist", ariaLabel: "Business revision" },
                   { label: "History", href: "/history/specimen", ariaLabel: "History revision" },
@@ -102,8 +102,8 @@ export default function LandingPage() {
               },
               {
                 label: "Sciences",
-                bgColor: "rgba(255,255,255,0.08)",
-                textColor: "#fdf9f3",
+                bgColor: "#f5f3ef",
+                textColor: "#1a1a1a",
                 links: [
                   { label: "Biology", href: "/biology/checklist", ariaLabel: "Biology revision" },
                   { label: "Chemistry", href: "/chemistry/checklist", ariaLabel: "Chemistry revision" },
@@ -113,17 +113,17 @@ export default function LandingPage() {
               },
               {
                 label: "Other",
-                bgColor: "rgba(255,255,255,0.08)",
-                textColor: "#fdf9f3",
+                bgColor: "#f5f3ef",
+                textColor: "#1a1a1a",
                 links: [
                   { label: "Admin", href: "/admin", ariaLabel: "Admin panel" },
                 ],
               },
             ]}
-            baseColor="rgba(255,255,255,0.06)"
-            menuColor="rgba(253,249,243,0.85)"
-            buttonBgColor="rgba(255,255,255,0.12)"
-            buttonTextColor="rgba(255,255,255,0.85)"
+            baseColor="#fff"
+            menuColor="#1a1a1a"
+            buttonBgColor="#111"
+            buttonTextColor="#fff"
             ctaContent={
               <>
                 <Show when="signed-out">
@@ -134,11 +134,9 @@ export default function LandingPage() {
                         fontFamily: "'JSans', sans-serif",
                         fontSize: 14,
                         fontWeight: 500,
-                        background: "rgba(255,255,255,0.12)",
-                        backdropFilter: "blur(12px)",
-                        WebkitBackdropFilter: "blur(12px)",
-                        color: "rgba(255,255,255,0.85)",
-                        border: "1px solid rgba(255,255,255,0.1)",
+                        background: "#111",
+                        color: "#fff",
+                        border: "none",
                         borderRadius: "calc(0.75rem - 0.35rem)",
                         padding: "0 1rem",
                         height: "100%",
@@ -157,11 +155,9 @@ export default function LandingPage() {
                         fontFamily: "'JSans', sans-serif",
                         fontSize: 14,
                         fontWeight: 500,
-                        background: "rgba(255,255,255,0.12)",
-                        backdropFilter: "blur(12px)",
-                        WebkitBackdropFilter: "blur(12px)",
-                        color: "rgba(255,255,255,0.85)",
-                        border: "1px solid rgba(255,255,255,0.1)",
+                        background: "#111",
+                        color: "#fff",
+                        border: "none",
                         borderRadius: "calc(0.75rem - 0.35rem)",
                         padding: "0 1rem",
                         height: "100%",
