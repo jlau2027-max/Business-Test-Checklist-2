@@ -114,7 +114,7 @@ export default function LandingPage() {
             const subjects = [
               { label: "Business", href: "/business/checklist", color: "#7BA3B5", subtitle: "Finance Unit" },
               { label: "History", href: "/history/specimen", color: "#D4A572", subtitle: "Paper 2 & 3" },
-              { label: "Biology", href: "/biology/checklist", color: "#5BA88C", subtitle: "Paper 1 & 2" },
+              { label: "Biology", href: "/biology/checklist", color: "#5BA88C", subtitle: "Unit 3 & 4" },
               { label: "Chemistry", href: "/chemistry/checklist", color: "#8B5CF6", subtitle: "Work in Progress" },
               { label: "Physics", href: "/physics/checklist", color: "#F59E0B", subtitle: "Work in Progress" },
               { label: "Sports Science", href: "/sports-science/checklist", color: "#EF4444", subtitle: "Work in Progress" },

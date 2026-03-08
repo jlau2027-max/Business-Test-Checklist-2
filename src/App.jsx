@@ -35,7 +35,7 @@ const SUBJECT_CONFIGS = {
   biology: {
     subject: "biology",
     label: "IB Biology",
-    subtitle: "Biology Review",
+    subtitle: "Unit 3 & 4",
     accentColor: "var(--color-success)",
     accentSoft: "var(--color-success-soft)",
     accentGlow: "var(--color-success-soft)",

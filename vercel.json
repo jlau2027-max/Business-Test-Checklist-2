@@ -1,6 +1,7 @@
 {
   "redirects": [
     { "source": "/specimen", "destination": "/business/specimen", "statusCode": 301 },
+    { "source": "/business", "destination": "/business/checklist", "statusCode": 301 },
     { "source": "/history", "destination": "/history/specimen", "statusCode": 301 },
     { "source": "/biology", "destination": "/biology/checklist", "statusCode": 301 },
     { "source": "/chemistry", "destination": "/chemistry/checklist", "statusCode": 301 },
