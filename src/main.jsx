@@ -180,7 +180,7 @@ function SignInGate() {
           <p style={{
             fontSize: 15, color: "#666", lineHeight: 1.6, marginBottom: 28,
           }}>
-            Create a free account to access revision checklists, flashcards, practice questions, and track your progress.
+            Create a free account to access revision content, flashcards, specimen papers, AI marking and progress tracking.
           </p>
 
           <SignInButton mode="modal">
