@@ -116,13 +116,11 @@ export default function LandingPage() {
                 bgColor: "#f0ede8",
                 textColor: "#1a1a1a",
                 extraContent: (
-                  <Show when="signed-out">
-                    <SignInButton mode="modal">
-                      <span className="nav-card-link" role="button" tabIndex={0} style={{ cursor: "pointer" }}>
-                        <span style={{ display: "inline-flex" }}><ArrowUpRight size={14} strokeWidth={2} aria-hidden="true" /></span>
-                        Sign In
-                      </span>
-                    </SignInButton>
+                  <Show when="signed-in">
+                    <a className="nav-card-link" href="/dashboard" aria-label="Dashboard">
+                      <ArrowUpRight size={14} strokeWidth={2} aria-hidden="true" />
+                      Dashboard
+                    </a>
                   </Show>
                 ),
                 links: [
@@ -136,50 +134,27 @@ export default function LandingPage() {
             buttonBgColor="#111"
             buttonTextColor="#fff"
             ctaContent={
-              <>
-                <Show when="signed-out">
-                  <SignInButton mode="modal">
-                    <button
-                      type="button"
-                      style={{
-                        fontFamily: "'JSans', sans-serif",
-                        fontSize: 14,
-                        fontWeight: 500,
-                        background: "#111",
-                        color: "#fff",
-                        border: "none",
-                        borderRadius: "calc(0.75rem - 0.35rem)",
-                        padding: "0 1rem",
-                        height: "100%",
-                        cursor: "pointer",
-                      }}
-                    >
-                      Sign In
-                    </button>
-                  </SignInButton>
-                </Show>
-                <Show when="signed-in">
-                  <a href="/business" style={{ textDecoration: "none", height: "100%" }}>
-                    <button
-                      type="button"
-                      style={{
-                        fontFamily: "'JSans', sans-serif",
-                        fontSize: 14,
-                        fontWeight: 500,
-                        background: "#111",
-                        color: "#fff",
-                        border: "none",
-                        borderRadius: "calc(0.75rem - 0.35rem)",
-                        padding: "0 1rem",
-                        height: "100%",
-                        cursor: "pointer",
-                      }}
-                    >
-                      Go to Material
-                    </button>
-                  </a>
-                </Show>
-              </>
+              <Show when="signed-out">
+                <SignInButton mode="modal">
+                  <button
+                    type="button"
+                    style={{
+                      fontFamily: "'JSans', sans-serif",
+                      fontSize: 14,
+                      fontWeight: 500,
+                      background: "#111",
+                      color: "#fff",
+                      border: "none",
+                      borderRadius: "calc(0.75rem - 0.35rem)",
+                      padding: "0 1rem",
+                      height: "100%",
+                      cursor: "pointer",
+                    }}
+                  >
+                    Sign In
+                  </button>
+                </SignInButton>
+              </Show>
             }
           />
         </div>
