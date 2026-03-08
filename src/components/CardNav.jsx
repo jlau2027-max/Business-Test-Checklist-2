@@ -166,6 +166,7 @@ const CardNav = ({
             >
               <div className="nav-card-label">{item.label}</div>
               <div className="nav-card-links">
+                {item.extraContent}
                 {item.links?.map((lnk, i) => (
                   <a
                     key={`${lnk.label}-${i}`}

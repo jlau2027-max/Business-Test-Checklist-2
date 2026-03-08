@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { Show, SignInButton } from "@clerk/react";
+import { ArrowUpRight } from "lucide-react";
 import Grainient from "./components/Grainient.jsx";
 import RotatingText from "./components/RotatingText.jsx";
 import CardNav from "./components/CardNav.jsx";
@@ -114,8 +115,19 @@ export default function LandingPage() {
                 label: "Other",
                 bgColor: "#f0ede8",
                 textColor: "#1a1a1a",
+                extraContent: (
+                  <Show when="signed-out">
+                    <SignInButton mode="modal">
+                      <span className="nav-card-link" role="button" tabIndex={0} style={{ cursor: "pointer" }}>
+                        <span style={{ display: "inline-flex" }}><ArrowUpRight size={14} strokeWidth={2} aria-hidden="true" /></span>
+                        Sign In
+                      </span>
+                    </SignInButton>
+                  </Show>
+                ),
                 links: [
-                  { label: "Admin", href: "/admin", ariaLabel: "Admin panel" },
+                  { label: "Privacy", href: "/privacy", ariaLabel: "Privacy policy" },
+                  { label: "Terms", href: "/terms", ariaLabel: "Terms of service" },
                 ],
               },
             ]}

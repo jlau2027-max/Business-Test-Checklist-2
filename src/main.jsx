@@ -9,6 +9,8 @@ import BiologyPage from './BiologyPage.jsx'
 import DashboardPage from './DashboardPage.jsx'
 import AdminPage from './admin/AdminPage.jsx'
 import LandingPage from './LandingPage.jsx'
+import PrivacyPage from './PrivacyPage.jsx'
+import TermsPage from './TermsPage.jsx'
 import { AuthProvider, useAuth } from './AuthContext.jsx'
 import ThemeToggle from './ThemeToggle.jsx'
 
@@ -75,6 +77,10 @@ if (path.startsWith('/business/')) {
   Page = DashboardPage
 } else if (path === '/admin') {
   Page = AdminPage
+} else if (path === '/privacy') {
+  Page = PrivacyPage
+} else if (path === '/terms') {
+  Page = TermsPage
 } else if (path !== '/') {
   // Unknown path — show landing
   Page = LandingPage

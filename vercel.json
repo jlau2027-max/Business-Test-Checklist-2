@@ -19,6 +19,8 @@
     { "source": "/sports-science/:path*", "destination": "/index.html" },
     { "source": "/economics/:path*", "destination": "/index.html" },
     { "source": "/dashboard", "destination": "/index.html" },
-    { "source": "/admin", "destination": "/index.html" }
+    { "source": "/admin", "destination": "/index.html" },
+    { "source": "/privacy", "destination": "/index.html" },
+    { "source": "/terms", "destination": "/index.html" }
   ]
 }
