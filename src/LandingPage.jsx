@@ -114,13 +114,13 @@ export default function LandingPage() {
               "Group 3 — Individuals & Societies": [
                 { label: "Business", href: "/business/checklist", color: "#7BA3B5", subtitle: "Finance Unit" },
                 { label: "History", href: "/history/specimen", color: "#D4A572", subtitle: "Paper 2 & 3" },
-                { label: "Economics", href: "/economics/checklist", color: "#06B6D4", subtitle: "Work in Progress" },
+                { label: "Economics", href: "/economics/checklist", color: "#6BA3AD", subtitle: "Work in Progress" },
               ],
               "Group 4 — Sciences": [
                 { label: "Biology", href: "/biology/checklist", color: "#5BA88C", subtitle: "Unit 3 & 4" },
-                { label: "Chemistry", href: "/chemistry/checklist", color: "#8B5CF6", subtitle: "Work in Progress" },
-                { label: "Physics", href: "/physics/checklist", color: "#F59E0B", subtitle: "Work in Progress" },
-                { label: "Sports Science", href: "/sports-science/checklist", color: "#EF4444", subtitle: "Work in Progress" },
+                { label: "Chemistry", href: "/chemistry/checklist", color: "#8B7EB5", subtitle: "Work in Progress" },
+                { label: "Physics", href: "/physics/checklist", color: "#C4A36A", subtitle: "Work in Progress" },
+                { label: "Sports Science", href: "/sports-science/checklist", color: "#B57A7A", subtitle: "Work in Progress" },
               ],
             };
             const groupKeys = Object.keys(groups);
