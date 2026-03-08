@@ -1,92 +1,165 @@
 import { Button } from "@heroui/react";
 import { useAuth } from "./AuthContext.jsx";
 
-const SUBJECT_COLORS = {
-  business: { solid: "var(--accent)", glow: "var(--accent-glow)" },
-  history: { solid: "var(--accent-tertiary)", glow: "var(--accent-tertiary-soft)" },
-  biology: { solid: "var(--color-success)", glow: "var(--color-success-soft)" },
-  chemistry: { solid: "#8B5CF6", glow: "#8B5CF640" },
-  physics: { solid: "#F59E0B", glow: "#F59E0B40" },
-  sports: { solid: "#EF4444", glow: "#EF444440" },
-  economics: { solid: "#06B6D4", glow: "#06B6D440" },
-  dashboard: { solid: "var(--accent-secondary)", glow: "var(--accent-secondary-soft)" },
-};
+const SECTIONS = [
+  {
+    items: [
+      { label: "Home", href: "/", subject: "home", icon: "⌂" },
+    ],
+  },
+  {
+    heading: "Group 3",
+    items: [
+      { label: "Business", href: "/business/checklist", subject: "business", color: "var(--accent)" },
+      { label: "History", href: "/history/specimen", subject: "history", color: "var(--accent-tertiary)" },
+      { label: "Economics", href: "/economics/checklist", subject: "economics", color: "#6BA3AD" },
+    ],
+  },
+  {
+    heading: "Group 4",
+    items: [
+      { label: "Biology", href: "/biology/checklist", subject: "biology", color: "var(--color-success)" },
+      { label: "Chemistry", href: "/chemistry/checklist", subject: "chemistry", color: "#8B7EB5" },
+      { label: "Physics", href: "/physics/checklist", subject: "physics", color: "#C4A36A" },
+      { label: "Sports Sci", href: "/sports-science/checklist", subject: "sports", color: "#B57A7A" },
+    ],
+  },
+];
 
 export default function Sidebar({ activeSubject, sidebarOpen, onClose }) {
   const { user } = useAuth();
 
-  const items = [
-    { label: "Business", href: "/business/checklist", subject: "business" },
-    { label: "History", href: "/history/specimen", subject: "history" },
-    { label: "Biology", href: "/biology/checklist", subject: "biology" },
-    { label: "Chemistry", href: "/chemistry/checklist", subject: "chemistry" },
-    { label: "Physics", href: "/physics/checklist", subject: "physics" },
-    { label: "Sports Sci", href: "/sports-science/checklist", subject: "sports" },
-    { label: "Economics", href: "/economics/checklist", subject: "economics" },
-    ...(user ? [{ label: "Dashboard", href: "/dashboard", subject: "dashboard" }] : []),
-  ];
+  const allSections = user
+    ? [...SECTIONS, { items: [{ label: "Dashboard", href: "/dashboard", subject: "dashboard", icon: "◎" }] }]
+    : SECTIONS;
 
   return (
     <>
-      {/* Sidebar overlay (mobile) */}
+      {/* Overlay */}
       {sidebarOpen && (
         <div
           onClick={onClose}
-          style={{
-            position: "fixed", inset: 0, zIndex: 199,
-            backgroundColor: "rgba(0,0,0,0.5)",
-          }}
+          style={{ position: "fixed", inset: 0, zIndex: 199, backgroundColor: "rgba(0,0,0,0.45)", backdropFilter: "blur(2px)" }}
         />
       )}
 
-      {/* Sidebar */}
+      {/* Panel */}
       <div
         style={{
           position: "fixed",
           top: 0,
-          left: sidebarOpen ? 0 : -220,
-          width: 220,
+          left: sidebarOpen ? 0 : -240,
+          width: 240,
           height: "100vh",
           zIndex: 200,
           backgroundColor: "var(--bg-base)",
           borderRight: "1px solid var(--bg-input)",
           display: "flex",
           flexDirection: "column",
-          padding: "20px 12px",
-          gap: 8,
-          transition: "left 0.25s ease",
+          padding: "24px 14px 20px",
+          gap: 0,
+          transition: "left 0.25s cubic-bezier(0.4, 0, 0.2, 1)",
+          fontFamily: "'JSans', sans-serif",
+          overflowY: "auto",
         }}
       >
-        <span className="text-[var(--text-muted)] mb-1 px-2" style={{ fontSize: 11, fontFamily: "'JSans', sans-serif", letterSpacing: 1 }}>
-          SUBJECTS
-        </span>
-        {items.map(s => {
-          const active = activeSubject === s.subject;
-          const theme = SUBJECT_COLORS[s.subject] || { solid: "var(--accent)", glow: "var(--accent-glow)" };
-          const btn = (
-            <Button
-              key={s.label}
-              onPress={onClose}
-              className="rounded-full font-semibold text-sm w-full justify-start"
-              style={{
-                height: 44,
-                paddingLeft: 14,
-                fontFamily: "'JSans', sans-serif",
-                backgroundColor: active ? theme.solid : "transparent",
-                color: active ? "#fff" : "var(--text-secondary)",
-                border: active ? "none" : "1px solid transparent",
-                boxShadow: active ? `0 0 12px ${theme.glow}` : "none",
-              }}
-            >
-              {s.label}
-            </Button>
-          );
-          return active ? btn : (
-            <a key={s.label} href={s.href} style={{ textDecoration: "none" }}>
-              {btn}
-            </a>
-          );
-        })}
+        {/* Logo / brand */}
+        <div
+          style={{
+            fontSize: 18,
+            fontWeight: 700,
+            letterSpacing: -0.5,
+            color: "var(--text-primary)",
+            padding: "0 10px 20px",
+          }}
+        >
+          IB Revision
+        </div>
+
+        {allSections.map((section, si) => (
+          <div key={si}>
+            {/* Group heading */}
+            {section.heading && (
+              <span
+                style={{
+                  display: "block",
+                  fontSize: 10,
+                  fontWeight: 600,
+                  textTransform: "uppercase",
+                  letterSpacing: 1.2,
+                  color: "var(--text-muted)",
+                  padding: "16px 10px 6px",
+                }}
+              >
+                {section.heading}
+              </span>
+            )}
+
+            {/* Items */}
+            {section.items.map((s) => {
+              const active = activeSubject === s.subject;
+              const linkContent = (
+                <Button
+                  key={s.label}
+                  render={(props) => <button {...props} />}
+                  onPress={onClose}
+                  className="w-full justify-start font-medium text-sm"
+                  style={{
+                    height: 40,
+                    borderRadius: 10,
+                    paddingLeft: 10,
+                    gap: 10,
+                    fontFamily: "'JSans', sans-serif",
+                    backgroundColor: active ? "var(--bg-input)" : "transparent",
+                    color: active ? "var(--text-primary)" : "var(--text-secondary)",
+                    border: "none",
+                    transition: "all 0.15s ease",
+                  }}
+                >
+                  {/* Color dot or icon */}
+                  {s.icon ? (
+                    <span style={{ fontSize: 16, lineHeight: 1, opacity: active ? 1 : 0.5, width: 20, textAlign: "center" }}>
+                      {s.icon}
+                    </span>
+                  ) : (
+                    <span
+                      style={{
+                        width: 8,
+                        height: 8,
+                        borderRadius: "50%",
+                        backgroundColor: s.color,
+                        flexShrink: 0,
+                        marginLeft: 6,
+                        boxShadow: active ? `0 0 8px ${s.color}` : "none",
+                        transition: "box-shadow 0.15s ease",
+                      }}
+                    />
+                  )}
+                  {s.label}
+                  {active && (
+                    <span
+                      style={{
+                        marginLeft: "auto",
+                        width: 4,
+                        height: 16,
+                        borderRadius: 2,
+                        backgroundColor: s.color || "var(--accent)",
+                      }}
+                    />
+                  )}
+                </Button>
+              );
+
+              return active ? (
+                <div key={s.label} style={{ marginBottom: 2 }}>{linkContent}</div>
+              ) : (
+                <a key={s.label} href={s.href} style={{ textDecoration: "none", display: "block", marginBottom: 2 }}>
+                  {linkContent}
+                </a>
+              );
+            })}
+          </div>
+        ))}
 
         <div style={{ flex: 1 }} />
       </div>
