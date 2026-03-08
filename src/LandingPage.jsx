@@ -52,23 +52,23 @@ export default function LandingPage() {
         <div className="max-w-2xl mx-auto px-4 flex flex-col items-center" style={{ paddingTop: 0, paddingBottom: 120 }}>
           {/* Title */}
           <h1 style={{
-            fontSize: "clamp(48px, 10vw, 96px)",
+            fontSize: "clamp(40px, 8vw, 72px)",
             fontWeight: 800,
-            letterSpacing: -2,
+            letterSpacing: -1.5,
             color: "#fdf9f3",
             textAlign: "center",
-            marginTop: "clamp(80px, 15vw, 160px)",
-            marginBottom: 24,
+            marginTop: "clamp(72px, 12vw, 140px)",
+            marginBottom: 12,
             lineHeight: 1,
           }}>
             IB Revision
           </h1>
           <p style={{
-            fontSize: "clamp(18px, 3vw, 28px)",
+            fontSize: "clamp(16px, 2.5vw, 24px)",
             fontWeight: 500,
-            color: "rgba(253,249,243,0.7)",
+            color: "rgba(253,249,243,0.6)",
             textAlign: "center",
-            marginBottom: 32,
+            marginBottom: 28,
             lineHeight: 1.4,
             display: "flex",
             alignItems: "center",
@@ -83,23 +83,23 @@ export default function LandingPage() {
               staggerFrom="first"
               splitBy="characters"
               mainClassName=""
-              style={{ color: "#fdf9f3", fontWeight: 700 }}
+              style={{ color: "rgba(253,249,243,0.85)", fontWeight: 700 }}
             />
           </p>
-          <div className="flex justify-center" style={{ marginBottom: 28 }}>
+          <div className="flex justify-center" style={{ marginBottom: 48 }}>
             <Show when="signed-out">
               <SignInButton mode="modal">
                 <Button
                   render={(props) => <button {...props} />}
                   size="md"
-                  className="rounded-full border-none text-[15px] font-semibold"
+                  className="rounded-full border-none text-[14px] font-semibold"
                   style={{
                     fontFamily: "'JSans', sans-serif",
-                    background: "rgba(255,255,255,0.15)",
+                    background: "rgba(255,255,255,0.12)",
                     backdropFilter: "blur(12px)",
                     WebkitBackdropFilter: "blur(12px)",
-                    color: "rgba(255,255,255,0.9)",
-                    border: "1px solid rgba(255,255,255,0.12)",
+                    color: "rgba(255,255,255,0.85)",
+                    border: "1px solid rgba(255,255,255,0.1)",
                     paddingLeft: 28,
                     paddingRight: 28,
                   }}
@@ -113,14 +113,14 @@ export default function LandingPage() {
                 <Button
                   render={(props) => <button {...props} />}
                   size="md"
-                  className="rounded-full border-none text-[15px] font-semibold"
+                  className="rounded-full border-none text-[14px] font-semibold"
                   style={{
                     fontFamily: "'JSans', sans-serif",
-                    background: "rgba(255,255,255,0.15)",
+                    background: "rgba(255,255,255,0.12)",
                     backdropFilter: "blur(12px)",
                     WebkitBackdropFilter: "blur(12px)",
-                    color: "rgba(255,255,255,0.9)",
-                    border: "1px solid rgba(255,255,255,0.12)",
+                    color: "rgba(255,255,255,0.85)",
+                    border: "1px solid rgba(255,255,255,0.1)",
                     paddingLeft: 28,
                     paddingRight: 28,
                   }}
@@ -130,8 +130,6 @@ export default function LandingPage() {
               </a>
             </Show>
           </div>
-
-          <div style={{ marginBottom: 64 }} />
 
           {/* Subject groups */}
           {(() => {
@@ -172,7 +170,7 @@ export default function LandingPage() {
                         <Tabs.Tab
                           key={group}
                           id={group}
-                          className="rounded-full px-5 py-2 text-sm font-semibold"
+                          className="rounded-full px-5 py-2 text-[13px] font-semibold"
                           style={{ fontFamily: "'JSans', sans-serif", letterSpacing: 0.3 }}
                         >
                           {group}
@@ -225,8 +223,8 @@ export default function LandingPage() {
                                   e.currentTarget.style.transform = "none";
                                 }}
                               >
-                                <span style={{ fontSize: 16, letterSpacing: -0.3, lineHeight: 1.2 }}>{s.label}</span>
-                                <span style={{ fontSize: 10, fontWeight: 500, textTransform: "uppercase", letterSpacing: 0.8, opacity: 0.7, lineHeight: 1 }}>
+                                <span style={{ fontSize: 14, letterSpacing: -0.2, lineHeight: 1.2 }}>{s.label}</span>
+                                <span style={{ fontSize: 10, fontWeight: 500, textTransform: "uppercase", letterSpacing: 0.8, opacity: 0.65, lineHeight: 1 }}>
                                   {s.subtitle}
                                 </span>
                               </Button>
