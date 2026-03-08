@@ -78,6 +78,8 @@ const SUBJECT_CONFIGS = {
       { value: "4", label: "4" },
       { value: "5", label: "5" },
       { value: "6a", label: "6a" },
+      { value: "7", label: "7" },
+      { value: "8a", label: "8a" },
     ],
     api: {
       fetchChecklist: chemistryApi.fetchChecklist, fetchFlashcardTopics: chemistryApi.fetchFlashcardTopics,
