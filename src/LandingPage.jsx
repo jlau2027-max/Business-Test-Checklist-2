@@ -46,10 +46,10 @@ export default function LandingPage() {
         />
       </div>
 
-      {/* Content layer */}
-      <div style={{ position: "relative", zIndex: 1 }}>
+      {/* Content layer — vertically centered */}
+      <div style={{ position: "relative", zIndex: 1, minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center" }}>
         {/* Hero */}
-        <div className="mx-auto px-4 flex flex-col items-center" style={{ maxWidth: 1400, paddingTop: 0, paddingBottom: 120 }}>
+        <div className="mx-auto px-4 flex flex-col items-center" style={{ maxWidth: 1400, width: "100%" }}>
           {/* Title */}
           <h1 style={{
             fontSize: "clamp(52px, 10vw, 96px)",
@@ -57,7 +57,6 @@ export default function LandingPage() {
             letterSpacing: -1.5,
             color: "#fdf9f3",
             textAlign: "center",
-            marginTop: "clamp(72px, 12vw, 140px)",
             marginBottom: 12,
             lineHeight: 1,
           }}>
@@ -92,7 +91,7 @@ export default function LandingPage() {
             items={[
               {
                 label: "Individuals & Societies",
-                bgColor: "#f5f3ef",
+                bgColor: "#e8eff3",
                 textColor: "#1a1a1a",
                 links: [
                   { label: "Business", href: "/business/checklist", ariaLabel: "Business revision" },
@@ -102,7 +101,7 @@ export default function LandingPage() {
               },
               {
                 label: "Sciences",
-                bgColor: "#f5f3ef",
+                bgColor: "#e6f0ec",
                 textColor: "#1a1a1a",
                 links: [
                   { label: "Biology", href: "/biology/checklist", ariaLabel: "Biology revision" },
@@ -113,7 +112,7 @@ export default function LandingPage() {
               },
               {
                 label: "Other",
-                bgColor: "#f5f3ef",
+                bgColor: "#f0ede8",
                 textColor: "#1a1a1a",
                 links: [
                   { label: "Admin", href: "/admin", ariaLabel: "Admin panel" },
