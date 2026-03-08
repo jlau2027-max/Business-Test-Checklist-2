@@ -126,7 +126,7 @@ export default function AdminPage() {
             className="mb-4"
           >
             <Tabs.ListContainer>
-              <Tabs.List aria-label="Admin sections" className="bg-[var(--bg-card)] border border-[var(--border)] rounded-lg p-1">
+              <Tabs.List aria-label="Admin sections" className="bg-[var(--bg-card)] border border-[var(--border)] rounded-full p-1">
                 <Tabs.Tab id="business" className="font-semibold text-sm font-mono text-[var(--text-secondary)] data-[selected=true]:text-white rounded-full px-4 py-2">
                   Business
                   <Tabs.Indicator className="bg-[var(--accent)] rounded-full" />

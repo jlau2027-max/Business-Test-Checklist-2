@@ -377,7 +377,7 @@ export default function ChecklistAdmin({
                   key={section.id}
                   isExpanded={isExpanded}
                   onExpandedChange={() => toggleSection(section.id)}
-                  className="bg-[var(--bg-card)] rounded-lg border border-[var(--border)] overflow-hidden"
+                  className="bg-[var(--bg-card)] rounded-full border border-[var(--border)] overflow-hidden"
                 >
                   {/* Section header row */}
                   <Disclosure.Heading>
