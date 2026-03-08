@@ -61,7 +61,7 @@ export default function LandingPage() {
             marginBottom: 12,
             lineHeight: 1,
           }}>
-            IB Revision
+            IBrev.org
           </h1>
           <p style={{
             fontSize: "clamp(20px, 3vw, 30px)",
