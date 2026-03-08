@@ -100,6 +100,10 @@ const SUBJECT_CONFIGS = {
     show10Marker: false,
     showSpecimen: false,
     lsPrefix: "phys_",
+    units: [
+      { value: "All", label: "All Units" },
+      { value: "C", label: "C" },
+    ],
     api: {
       fetchChecklist: physicsApi.fetchChecklist, fetchFlashcardTopics: physicsApi.fetchFlashcardTopics,
       fetchFlashcards: physicsApi.fetchFlashcards, fetchMcqQuestions: physicsApi.fetchMcqQuestions,
