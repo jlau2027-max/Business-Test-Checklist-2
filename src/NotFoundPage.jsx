@@ -35,14 +35,14 @@ export default function NotFoundPage() {
         padding: "24px",
       }}>
         {/* ASCII "404" */}
-        <div style={{ position: "relative", width: "100%", maxWidth: 600, height: 200, marginBottom: 24, overflow: "hidden" }}>
+        <div style={{ position: "relative", width: "100%", maxWidth: 900, height: "clamp(250px, 40vh, 450px)", marginBottom: 24, overflow: "hidden" }}>
           <ASCIIText
             text="404"
             enableWaves={false}
             asciiFontSize={8}
-            textFontSize={200}
+            textFontSize={400}
             textColor="#fdf9f3"
-            planeBaseHeight={10}
+            planeBaseHeight={12}
           />
         </div>
 
