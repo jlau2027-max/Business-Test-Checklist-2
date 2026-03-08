@@ -4,7 +4,7 @@ import { useAuth } from "./AuthContext.jsx";
 import { House, Briefcase, Clock, TrendingUp, Leaf, FlaskConical, Atom, Activity, LayoutGrid, ChevronsLeft, ChevronsRight } from "lucide-react";
 
 const EXPANDED = 240;
-const COLLAPSED = 64;
+const COLLAPSED = 48;
 const LS_KEY = "sidebar_collapsed";
 
 const SECTIONS = [
