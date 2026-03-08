@@ -34,7 +34,7 @@ export default function NotFoundPage() {
         padding: "24px",
       }}>
         {/* ASCII "404" */}
-        <div style={{ width: "100%", maxWidth: 600, height: 200, marginBottom: 24 }}>
+        <div style={{ position: "relative", width: "100%", maxWidth: 600, height: 200, marginBottom: 24, overflow: "hidden" }}>
           <ASCIIText
             text="404"
             enableWaves={false}
