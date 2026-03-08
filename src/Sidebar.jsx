@@ -26,7 +26,7 @@ const SECTIONS = [
   },
 ];
 
-export default function Sidebar({ activeSubject, sidebarOpen, onClose }) {
+export default function Sidebar({ activeSubject }) {
   const { user } = useAuth();
 
   const allSections = user
@@ -34,21 +34,11 @@ export default function Sidebar({ activeSubject, sidebarOpen, onClose }) {
     : SECTIONS;
 
   return (
-    <>
-      {/* Overlay */}
-      {sidebarOpen && (
-        <div
-          onClick={onClose}
-          style={{ position: "fixed", inset: 0, zIndex: 199, backgroundColor: "rgba(0,0,0,0.45)", backdropFilter: "blur(2px)" }}
-        />
-      )}
-
-      {/* Panel */}
       <div
         style={{
           position: "fixed",
           top: 0,
-          left: sidebarOpen ? 0 : -240,
+          left: 0,
           width: 240,
           height: "100vh",
           zIndex: 200,
@@ -58,7 +48,6 @@ export default function Sidebar({ activeSubject, sidebarOpen, onClose }) {
           flexDirection: "column",
           padding: "24px 14px 20px",
           gap: 0,
-          transition: "left 0.25s cubic-bezier(0.4, 0, 0.2, 1)",
           fontFamily: "'JSans', sans-serif",
           overflowY: "auto",
         }}
@@ -102,7 +91,6 @@ export default function Sidebar({ activeSubject, sidebarOpen, onClose }) {
                 <Button
                   key={s.label}
                   render={(props) => <button {...props} />}
-                  onPress={onClose}
                   className="w-full justify-start font-medium text-sm"
                   style={{
                     height: 40,
@@ -163,6 +151,5 @@ export default function Sidebar({ activeSubject, sidebarOpen, onClose }) {
 
         <div style={{ flex: 1 }} />
       </div>
-    </>
   );
 }

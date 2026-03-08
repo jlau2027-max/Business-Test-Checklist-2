@@ -267,7 +267,6 @@ function BiologyQuestion({ q, prefix }) {
 // ─── Main Biology Page ────────────────────────────────────────────────────
 export default function BiologyPage() {
   const { user } = useAuth();
-  const [sidebarOpen, setSidebarOpen] = useState(false);
   const [paper, setPaper] = useState(() => loadLS("bio_paper_tab", "paper1"));
   const [paper1Questions, setPaper1Questions] = useState(null);
   const [paper2Questions, setPaper2Questions] = useState(null);
@@ -336,7 +335,9 @@ export default function BiologyPage() {
   return (
     <div className="min-h-screen" style={{ backgroundColor: "var(--bg-base)", fontFamily: "'JSans', sans-serif", color: "var(--text-primary)" }}>
 
-      <Sidebar activeSubject="biology" sidebarOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
+      <Sidebar activeSubject="biology" />
+
+      <div style={{ marginLeft: 240 }}>
 
       {/* Header */}
       <div
@@ -352,25 +353,6 @@ export default function BiologyPage() {
       >
         <div className="max-w-4xl mx-auto py-2 px-4">
           <div className="flex items-center justify-center mb-1" style={{ position: "relative" }}>
-            {/* Sidebar toggle */}
-            <Button
-              isIconOnly
-              variant="outline"
-              onPress={() => setSidebarOpen(o => !o)}
-              className="rounded-full bg-transparent text-[var(--text-secondary)] border-[var(--border)] min-w-[auto] h-8 px-[10px]"
-              style={{
-                position: "absolute",
-                left: 0,
-                top: "50%",
-                transform: "translateY(-50%)",
-              }}
-            >
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
-                <line x1="3" y1="6" x2="21" y2="6"/>
-                <line x1="3" y1="12" x2="21" y2="12"/>
-                <line x1="3" y1="18" x2="21" y2="18"/>
-              </svg>
-            </Button>
             <span
               className="text-xs px-2 py-0.5 rounded-full uppercase font-bold"
               style={{ letterSpacing: 2, backgroundColor: "var(--color-success-soft)", color: "var(--color-success)", border: "none", fontFamily: "'JSans', sans-serif" }}
@@ -517,6 +499,7 @@ export default function BiologyPage() {
           <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" style={{transition:"fill 0.25s ease"}}/>
         </svg>
       </a>
+    </div>
     </div>
   );
 }

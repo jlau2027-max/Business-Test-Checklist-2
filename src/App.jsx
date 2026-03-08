@@ -1080,8 +1080,6 @@ export default function App({ initialTab = "checklist", subject = "business" }) 
     const urlMap = { checklist: 'checklist', flashcards: 'flashcards', practice: 'multi-choice', written: 'written' };
     window.location.href = `${config.basePath}/${urlMap[t] || t}`;
   };
-  const [sidebarOpen, setSidebarOpen] = useState(false);
-
   // Unit filter (biology only)
   const [unit, setUnit] = useState(() => loadLS(`${config.lsPrefix}unit_tab`, "All"));
   useEffect(() => { saveLS(`${config.lsPrefix}unit_tab`, unit); }, [unit, config.lsPrefix]);
@@ -1116,7 +1114,9 @@ export default function App({ initialTab = "checklist", subject = "business" }) 
     <ContentCtx.Provider value={filteredContent}>
     <div className="min-h-screen bg-[var(--bg-base)]" style={{fontFamily:"'JSans', sans-serif",color:"var(--text-primary)"}}>
 
-      <Sidebar activeSubject={config.subject} sidebarOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
+      <Sidebar activeSubject={config.subject} />
+
+      <div style={{ marginLeft: 240 }}>
 
       {/* Sticky header with glassmorphism */}
       <div
@@ -1130,25 +1130,6 @@ export default function App({ initialTab = "checklist", subject = "business" }) 
       >
         <div className="max-w-5xl mx-auto pt-4 pb-2 px-4">
           <div className="flex items-center justify-center mb-2.5" style={{ position: "relative" }}>
-            {/* Sidebar toggle */}
-            <Button
-              isIconOnly
-              variant="outline"
-              onPress={() => setSidebarOpen(o => !o)}
-              className="rounded-full border-[var(--border)] text-[var(--text-secondary)] bg-transparent min-w-[auto] h-8 px-2.5"
-              style={{
-                position: "absolute",
-                left: 0,
-                top: "50%",
-                transform: "translateY(-50%)",
-              }}
-            >
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
-                <line x1="3" y1="6" x2="21" y2="6"/>
-                <line x1="3" y1="12" x2="21" y2="12"/>
-                <line x1="3" y1="18" x2="21" y2="18"/>
-              </svg>
-            </Button>
             <span className="text-xs px-2.5 py-1 rounded-full uppercase font-bold tracking-widest" style={{fontFamily: "'JSans', sans-serif", backgroundColor: config.accentSoft, color: config.labelColor}}>
               {config.label}
             </span>
@@ -1247,6 +1228,7 @@ export default function App({ initialTab = "checklist", subject = "business" }) 
       </a>
 
       <Analytics />
+    </div>
     </div>
     </ContentCtx.Provider>
     </SubjectConfigCtx.Provider>
