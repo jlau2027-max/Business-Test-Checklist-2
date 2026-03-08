@@ -2,7 +2,6 @@ import { useState, useEffect } from "react";
 import { Button, Tabs } from "@heroui/react";
 import { Show, SignInButton } from "@clerk/react";
 import Grainient from "./components/Grainient.jsx";
-import ASCIIText from "./components/ASCIIText.jsx";
 
 export default function LandingPage() {
   // Reactive theme detection — re-renders when .dark class toggles
@@ -50,17 +49,19 @@ export default function LandingPage() {
       <div style={{ position: "relative", zIndex: 1 }}>
         {/* Hero */}
         <div className="max-w-2xl mx-auto px-4 flex flex-col items-center" style={{ paddingTop: 0, paddingBottom: 120 }}>
-          {/* ASCII art title */}
-          <div style={{ position: "relative", width: "280%", maxWidth: "2400px", height: "clamp(450px, 65vw, 800px)", marginBottom: -20 }}>
-            <ASCIIText
-              text="ib rev"
-              enableWaves={false}
-              asciiFontSize={8}
-              textFontSize={200}
-              textColor="#fdf9f3"
-              planeBaseHeight={10}
-            />
-          </div>
+          {/* Title */}
+          <h1 style={{
+            fontSize: "clamp(48px, 10vw, 96px)",
+            fontWeight: 800,
+            letterSpacing: -2,
+            color: "#fdf9f3",
+            textAlign: "center",
+            marginTop: "clamp(80px, 15vw, 160px)",
+            marginBottom: 24,
+            lineHeight: 1,
+          }}>
+            IB Revision
+          </h1>
           <div className="flex justify-center" style={{ marginBottom: 28 }}>
             <Show when="signed-out">
               <SignInButton mode="modal">
