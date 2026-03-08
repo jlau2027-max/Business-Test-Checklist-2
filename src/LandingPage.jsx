@@ -75,9 +75,9 @@ export default function LandingPage() {
             gap: 8,
             overflow: "hidden",
           }}>
-            Revision for{" "}
+            Free revision for{" "}
             <RotatingText
-              texts={["Business", "History", "Economics", "Biology", "Chemistry", "Physics", "Sports Sci"]}
+              texts={["IB Business", "IB History", "IB Economics", "IB Biology", "IB Chemistry", "IB Physics", "IB Sports Sci"]}
               rotationInterval={2000}
               staggerDuration={0.02}
               staggerFrom="first"
