@@ -125,7 +125,7 @@ export default function LandingPage() {
             };
             const groupKeys = Object.keys(groups);
             return (
-              <div className="w-full" style={{ maxWidth: 700 }}>
+              <div className="w-full" style={{ maxWidth: 900 }}>
                 <Tabs
                   variant="primary"
                   defaultSelectedKey={groupKeys[0]}
