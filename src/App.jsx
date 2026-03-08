@@ -70,6 +70,15 @@ const SUBJECT_CONFIGS = {
     show10Marker: false,
     showSpecimen: false,
     lsPrefix: "chem_",
+    units: [
+      { value: "All", label: "All Units" },
+      { value: "1", label: "1" },
+      { value: "2", label: "2" },
+      { value: "3", label: "3" },
+      { value: "4", label: "4" },
+      { value: "5", label: "5" },
+      { value: "6a", label: "6a" },
+    ],
     api: {
       fetchChecklist: chemistryApi.fetchChecklist, fetchFlashcardTopics: chemistryApi.fetchFlashcardTopics,
       fetchFlashcards: chemistryApi.fetchFlashcards, fetchMcqQuestions: chemistryApi.fetchMcqQuestions,
