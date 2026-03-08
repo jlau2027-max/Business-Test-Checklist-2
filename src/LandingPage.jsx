@@ -49,7 +49,7 @@ export default function LandingPage() {
       {/* Content layer */}
       <div style={{ position: "relative", zIndex: 1 }}>
         {/* Hero */}
-        <div className="max-w-2xl mx-auto px-4 flex flex-col items-center" style={{ paddingTop: 0, paddingBottom: 120 }}>
+        <div className="mx-auto px-4 flex flex-col items-center" style={{ maxWidth: 1400, paddingTop: 0, paddingBottom: 120 }}>
           {/* Title */}
           <h1 style={{
             fontSize: "clamp(52px, 10vw, 96px)",
@@ -148,7 +148,7 @@ export default function LandingPage() {
             };
             const groupKeys = Object.keys(groups);
             return (
-              <div className="w-full" style={{ maxWidth: 900 }}>
+              <div className="w-full" style={{ maxWidth: 1200 }}>
                 <Tabs
                   variant="primary"
                   defaultSelectedKey={groupKeys[0]}
@@ -162,15 +162,15 @@ export default function LandingPage() {
                       style={{
                         background: "rgba(255,255,255,0.08)",
                         borderRadius: 9999,
-                        padding: 4,
-                        gap: 4,
+                        padding: 8,
+                        gap: 8,
                       }}
                     >
                       {groupKeys.map((group) => (
                         <Tabs.Tab
                           key={group}
                           id={group}
-                          className="rounded-full px-5 py-2 text-[13px] font-semibold"
+                          className="rounded-full px-10 py-4 text-[26px] font-semibold"
                           style={{ fontFamily: "'JSans', sans-serif", letterSpacing: 0.3 }}
                         >
                           {group}
@@ -187,8 +187,8 @@ export default function LandingPage() {
                           style={{
                             display: "grid",
                             gridTemplateColumns: `repeat(${subjects.length}, 1fr)`,
-                            gap: 12,
-                            marginTop: 20,
+                            gap: 24,
+                            marginTop: 40,
                           }}
                         >
                           {subjects.map((s) => (
@@ -199,7 +199,7 @@ export default function LandingPage() {
                                 className="rounded-full w-full font-bold"
                                 style={{
                                   fontFamily: "'JSans', sans-serif",
-                                  height: 72,
+                                  height: 144,
                                   background: s.color,
                                   border: "none",
                                   color: "#fff",
@@ -207,24 +207,24 @@ export default function LandingPage() {
                                   flexDirection: "column",
                                   alignItems: "center",
                                   justifyContent: "center",
-                                  gap: 3,
-                                  padding: "10px 16px",
-                                  boxShadow: `0 4px 24px ${s.color}50`,
+                                  gap: 6,
+                                  padding: "20px 32px",
+                                  boxShadow: `0 8px 48px ${s.color}50`,
                                   transition: "all 0.2s ease",
                                 }}
                                 onMouseEnter={(e) => {
                                   e.currentTarget.style.filter = "brightness(1.15)";
-                                  e.currentTarget.style.boxShadow = `0 6px 32px ${s.color}70`;
-                                  e.currentTarget.style.transform = "translateY(-1px)";
+                                  e.currentTarget.style.boxShadow = `0 12px 64px ${s.color}70`;
+                                  e.currentTarget.style.transform = "translateY(-2px)";
                                 }}
                                 onMouseLeave={(e) => {
                                   e.currentTarget.style.filter = "none";
-                                  e.currentTarget.style.boxShadow = `0 4px 24px ${s.color}50`;
+                                  e.currentTarget.style.boxShadow = `0 8px 48px ${s.color}50`;
                                   e.currentTarget.style.transform = "none";
                                 }}
                               >
-                                <span style={{ fontSize: 14, letterSpacing: -0.2, lineHeight: 1.2 }}>{s.label}</span>
-                                <span style={{ fontSize: 10, fontWeight: 500, textTransform: "uppercase", letterSpacing: 0.8, opacity: 0.65, lineHeight: 1 }}>
+                                <span style={{ fontSize: 28, letterSpacing: -0.4, lineHeight: 1.2 }}>{s.label}</span>
+                                <span style={{ fontSize: 20, fontWeight: 500, textTransform: "uppercase", letterSpacing: 1.2, opacity: 0.65, lineHeight: 1 }}>
                                   {s.subtitle}
                                 </span>
                               </Button>
