@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { Button, Tabs } from "@heroui/react";
 import { Show, SignInButton } from "@clerk/react";
 import Grainient from "./components/Grainient.jsx";
+import RotatingText from "./components/RotatingText.jsx";
 
 export default function LandingPage() {
   // Reactive theme detection — re-renders when .dark class toggles
@@ -62,6 +63,29 @@ export default function LandingPage() {
           }}>
             IB Revision
           </h1>
+          <p style={{
+            fontSize: "clamp(18px, 3vw, 28px)",
+            fontWeight: 500,
+            color: "rgba(253,249,243,0.7)",
+            textAlign: "center",
+            marginBottom: 32,
+            lineHeight: 1.4,
+            display: "flex",
+            alignItems: "center",
+            gap: 8,
+            overflow: "hidden",
+          }}>
+            Revision for{" "}
+            <RotatingText
+              texts={["Business", "History", "Economics", "Biology", "Chemistry", "Physics", "Sports Sci"]}
+              rotationInterval={2000}
+              staggerDuration={0.02}
+              staggerFrom="first"
+              splitBy="characters"
+              mainClassName=""
+              style={{ color: "#fdf9f3", fontWeight: 700 }}
+            />
+          </p>
           <div className="flex justify-center" style={{ marginBottom: 28 }}>
             <Show when="signed-out">
               <SignInButton mode="modal">
