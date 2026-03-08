@@ -1,6 +1,7 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useLayoutEffect, useRef } from "react";
 import { Show, SignInButton } from "@clerk/react";
 import { ArrowUpRight } from "lucide-react";
+import { gsap } from "gsap";
 import Grainient from "./components/Grainient.jsx";
 import RotatingText from "./components/RotatingText.jsx";
 import CardNav from "./components/CardNav.jsx";
@@ -17,8 +18,64 @@ export default function LandingPage() {
     return () => observer.disconnect();
   }, []);
 
+  // ─── Splash preloader (first visit per session only) ────────────────────────
+  const [showSplash, setShowSplash] = useState(() => !sessionStorage.getItem("ibrev-landed"));
+  const overlayRef = useRef(null);
+  const splashTextRef = useRef(null);
+
+  useLayoutEffect(() => {
+    if (!showSplash) return;
+    const overlay = overlayRef.current;
+    const text = splashTextRef.current;
+    if (!overlay || !text) return;
+
+    gsap.set(text, { scale: 0.5, opacity: 0 });
+
+    const tl = gsap.timeline({
+      onComplete: () => {
+        sessionStorage.setItem("ibrev-landed", "1");
+        setShowSplash(false);
+      },
+    });
+
+    tl.to(text, { opacity: 1, scale: 1, duration: 0.6, ease: "power2.out" })
+      .to(text, { scale: 1.8, duration: 0.8, ease: "power2.in" }, "+=0.3")
+      .to(overlay, { opacity: 0, duration: 0.5, ease: "power2.inOut" }, "-=0.3");
+
+    return () => tl.kill();
+  }, [showSplash]);
+
   return (
     <div className="min-h-screen relative" style={{ fontFamily: "'JSans', sans-serif", color: "#F0EEE8" }}>
+      {/* Splash preloader overlay */}
+      {showSplash && (
+        <div
+          ref={overlayRef}
+          style={{
+            position: "fixed",
+            inset: 0,
+            zIndex: 50,
+            background: isDark ? "#0D1520" : "#5A8494",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+        >
+          <span
+            ref={splashTextRef}
+            style={{
+              fontSize: "clamp(48px, 12vw, 120px)",
+              fontWeight: 800,
+              color: "#fdf9f3",
+              letterSpacing: -2,
+              userSelect: "none",
+            }}
+          >
+            IBrev.org
+          </span>
+        </div>
+      )}
+
       {/* Grainient full-page background */}
       <div style={{ position: "fixed", inset: 0, zIndex: 0 }}>
         <Grainient
