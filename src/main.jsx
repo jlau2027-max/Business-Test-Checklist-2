@@ -14,7 +14,7 @@ import TermsPage from './TermsPage.jsx'
 import { AuthProvider, useAuth } from './AuthContext.jsx'
 import ThemeToggle from './ThemeToggle.jsx'
 
-const PUBLISHABLE_KEY = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY || 'pk_live_Y2xlcmsuamFzcGVybGF1bHZsN3N0dWRlbnQuY29tJA'
+const PUBLISHABLE_KEY = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY || 'pk_live_Y2xlcmsuaWJyZXYub3JnJA'
 
 // ─── Routing ────────────────────────────────────────────────────────────────
 const path = window.location.pathname
