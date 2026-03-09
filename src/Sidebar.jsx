@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { Button } from "@heroui/react";
 import { useAuth } from "./AuthContext.jsx";
-import { House, Briefcase, Clock, TrendingUp, Leaf, FlaskConical, Atom, Activity, Languages, LayoutGrid, ChevronsLeft, ChevronsRight } from "lucide-react";
+import { House, Briefcase, Clock, TrendingUp, Leaf, FlaskConical, Atom, Activity, Languages, Trees, LayoutGrid, ChevronsLeft, ChevronsRight } from "lucide-react";
 
 const EXPANDED = 240;
 const COLLAPSED = 56;
@@ -34,6 +34,7 @@ const SECTIONS = [
       { label: "Chemistry", href: "/chemistry/checklist", subject: "chemistry", Icon: FlaskConical, color: "#8B7EB5" },
       { label: "Physics", href: "/physics/checklist", subject: "physics", Icon: Atom, color: "#C4A36A" },
       { label: "Sports Sci", href: "/sports-science/checklist", subject: "sports", Icon: Activity, color: "#B57A7A" },
+      { label: "ESS", href: "/ess/checklist", subject: "ess", Icon: Trees, color: "#7AAD6B" },
     ],
   },
 ];
