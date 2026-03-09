@@ -40,7 +40,7 @@ export default function TermsPage() {
           These Terms of Service (&ldquo;Terms&rdquo;) govern your access to and use of:
         </p>
         <ol style={{ ...text, paddingLeft: 22, marginBottom: 16, display: "flex", flexDirection: "column", gap: 4 }}>
-          <li>the IBrev website at <a href="https://ibrev.org" style={link}>ibrev.org</a> and <a href="https://jasperlaulvl7student.com" style={link}>jasperlaulvl7student.com</a> (the &ldquo;Website&rdquo;), and</li>
+          <li>the IBrev website at <a href="https://ibrev.org" style={link}>ibrev.org</a> (the &ldquo;Website&rdquo;), and</li>
           <li>the revision tools, content, and features available through the Website (collectively, the &ldquo;Services&rdquo;).</li>
         </ol>
         <p style={{ ...text, marginBottom: 40 }}>
@@ -51,7 +51,7 @@ export default function TermsPage() {
         <h2 style={{ fontSize: 22, fontWeight: 600, marginTop: 0, marginBottom: 12 }}>1) About the Services</h2>
         <p style={{ ...text, marginBottom: 16 }}>
           IBrev is a free, web-based revision application designed for International Baccalaureate students.
-          The Services can be used without creating an account. Optional sign-in is available through{" "}
+          An account is required to use the Services. Authentication is provided through{" "}
           <a href="https://clerk.com" target="_blank" rel="noopener noreferrer" style={link}>Clerk</a> using email, Apple, Google,
           or other supported third-party authentication providers.
         </p>
@@ -68,7 +68,7 @@ export default function TermsPage() {
         {/* 3 — Accounts */}
         <h2 style={{ fontSize: 22, fontWeight: 600, marginTop: 36, marginBottom: 12 }}>3) Accounts and authentication</h2>
         <p style={{ ...text, marginBottom: 12 }}>
-          Creating an account is optional. If you choose to sign in, authentication is handled by Clerk.
+          An account is required to access the Services. Authentication is handled by Clerk.
           You are responsible for maintaining the security of your authentication credentials and for all
           activity that occurs under your account.
         </p>

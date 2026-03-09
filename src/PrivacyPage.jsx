@@ -38,8 +38,8 @@ export default function PrivacyPage() {
         {/* Intro */}
         <p style={{ ...text, marginBottom: 16 }}>
           IBrev is a web-based revision application for International Baccalaureate students, hosted at{" "}
-          <a href="https://ibrev.org" style={link}>ibrev.org</a> and <a href="https://jasperlaulvl7student.com" style={link}>jasperlaulvl7student.com</a>. The app can be used
-          without an account. Optional sign-in is provided through Clerk and supports email, Apple, Google,
+          <a href="https://ibrev.org" style={link}>ibrev.org</a>. An account is required to use the app.
+          Authentication is handled through Clerk and supports email, Apple, Google,
           and other third-party authentication providers.
         </p>
         <p style={{ ...text, marginBottom: 40 }}>
@@ -50,10 +50,10 @@ export default function PrivacyPage() {
         <h2 style={{ fontSize: 22, fontWeight: 600, marginTop: 0, marginBottom: 12 }}>1) Summary</h2>
         <div style={{ background: "var(--bg-secondary, #f5f7f9)", borderLeft: "3px solid #2c5f8a", padding: "16px 20px", borderRadius: "0 6px 6px 0", marginBottom: 24 }}>
           <ul style={{ listStyle: "none", padding: 0, margin: 0, display: "flex", flexDirection: "column", gap: 8, fontSize: 15 }}>
-            <li><strong>No accounts required.</strong> IBrev can be used without signing in.</li>
+            <li><strong>Account required.</strong> You must sign in to use IBrev.</li>
             <li><strong>No analytics or tracking.</strong> We do not run analytics, profiling, or cross-site tracking.</li>
             <li><strong>No advertising.</strong> IBrev does not serve ads or share data with advertisers.</li>
-            <li><strong>Authentication is optional.</strong> If you choose to sign in, authentication is handled by Clerk. We do not store your password.</li>
+            <li><strong>Secure authentication.</strong> Authentication is handled by Clerk. We do not store your password.</li>
             <li><strong>Minimal data.</strong> We only process information necessary to provide the revision features you use.</li>
             <li><strong>Free to use.</strong> IBrev does not collect payment information.</li>
           </ul>
@@ -62,18 +62,11 @@ export default function PrivacyPage() {
         {/* 2 — Information we collect */}
         <h2 style={{ fontSize: 22, fontWeight: 600, marginTop: 36, marginBottom: 12 }}>2) Information we collect and where it is stored</h2>
 
-        <h3 style={{ fontSize: 16, fontWeight: 600, marginTop: 20, marginBottom: 8 }}>A) Without an account (local storage)</h3>
-        <p style={{ ...text, marginBottom: 16 }}>
-          If you use IBrev without signing in, any revision data, preferences, or progress you create is
-          stored <strong>locally in your browser</strong> using standard web storage mechanisms. This data
-          does not leave your device and is not transmitted to our servers.
-        </p>
-
-        <h3 style={{ fontSize: 16, fontWeight: 600, marginTop: 20, marginBottom: 8 }}>B) With an account (Clerk authentication)</h3>
+        <h3 style={{ fontSize: 16, fontWeight: 600, marginTop: 20, marginBottom: 8 }}>A) Account authentication (Clerk)</h3>
         <p style={{ ...text, marginBottom: 8 }}>
-          If you choose to create an account or sign in, authentication is handled by{" "}
+          Authentication is handled by{" "}
           <a href="https://clerk.com" target="_blank" rel="noopener noreferrer" style={link}>Clerk</a>, a third-party
-          authentication provider. When you sign in, Clerk may collect and process:
+          authentication provider. Clerk may collect and process:
         </p>
         <ul style={{ ...text, paddingLeft: 22, marginBottom: 12, display: "flex", flexDirection: "column", gap: 4 }}>
           <li>Your email address</li>
@@ -87,14 +80,14 @@ export default function PrivacyPage() {
           identify your account within the app.
         </p>
 
-        <h3 style={{ fontSize: 16, fontWeight: 600, marginTop: 20, marginBottom: 8 }}>C) Revision data (cloud-stored for signed-in users)</h3>
+        <h3 style={{ fontSize: 16, fontWeight: 600, marginTop: 20, marginBottom: 8 }}>B) Revision data (cloud-stored)</h3>
         <p style={{ ...text, marginBottom: 16 }}>
-          If you are signed in, your revision content, progress, and preferences may be stored in our
+          Your revision content, progress, and preferences may be stored in our
           cloud infrastructure hosted on <strong>Cloudflare</strong> so that your data can be synchronised
           across devices. This data is associated with your account and is not shared with third parties.
         </p>
 
-        <h3 style={{ fontSize: 16, fontWeight: 600, marginTop: 20, marginBottom: 8 }}>D) Hosting and infrastructure</h3>
+        <h3 style={{ fontSize: 16, fontWeight: 600, marginTop: 20, marginBottom: 8 }}>C) Hosting and infrastructure</h3>
         <p style={{ ...text, marginBottom: 16 }}>
           IBrev is hosted on <strong>Cloudflare</strong>. When you visit the site, Cloudflare may
           automatically process certain technical information such as your IP address, browser type, and
@@ -158,11 +151,7 @@ export default function PrivacyPage() {
         {/* 7 — Retention */}
         <h2 style={{ fontSize: 22, fontWeight: 600, marginTop: 36, marginBottom: 12 }}>7) Data retention and deletion</h2>
         <p style={{ ...text, marginBottom: 12 }}>
-          <strong>Local data (no account):</strong> Data stored in your browser remains until you clear it
-          through your browser settings or the app&rsquo;s own controls.
-        </p>
-        <p style={{ ...text, marginBottom: 16 }}>
-          <strong>Account data:</strong> If you have an account, your revision data is retained while your
+          <strong>Account data:</strong> Your revision data is retained while your
           account is active. You may request deletion of your account and associated data by contacting us
           at <a href="mailto:legal@ibrev.org" style={link}>legal@ibrev.org</a>. Upon deletion, we will
           remove your data from our cloud infrastructure within a reasonable timeframe. Clerk may retain

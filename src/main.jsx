@@ -144,7 +144,7 @@ if (PAGE_TITLES[path]) {
 }
 
 // ─── Auth gating ─────────────────────────────────────────────────────────────
-const PUBLIC_PATHS = new Set(['/', '/privacy', '/terms', '/feedback'])
+const PUBLIC_PATHS = new Set(['/', '/privacy', '/terms'])
 const isPublicPage = PUBLIC_PATHS.has(path) || Page === NotFoundPage
 
 function SignInGate() {
