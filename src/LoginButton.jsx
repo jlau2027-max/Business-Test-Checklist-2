@@ -1,5 +1,5 @@
 import { Button } from "@heroui/react";
-import { Show, SignInButton, UserButton } from "@clerk/react";
+import { Show, SignInButton, UserButton, useUser } from "@clerk/react";
 import { useAuth } from "./AuthContext.jsx";
 
 export default function LoginButton() {
@@ -27,14 +27,36 @@ export default function LoginButton() {
       </Show>
 
       <Show when="signed-in">
+        <GreetingWithAvatar isAdmin={isAdmin} />
+      </Show>
+    </>
+  );
+}
+
+function GreetingWithAvatar({ isAdmin }) {
+  const { user: clerkUser } = useUser();
+  const greeting = clerkUser?.firstName || clerkUser?.username || "";
+
+  return (
         <div
           style={{
             position: "absolute",
             right: 0,
             top: "50%",
             transform: "translateY(-50%)",
+            display: "flex",
+            alignItems: "center",
+            gap: 8,
           }}
         >
+          {greeting && (
+            <span
+              className="text-[13px] font-semibold text-[var(--text-secondary)] hidden sm:inline"
+              style={{ fontFamily: "'JSans', sans-serif", whiteSpace: "nowrap" }}
+            >
+              Hello, {greeting}
+            </span>
+          )}
           <UserButton
             userProfileUrl="https://accounts.ibrev.org/user"
             userProfileMode="navigation"
@@ -76,7 +98,5 @@ export default function LoginButton() {
             </UserButton.MenuItems>
           </UserButton>
         </div>
-      </Show>
-    </>
   );
 }

@@ -498,11 +498,12 @@ function ChecklistView() {
         {checklistSections.map(section => {
           const sectionChecked = section.items.filter((_,i)=>checked[`${section.id}-${i}`]).length;
           const allDone = sectionChecked===section.items.length;
+          const isOpen = Array.isArray(openSections) ? openSections.includes(section.id) : openSections === "all";
           return (
             <Accordion.Item key={section.id} id={section.id} className="bg-[var(--bg-card)] rounded-2xl overflow-hidden">
               <Accordion.Heading>
                 <Accordion.Trigger className="w-full flex items-center gap-2 px-5 py-3.5 hover:bg-[var(--bg-input)] transition-colors">
-                  <span className="text-xs px-2 py-0.5 rounded-full font-bold" style={{backgroundColor: section.color + "22", color: section.color, fontFamily: "'JSans', sans-serif"}}>{sectionChecked}/{section.items.length}</span>
+                  {!isOpen && <span className="text-xs px-2 py-0.5 rounded-full font-bold" style={{backgroundColor: section.color + "22", color: section.color, fontFamily: "'JSans', sans-serif"}}>{sectionChecked}/{section.items.length}</span>}
                   <span className="text-sm font-semibold" style={{color: allDone ? section.color : "var(--text-primary)"}}>{allDone && "✓ "}{section.title}</span>
                   <Accordion.Indicator className="ml-auto shrink-0 text-[var(--text-muted)]">
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polyline points="6 9 12 15 18 9"/></svg>

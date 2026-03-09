@@ -19,7 +19,7 @@ export default function LandingPage() {
   }, []);
 
   // ─── Splash preloader (first visit per session only) ────────────────────────
-  const [showSplash, setShowSplash] = useState(() => !sessionStorage.getItem("ibrev-landed"));
+  const [showSplash, setShowSplash] = useState(true);
   const overlayRef = useRef(null);
   const splashTextRef = useRef(null);
 
@@ -32,10 +32,7 @@ export default function LandingPage() {
     gsap.set(text, { scale: 0.5, opacity: 0 });
 
     const tl = gsap.timeline({
-      onComplete: () => {
-        sessionStorage.setItem("ibrev-landed", "1");
-        setShowSplash(false);
-      },
+      onComplete: () => setShowSplash(false),
     });
 
     tl.to(text, { opacity: 1, scale: 1, duration: 0.6, ease: "power2.out" })
@@ -183,6 +180,7 @@ export default function LandingPage() {
                 links: [
                   { label: "Privacy", href: "/privacy", ariaLabel: "Privacy policy" },
                   { label: "Terms", href: "/terms", ariaLabel: "Terms of service" },
+                  { label: "Feedback", href: "/feedback", ariaLabel: "Feedback form" },
                 ],
               },
             ]}

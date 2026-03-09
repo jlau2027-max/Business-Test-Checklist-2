@@ -13,6 +13,27 @@ function jsonCached(data, status = 200) {
   });
 }
 
+// ─── Feedback → Google Sheets proxy ─────────────────────────────────────────
+
+async function handleFeedback(request, env) {
+  try {
+    const body = await request.json();
+    const sheetUrl = env.GOOGLE_SHEETS_FEEDBACK_URL;
+    if (!sheetUrl) return json({ error: "Feedback endpoint not configured" }, 500);
+
+    const res = await fetch(sheetUrl, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(body),
+    });
+
+    if (!res.ok) return json({ error: "Failed to submit feedback" }, 502);
+    return json({ ok: true });
+  } catch (e) {
+    return json({ error: "Failed to submit feedback" }, 500);
+  }
+}
+
 // ─── Grading endpoint (Claude API) ──────────────────────────────────────────
 
 async function handleGrade(request, env) {
@@ -1785,6 +1806,11 @@ export default {
 
     if (method === "GET" && path === "/api/content/colors") {
       return handleGetColors(env);
+    }
+
+    // ── Feedback (public, proxied to Google Sheets) ───────────────────────
+    if (method === "POST" && path === "/api/feedback") {
+      return handleFeedback(request, env);
     }
 
     // ── Admin CRUD routes (auth required) ───────────────────────────────

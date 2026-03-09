@@ -13,6 +13,7 @@ import AdminPage from './admin/AdminPage.jsx'
 import LandingPage from './LandingPage.jsx'
 import PrivacyPage from './PrivacyPage.jsx'
 import TermsPage from './TermsPage.jsx'
+import FeedbackPage from './FeedbackPage.jsx'
 import NotFoundPage from './NotFoundPage.jsx'
 import Grainient from './components/Grainient.jsx'
 import { AuthProvider, useAuth } from './AuthContext.jsx'
@@ -85,6 +86,8 @@ if (path.startsWith('/business/')) {
   Page = PrivacyPage
 } else if (path === '/terms') {
   Page = TermsPage
+} else if (path === '/feedback') {
+  Page = FeedbackPage
 } else if (path !== '/') {
   // Unknown path — 404
   Page = NotFoundPage
@@ -97,6 +100,7 @@ const PAGE_TITLES = {
   '/admin': 'Admin — IBrev',
   '/privacy': 'Privacy Policy — IBrev',
   '/terms': 'Terms of Service — IBrev',
+  '/feedback': 'Feedback — IBrev',
   '/history/specimen': 'IB History Specimen — IBrev',
 }
 const SUBJECT_LABELS = {
@@ -126,7 +130,7 @@ if (PAGE_TITLES[path]) {
 }
 
 // ─── Auth gating ─────────────────────────────────────────────────────────────
-const PUBLIC_PATHS = new Set(['/', '/privacy', '/terms'])
+const PUBLIC_PATHS = new Set(['/', '/privacy', '/terms', '/feedback'])
 const isPublicPage = PUBLIC_PATHS.has(path) || Page === NotFoundPage
 
 function SignInGate() {
