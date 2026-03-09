@@ -11,7 +11,7 @@ import { syncToCloud } from "./stateSync.js";
 import {
   fetchFlashcardTopics, fetchFlashcards, fetchMcqQuestions, fetchWrittenQuestions, fetchChecklist, fetchCategoryColors,
   fetchBiologyFlashcardTopics, fetchBiologyFlashcards, fetchBiologyMcqQuestions, fetchBiologyWrittenQuestions, fetchBiologyChecklist, fetchBiologyCategoryColors,
-  chemistryApi, physicsApi, sportsApi, economicsApi,
+  chemistryApi, physicsApi, sportsApi, economicsApi, essApi, spanishApi,
 } from "./api/contentApi.js";
 
 // ─── Subject configuration ──────────────────────────────────────────────────
@@ -150,6 +150,52 @@ const SUBJECT_CONFIGS = {
       fetchChecklist: economicsApi.fetchChecklist, fetchFlashcardTopics: economicsApi.fetchFlashcardTopics,
       fetchFlashcards: economicsApi.fetchFlashcards, fetchMcqQuestions: economicsApi.fetchMcqQuestions,
       fetchWrittenQuestions: economicsApi.fetchWrittenQuestions, fetchCategoryColors: economicsApi.fetchCategoryColors,
+    },
+  },
+  ess: {
+    subject: "ess",
+    label: "IB ESS",
+    subtitle: "Environmental Systems & Societies",
+    accentColor: "#7AAD6B",
+    accentSoft: "#7AAD6B20",
+    accentGlow: "#7AAD6B40",
+    labelColor: "#7AAD6B",
+    basePath: "/ess",
+    show10Marker: false,
+    showSpecimen: false,
+    lsPrefix: "ess_",
+    units: [
+      { value: "All", label: "All Units" },
+      { value: "1", label: "1" },
+      { value: "2", label: "2" },
+    ],
+    api: {
+      fetchChecklist: essApi.fetchChecklist, fetchFlashcardTopics: essApi.fetchFlashcardTopics,
+      fetchFlashcards: essApi.fetchFlashcards, fetchMcqQuestions: essApi.fetchMcqQuestions,
+      fetchWrittenQuestions: essApi.fetchWrittenQuestions, fetchCategoryColors: essApi.fetchCategoryColors,
+    },
+  },
+  spanish: {
+    subject: "spanish",
+    label: "IB Spanish",
+    subtitle: "Language Acquisition",
+    accentColor: "#D4915C",
+    accentSoft: "#D4915C20",
+    accentGlow: "#D4915C40",
+    labelColor: "#D4915C",
+    basePath: "/spanish",
+    show10Marker: false,
+    showSpecimen: false,
+    lsPrefix: "span_",
+    units: [
+      { value: "All", label: "All Units" },
+      { value: "Ingenio Humano", label: "Ingenio Humano" },
+      { value: "Cómo nos cuidamos", label: "Cómo nos cuidamos" },
+    ],
+    api: {
+      fetchChecklist: spanishApi.fetchChecklist, fetchFlashcardTopics: spanishApi.fetchFlashcardTopics,
+      fetchFlashcards: spanishApi.fetchFlashcards, fetchMcqQuestions: spanishApi.fetchMcqQuestions,
+      fetchWrittenQuestions: spanishApi.fetchWrittenQuestions, fetchCategoryColors: spanishApi.fetchCategoryColors,
     },
   },
 };
