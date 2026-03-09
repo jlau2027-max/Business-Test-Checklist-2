@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Tabs } from "@heroui/react";
+import { Tabs, Select, ListBox, Label } from "@heroui/react";
 import AdminGuard from "./AdminGuard.jsx";
 import FlashcardAdmin from "./FlashcardAdmin.jsx";
 import McqAdmin from "./McqAdmin.jsx";
@@ -15,7 +15,7 @@ import {
   createBiologyFlashcard, updateBiologyFlashcard, deleteBiologyFlashcard,
   fetchBiologyMcqQuestions, createBiologyMcqQuestion, updateBiologyMcqQuestion, deleteBiologyMcqQuestion,
   fetchBiologyWrittenQuestions, createBiologyWrittenQuestion, updateBiologyWrittenQuestion, deleteBiologyWrittenQuestion,
-  chemistryApi, physicsApi, sportsApi, economicsApi,
+  chemistryApi, physicsApi, sportsApi, economicsApi, essApi, spanishApi,
 } from "../api/contentApi.js";
 
 const BUSINESS_TABS = [
@@ -80,6 +80,20 @@ const BIOLOGY_UNITS = [
   { value: "D", label: "D" },
 ];
 
+const ESS_TABS = [
+  { value: "ess_checklist", label: "Checklist" },
+  { value: "ess_flashcards", label: "Flashcards" },
+  { value: "ess_mcq", label: "MCQ" },
+  { value: "ess_written", label: "Written" },
+];
+
+const SPANISH_TABS = [
+  { value: "span_checklist", label: "Checklist" },
+  { value: "span_flashcards", label: "Flashcards" },
+  { value: "span_mcq", label: "MCQ" },
+  { value: "span_written", label: "Written" },
+];
+
 const USERS_TABS = [
   { value: "users", label: "User Management" },
 ];
@@ -89,13 +103,15 @@ export default function AdminPage() {
   const [activeTab, setActiveTab] = useState("checklist");
 
   const SECTION_TAB_MAP = {
+    spanish: { tabs: SPANISH_TABS, defaultTab: "span_checklist" },
     business: { tabs: BUSINESS_TABS, defaultTab: "checklist" },
     history: { tabs: HISTORY_TABS, defaultTab: "history" },
+    economics: { tabs: ECONOMICS_TABS, defaultTab: "econ_checklist" },
     biology: { tabs: BIOLOGY_TABS, defaultTab: "bio_checklist" },
     chemistry: { tabs: CHEMISTRY_TABS, defaultTab: "chem_checklist" },
     physics: { tabs: PHYSICS_TABS, defaultTab: "phys_checklist" },
     sports: { tabs: SPORTS_TABS, defaultTab: "sport_checklist" },
-    economics: { tabs: ECONOMICS_TABS, defaultTab: "econ_checklist" },
+    ess: { tabs: ESS_TABS, defaultTab: "ess_checklist" },
     users: { tabs: USERS_TABS, defaultTab: "users" },
   };
 
@@ -118,50 +134,45 @@ export default function AdminPage() {
             </a>
           </div>
 
-          {/* Section selector — primary variant */}
-          <Tabs
-            variant="primary"
+          {/* Section selector — dropdown */}
+          <Select
             selectedKey={section}
             onSelectionChange={handleSectionChange}
-            className="mb-4"
+            className="mb-4 w-[240px]"
+            placeholder="Select subject"
           >
-            <Tabs.ListContainer>
-              <Tabs.List aria-label="Admin sections" className="bg-[var(--bg-card)] border border-[var(--border)] rounded-full p-1">
-                <Tabs.Tab id="business" className="font-semibold text-sm font-mono text-[var(--text-secondary)] data-[selected=true]:text-white rounded-full px-4 py-2">
-                  Business
-                  <Tabs.Indicator className="bg-[var(--accent)] rounded-full" />
-                </Tabs.Tab>
-                <Tabs.Tab id="history" className="font-semibold text-sm font-mono text-[var(--text-secondary)] data-[selected=true]:text-white rounded-full px-4 py-2">
-                  History
-                  <Tabs.Indicator className="bg-[var(--accent-tertiary)] rounded-full" />
-                </Tabs.Tab>
-                <Tabs.Tab id="biology" className="font-semibold text-sm font-mono text-[var(--text-secondary)] data-[selected=true]:text-white rounded-full px-4 py-2">
-                  Biology
-                  <Tabs.Indicator className="bg-[var(--color-success)] rounded-full" />
-                </Tabs.Tab>
-                <Tabs.Tab id="chemistry" className="font-semibold text-sm font-mono text-[var(--text-secondary)] data-[selected=true]:text-white rounded-full px-4 py-2">
-                  Chemistry
-                  <Tabs.Indicator className="bg-[#8B7EB5] rounded-full" />
-                </Tabs.Tab>
-                <Tabs.Tab id="physics" className="font-semibold text-sm font-mono text-[var(--text-secondary)] data-[selected=true]:text-white rounded-full px-4 py-2">
-                  Physics
-                  <Tabs.Indicator className="bg-[#C4A36A] rounded-full" />
-                </Tabs.Tab>
-                <Tabs.Tab id="sports" className="font-semibold text-sm font-mono text-[var(--text-secondary)] data-[selected=true]:text-white rounded-full px-4 py-2">
-                  Sports Sci
-                  <Tabs.Indicator className="bg-[#B57A7A] rounded-full" />
-                </Tabs.Tab>
-                <Tabs.Tab id="economics" className="font-semibold text-sm font-mono text-[var(--text-secondary)] data-[selected=true]:text-white rounded-full px-4 py-2">
-                  Economics
-                  <Tabs.Indicator className="bg-[#6BA3AD] rounded-full" />
-                </Tabs.Tab>
-                <Tabs.Tab id="users" className="font-semibold text-sm font-mono text-[var(--text-secondary)] data-[selected=true]:text-white rounded-full px-4 py-2">
-                  Users
-                  <Tabs.Indicator className="bg-[var(--accent-secondary)] rounded-full" />
-                </Tabs.Tab>
-              </Tabs.List>
-            </Tabs.ListContainer>
-          </Tabs>
+            <Label className="text-xs font-semibold uppercase tracking-wider text-[var(--text-muted)]">Subject</Label>
+            <Select.Trigger className="bg-[var(--bg-card)] border border-[var(--border)] rounded-xl px-4 py-2.5 text-sm font-semibold text-[var(--text-primary)]">
+              <Select.Value />
+              <Select.Indicator />
+            </Select.Trigger>
+            <Select.Popover className="bg-[var(--bg-card)] border border-[var(--border)] rounded-xl shadow-lg">
+              <ListBox className="p-1">
+                <ListBox.Section>
+                  <ListBox.SectionHeader className="text-[10px] font-semibold uppercase tracking-wider text-[var(--text-muted)] px-3 py-1.5">Group 2</ListBox.SectionHeader>
+                  <ListBox.Item id="spanish" textValue="Spanish" className="text-sm font-medium text-[var(--text-secondary)] data-[selected=true]:text-[var(--text-primary)] px-3 py-2 rounded-lg">Spanish<ListBox.ItemIndicator /></ListBox.Item>
+                </ListBox.Section>
+                <ListBox.Section>
+                  <ListBox.SectionHeader className="text-[10px] font-semibold uppercase tracking-wider text-[var(--text-muted)] px-3 py-1.5">Group 3</ListBox.SectionHeader>
+                  <ListBox.Item id="business" textValue="Business" className="text-sm font-medium text-[var(--text-secondary)] data-[selected=true]:text-[var(--text-primary)] px-3 py-2 rounded-lg">Business<ListBox.ItemIndicator /></ListBox.Item>
+                  <ListBox.Item id="history" textValue="History" className="text-sm font-medium text-[var(--text-secondary)] data-[selected=true]:text-[var(--text-primary)] px-3 py-2 rounded-lg">History<ListBox.ItemIndicator /></ListBox.Item>
+                  <ListBox.Item id="economics" textValue="Economics" className="text-sm font-medium text-[var(--text-secondary)] data-[selected=true]:text-[var(--text-primary)] px-3 py-2 rounded-lg">Economics<ListBox.ItemIndicator /></ListBox.Item>
+                </ListBox.Section>
+                <ListBox.Section>
+                  <ListBox.SectionHeader className="text-[10px] font-semibold uppercase tracking-wider text-[var(--text-muted)] px-3 py-1.5">Group 4</ListBox.SectionHeader>
+                  <ListBox.Item id="biology" textValue="Biology" className="text-sm font-medium text-[var(--text-secondary)] data-[selected=true]:text-[var(--text-primary)] px-3 py-2 rounded-lg">Biology<ListBox.ItemIndicator /></ListBox.Item>
+                  <ListBox.Item id="chemistry" textValue="Chemistry" className="text-sm font-medium text-[var(--text-secondary)] data-[selected=true]:text-[var(--text-primary)] px-3 py-2 rounded-lg">Chemistry<ListBox.ItemIndicator /></ListBox.Item>
+                  <ListBox.Item id="physics" textValue="Physics" className="text-sm font-medium text-[var(--text-secondary)] data-[selected=true]:text-[var(--text-primary)] px-3 py-2 rounded-lg">Physics<ListBox.ItemIndicator /></ListBox.Item>
+                  <ListBox.Item id="sports" textValue="Sports Sci" className="text-sm font-medium text-[var(--text-secondary)] data-[selected=true]:text-[var(--text-primary)] px-3 py-2 rounded-lg">Sports Sci<ListBox.ItemIndicator /></ListBox.Item>
+                  <ListBox.Item id="ess" textValue="ESS" className="text-sm font-medium text-[var(--text-secondary)] data-[selected=true]:text-[var(--text-primary)] px-3 py-2 rounded-lg">ESS<ListBox.ItemIndicator /></ListBox.Item>
+                </ListBox.Section>
+                <ListBox.Section>
+                  <ListBox.SectionHeader className="text-[10px] font-semibold uppercase tracking-wider text-[var(--text-muted)] px-3 py-1.5">Admin</ListBox.SectionHeader>
+                  <ListBox.Item id="users" textValue="Users" className="text-sm font-medium text-[var(--text-secondary)] data-[selected=true]:text-[var(--text-primary)] px-3 py-2 rounded-lg">Users<ListBox.ItemIndicator /></ListBox.Item>
+                </ListBox.Section>
+              </ListBox>
+            </Select.Popover>
+          </Select>
 
           {/* Sub-tabs — secondary variant */}
           <Tabs
@@ -299,6 +310,34 @@ export default function AdminPage() {
             </Tabs.Panel>
             <Tabs.Panel id="econ_written" className="pt-4">
               <WrittenAdmin fetchWrittenQuestions={economicsApi.fetchWrittenQuestions} createWrittenQuestion={economicsApi.createWrittenQuestion} updateWrittenQuestion={economicsApi.updateWrittenQuestion} deleteWrittenQuestion={economicsApi.deleteWrittenQuestion} questionTypes={SHORT_ANSWER_ONLY} />
+            </Tabs.Panel>
+
+            {/* ESS */}
+            <Tabs.Panel id="ess_checklist" className="pt-4">
+              <ChecklistAdmin fetchChecklist={essApi.fetchChecklist} createChecklistSection={essApi.createChecklistSection} updateChecklistSection={essApi.updateChecklistSection} deleteChecklistSection={essApi.deleteChecklistSection} createChecklistItem={essApi.createChecklistItem} updateChecklistItem={essApi.updateChecklistItem} deleteChecklistItem={essApi.deleteChecklistItem} />
+            </Tabs.Panel>
+            <Tabs.Panel id="ess_flashcards" className="pt-4">
+              <FlashcardAdmin fetchFlashcardTopics={essApi.fetchFlashcardTopics} fetchFlashcards={essApi.fetchFlashcards} createFlashcardTopic={essApi.createFlashcardTopic} updateFlashcardTopic={essApi.updateFlashcardTopic} deleteFlashcardTopic={essApi.deleteFlashcardTopic} createFlashcard={essApi.createFlashcard} updateFlashcard={essApi.updateFlashcard} deleteFlashcard={essApi.deleteFlashcard} />
+            </Tabs.Panel>
+            <Tabs.Panel id="ess_mcq" className="pt-4">
+              <McqAdmin fetchMcqQuestions={essApi.fetchMcqQuestions} createMcqQuestion={essApi.createMcqQuestion} updateMcqQuestion={essApi.updateMcqQuestion} deleteMcqQuestion={essApi.deleteMcqQuestion} />
+            </Tabs.Panel>
+            <Tabs.Panel id="ess_written" className="pt-4">
+              <WrittenAdmin fetchWrittenQuestions={essApi.fetchWrittenQuestions} createWrittenQuestion={essApi.createWrittenQuestion} updateWrittenQuestion={essApi.updateWrittenQuestion} deleteWrittenQuestion={essApi.deleteWrittenQuestion} questionTypes={SHORT_ANSWER_ONLY} />
+            </Tabs.Panel>
+
+            {/* Spanish */}
+            <Tabs.Panel id="span_checklist" className="pt-4">
+              <ChecklistAdmin fetchChecklist={spanishApi.fetchChecklist} createChecklistSection={spanishApi.createChecklistSection} updateChecklistSection={spanishApi.updateChecklistSection} deleteChecklistSection={spanishApi.deleteChecklistSection} createChecklistItem={spanishApi.createChecklistItem} updateChecklistItem={spanishApi.updateChecklistItem} deleteChecklistItem={spanishApi.deleteChecklistItem} />
+            </Tabs.Panel>
+            <Tabs.Panel id="span_flashcards" className="pt-4">
+              <FlashcardAdmin fetchFlashcardTopics={spanishApi.fetchFlashcardTopics} fetchFlashcards={spanishApi.fetchFlashcards} createFlashcardTopic={spanishApi.createFlashcardTopic} updateFlashcardTopic={spanishApi.updateFlashcardTopic} deleteFlashcardTopic={spanishApi.deleteFlashcardTopic} createFlashcard={spanishApi.createFlashcard} updateFlashcard={spanishApi.updateFlashcard} deleteFlashcard={spanishApi.deleteFlashcard} />
+            </Tabs.Panel>
+            <Tabs.Panel id="span_mcq" className="pt-4">
+              <McqAdmin fetchMcqQuestions={spanishApi.fetchMcqQuestions} createMcqQuestion={spanishApi.createMcqQuestion} updateMcqQuestion={spanishApi.updateMcqQuestion} deleteMcqQuestion={spanishApi.deleteMcqQuestion} />
+            </Tabs.Panel>
+            <Tabs.Panel id="span_written" className="pt-4">
+              <WrittenAdmin fetchWrittenQuestions={spanishApi.fetchWrittenQuestions} createWrittenQuestion={spanishApi.createWrittenQuestion} updateWrittenQuestion={spanishApi.updateWrittenQuestion} deleteWrittenQuestion={spanishApi.deleteWrittenQuestion} questionTypes={SHORT_ANSWER_ONLY} />
             </Tabs.Panel>
 
             <Tabs.Panel id="users" className="pt-4">
