@@ -148,28 +148,16 @@ export default function AdminPage() {
             </Select.Trigger>
             <Select.Popover className="bg-[var(--bg-card)] border border-[var(--border)] rounded-xl shadow-lg">
               <ListBox className="p-1">
-                <ListBox.Section>
-                  <ListBox.SectionHeader className="text-[10px] font-semibold uppercase tracking-wider text-[var(--text-muted)] px-3 py-1.5">Group 2</ListBox.SectionHeader>
-                  <ListBox.Item id="spanish" textValue="Spanish" className="text-sm font-medium text-[var(--text-secondary)] data-[selected=true]:text-[var(--text-primary)] px-3 py-2 rounded-lg">Spanish<ListBox.ItemIndicator /></ListBox.Item>
-                </ListBox.Section>
-                <ListBox.Section>
-                  <ListBox.SectionHeader className="text-[10px] font-semibold uppercase tracking-wider text-[var(--text-muted)] px-3 py-1.5">Group 3</ListBox.SectionHeader>
-                  <ListBox.Item id="business" textValue="Business" className="text-sm font-medium text-[var(--text-secondary)] data-[selected=true]:text-[var(--text-primary)] px-3 py-2 rounded-lg">Business<ListBox.ItemIndicator /></ListBox.Item>
-                  <ListBox.Item id="history" textValue="History" className="text-sm font-medium text-[var(--text-secondary)] data-[selected=true]:text-[var(--text-primary)] px-3 py-2 rounded-lg">History<ListBox.ItemIndicator /></ListBox.Item>
-                  <ListBox.Item id="economics" textValue="Economics" className="text-sm font-medium text-[var(--text-secondary)] data-[selected=true]:text-[var(--text-primary)] px-3 py-2 rounded-lg">Economics<ListBox.ItemIndicator /></ListBox.Item>
-                </ListBox.Section>
-                <ListBox.Section>
-                  <ListBox.SectionHeader className="text-[10px] font-semibold uppercase tracking-wider text-[var(--text-muted)] px-3 py-1.5">Group 4</ListBox.SectionHeader>
-                  <ListBox.Item id="biology" textValue="Biology" className="text-sm font-medium text-[var(--text-secondary)] data-[selected=true]:text-[var(--text-primary)] px-3 py-2 rounded-lg">Biology<ListBox.ItemIndicator /></ListBox.Item>
-                  <ListBox.Item id="chemistry" textValue="Chemistry" className="text-sm font-medium text-[var(--text-secondary)] data-[selected=true]:text-[var(--text-primary)] px-3 py-2 rounded-lg">Chemistry<ListBox.ItemIndicator /></ListBox.Item>
-                  <ListBox.Item id="physics" textValue="Physics" className="text-sm font-medium text-[var(--text-secondary)] data-[selected=true]:text-[var(--text-primary)] px-3 py-2 rounded-lg">Physics<ListBox.ItemIndicator /></ListBox.Item>
-                  <ListBox.Item id="sports" textValue="Sports Sci" className="text-sm font-medium text-[var(--text-secondary)] data-[selected=true]:text-[var(--text-primary)] px-3 py-2 rounded-lg">Sports Sci<ListBox.ItemIndicator /></ListBox.Item>
-                  <ListBox.Item id="ess" textValue="ESS" className="text-sm font-medium text-[var(--text-secondary)] data-[selected=true]:text-[var(--text-primary)] px-3 py-2 rounded-lg">ESS<ListBox.ItemIndicator /></ListBox.Item>
-                </ListBox.Section>
-                <ListBox.Section>
-                  <ListBox.SectionHeader className="text-[10px] font-semibold uppercase tracking-wider text-[var(--text-muted)] px-3 py-1.5">Admin</ListBox.SectionHeader>
-                  <ListBox.Item id="users" textValue="Users" className="text-sm font-medium text-[var(--text-secondary)] data-[selected=true]:text-[var(--text-primary)] px-3 py-2 rounded-lg">Users<ListBox.ItemIndicator /></ListBox.Item>
-                </ListBox.Section>
+                <ListBox.Item id="spanish" textValue="Spanish" className="text-sm font-medium text-[var(--text-secondary)] px-3 py-2 rounded-lg cursor-pointer">Spanish</ListBox.Item>
+                <ListBox.Item id="business" textValue="Business" className="text-sm font-medium text-[var(--text-secondary)] px-3 py-2 rounded-lg cursor-pointer">Business</ListBox.Item>
+                <ListBox.Item id="history" textValue="History" className="text-sm font-medium text-[var(--text-secondary)] px-3 py-2 rounded-lg cursor-pointer">History</ListBox.Item>
+                <ListBox.Item id="economics" textValue="Economics" className="text-sm font-medium text-[var(--text-secondary)] px-3 py-2 rounded-lg cursor-pointer">Economics</ListBox.Item>
+                <ListBox.Item id="biology" textValue="Biology" className="text-sm font-medium text-[var(--text-secondary)] px-3 py-2 rounded-lg cursor-pointer">Biology</ListBox.Item>
+                <ListBox.Item id="chemistry" textValue="Chemistry" className="text-sm font-medium text-[var(--text-secondary)] px-3 py-2 rounded-lg cursor-pointer">Chemistry</ListBox.Item>
+                <ListBox.Item id="physics" textValue="Physics" className="text-sm font-medium text-[var(--text-secondary)] px-3 py-2 rounded-lg cursor-pointer">Physics</ListBox.Item>
+                <ListBox.Item id="sports" textValue="Sports Sci" className="text-sm font-medium text-[var(--text-secondary)] px-3 py-2 rounded-lg cursor-pointer">Sports Sci</ListBox.Item>
+                <ListBox.Item id="ess" textValue="ESS" className="text-sm font-medium text-[var(--text-secondary)] px-3 py-2 rounded-lg cursor-pointer">ESS</ListBox.Item>
+                <ListBox.Item id="users" textValue="Users" className="text-sm font-medium text-[var(--text-secondary)] px-3 py-2 rounded-lg cursor-pointer">Users</ListBox.Item>
               </ListBox>
             </Select.Popover>
           </Select>
