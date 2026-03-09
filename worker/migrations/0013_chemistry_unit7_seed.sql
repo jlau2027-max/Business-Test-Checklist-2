@@ -14,7 +14,7 @@ INSERT OR REPLACE INTO chemistry_category_colors (category, color) VALUES
   ('S2.2.10 Chromatography', '#D97706');
 
 -- ─── CHECKLIST SECTIONS ──────────────────────────────────────
-INSERT INTO chemistry_checklist_sections (id, title, color, unit, sort_order) VALUES
+INSERT OR IGNORE INTO chemistry_checklist_sections (id, title, color, unit, sort_order) VALUES
   ('s2-2-12-benzene', 'S2.2.12 — Benzene & Resonance (AHL)', '#7C3AED', '7', 38),
   ('s2-2-15-sigma-pi', 'S2.2.15 — Sigma & Pi Bonds (AHL)', '#2563EB', '7', 39),
   ('s2-2-16-hybrid', 'S2.2.16 — Hybridisation (AHL)', '#0891B2', '7', 40),
@@ -26,7 +26,7 @@ INSERT INTO chemistry_checklist_sections (id, title, color, unit, sort_order) VA
 -- ─── CHECKLIST ITEMS ─────────────────────────────────────────
 
 -- S2.2.12 Benzene & Resonance (AHL)
-INSERT INTO chemistry_checklist_items (section_id, text, sort_order) VALUES
+INSERT OR IGNORE INTO chemistry_checklist_items (section_id, text, sort_order) VALUES
   ('s2-2-12-benzene', 'State the molecular formula of benzene (C6H6) and describe its 1:1 C:H ratio', 1),
   ('s2-2-12-benzene', 'Explain why the Kekule structure (cyclohexatriene) is inconsistent with experimental evidence', 2),
   ('s2-2-12-benzene', 'Cite evidence: all C-C bond lengths in benzene are equal (X-ray diffraction)', 3),
@@ -37,7 +37,7 @@ INSERT INTO chemistry_checklist_items (section_id, text, sort_order) VALUES
   ('s2-2-12-benzene', 'Calculate the resonance stabilisation energy of benzene (approx 153 kJ/mol)', 8);
 
 -- S2.2.15 Sigma & Pi Bonds (AHL)
-INSERT INTO chemistry_checklist_items (section_id, text, sort_order) VALUES
+INSERT OR IGNORE INTO chemistry_checklist_items (section_id, text, sort_order) VALUES
   ('s2-2-15-sigma-pi', 'Define a sigma bond as head-on overlap of orbitals with electron density along the bond axis', 1),
   ('s2-2-15-sigma-pi', 'Define a pi bond as lateral/sideways overlap of p-orbitals with electron density above and below the bond axis', 2),
   ('s2-2-15-sigma-pi', 'Draw the three types of sigma overlap: s-s, s-p, and p-p (head-on)', 3),
@@ -47,7 +47,7 @@ INSERT INTO chemistry_checklist_items (section_id, text, sort_order) VALUES
   ('s2-2-15-sigma-pi', 'Explain why free rotation occurs around sigma bonds but not pi bonds', 7);
 
 -- S2.2.16 Hybridisation (AHL)
-INSERT INTO chemistry_checklist_items (section_id, text, sort_order) VALUES
+INSERT OR IGNORE INTO chemistry_checklist_items (section_id, text, sort_order) VALUES
   ('s2-2-16-hybrid', 'Define hybridisation as the mixing of atomic orbitals to form new hybrid orbitals for bonding', 1),
   ('s2-2-16-hybrid', 'Link sp hybridisation to 2 electron domains, linear geometry, 180 degrees', 2),
   ('s2-2-16-hybrid', 'Link sp2 hybridisation to 3 electron domains, trigonal planar geometry, 120 degrees', 3),
@@ -57,7 +57,7 @@ INSERT INTO chemistry_checklist_items (section_id, text, sort_order) VALUES
   ('s2-2-16-hybrid', 'Explain hybridisation in methane (sp3), ethene (sp2), and ethyne (sp)', 7);
 
 -- S2.2.4/13 VSEPR Theory
-INSERT INTO chemistry_checklist_items (section_id, text, sort_order) VALUES
+INSERT OR IGNORE INTO chemistry_checklist_items (section_id, text, sort_order) VALUES
   ('s2-2-4-vsepr', 'State VSEPR theory: electron domains repel and arrange to minimise repulsion', 1),
   ('s2-2-4-vsepr', 'Define an electron domain (lone pair, single bond, double bond, or triple bond)', 2),
   ('s2-2-4-vsepr', 'Distinguish electron domain geometry from molecular geometry', 3),
@@ -68,7 +68,7 @@ INSERT INTO chemistry_checklist_items (section_id, text, sort_order) VALUES
   ('s2-2-4-vsepr', 'Name all molecular geometries: linear, bent, trigonal planar, pyramidal, tetrahedral, see-saw, T-shaped, square planar, square pyramidal, octahedral', 8);
 
 -- S2.2.6 Molecular Polarity
-INSERT INTO chemistry_checklist_items (section_id, text, sort_order) VALUES
+INSERT OR IGNORE INTO chemistry_checklist_items (section_id, text, sort_order) VALUES
   ('s2-2-6-polarity', 'Explain that molecular polarity depends on both bond polarity and molecular geometry', 1),
   ('s2-2-6-polarity', 'Deduce bond polarity from electronegativity differences', 2),
   ('s2-2-6-polarity', 'Explain why symmetrical molecules (e.g. CO2, BF3, CH4, SF6) are non-polar despite polar bonds', 3),
@@ -76,7 +76,7 @@ INSERT INTO chemistry_checklist_items (section_id, text, sort_order) VALUES
   ('s2-2-6-polarity', 'Draw dipole arrows and deduce net dipole moments', 5);
 
 -- S2.2.8-9 Intermolecular Forces
-INSERT INTO chemistry_checklist_items (section_id, text, sort_order) VALUES
+INSERT OR IGNORE INTO chemistry_checklist_items (section_id, text, sort_order) VALUES
   ('s2-2-8-imf', 'Distinguish intramolecular bonds from intermolecular forces', 1),
   ('s2-2-8-imf', 'Describe London dispersion forces (instantaneous dipole-induced dipole)', 2),
   ('s2-2-8-imf', 'Explain that LDF strength increases with molar mass / number of electrons / surface area', 3),
@@ -90,7 +90,7 @@ INSERT INTO chemistry_checklist_items (section_id, text, sort_order) VALUES
   ('s2-2-8-imf', 'Identify IMFs in biological systems (DNA base pairing, protein folding, cellulose)', 11);
 
 -- S2.2.10 Chromatography
-INSERT INTO chemistry_checklist_items (section_id, text, sort_order) VALUES
+INSERT OR IGNORE INTO chemistry_checklist_items (section_id, text, sort_order) VALUES
   ('s2-2-10-chrom', 'Explain that chromatography separates mixtures based on different attractions to mobile and stationary phases', 1),
   ('s2-2-10-chrom', 'Identify mobile and stationary phases in paper chromatography and TLC', 2),
   ('s2-2-10-chrom', 'Calculate Rf = distance travelled by component / distance travelled by solvent front', 3),
@@ -99,14 +99,14 @@ INSERT INTO chemistry_checklist_items (section_id, text, sort_order) VALUES
   ('s2-2-10-chrom', 'Explain why a substance with Rf = 0 has strong attraction to the stationary phase', 6);
 
 -- ─── FLASHCARD TOPICS ────────────────────────────────────────
-INSERT INTO chemistry_flashcard_topics (id, label, color, unit, sort_order) VALUES
+INSERT OR IGNORE INTO chemistry_flashcard_topics (id, label, color, unit, sort_order) VALUES
   ('chem-u7-key-defs', 'Unit 7 — Key Definitions', '#7C3AED', '7', 35),
   ('chem-u7-quick-recall', 'Unit 7 — Quick Recall', '#2563EB', '7', 36);
 
 -- ─── FLASHCARDS ──────────────────────────────────────────────
 
 -- Key Definitions (18 cards)
-INSERT INTO chemistry_flashcards (topic_id, term, definition, formula, sort_order) VALUES
+INSERT OR IGNORE INTO chemistry_flashcards (topic_id, term, definition, formula, sort_order) VALUES
   ('chem-u7-key-defs', 'What is VSEPR Theory?', 'Electron pairs in the valence shell repel each other and arrange themselves to minimise repulsion, determining molecular shape.', NULL, 1),
   ('chem-u7-key-defs', 'What is an electron domain?', 'A region of electron density in the valence shell: a lone pair, single bond, double bond, or triple bond each count as one domain.', NULL, 2),
   ('chem-u7-key-defs', 'What is electron domain geometry?', 'The 3D arrangement of ALL electron domains (bonding + lone pairs) around a central atom.', NULL, 3),
@@ -127,7 +127,7 @@ INSERT INTO chemistry_flashcards (topic_id, term, definition, formula, sort_orde
   ('chem-u7-key-defs', 'What is a chromatogram?', 'The pattern of spots/bands formed after chromatographic separation of a mixture.', NULL, 18);
 
 -- Quick Recall (19 cards)
-INSERT INTO chemistry_flashcards (topic_id, term, definition, formula, sort_order) VALUES
+INSERT OR IGNORE INTO chemistry_flashcards (topic_id, term, definition, formula, sort_order) VALUES
   ('chem-u7-quick-recall', 'sp hybridisation: how many domains, shape, angle?', '2 domains -> linear -> 180 degrees', NULL, 1),
   ('chem-u7-quick-recall', 'sp2 hybridisation: how many domains, shape, angle?', '3 domains -> trigonal planar -> 120 degrees', NULL, 2),
   ('chem-u7-quick-recall', 'sp3 hybridisation: how many domains, shape, angle?', '4 domains -> tetrahedral -> 109.5 degrees', NULL, 3),
@@ -149,7 +149,7 @@ INSERT INTO chemistry_flashcards (topic_id, term, definition, formula, sort_orde
   ('chem-u7-quick-recall', 'Why is the HF boiling point anomalously high?', 'Hydrogen bonding between H (bonded to F) and lone pairs on F of adjacent molecules.', NULL, 19);
 
 -- ─── MCQ QUESTIONS ───────────────────────────────────────────
-INSERT INTO chemistry_mcq_questions (id, category, difficulty, unit, question_text, option_a, option_b, option_c, option_d, correct_option, explanation, sort_order) VALUES
+INSERT OR IGNORE INTO chemistry_mcq_questions (id, category, difficulty, unit, question_text, option_a, option_b, option_c, option_d, correct_option, explanation, sort_order) VALUES
   ('chem-u7-mcq-01', 'S2.2.12 Benzene & Resonance (AHL)', 'HL', '7',
    'All carbon-carbon bond lengths in benzene are equal. This is best explained by:',
    'Alternating single and double bonds in the Kekule structure',
@@ -311,7 +311,7 @@ INSERT INTO chemistry_mcq_questions (id, category, difficulty, unit, question_te
    1, 'Rf = distance travelled by the substance / distance travelled by the solvent front.', 125);
 
 -- ─── WRITTEN QUESTIONS ───────────────────────────────────────
-INSERT INTO chemistry_written_questions (id, category, difficulty, question_type, unit, marks, question_text, mark_scheme, sort_order) VALUES
+INSERT OR IGNORE INTO chemistry_written_questions (id, category, difficulty, question_type, unit, marks, question_text, mark_scheme, sort_order) VALUES
   ('chem-u7-wr-01', 'S2.2.12 Benzene & Resonance (AHL)', 'HL', 'short_answer', '7', 6,
    'Discuss the structure of benzene from physical and chemical evidence. [6]',
    'X-ray diffraction shows all six C-C bond lengths are equal/intermediate between single and double bond length [1]\nThis is inconsistent with the Kekule structure which would have alternating long and short bonds [1]\nThe enthalpy of hydrogenation of benzene (-207 kJ/mol) is less exothermic than 3x cyclohexene (-360 kJ/mol) [1]\nBenzene is 153 kJ/mol more stable than predicted -> evidence for resonance/delocalisation stabilisation [1]\nBenzene undergoes substitution rather than addition reactions, suggesting it resists breaking its delocalised pi system [1]\nThe actual structure is a resonance hybrid with delocalised electrons above and below the plane of the ring [1]',

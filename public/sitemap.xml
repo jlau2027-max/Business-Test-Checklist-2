@@ -40,6 +40,12 @@
   <url><loc>https://ibrev.org/economics/multi-choice</loc><priority>0.6</priority><changefreq>monthly</changefreq></url>
   <url><loc>https://ibrev.org/economics/written</loc><priority>0.6</priority><changefreq>monthly</changefreq></url>
 
+  <!-- Spanish -->
+  <url><loc>https://ibrev.org/spanish/checklist</loc><priority>0.6</priority><changefreq>monthly</changefreq></url>
+  <url><loc>https://ibrev.org/spanish/flashcards</loc><priority>0.6</priority><changefreq>monthly</changefreq></url>
+  <url><loc>https://ibrev.org/spanish/multi-choice</loc><priority>0.6</priority><changefreq>monthly</changefreq></url>
+  <url><loc>https://ibrev.org/spanish/written</loc><priority>0.6</priority><changefreq>monthly</changefreq></url>
+
   <!-- History -->
   <url><loc>https://ibrev.org/history/specimen</loc><priority>0.7</priority><changefreq>monthly</changefreq></url>
 

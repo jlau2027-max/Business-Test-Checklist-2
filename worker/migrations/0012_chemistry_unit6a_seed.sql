@@ -14,7 +14,7 @@ INSERT OR REPLACE INTO chemistry_category_colors (category, color) VALUES
   ('Practical: Redox Titration', '#059669');
 
 -- ─── CHECKLIST SECTIONS ──────────────────────────────────────
-INSERT INTO chemistry_checklist_sections (id, title, color, unit, sort_order) VALUES
+INSERT OR IGNORE INTO chemistry_checklist_sections (id, title, color, unit, sort_order) VALUES
   ('r3-2-1-ox-red', 'R3.2.1 — Oxidation & Reduction Fundamentals', '#DC2626', '6a', 31),
   ('r3-2-2-half-eq', 'R3.2.2 — Half-Equations', '#E11D48', '6a', 32),
   ('r3-2-3-predict', 'R3.2.3 — Predicting Redox Behaviour', '#F97316', '6a', 33),
@@ -26,7 +26,7 @@ INSERT INTO chemistry_checklist_sections (id, title, color, unit, sort_order) VA
 -- ─── CHECKLIST ITEMS ─────────────────────────────────────────
 
 -- R3.2.1 Oxidation & Reduction Fundamentals
-INSERT INTO chemistry_checklist_items (section_id, text, sort_order) VALUES
+INSERT OR IGNORE INTO chemistry_checklist_items (section_id, text, sort_order) VALUES
   ('r3-2-1-ox-red', 'Define oxidation in four ways: loss of electrons, gain of oxygen, loss of hydrogen, increase in oxidation state', 1),
   ('r3-2-1-ox-red', 'Define reduction in four ways: gain of electrons, loss of oxygen, gain of hydrogen, decrease in oxidation state', 2),
   ('r3-2-1-ox-red', 'Explain that redox reactions involve simultaneous oxidation and reduction', 3),
@@ -38,7 +38,7 @@ INSERT INTO chemistry_checklist_items (section_id, text, sort_order) VALUES
   ('r3-2-1-ox-red', 'Determine oxidation states of carbon in organic molecules (e.g. ethanol vs ethanoic acid)', 9);
 
 -- R3.2.2 Half-Equations
-INSERT INTO chemistry_checklist_items (section_id, text, sort_order) VALUES
+INSERT OR IGNORE INTO chemistry_checklist_items (section_id, text, sort_order) VALUES
   ('r3-2-2-half-eq', 'Write balanced half-equations showing electron loss (oxidation) or gain (reduction)', 1),
   ('r3-2-2-half-eq', 'Balance half-equations in neutral conditions (electrons, charges, atoms)', 2),
   ('r3-2-2-half-eq', 'Balance half-equations in acidic conditions using H+ and H2O', 3),
@@ -46,7 +46,7 @@ INSERT INTO chemistry_checklist_items (section_id, text, sort_order) VALUES
   ('r3-2-2-half-eq', 'Apply half-equations to titration contexts, e.g. MnO4-/Fe2+', 5);
 
 -- R3.2.3 Predicting Redox Behaviour
-INSERT INTO chemistry_checklist_items (section_id, text, sort_order) VALUES
+INSERT OR IGNORE INTO chemistry_checklist_items (section_id, text, sort_order) VALUES
   ('r3-2-3-predict', 'Predict relative ease of oxidation of metals from their position in the periodic table (down a group = easier to oxidise)', 1),
   ('r3-2-3-predict', 'Predict relative ease of reduction of halogens (up Group 17 = stronger oxidising agent)', 2),
   ('r3-2-3-predict', 'Interpret metal/metal-ion displacement data to rank metals by reducing strength', 3),
@@ -55,7 +55,7 @@ INSERT INTO chemistry_checklist_items (section_id, text, sort_order) VALUES
   ('r3-2-3-predict', 'Link ease of oxidation to ionisation energy values', 6);
 
 -- S3.1.8-9 Transition Elements (AHL)
-INSERT INTO chemistry_checklist_items (section_id, text, sort_order) VALUES
+INSERT OR IGNORE INTO chemistry_checklist_items (section_id, text, sort_order) VALUES
   ('s3-1-transition', 'State the IUPAC definition of a transition element (incomplete d sub-shell in atom or ion)', 1),
   ('s3-1-transition', 'Explain why Sc and Zn are d-block but NOT transition elements (Sc3+ has no d electrons; Zn2+ has full d10)', 2),
   ('s3-1-transition', 'List characteristic properties: variable oxidation states, high melting points, paramagnetism, catalytic activity, coloured compounds, complex-ion formation', 3),
@@ -66,7 +66,7 @@ INSERT INTO chemistry_checklist_items (section_id, text, sort_order) VALUES
   ('s3-1-transition', 'Describe vanadium oxidation states: V2+ (purple), V3+ (green), VO2+ (blue), VO2+ (yellow)', 8);
 
 -- R3.4.6-8 Lewis Acids/Bases & Complex Ions (AHL)
-INSERT INTO chemistry_checklist_items (section_id, text, sort_order) VALUES
+INSERT OR IGNORE INTO chemistry_checklist_items (section_id, text, sort_order) VALUES
   ('r3-4-lewis-complex', 'Define Lewis acid (electron-pair acceptor) and Lewis base (electron-pair donor)', 1),
   ('r3-4-lewis-complex', 'In complex-ion formation: metal ion = Lewis acid; ligand = Lewis base', 2),
   ('r3-4-lewis-complex', 'Define ligand: ion or molecule with a lone pair that forms a coordination (dative) bond to a metal ion', 3),
@@ -76,7 +76,7 @@ INSERT INTO chemistry_checklist_items (section_id, text, sort_order) VALUES
   ('r3-4-lewis-complex', 'Name simple complexes: [Cu(H2O)6]2+, [CuCl4]2-, [Cu(NH3)4(H2O)2]2+', 7);
 
 -- S3.1.10 Colour of Complexes (AHL)
-INSERT INTO chemistry_checklist_items (section_id, text, sort_order) VALUES
+INSERT OR IGNORE INTO chemistry_checklist_items (section_id, text, sort_order) VALUES
   ('s3-1-10-colour', 'Explain d-orbital splitting: in a complex ion the five d-orbitals split into two energy levels', 1),
   ('s3-1-10-colour', 'A d-d electron transition absorbs a photon of visible light whose energy equals delta-E', 2),
   ('s3-1-10-colour', 'Apply E = hf and c = f(lambda) to calculate wavelength/frequency of absorbed light', 3),
@@ -85,7 +85,7 @@ INSERT INTO chemistry_checklist_items (section_id, text, sort_order) VALUES
   ('s3-1-10-colour', 'Explain why d0 and d10 complexes are colourless (no d-d transitions possible)', 6);
 
 -- Practical Skills - Redox Titration
-INSERT INTO chemistry_checklist_items (section_id, text, sort_order) VALUES
+INSERT OR IGNORE INTO chemistry_checklist_items (section_id, text, sort_order) VALUES
   ('prac-redox-titr', 'Describe the purpose and method of a redox titration using acidified KMnO4', 1),
   ('prac-redox-titr', 'Explain why KMnO4 acts as its own indicator (purple -> colourless, end point = faint pink)', 2),
   ('prac-redox-titr', 'Balance the half-equation: MnO4- + 8H+ + 5e- -> Mn2+ + 4H2O', 3),
@@ -93,7 +93,7 @@ INSERT INTO chemistry_checklist_items (section_id, text, sort_order) VALUES
   ('prac-redox-titr', 'Explain why the iron(II) salt should not be heated (to prevent oxidation to Fe3+)', 5);
 
 -- ─── FLASHCARD TOPICS ────────────────────────────────────────
-INSERT INTO chemistry_flashcard_topics (id, label, color, unit, sort_order) VALUES
+INSERT OR IGNORE INTO chemistry_flashcard_topics (id, label, color, unit, sort_order) VALUES
   ('chem-u6a-redox-fund', 'R3.2 Oxidation & Reduction', '#DC2626', '6a', 29),
   ('chem-u6a-half-pred', 'R3.2 Half-Equations & Predictions', '#F97316', '6a', 30),
   ('chem-u6a-transition', 'S3.1 Transition Elements', '#2563EB', '6a', 31),
@@ -104,7 +104,7 @@ INSERT INTO chemistry_flashcard_topics (id, label, color, unit, sort_order) VALU
 -- ─── FLASHCARDS ──────────────────────────────────────────────
 
 -- R3.2 Oxidation & Reduction
-INSERT INTO chemistry_flashcards (topic_id, term, definition, formula, sort_order) VALUES
+INSERT OR IGNORE INTO chemistry_flashcards (topic_id, term, definition, formula, sort_order) VALUES
   ('chem-u6a-redox-fund', 'Define oxidation (4 ways)', 'Loss of electrons; gain of oxygen; loss of hydrogen; increase in oxidation state.', NULL, 1),
   ('chem-u6a-redox-fund', 'Define reduction (4 ways)', 'Gain of electrons; loss of oxygen; gain of hydrogen; decrease in oxidation state.', NULL, 2),
   ('chem-u6a-redox-fund', 'What is an oxidising agent?', 'A species that is itself reduced (gains electrons), causing another species to be oxidised.', NULL, 3),
@@ -113,14 +113,14 @@ INSERT INTO chemistry_flashcards (topic_id, term, definition, formula, sort_orde
   ('chem-u6a-redox-fund', 'Rules for assigning oxidation states', 'Elements = 0; monatomic ions = charge; O = -2 (except peroxides -1); H = +1 (except metal hydrides -1); sum in compound = 0; sum in ion = ion charge.', NULL, 6);
 
 -- R3.2 Half-Equations & Predictions
-INSERT INTO chemistry_flashcards (topic_id, term, definition, formula, sort_order) VALUES
+INSERT OR IGNORE INTO chemistry_flashcards (topic_id, term, definition, formula, sort_order) VALUES
   ('chem-u6a-half-pred', 'What is a half-equation?', 'An equation showing one half of a redox reaction — either the oxidation or the reduction process, with electrons explicitly shown.', NULL, 1),
   ('chem-u6a-half-pred', 'How to balance half-equations in acidic solution?', '1) Balance atoms other than O and H. 2) Balance O with H2O. 3) Balance H with H+. 4) Balance charge with e-.', NULL, 2),
   ('chem-u6a-half-pred', 'Reducing strength trend: Group 1 metals', 'Increases down the group (lower ionisation energy -> easier electron loss).', NULL, 3),
   ('chem-u6a-half-pred', 'Oxidising strength trend: Group 17', 'Increases up the group (higher electronegativity -> more readily gains electrons). F2 is strongest.', NULL, 4);
 
 -- S3.1 Transition Elements
-INSERT INTO chemistry_flashcards (topic_id, term, definition, formula, sort_order) VALUES
+INSERT OR IGNORE INTO chemistry_flashcards (topic_id, term, definition, formula, sort_order) VALUES
   ('chem-u6a-transition', 'IUPAC definition of transition element', 'An element whose atom has an incomplete d sub-shell, or which gives rise to cations with an incomplete d sub-shell.', NULL, 1),
   ('chem-u6a-transition', 'Why are Sc and Zn not transition elements?', 'Sc3+ has 0 d-electrons (empty d sub-shell); Zn2+ has 10 d-electrons (full d sub-shell). Neither has an incomplete d sub-shell in its common ion.', NULL, 2),
   ('chem-u6a-transition', 'Electron config rule for d-block ions?', 'Remove 4s electrons before 3d electrons. E.g. Fe = [Ar] 4s2 3d6, Fe2+ = [Ar] 3d6.', NULL, 3),
@@ -130,7 +130,7 @@ INSERT INTO chemistry_flashcards (topic_id, term, definition, formula, sort_orde
   ('chem-u6a-transition', 'What causes paramagnetism?', 'Unpaired d-electrons. More unpaired electrons = stronger paramagnetism.', NULL, 7);
 
 -- R3.4 Lewis Acids & Complex Ions
-INSERT INTO chemistry_flashcards (topic_id, term, definition, formula, sort_order) VALUES
+INSERT OR IGNORE INTO chemistry_flashcards (topic_id, term, definition, formula, sort_order) VALUES
   ('chem-u6a-lewis', 'What is a Lewis acid?', 'An electron-pair acceptor.', NULL, 1),
   ('chem-u6a-lewis', 'What is a Lewis base?', 'An electron-pair donor.', NULL, 2),
   ('chem-u6a-lewis', 'What is a ligand?', 'An ion or molecule with a lone pair that forms a coordination (dative) bond to a central metal ion.', NULL, 3),
@@ -138,7 +138,7 @@ INSERT INTO chemistry_flashcards (topic_id, term, definition, formula, sort_orde
   ('chem-u6a-lewis', 'Link: nucleophile & electrophile to Lewis theory', 'Nucleophile = Lewis base (electron-pair donor); Electrophile = Lewis acid (electron-pair acceptor).', NULL, 5);
 
 -- S3.1.10 Colour of Complexes
-INSERT INTO chemistry_flashcards (topic_id, term, definition, formula, sort_order) VALUES
+INSERT OR IGNORE INTO chemistry_flashcards (topic_id, term, definition, formula, sort_order) VALUES
   ('chem-u6a-colour', 'Why are transition-metal complexes coloured?', 'd-orbitals split into two energy levels in a complex. d-d electron transitions absorb visible light; the complementary colour is observed.', NULL, 1),
   ('chem-u6a-colour', 'What determines which colour is absorbed?', 'delta-E between the split d-orbitals. E = hf and c = f(lambda) link delta-E to wavelength.', NULL, 2),
   ('chem-u6a-colour', 'Why are d0 and d10 complexes colourless?', 'No electrons available for d-d transitions (d0) or no vacancies to promote into (d10).', NULL, 3),
@@ -146,13 +146,13 @@ INSERT INTO chemistry_flashcards (topic_id, term, definition, formula, sort_orde
   ('chem-u6a-colour', 'Colour wheel: complementary of yellow?', 'Violet.', NULL, 5);
 
 -- Practical: Redox Titration
-INSERT INTO chemistry_flashcards (topic_id, term, definition, formula, sort_order) VALUES
+INSERT OR IGNORE INTO chemistry_flashcards (topic_id, term, definition, formula, sort_order) VALUES
   ('chem-u6a-titration', 'KMnO4 titration endpoint?', 'Faint persistent pink colour (excess MnO4- not reduced). KMnO4 is its own indicator.', NULL, 1),
   ('chem-u6a-titration', 'Balanced half-equation for MnO4- in acid?', 'MnO4- + 8H+ + 5e- -> Mn2+ + 4H2O.', 'MnO4- + 8H+ + 5e- -> Mn2+ + 4H2O', 2),
   ('chem-u6a-titration', 'Mole ratio: MnO4- to Fe2+?', '1 : 5 (MnO4- gains 5e-; each Fe2+ loses 1e-).', NULL, 3);
 
 -- ─── MCQ QUESTIONS ───────────────────────────────────────────
-INSERT INTO chemistry_mcq_questions (id, category, difficulty, unit, question_text, option_a, option_b, option_c, option_d, correct_option, explanation, sort_order) VALUES
+INSERT OR IGNORE INTO chemistry_mcq_questions (id, category, difficulty, unit, question_text, option_a, option_b, option_c, option_d, correct_option, explanation, sort_order) VALUES
   ('chem-u6a-mcq-01', 'R3.2 Oxidation & Reduction', 'SL/HL', '6a',
    'Which statement correctly describes oxidation?',
    'Gain of electrons',
@@ -314,7 +314,7 @@ INSERT INTO chemistry_mcq_questions (id, category, difficulty, unit, question_te
    3, 'x + 2(-2) = +1, so x + (-4) = +1, giving x = +5.', 105);
 
 -- ─── WRITTEN QUESTIONS ───────────────────────────────────────
-INSERT INTO chemistry_written_questions (id, category, difficulty, question_type, unit, marks, question_text, mark_scheme, sort_order) VALUES
+INSERT OR IGNORE INTO chemistry_written_questions (id, category, difficulty, question_type, unit, marks, question_text, mark_scheme, sort_order) VALUES
   ('chem-u6a-wr-01', 'R3.2 Oxidation & Reduction', 'SL/HL', 'short_answer', '6a', 2,
    'Define oxidation and reduction in terms of electron transfer. [2]',
    'Oxidation is the loss of electrons [1]\nReduction is the gain of electrons [1]',

@@ -131,7 +131,7 @@ export default function LandingPage() {
           }}>
             Free revision for{" "}
             <RotatingText
-              texts={["IB Business", "IB History", "IB Economics", "IB Biology", "IB Chemistry", "IB Physics", "IB Sports Sci"]}
+              texts={["IB Business", "IB History", "IB Economics", "IB Biology", "IB Chemistry", "IB Physics", "IB Sports Sci", "IB Spanish"]}
               rotationInterval={2000}
               staggerDuration={0.02}
               staggerFrom="first"
@@ -145,6 +145,14 @@ export default function LandingPage() {
             logoText="IB Subjects"
             items={[
               {
+                label: "Language Acquisition",
+                bgColor: "#f0ece3",
+                textColor: "#1a1a1a",
+                links: [
+                  { label: "Spanish", href: "/spanish/checklist", ariaLabel: "Spanish revision" },
+                ],
+              },
+              {
                 label: "Individuals & Societies",
                 bgColor: "#e8eff3",
                 textColor: "#1a1a1a",
@@ -152,6 +160,7 @@ export default function LandingPage() {
                   { label: "Business", href: "/business/checklist", ariaLabel: "Business revision" },
                   { label: "History", href: "/history/specimen", ariaLabel: "History revision" },
                   { label: "Economics", href: "/economics/checklist", ariaLabel: "Economics revision" },
+                  { label: "ESS", href: "/ess/checklist", ariaLabel: "ESS revision" },
                 ],
               },
               {

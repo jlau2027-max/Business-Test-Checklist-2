@@ -13,7 +13,7 @@ INSERT OR REPLACE INTO chemistry_category_colors (category, color) VALUES
   ('R2.2 Arrhenius Equation (AHL)', '#6366F1');
 
 -- ─── CHECKLIST SECTIONS ──────────────────────────────────────
-INSERT INTO chemistry_checklist_sections (id, title, color, unit, sort_order) VALUES
+INSERT OR IGNORE INTO chemistry_checklist_sections (id, title, color, unit, sort_order) VALUES
   ('r2-2-rates-collision', 'R2.2.1–R2.2.3 — Rates & Collision Theory', '#2563EB', '3', 13),
   ('r2-2-ea-mb', 'R2.2.4–R2.2.5 — Activation Energy, M–B Distributions & Catalysts', '#7C3AED', '3', 14),
   ('r2-2-mechanisms', 'R2.2.6–R2.2.8 — Mechanisms & Molecularity (AHL)', '#D97706', '3', 15),
@@ -23,7 +23,7 @@ INSERT INTO chemistry_checklist_sections (id, title, color, unit, sort_order) VA
 -- ─── CHECKLIST ITEMS ─────────────────────────────────────────
 
 -- R2.2.1–R2.2.3 Rates & Collision Theory
-INSERT INTO chemistry_checklist_items (section_id, text, sort_order) VALUES
+INSERT OR IGNORE INTO chemistry_checklist_items (section_id, text, sort_order) VALUES
   ('r2-2-rates-collision', 'Define rate of reaction as the change in concentration of reactant/product per unit time', 1),
   ('r2-2-rates-collision', 'State the units of rate of reaction (mol dm⁻³ s⁻¹)', 2),
   ('r2-2-rates-collision', 'Explain how to measure rate from a concentration–time graph (gradient/tangent)', 3),
@@ -40,7 +40,7 @@ INSERT INTO chemistry_checklist_items (section_id, text, sort_order) VALUES
   ('r2-2-rates-collision', 'Identify appropriate independent, dependent, and controlled variables for a kinetics investigation', 14);
 
 -- R2.2.4–R2.2.5 Activation Energy, M–B Distributions & Catalysts
-INSERT INTO chemistry_checklist_items (section_id, text, sort_order) VALUES
+INSERT OR IGNORE INTO chemistry_checklist_items (section_id, text, sort_order) VALUES
   ('r2-2-ea-mb', 'Define activation energy (Ea) as the minimum energy colliding particles need for a successful collision', 1),
   ('r2-2-ea-mb', 'Sketch a Maxwell–Boltzmann distribution curve and label: most probable energy, average energy, Ea', 2),
   ('r2-2-ea-mb', 'State that no particles have zero kinetic energy and the curve never touches the x-axis on the right', 3),
@@ -55,7 +55,7 @@ INSERT INTO chemistry_checklist_items (section_id, text, sort_order) VALUES
   ('r2-2-ea-mb', 'Distinguish between homogeneous catalysts (same phase) and heterogeneous catalysts (different phase)', 12);
 
 -- R2.2.6–R2.2.8 Mechanisms & Molecularity (AHL)
-INSERT INTO chemistry_checklist_items (section_id, text, sort_order) VALUES
+INSERT OR IGNORE INTO chemistry_checklist_items (section_id, text, sort_order) VALUES
   ('r2-2-mechanisms', 'Define reaction mechanism as the series of elementary steps making up an overall reaction', 1),
   ('r2-2-mechanisms', 'Define the rate-determining step (RDS) as the slowest elementary step', 2),
   ('r2-2-mechanisms', 'Distinguish between an intermediate (can be isolated, appears in mechanism, cancels out) and a transition state (cannot be isolated, highest energy point on profile)', 3),
@@ -66,7 +66,7 @@ INSERT INTO chemistry_checklist_items (section_id, text, sort_order) VALUES
   ('r2-2-mechanisms', 'Construct energy profiles for multi-step reactions showing separate Ea for each step and the RDS as the highest barrier', 8);
 
 -- R2.2.9–R2.2.11 Rate Equations, Order & Rate Constant (AHL)
-INSERT INTO chemistry_checklist_items (section_id, text, sort_order) VALUES
+INSERT OR IGNORE INTO chemistry_checklist_items (section_id, text, sort_order) VALUES
   ('r2-2-rate-equations', 'State that rate equations can only be determined experimentally (not from stoichiometry)', 1),
   ('r2-2-rate-equations', 'Write rate equations in the form: rate = k[A]^m[B]^n', 2),
   ('r2-2-rate-equations', 'Define order of reaction with respect to a reactant (exponent in the rate equation)', 3),
@@ -82,7 +82,7 @@ INSERT INTO chemistry_checklist_items (section_id, text, sort_order) VALUES
   ('r2-2-rate-equations', 'Explain why a reactant absent from the rate equation is not involved in the RDS', 13);
 
 -- R2.2.12–R2.2.13 Arrhenius Equation (AHL)
-INSERT INTO chemistry_checklist_items (section_id, text, sort_order) VALUES
+INSERT OR IGNORE INTO chemistry_checklist_items (section_id, text, sort_order) VALUES
   ('r2-2-arrhenius', 'State the Arrhenius equation: k = Ae^(–Ea/RT)', 1),
   ('r2-2-arrhenius', 'Identify the terms: k = rate constant, A = Arrhenius/frequency factor, Ea = activation energy, R = 8.31 J K⁻¹ mol⁻¹, T = temperature in K', 2),
   ('r2-2-arrhenius', 'Explain qualitatively that as T increases, k increases (exponential relationship)', 3),
@@ -95,7 +95,7 @@ INSERT INTO chemistry_checklist_items (section_id, text, sort_order) VALUES
   ('r2-2-arrhenius', 'Sketch the effect of a catalyst on a ln k vs 1/T plot (parallel line shifted up, same gradient if Ea similar, or different gradient if Ea lower)', 10);
 
 -- ─── FLASHCARD TOPICS ────────────────────────────────────────
-INSERT INTO chemistry_flashcard_topics (id, label, color, unit, sort_order) VALUES
+INSERT OR IGNORE INTO chemistry_flashcard_topics (id, label, color, unit, sort_order) VALUES
   ('chem-u3-rates', 'R2.2 Rates & Collision Theory', '#2563EB', '3', 12),
   ('chem-u3-ea-mb', 'R2.2 Activation Energy & M–B Distributions', '#7C3AED', '3', 13),
   ('chem-u3-catalysts', 'R2.2 Catalysts & Energy Profiles', '#059669', '3', 14),
@@ -106,7 +106,7 @@ INSERT INTO chemistry_flashcard_topics (id, label, color, unit, sort_order) VALU
 -- ─── FLASHCARDS ──────────────────────────────────────────────
 
 -- Rates & Collision Theory
-INSERT INTO chemistry_flashcards (topic_id, term, definition, formula, sort_order) VALUES
+INSERT OR IGNORE INTO chemistry_flashcards (topic_id, term, definition, formula, sort_order) VALUES
   ('chem-u3-rates', 'Rate of reaction', 'The change in concentration of a reactant or product per unit time. Units: mol dm⁻³ s⁻¹.', NULL, 1),
   ('chem-u3-rates', 'Two conditions for a successful collision', '1) Sufficient energy (≥ Ea). 2) Correct orientation (proper collision geometry).', NULL, 2),
   ('chem-u3-rates', '5 factors affecting rate', 'Concentration, pressure (gases), surface area, temperature, catalyst.', NULL, 3),
@@ -115,28 +115,28 @@ INSERT INTO chemistry_flashcards (topic_id, term, definition, formula, sort_orde
   ('chem-u3-rates', 'Initial rate (how to find)', 'Draw a tangent to the concentration–time curve at t = 0. The gradient of this tangent = initial rate.', NULL, 6);
 
 -- Activation Energy & M-B Distributions
-INSERT INTO chemistry_flashcards (topic_id, term, definition, formula, sort_order) VALUES
+INSERT OR IGNORE INTO chemistry_flashcards (topic_id, term, definition, formula, sort_order) VALUES
   ('chem-u3-ea-mb', 'Activation energy (Ea)', 'The minimum energy that colliding particles need for a successful collision leading to a reaction.', NULL, 1),
   ('chem-u3-ea-mb', 'Maxwell–Boltzmann distribution', 'A graph showing the distribution of kinetic energies among particles in a sample. Area under curve = total number of particles.', NULL, 2),
   ('chem-u3-ea-mb', 'Effect of ↑ temperature on M–B curve', 'Peak shifts right and lowers; curve broadens. Same total area. Greater fraction of particles exceed Ea → faster rate.', NULL, 3),
   ('chem-u3-ea-mb', 'Effect of catalyst on M–B curve', 'The curve stays the same, but the Ea line shifts left (lower Ea). More particles now exceed the new, lower Ea.', NULL, 4);
 
 -- Catalysts & Energy Profiles
-INSERT INTO chemistry_flashcards (topic_id, term, definition, formula, sort_order) VALUES
+INSERT OR IGNORE INTO chemistry_flashcards (topic_id, term, definition, formula, sort_order) VALUES
   ('chem-u3-catalysts', 'Catalyst', 'A substance that increases the rate of reaction by providing an alternative pathway with lower Ea. It is not consumed overall.', NULL, 1),
   ('chem-u3-catalysts', 'Exothermic energy profile', 'Reactants higher than products. ΔH is negative. Ea measured from reactant level to peak (transition state).', NULL, 2),
   ('chem-u3-catalysts', 'Endothermic energy profile', 'Products higher than reactants. ΔH is positive. Ea measured from reactant level to peak.', NULL, 3),
   ('chem-u3-catalysts', 'Homogeneous vs heterogeneous catalyst', 'Homogeneous: same phase as reactants. Heterogeneous: different phase from reactants.', NULL, 4);
 
 -- Mechanisms & Molecularity (AHL)
-INSERT INTO chemistry_flashcards (topic_id, term, definition, formula, sort_order) VALUES
+INSERT OR IGNORE INTO chemistry_flashcards (topic_id, term, definition, formula, sort_order) VALUES
   ('chem-u3-mechanisms', '(AHL) Reaction mechanism', 'The series of elementary steps by which a chemical reaction occurs. Steps must sum to the overall equation.', NULL, 1),
   ('chem-u3-mechanisms', '(AHL) Rate-determining step (RDS)', 'The slowest elementary step in a mechanism. It controls the overall rate of reaction.', NULL, 2),
   ('chem-u3-mechanisms', '(AHL) Intermediate vs transition state', 'Intermediate: formed in one step, consumed in another, can be isolated. Transition state: highest energy point, cannot be isolated.', NULL, 3),
   ('chem-u3-mechanisms', '(AHL) Molecularity', 'The number of reacting particles in an elementary step. Unimolecular (1), bimolecular (2), termolecular (3, very rare).', NULL, 4);
 
 -- Rate Equations & Order (AHL)
-INSERT INTO chemistry_flashcards (topic_id, term, definition, formula, sort_order) VALUES
+INSERT OR IGNORE INTO chemistry_flashcards (topic_id, term, definition, formula, sort_order) VALUES
   ('chem-u3-rate-eqns', '(AHL) Order of reaction (wrt a reactant)', 'The exponent to which the concentration of that reactant is raised in the experimentally determined rate equation.', NULL, 1),
   ('chem-u3-rate-eqns', '(AHL) Overall order', 'The sum of the individual orders with respect to each reactant in the rate equation.', NULL, 2),
   ('chem-u3-rate-eqns', '(AHL) Zero order: [A] vs t graph', 'Straight line with negative gradient. Rate is constant regardless of [A].', NULL, 3),
@@ -147,14 +147,14 @@ INSERT INTO chemistry_flashcards (topic_id, term, definition, formula, sort_orde
   ('chem-u3-rate-eqns', '(AHL) Why can''t rate equations be deduced from stoichiometry?', 'Rate equations depend on the mechanism (specifically the RDS), not the overall balanced equation. They must be determined experimentally.', NULL, 8);
 
 -- Arrhenius Equation (AHL)
-INSERT INTO chemistry_flashcards (topic_id, term, definition, formula, sort_order) VALUES
+INSERT OR IGNORE INTO chemistry_flashcards (topic_id, term, definition, formula, sort_order) VALUES
   ('chem-u3-arrhenius', '(AHL) Arrhenius equation', 'k = Ae^(–Ea/RT). k = rate constant, A = frequency factor, Ea = activation energy, R = 8.31 J K⁻¹ mol⁻¹, T = temperature (K).', 'k = Ae^(-Ea/RT)', 1),
   ('chem-u3-arrhenius', '(AHL) Linear form of Arrhenius', 'ln k = –Ea/R × (1/T) + ln A. Plot ln k vs 1/T: gradient = –Ea/R, y-intercept = ln A.', 'ln k = -Ea/R × (1/T) + ln A', 2),
   ('chem-u3-arrhenius', '(AHL) Arrhenius factor (A)', 'The pre-exponential factor. Represents the frequency of collisions with proper orientation. Same units as k.', NULL, 3),
   ('chem-u3-arrhenius', '(AHL) How to find Ea from two (k, T) pairs', 'Use ln(k₂/k₁) = (Ea/R)(1/T₁ – 1/T₂) and solve for Ea.', 'ln(k₂/k₁) = (Ea/R)(1/T₁ - 1/T₂)', 4);
 
 -- ─── MCQ QUESTIONS ───────────────────────────────────────────
-INSERT INTO chemistry_mcq_questions (id, category, difficulty, unit, question_text, option_a, option_b, option_c, option_d, correct_option, explanation, sort_order) VALUES
+INSERT OR IGNORE INTO chemistry_mcq_questions (id, category, difficulty, unit, question_text, option_a, option_b, option_c, option_d, correct_option, explanation, sort_order) VALUES
   ('chem-u3-mcq-01', 'R2.2 Rates & Collision Theory', 'SL/HL', '3',
    'Which correctly defines the rate of a chemical reaction?',
    'The time taken for a reaction to reach completion',
@@ -316,7 +316,7 @@ INSERT INTO chemistry_mcq_questions (id, category, difficulty, unit, question_te
    2, 'Two (k, T) pairs allow calculation of Ea using ln(k₂/k₁) = (Ea/R)(1/T₁ – 1/T₂).', 55);
 
 -- ─── WRITTEN QUESTIONS ───────────────────────────────────────
-INSERT INTO chemistry_written_questions (id, category, difficulty, question_type, unit, marks, question_text, mark_scheme, sort_order) VALUES
+INSERT OR IGNORE INTO chemistry_written_questions (id, category, difficulty, question_type, unit, marks, question_text, mark_scheme, sort_order) VALUES
   ('chem-u3-wr-01', 'R2.2 Rates & Collision Theory', 'SL/HL', 'short_answer', '3', 8,
    '(a) Define the term ''rate of reaction''. [1]\n(b) The reaction Mg(s) + 2HCl(aq) → MgCl₂(aq) + H₂(g) was monitored by measuring the volume of hydrogen gas produced over time. Sketch a graph of volume of H₂ (y-axis) against time (x-axis). [2]\n(c) Describe how you would determine the initial rate of this reaction from your graph. [2]\n(d) Explain, using collision theory, why increasing the concentration of HCl increases the rate of this reaction. [3]',
    '1(a) Rate of reaction is the change in concentration of a reactant/product per unit time ✓ [1]\n1(b) Curve starts steep at origin and levels off to a plateau ✓; curve is smooth (not linear) with decreasing gradient ✓ [2]\n1(c) Draw a tangent to the curve at t = 0 ✓; calculate the gradient (ΔV/Δt) of this tangent ✓ [2]\n1(d) Higher concentration means more particles per unit volume ✓; this leads to a greater frequency of collisions ✓; therefore more successful collisions (with E ≥ Ea and correct orientation) per unit time, increasing the rate ✓ [3]',

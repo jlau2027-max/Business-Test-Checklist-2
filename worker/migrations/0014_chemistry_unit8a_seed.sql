@@ -15,7 +15,7 @@ INSERT OR REPLACE INTO chemistry_category_colors (category, color) VALUES
   ('R1.4.4/R2.3.7 Linking dG and K (AHL)', '#E11D48');
 
 -- ─── CHECKLIST SECTIONS ──────────────────────────────────────
-INSERT INTO chemistry_checklist_sections (id, title, color, unit, sort_order) VALUES
+INSERT OR IGNORE INTO chemistry_checklist_sections (id, title, color, unit, sort_order) VALUES
   ('r3-2-13-spont', 'R3.2.13–14 — Spontaneity & Standard Electrode Potentials', '#DC2626', '8a', 45),
   ('r1-4-1-entropy', 'R1.4.1 — Entropy', '#7C3AED', '8a', 46),
   ('r1-4-2-gibbs', 'R1.4.2–3 — Gibbs Energy & Spontaneity', '#2563EB', '8a', 47),
@@ -28,7 +28,7 @@ INSERT INTO chemistry_checklist_sections (id, title, color, unit, sort_order) VA
 -- ─── CHECKLIST ITEMS ─────────────────────────────────────────
 
 -- R3.2.13-14 Spontaneity & Standard Electrode Potentials
-INSERT INTO chemistry_checklist_items (section_id, text, sort_order) VALUES
+INSERT OR IGNORE INTO chemistry_checklist_items (section_id, text, sort_order) VALUES
   ('r3-2-13-spont', 'Calculate standard cell potential E(cell) from standard electrode potentials using the Data Booklet (Table 19)', 1),
   ('r3-2-13-spont', 'State that a positive E(cell) indicates a spontaneous reaction', 2),
   ('r3-2-13-spont', 'Predict whether a reaction is spontaneous in the forward or reverse direction from E data', 3),
@@ -37,7 +37,7 @@ INSERT INTO chemistry_checklist_items (section_id, text, sort_order) VALUES
   ('r3-2-13-spont', 'Calculate dG from E data, converting units correctly (J to kJ)', 6);
 
 -- R1.4.1 Entropy
-INSERT INTO chemistry_checklist_items (section_id, text, sort_order) VALUES
+INSERT OR IGNORE INTO chemistry_checklist_items (section_id, text, sort_order) VALUES
   ('r1-4-1-entropy', 'Define entropy (S) as a measure of the dispersal or distribution of matter and/or energy in a system', 1),
   ('r1-4-1-entropy', 'State the entropy ordering: S(gas) > S(liquid) > S(solid) under the same conditions', 2),
   ('r1-4-1-entropy', 'Predict whether a physical or chemical change increases or decreases entropy (e.g. change of state, dissolving, change in number of gas moles)', 3),
@@ -45,7 +45,7 @@ INSERT INTO chemistry_checklist_items (section_id, text, sort_order) VALUES
   ('r1-4-1-entropy', 'Understand the significance of zero entropy (perfect crystal at 0 K, Third Law of Thermodynamics)', 5);
 
 -- R1.4.2-3 Gibbs Energy & Spontaneity
-INSERT INTO chemistry_checklist_items (section_id, text, sort_order) VALUES
+INSERT OR IGNORE INTO chemistry_checklist_items (section_id, text, sort_order) VALUES
   ('r1-4-2-gibbs', 'State and use the equation dG = dH - TdS to calculate unknown values', 1),
   ('r1-4-2-gibbs', 'Convert units correctly (especially dS in J/K/mol vs dH in kJ/mol)', 2),
   ('r1-4-2-gibbs', 'State that a process is spontaneous when dG < 0, non-spontaneous when dG > 0, and at equilibrium when dG = 0', 3),
@@ -54,7 +54,7 @@ INSERT INTO chemistry_checklist_items (section_id, text, sort_order) VALUES
   ('r1-4-2-gibbs', 'Determine the temperature at which a reaction becomes spontaneous (set dG = 0, solve T = dH/dS)', 6);
 
 -- R2.3.1/4 Dynamic Equilibrium & Le Chatelier's Principle
-INSERT INTO chemistry_checklist_items (section_id, text, sort_order) VALUES
+INSERT OR IGNORE INTO chemistry_checklist_items (section_id, text, sort_order) VALUES
   ('r2-3-1-equil', 'Define dynamic equilibrium: closed system, forward and reverse rates equal, no net change in macroscopic properties', 1),
   ('r2-3-1-equil', 'List the five key characteristics of dynamic equilibrium', 2),
   ('r2-3-1-equil', 'Explain why a closed system is required for equilibrium', 3),
@@ -65,7 +65,7 @@ INSERT INTO chemistry_checklist_items (section_id, text, sort_order) VALUES
   ('r2-3-1-equil', 'State that a catalyst has no effect on the position of equilibrium or the value of K', 8);
 
 -- R2.3.2-3 Equilibrium Constant Kc
-INSERT INTO chemistry_checklist_items (section_id, text, sort_order) VALUES
+INSERT OR IGNORE INTO chemistry_checklist_items (section_id, text, sort_order) VALUES
   ('r2-3-2-kc', 'Write equilibrium constant expressions (Kc) from balanced equations for homogeneous reactions', 1),
   ('r2-3-2-kc', 'Explain why solids and pure liquids are excluded from Kc expressions in heterogeneous equilibria', 2),
   ('r2-3-2-kc', 'Interpret the magnitude of Kc: large K = products favoured; small K = reactants favoured', 3),
@@ -75,20 +75,20 @@ INSERT INTO chemistry_checklist_items (section_id, text, sort_order) VALUES
   ('r2-3-2-kc', 'Deduce units for Kc from the expression', 7);
 
 -- R2.3.5 Reaction Quotient Q (AHL)
-INSERT INTO chemistry_checklist_items (section_id, text, sort_order) VALUES
+INSERT OR IGNORE INTO chemistry_checklist_items (section_id, text, sort_order) VALUES
   ('r2-3-5-q', 'Define Q and explain how it differs from K (Q uses non-equilibrium concentrations)', 1),
   ('r2-3-5-q', 'Calculate Q from given concentrations', 2),
   ('r2-3-5-q', 'Predict the direction of reaction: Q < K -> forward; Q > K -> reverse; Q = K -> at equilibrium', 3);
 
 -- R2.3.6 ICE Tables (AHL)
-INSERT INTO chemistry_checklist_items (section_id, text, sort_order) VALUES
+INSERT OR IGNORE INTO chemistry_checklist_items (section_id, text, sort_order) VALUES
   ('r2-3-6-ice', 'Set up an ICE table (Initial, Change, Equilibrium) for a given reaction and initial conditions', 1),
   ('r2-3-6-ice', 'Solve for equilibrium concentrations given Kc and initial amounts', 2),
   ('r2-3-6-ice', 'Calculate Kc (value and units) given equilibrium or initial data', 3),
   ('r2-3-6-ice', 'Correctly convert between moles and concentration using volume', 4);
 
 -- R1.4.4/R2.3.7 Linking dG and K (AHL)
-INSERT INTO chemistry_checklist_items (section_id, text, sort_order) VALUES
+INSERT OR IGNORE INTO chemistry_checklist_items (section_id, text, sort_order) VALUES
   ('r1-4-4-dg-k', 'State and use dG = dG_standard + RT ln Q', 1),
   ('r1-4-4-dg-k', 'Derive and use dG_standard = -RT ln K (at equilibrium, dG = 0, Q = K)', 2),
   ('r1-4-4-dg-k', 'Explain that as a reaction approaches equilibrium, dG becomes less negative and reaches zero', 3),
@@ -96,7 +96,7 @@ INSERT INTO chemistry_checklist_items (section_id, text, sort_order) VALUES
   ('r1-4-4-dg-k', 'Link negative dG_standard to K > 1 (products favoured) and positive dG_standard to K < 1 (reactants favoured)', 5);
 
 -- ─── FLASHCARD TOPICS ────────────────────────────────────────
-INSERT INTO chemistry_flashcard_topics (id, label, color, unit, sort_order) VALUES
+INSERT OR IGNORE INTO chemistry_flashcard_topics (id, label, color, unit, sort_order) VALUES
   ('chem-u8a-key-defs', 'Unit 8a — Key Definitions', '#7C3AED', '8a', 37),
   ('chem-u8a-key-eqns', 'Unit 8a — Key Equations & Relationships', '#2563EB', '8a', 38),
   ('chem-u8a-spont-cond', 'Unit 8a — Spontaneity Conditions', '#DC2626', '8a', 39);
@@ -104,7 +104,7 @@ INSERT INTO chemistry_flashcard_topics (id, label, color, unit, sort_order) VALU
 -- ─── FLASHCARDS ──────────────────────────────────────────────
 
 -- Key Definitions (10 cards)
-INSERT INTO chemistry_flashcards (topic_id, term, definition, formula, sort_order) VALUES
+INSERT OR IGNORE INTO chemistry_flashcards (topic_id, term, definition, formula, sort_order) VALUES
   ('chem-u8a-key-defs', 'What is dynamic equilibrium?', 'A state in a closed system where the rate of the forward reaction equals the rate of the reverse reaction; no net change in concentrations of reactants and products.', NULL, 1),
   ('chem-u8a-key-defs', 'What is entropy (S)?', 'A measure of the dispersal or distribution of matter and/or energy in a system. Related to the number of microstates.', NULL, 2),
   ('chem-u8a-key-defs', 'What is Gibbs energy change (dG)?', 'The energy from a chemical reaction that can be used to do non-mechanical work. dG = dH - TdS.', NULL, 3),
@@ -117,7 +117,7 @@ INSERT INTO chemistry_flashcards (topic_id, term, definition, formula, sort_orde
   ('chem-u8a-key-defs', 'What are macroscopic properties?', 'Observable properties such as pressure, volume, density, and colour that remain constant at equilibrium.', NULL, 10);
 
 -- Key Equations & Relationships (17 cards)
-INSERT INTO chemistry_flashcards (topic_id, term, definition, formula, sort_order) VALUES
+INSERT OR IGNORE INTO chemistry_flashcards (topic_id, term, definition, formula, sort_order) VALUES
   ('chem-u8a-key-eqns', 'Gibbs energy equation', 'dG_standard = dH_standard - TdS_standard', 'dG = dH - TdS', 1),
   ('chem-u8a-key-eqns', 'Gibbs energy from electrode potential', 'dG_standard = -nFE_standard(cell), where n = moles of electrons transferred, F = 9.65 x 10^4 C/mol', 'dG = -nFE', 2),
   ('chem-u8a-key-eqns', 'dG and Q relationship', 'dG = dG_standard + RT ln Q', 'dG = dG_std + RT ln Q', 3),
@@ -137,14 +137,14 @@ INSERT INTO chemistry_flashcards (topic_id, term, definition, formula, sort_orde
   ('chem-u8a-key-eqns', 'dG_standard > 0 means K is...', 'Less than 1 (reactants favoured)', NULL, 17);
 
 -- Spontaneity Conditions (4 cards)
-INSERT INTO chemistry_flashcards (topic_id, term, definition, formula, sort_order) VALUES
+INSERT OR IGNORE INTO chemistry_flashcards (topic_id, term, definition, formula, sort_order) VALUES
   ('chem-u8a-spont-cond', 'dH negative (exo) and dS positive (increase): spontaneity?', 'dG is always negative -> spontaneous at ALL temperatures.', NULL, 1),
   ('chem-u8a-spont-cond', 'dH negative (exo) and dS negative (decrease): spontaneity?', 'dG is negative at low T, positive at high T -> spontaneous at LOW temperatures only.', NULL, 2),
   ('chem-u8a-spont-cond', 'dH positive (endo) and dS positive (increase): spontaneity?', 'dG is positive at low T, negative at high T -> spontaneous at HIGH temperatures only.', NULL, 3),
   ('chem-u8a-spont-cond', 'dH positive (endo) and dS negative (decrease): spontaneity?', 'dG is always positive -> NEVER spontaneous at any temperature.', NULL, 4);
 
 -- ─── MCQ QUESTIONS ───────────────────────────────────────────
-INSERT INTO chemistry_mcq_questions (id, category, difficulty, unit, question_text, option_a, option_b, option_c, option_d, correct_option, explanation, sort_order) VALUES
+INSERT OR IGNORE INTO chemistry_mcq_questions (id, category, difficulty, unit, question_text, option_a, option_b, option_c, option_d, correct_option, explanation, sort_order) VALUES
   ('chem-u8a-mcq-01', 'R3.2.13-14 Spontaneity & Electrode Potentials', 'HL', '8a',
    'What must be true for a redox reaction to be spontaneous under standard conditions?',
    'E(cell) < 0 and dG < 0',
@@ -266,7 +266,7 @@ INSERT INTO chemistry_mcq_questions (id, category, difficulty, unit, question_te
    1, 'Moles of A at eq = 5.00 - 0.82 = 4.18 mol. [A] = 4.18/0.500 = 8.36 mol/dm3.', 140);
 
 -- ─── WRITTEN QUESTIONS ───────────────────────────────────────
-INSERT INTO chemistry_written_questions (id, category, difficulty, question_type, unit, marks, question_text, mark_scheme, sort_order) VALUES
+INSERT OR IGNORE INTO chemistry_written_questions (id, category, difficulty, question_type, unit, marks, question_text, mark_scheme, sort_order) VALUES
   ('chem-u8a-wr-01', 'R2.3.1/4 Dynamic Equilibrium & Le Chatelier''s', 'SL/HL', 'short_answer', '8a', 4,
    'Define the term dynamic equilibrium and state three characteristics of a system at dynamic equilibrium. [4]',
    'Dynamic equilibrium is a state in a closed system where the rate of the forward reaction equals the rate of the reverse reaction [1]\nMacroscopic properties (e.g. concentration, colour, pressure) remain constant [1]\nBoth forward and reverse reactions continue to occur (it is dynamic, not static) [1]\nRequires a closed system (no matter enters or leaves) [1]',

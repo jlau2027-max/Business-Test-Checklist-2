@@ -463,3 +463,5 @@ export const chemistryApi = createSubjectApi("chemistry");
 export const physicsApi = createSubjectApi("physics");
 export const sportsApi = createSubjectApi("sports-science");
 export const economicsApi = createSubjectApi("economics");
+export const essApi = createSubjectApi("ess");
+export const spanishApi = createSubjectApi("spanish");

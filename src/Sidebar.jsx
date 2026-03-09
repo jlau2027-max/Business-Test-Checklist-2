@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { Button } from "@heroui/react";
 import { useAuth } from "./AuthContext.jsx";
-import { House, Briefcase, Clock, TrendingUp, Leaf, FlaskConical, Atom, Activity, LayoutGrid, ChevronsLeft, ChevronsRight } from "lucide-react";
+import { House, Briefcase, Clock, TrendingUp, Leaf, FlaskConical, Atom, Activity, Languages, LayoutGrid, ChevronsLeft, ChevronsRight } from "lucide-react";
 
 const EXPANDED = 240;
 const COLLAPSED = 56;
@@ -11,6 +11,12 @@ const SECTIONS = [
   {
     items: [
       { label: "Home", href: "/", subject: "home", Icon: House, color: "var(--accent)" },
+    ],
+  },
+  {
+    heading: "Group 2",
+    items: [
+      { label: "Spanish", href: "/spanish/checklist", subject: "spanish", Icon: Languages, color: "#D4915C" },
     ],
   },
   {

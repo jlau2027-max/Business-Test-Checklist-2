@@ -13,7 +13,7 @@ INSERT OR REPLACE INTO chemistry_category_colors (category, color) VALUES
   ('S3.2.10-11 1H NMR Spectroscopy', '#0891B2');
 
 -- ─── CHECKLIST SECTIONS ──────────────────────────────────────
-INSERT INTO chemistry_checklist_sections (id, title, color, unit, sort_order) VALUES
+INSERT OR IGNORE INTO chemistry_checklist_sections (id, title, color, unit, sort_order) VALUES
   ('r3-3-1-bond-fiss', 'R3.3.1–2 / R3.4.1/3/4 — Bond Fission, Nucleophiles, Electrophiles & Radicals', '#7C3AED', '9', 53),
   ('s3-2-8-mass-spec', 'S3.2.8 — Mass Spectrometry Fragmentation (AHL)', '#2563EB', '9', 54),
   ('r3-3-2-free-rad', 'R3.3.2–3 — Free Radical Substitution', '#059669', '9', 55),
@@ -24,7 +24,7 @@ INSERT INTO chemistry_checklist_sections (id, title, color, unit, sort_order) VA
 -- ─── CHECKLIST ITEMS ─────────────────────────────────────────
 
 -- Lesson 1 – Bond Fission, Nucleophiles, Electrophiles & Radicals
-INSERT INTO chemistry_checklist_items (section_id, text, sort_order) VALUES
+INSERT OR IGNORE INTO chemistry_checklist_items (section_id, text, sort_order) VALUES
   ('r3-3-1-bond-fiss', 'Define a radical and explain why radicals are highly reactive', 1),
   ('r3-3-1-bond-fiss', 'Represent radicals using dot notation (e.g. •CH₃, •Cl)', 2),
   ('r3-3-1-bond-fiss', 'Distinguish between homolytic and heterolytic fission with equations', 3),
@@ -38,7 +38,7 @@ INSERT INTO chemistry_checklist_items (section_id, text, sort_order) VALUES
   ('r3-3-1-bond-fiss', 'Predict products from given curly arrow mechanisms', 11);
 
 -- Lesson 2 – Mass Spectrometry Fragmentation
-INSERT INTO chemistry_checklist_items (section_id, text, sort_order) VALUES
+INSERT OR IGNORE INTO chemistry_checklist_items (section_id, text, sort_order) VALUES
   ('s3-2-8-mass-spec', 'Explain how a mass spectrometer ionises and fragments organic molecules', 1),
   ('s3-2-8-mass-spec', 'Identify the molecular ion peak (M⁺) as the peak with highest m/z (excluding M+1)', 2),
   ('s3-2-8-mass-spec', 'Explain the M+1 peak (due to ¹³C isotope) and use it to estimate number of carbon atoms', 3),
@@ -50,7 +50,7 @@ INSERT INTO chemistry_checklist_items (section_id, text, sort_order) VALUES
   ('s3-2-8-mass-spec', 'Deduce structural features from a given MS fragmentation pattern', 9);
 
 -- Lesson 3 – Free Radical Substitution
-INSERT INTO chemistry_checklist_items (section_id, text, sort_order) VALUES
+INSERT OR IGNORE INTO chemistry_checklist_items (section_id, text, sort_order) VALUES
   ('r3-3-2-free-rad', 'List three features of a homologous series', 1),
   ('r3-3-2-free-rad', 'Explain the trend in boiling points of alkanes with increasing chain length', 2),
   ('r3-3-2-free-rad', 'Explain why branched alkanes have lower boiling points than straight-chain isomers', 3),
@@ -63,7 +63,7 @@ INSERT INTO chemistry_checklist_items (section_id, text, sort_order) VALUES
   ('r3-3-2-free-rad', 'Apply free radical mechanism to ozone depletion by CFCs', 10);
 
 -- Lesson 4 – Infrared Spectroscopy
-INSERT INTO chemistry_checklist_items (section_id, text, sort_order) VALUES
+INSERT OR IGNORE INTO chemistry_checklist_items (section_id, text, sort_order) VALUES
   ('s3-2-9-ir-spec', 'Explain that IR absorption depends on bond strength and atomic mass', 1),
   ('s3-2-9-ir-spec', 'State that stronger bonds absorb at higher wavenumber (higher frequency)', 2),
   ('s3-2-9-ir-spec', 'Describe the three types of molecular vibration: symmetric stretching, asymmetric stretching, bending', 3),
@@ -77,7 +77,7 @@ INSERT INTO chemistry_checklist_items (section_id, text, sort_order) VALUES
   ('s3-2-9-ir-spec', 'Distinguish between alcohols, aldehydes, ketones, and carboxylic acids using IR spectra', 11);
 
 -- Lesson 5 – Oxidation & Reduction of Alcohols
-INSERT INTO chemistry_checklist_items (section_id, text, sort_order) VALUES
+INSERT OR IGNORE INTO chemistry_checklist_items (section_id, text, sort_order) VALUES
   ('r3-2-9-ox-red', 'Classify alcohols as primary (1°), secondary (2°), or tertiary (3°)', 1),
   ('r3-2-9-ox-red', 'State the oxidising agent: acidified potassium dichromate (H⁺/Cr₂O₇²⁻) – orange to green', 2),
   ('r3-2-9-ox-red', 'Write the oxidation of a 1° alcohol to an aldehyde (distillation, excess alcohol)', 3),
@@ -91,7 +91,7 @@ INSERT INTO chemistry_checklist_items (section_id, text, sort_order) VALUES
   ('r3-2-9-ox-red', 'Combine MS + IR data to identify alcohols and their oxidation products', 11);
 
 -- Lesson 6 – ¹H NMR Spectroscopy
-INSERT INTO chemistry_checklist_items (section_id, text, sort_order) VALUES
+INSERT OR IGNORE INTO chemistry_checklist_items (section_id, text, sort_order) VALUES
   ('s3-2-10-nmr', 'Explain that ¹H NMR detects different chemical environments of hydrogen atoms', 1),
   ('s3-2-10-nmr', 'State that nuclei with odd mass numbers (e.g. ¹H, ¹³C) are NMR active', 2),
   ('s3-2-10-nmr', 'Explain shielding and deshielding in terms of electron density around the nucleus', 3),
@@ -105,7 +105,7 @@ INSERT INTO chemistry_checklist_items (section_id, text, sort_order) VALUES
   ('s3-2-10-nmr', 'Distinguish isomers (e.g. C₄H₈O carbonyl compounds, esters, carboxylic acids) using NMR data', 11);
 
 -- ─── FLASHCARD TOPICS ────────────────────────────────────────
-INSERT INTO chemistry_flashcard_topics (id, label, color, unit, sort_order) VALUES
+INSERT OR IGNORE INTO chemistry_flashcard_topics (id, label, color, unit, sort_order) VALUES
   ('chem-u9-key-defs', 'Key Definitions', '#7C3AED', '9', 40),
   ('chem-u9-analytical', 'Analytical Techniques', '#2563EB', '9', 41),
   ('chem-u9-reactions', 'Organic Reactions', '#059669', '9', 42);
@@ -113,7 +113,7 @@ INSERT INTO chemistry_flashcard_topics (id, label, color, unit, sort_order) VALU
 -- ─── FLASHCARDS ──────────────────────────────────────────────
 
 -- Key Definitions (6 cards)
-INSERT INTO chemistry_flashcards (topic_id, term, definition, formula, sort_order) VALUES
+INSERT OR IGNORE INTO chemistry_flashcards (topic_id, term, definition, formula, sort_order) VALUES
   ('chem-u9-key-defs', 'What is a radical?', 'A molecular entity with an unpaired electron. Highly reactive. Represented with a dot, e.g. •Cl, •CH₃.', NULL, 1),
   ('chem-u9-key-defs', 'What is homolytic fission?', 'Bond breaks so each fragment gets one electron. Produces two radicals. Requires UV light or heat.', NULL, 2),
   ('chem-u9-key-defs', 'What is heterolytic fission?', 'Bond breaks so both bonding electrons go to one fragment. Produces a cation and an anion.', NULL, 3),
@@ -122,7 +122,7 @@ INSERT INTO chemistry_flashcards (topic_id, term, definition, formula, sort_orde
   ('chem-u9-key-defs', 'Full curly arrow vs half curly arrow?', 'Full arrow = movement of an electron pair (heterolytic). Half arrow (fish-hook) = movement of a single electron (homolytic).', NULL, 6);
 
 -- Analytical Techniques (16 cards)
-INSERT INTO chemistry_flashcards (topic_id, term, definition, formula, sort_order) VALUES
+INSERT OR IGNORE INTO chemistry_flashcards (topic_id, term, definition, formula, sort_order) VALUES
   ('chem-u9-analytical', 'What does the molecular ion peak show?', 'The m/z of the intact molecule minus one electron (M⁺•). It gives the relative molecular mass.', NULL, 1),
   ('chem-u9-analytical', 'What is the base peak?', 'The most abundant ion in the mass spectrum (set to 100% relative abundance). It is the most stable fragment.', NULL, 2),
   ('chem-u9-analytical', 'Fragmentation equation?', 'M⁺• → X⁺ (detected) + Y• (radical, not detected). Bonds break at weaker points to form stable cations.', NULL, 3),
@@ -141,7 +141,7 @@ INSERT INTO chemistry_flashcards (topic_id, term, definition, formula, sort_orde
   ('chem-u9-analytical', 'Why use deuterated solvents?', 'CDCl₃, CCl₄ etc. are proton-free, avoiding unwanted NMR absorption signals from the solvent.', NULL, 16);
 
 -- Organic Reactions (9 cards)
-INSERT INTO chemistry_flashcards (topic_id, term, definition, formula, sort_order) VALUES
+INSERT OR IGNORE INTO chemistry_flashcards (topic_id, term, definition, formula, sort_order) VALUES
   ('chem-u9-reactions', 'Conditions for free radical substitution?', 'UV light (or heat) + halogen (e.g. Cl₂ or Br₂). Occurs with alkanes.', NULL, 1),
   ('chem-u9-reactions', 'Three stages of free radical substitution?', '1) Initiation: Cl₂ → 2Cl•. 2) Propagation: Cl•+CH₄→•CH₃+HCl; •CH₃+Cl₂→CH₃Cl+Cl•. 3) Termination: two radicals combine.', NULL, 2),
   ('chem-u9-reactions', 'Why does a mixture of products form?', 'The organic product (e.g. CH₃Cl) can undergo further substitution to form CH₂Cl₂, CHCl₃, CCl₄.', NULL, 3),
@@ -155,7 +155,7 @@ INSERT INTO chemistry_flashcards (topic_id, term, definition, formula, sort_orde
 -- ─── MCQ QUESTIONS ───────────────────────────────────────────
 
 -- Lesson 1: Bond Fission & Reactive Species (SL/HL) — Q1-6
-INSERT INTO chemistry_mcq_questions (id, category, difficulty, unit, question_text, option_a, option_b, option_c, option_d, correct_option, explanation, sort_order) VALUES
+INSERT OR IGNORE INTO chemistry_mcq_questions (id, category, difficulty, unit, question_text, option_a, option_b, option_c, option_d, correct_option, explanation, sort_order) VALUES
   ('chem-u9-mcq-01', 'R3.3.1-2/R3.4.1/3/4 Bond Fission & Reactive Species', 'SL/HL', '9',
    'Which of the following best describes homolytic fission?',
    'Both bonding electrons go to one fragment',
@@ -205,7 +205,7 @@ INSERT INTO chemistry_mcq_questions (id, category, difficulty, unit, question_te
    2, 'Negative charge increases lone pair availability, making OH⁻ a stronger nucleophile than neutral species.', 146);
 
 -- Lesson 2: Mass Spectrometry Fragmentation (HL) — Q7-11
-INSERT INTO chemistry_mcq_questions (id, category, difficulty, unit, question_text, option_a, option_b, option_c, option_d, correct_option, explanation, sort_order) VALUES
+INSERT OR IGNORE INTO chemistry_mcq_questions (id, category, difficulty, unit, question_text, option_a, option_b, option_c, option_d, correct_option, explanation, sort_order) VALUES
   ('chem-u9-mcq-07', 'S3.2.8 Mass Spectrometry Fragmentation', 'HL', '9',
    'In a mass spectrum, the molecular ion peak represents:',
    'The most stable fragment',
@@ -247,7 +247,7 @@ INSERT INTO chemistry_mcq_questions (id, category, difficulty, unit, question_te
    1, 'In ketones, loss of a methyl or alkyl group commonly produces the acylium ion CH₃CO⁺ at m/z = 43.', 151);
 
 -- Lesson 3: Free Radical Substitution (SL/HL) — Q12-15
-INSERT INTO chemistry_mcq_questions (id, category, difficulty, unit, question_text, option_a, option_b, option_c, option_d, correct_option, explanation, sort_order) VALUES
+INSERT OR IGNORE INTO chemistry_mcq_questions (id, category, difficulty, unit, question_text, option_a, option_b, option_c, option_d, correct_option, explanation, sort_order) VALUES
   ('chem-u9-mcq-12', 'R3.3.2-3 Free Radical Substitution', 'SL/HL', '9',
    'Alkanes are generally unreactive because:',
    'They have strong ionic bonds',
@@ -281,7 +281,7 @@ INSERT INTO chemistry_mcq_questions (id, category, difficulty, unit, question_te
    1, 'The initial product CH₃Cl can undergo further substitution to form CH₂Cl₂, CHCl₃, and CCl₄.', 155);
 
 -- Lesson 4: IR Spectroscopy (HL) — Q16-20
-INSERT INTO chemistry_mcq_questions (id, category, difficulty, unit, question_text, option_a, option_b, option_c, option_d, correct_option, explanation, sort_order) VALUES
+INSERT OR IGNORE INTO chemistry_mcq_questions (id, category, difficulty, unit, question_text, option_a, option_b, option_c, option_d, correct_option, explanation, sort_order) VALUES
   ('chem-u9-mcq-16', 'S3.2.9 IR Spectroscopy', 'HL', '9',
    'Which molecule is NOT infrared active?',
    'H₂O',
@@ -323,7 +323,7 @@ INSERT INTO chemistry_mcq_questions (id, category, difficulty, unit, question_te
    1, 'More energy is needed to vibrate a stronger bond, so a higher frequency (wavenumber) of IR radiation is absorbed.', 160);
 
 -- Lesson 5: Oxidation & Reduction of Alcohols (SL/HL) — Q21-25
-INSERT INTO chemistry_mcq_questions (id, category, difficulty, unit, question_text, option_a, option_b, option_c, option_d, correct_option, explanation, sort_order) VALUES
+INSERT OR IGNORE INTO chemistry_mcq_questions (id, category, difficulty, unit, question_text, option_a, option_b, option_c, option_d, correct_option, explanation, sort_order) VALUES
   ('chem-u9-mcq-21', 'R3.2.9-10 Oxidation & Reduction of Alcohols', 'SL/HL', '9',
    'Oxidation of a primary alcohol under reflux with excess acidified dichromate produces:',
    'An aldehyde',
@@ -365,7 +365,7 @@ INSERT INTO chemistry_mcq_questions (id, category, difficulty, unit, question_te
    1, 'Dichromate ions (Cr₂O₇²⁻, orange) are reduced to Cr³⁺ ions (green) during the oxidation.', 165);
 
 -- Lesson 6: ¹H NMR Spectroscopy (HL) — Q26-30
-INSERT INTO chemistry_mcq_questions (id, category, difficulty, unit, question_text, option_a, option_b, option_c, option_d, correct_option, explanation, sort_order) VALUES
+INSERT OR IGNORE INTO chemistry_mcq_questions (id, category, difficulty, unit, question_text, option_a, option_b, option_c, option_d, correct_option, explanation, sort_order) VALUES
   ('chem-u9-mcq-26', 'S3.2.10-11 1H NMR Spectroscopy', 'HL', '9',
    'TMS is used as the internal standard in NMR because:',
    'It absorbs at a high chemical shift',
@@ -409,7 +409,7 @@ INSERT INTO chemistry_mcq_questions (id, category, difficulty, unit, question_te
 -- ─── WRITTEN QUESTIONS ───────────────────────────────────────
 
 -- Bond Fission & Reactive Species (Q1-3, SL/HL)
-INSERT INTO chemistry_written_questions (id, category, difficulty, question_type, unit, marks, question_text, mark_scheme, sort_order) VALUES
+INSERT OR IGNORE INTO chemistry_written_questions (id, category, difficulty, question_type, unit, marks, question_text, mark_scheme, sort_order) VALUES
   ('chem-u9-wr-01', 'R3.3.1-2/R3.4.1/3/4 Bond Fission & Reactive Species', 'SL/HL', 'short_answer', '9', 4,
    'Define the terms homolytic fission and heterolytic fission. For each, draw a diagram showing the fission of a C–Cl bond, using appropriate curly arrows, and identify the products formed.',
    '• Homolytic fission: each bonding atom receives one electron [1]
@@ -430,7 +430,7 @@ INSERT INTO chemistry_written_questions (id, category, difficulty, question_type
 • Electron–electron repulsion pushes the lone pair further from the nucleus, making it more available for donation [1]', 92);
 
 -- Mass Spectrometry (Q4-5, HL)
-INSERT INTO chemistry_written_questions (id, category, difficulty, question_type, unit, marks, question_text, mark_scheme, sort_order) VALUES
+INSERT OR IGNORE INTO chemistry_written_questions (id, category, difficulty, question_type, unit, marks, question_text, mark_scheme, sort_order) VALUES
   ('chem-u9-wr-04', 'S3.2.8 Mass Spectrometry Fragmentation', 'HL', 'short_answer', '9', 5,
    'The mass spectrum of butanone (CH₃COCH₂CH₃) shows peaks at m/z = 72, 57, 43, 29 and 15. Identify each peak and explain the fragmentation pattern.',
    '• m/z = 72: molecular ion peak M⁺• (C₄H₈O⁺•) [1]
@@ -445,7 +445,7 @@ INSERT INTO chemistry_written_questions (id, category, difficulty, question_type
 • ⁷⁹Br and ⁸¹Br have approximately equal natural abundance, giving M:M+2 ≈ 1:1 [1]', 94);
 
 -- Free Radical Substitution (Q6-7, SL/HL)
-INSERT INTO chemistry_written_questions (id, category, difficulty, question_type, unit, marks, question_text, mark_scheme, sort_order) VALUES
+INSERT OR IGNORE INTO chemistry_written_questions (id, category, difficulty, question_type, unit, marks, question_text, mark_scheme, sort_order) VALUES
   ('chem-u9-wr-06', 'R3.3.2-3 Free Radical Substitution', 'SL/HL', 'short_answer', '9', 6,
    'Outline the mechanism for the free radical substitution of methane with chlorine, including initiation, propagation and termination steps. Use equations and fish-hook arrows where appropriate.',
    '• Initiation: Cl₂ → 2Cl• (UV light / homolytic fission) with fish-hook arrows [1]
@@ -462,7 +462,7 @@ INSERT INTO chemistry_written_questions (id, category, difficulty, question_type
 • Therefore alkanes are not readily attacked by nucleophiles or electrophiles / no region of high or low electron density [1]', 96);
 
 -- IR Spectroscopy (Q8-10, HL)
-INSERT INTO chemistry_written_questions (id, category, difficulty, question_type, unit, marks, question_text, mark_scheme, sort_order) VALUES
+INSERT OR IGNORE INTO chemistry_written_questions (id, category, difficulty, question_type, unit, marks, question_text, mark_scheme, sort_order) VALUES
   ('chem-u9-wr-08', 'S3.2.9 IR Spectroscopy', 'HL', 'short_answer', '9', 3,
    'Using water as an example, describe what happens at a molecular level during the absorption of infrared radiation.',
    '• Covalent bonds in H₂O vibrate (stretch and bend) [1]
@@ -482,7 +482,7 @@ INSERT INTO chemistry_written_questions (id, category, difficulty, question_type
 • Only vibrations that change the dipole moment absorb IR radiation [1]', 99);
 
 -- Oxidation & Reduction (Q11-12, SL/HL)
-INSERT INTO chemistry_written_questions (id, category, difficulty, question_type, unit, marks, question_text, mark_scheme, sort_order) VALUES
+INSERT OR IGNORE INTO chemistry_written_questions (id, category, difficulty, question_type, unit, marks, question_text, mark_scheme, sort_order) VALUES
   ('chem-u9-wr-11', 'R3.2.9-10 Oxidation & Reduction of Alcohols', 'SL/HL', 'short_answer', '9', 5,
    'Draw the two-step oxidation of ethanol with acidified potassium dichromate. State the conditions (apparatus) needed for each step and name all organic products.',
    '• Step 1: CH₃CH₂OH → CH₃CHO (ethanal) using H⁺/Cr₂O₇²⁻ [1]
@@ -499,7 +499,7 @@ INSERT INTO chemistry_written_questions (id, category, difficulty, question_type
 • 2-methylpropan-2-ol is tertiary – no hydrogen on the carbon bonded to –OH, so oxidation cannot occur [1]', 101);
 
 -- ¹H NMR Spectroscopy (Q13-15, HL)
-INSERT INTO chemistry_written_questions (id, category, difficulty, question_type, unit, marks, question_text, mark_scheme, sort_order) VALUES
+INSERT OR IGNORE INTO chemistry_written_questions (id, category, difficulty, question_type, unit, marks, question_text, mark_scheme, sort_order) VALUES
   ('chem-u9-wr-13', 'S3.2.10-11 1H NMR Spectroscopy', 'HL', 'short_answer', '9', 3,
    'Explain what information can be obtained from a low-resolution ¹H NMR spectrum of an organic compound.',
    '• Number of peaks = number of different chemical environments of hydrogen atoms [1]

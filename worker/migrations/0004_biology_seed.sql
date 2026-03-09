@@ -17,7 +17,7 @@ INSERT OR REPLACE INTO biology_category_colors (category, color) VALUES
 -- ─── CHECKLIST SECTIONS ──────────────────────────────────────
 
 -- Unit 3 sections
-INSERT INTO biology_checklist_sections (id, title, color, sort_order) VALUES
+INSERT OR IGNORE INTO biology_checklist_sections (id, title, color, sort_order) VALUES
   ('a2-1-origins', 'A2.1 — Origins of Cells (AHL)', '#7C3AED', 1),
   ('a2-2-cell-structure', 'A2.2 — Cell Structure', '#2563EB', 2),
   ('b2-2-organelles', 'B2.2 — Organelles & Compartmentalization', '#0891B2', 3),
@@ -26,16 +26,18 @@ INSERT INTO biology_checklist_sections (id, title, color, sort_order) VALUES
   ('b2-3-specialization', 'B2.3 — Cell Specialization', '#DC2626', 6);
 
 -- Unit 4 sections
-INSERT INTO biology_checklist_sections (id, title, color, sort_order) VALUES
+INSERT OR IGNORE INTO biology_checklist_sections (id, title, color, sort_order) VALUES
   ('c4-2-energy-matter', 'C4.2 — Transfers of Energy & Matter', '#D97706', 7),
   ('c1-3-photosynthesis', 'C1.3 — Photosynthesis', '#16A34A', 8),
   ('c1-2-respiration', 'C1.2 — Cell Respiration', '#E11D48', 9);
 
 
 -- ─── CHECKLIST ITEMS ─────────────────────────────────────────
+-- Clear existing items to prevent duplicates (autoincrement table)
+DELETE FROM biology_checklist_items;
 
 -- A2.1 Origins of Cells
-INSERT INTO biology_checklist_items (section_id, text, sort_order) VALUES
+INSERT OR IGNORE INTO biology_checklist_items (section_id, text, sort_order) VALUES
   ('a2-1-origins', 'Describe conditions on early Earth: lack of free O₂/ozone, high CO₂/CH₄, high UV, higher temperatures', 1),
   ('a2-1-origins', 'Explain why early conditions allowed spontaneous formation of carbon compounds', 2),
   ('a2-1-origins', 'Define self-sustaining life and distinguish living from non-living (e.g. viruses are non-living)', 3),
@@ -49,7 +51,7 @@ INSERT INTO biology_checklist_items (section_id, text, sort_order) VALUES
   ('a2-1-origins', 'State evidence for LUCA near hydrothermal vents: fossilized precipitates, conserved genomic sequences', 11);
 
 -- A2.2 Cell Structure
-INSERT INTO biology_checklist_items (section_id, text, sort_order) VALUES
+INSERT OR IGNORE INTO biology_checklist_items (section_id, text, sort_order) VALUES
   ('a2-2-cell-structure', 'State the three tenets of cell theory', 1),
   ('a2-2-cell-structure', 'Perform microscopy calculations: magnification = image size / actual size', 2),
   ('a2-2-cell-structure', 'Convert between mm, µm, nm and relate to cell and organelle sizes', 3),
@@ -66,7 +68,7 @@ INSERT INTO biology_checklist_items (section_id, text, sort_order) VALUES
   ('a2-2-cell-structure', '[AHL] Outline advantages of multicellularity: specialization, larger size, longer lifespan', 14);
 
 -- B2.2 Organelles
-INSERT INTO biology_checklist_items (section_id, text, sort_order) VALUES
+INSERT OR IGNORE INTO biology_checklist_items (section_id, text, sort_order) VALUES
   ('b2-2-organelles', 'Define organelle; classify by membrane type (none, single, double)', 1),
   ('b2-2-organelles', 'Explain advantage of nucleus/cytoplasm separation: gene regulation, transcription/translation uncoupled', 2),
   ('b2-2-organelles', 'State advantages of cytoplasmic compartmentalization: localize reactions, different pH, protective', 3),
@@ -78,7 +80,7 @@ INSERT INTO biology_checklist_items (section_id, text, sort_order) VALUES
   ('b2-2-organelles', '[AHL] Describe vesicle structure and function in cells', 9);
 
 -- B2.1 Membranes
-INSERT INTO biology_checklist_items (section_id, text, sort_order) VALUES
+INSERT OR IGNORE INTO biology_checklist_items (section_id, text, sort_order) VALUES
   ('b2-1-membranes', 'Explain how amphipathic phospholipids form bilayers spontaneously in water', 1),
   ('b2-1-membranes', 'Explain lipid bilayer as a barrier to large molecules, hydrophilic particles, ions, polar molecules', 2),
   ('b2-1-membranes', 'Describe simple diffusion of O₂ and CO₂ between phospholipids down concentration gradient', 3),
@@ -98,7 +100,7 @@ INSERT INTO biology_checklist_items (section_id, text, sort_order) VALUES
   ('b2-1-membranes', '[AHL] Describe cell adhesion molecules (CAMs) and their role in tissue formation', 17);
 
 -- D2.3 Water Potential
-INSERT INTO biology_checklist_items (section_id, text, sort_order) VALUES
+INSERT OR IGNORE INTO biology_checklist_items (section_id, text, sort_order) VALUES
   ('d2-3-water-potential', 'Define solvation; describe how water dissolves ionic and hydrophilic substances', 1),
   ('d2-3-water-potential', 'State direction of water movement: from less concentrated to more concentrated solution', 2),
   ('d2-3-water-potential', 'Predict direction of osmosis into/out of cells based on external solution concentration', 3),
@@ -112,7 +114,7 @@ INSERT INTO biology_checklist_items (section_id, text, sort_order) VALUES
   ('d2-3-water-potential', '[AHL] Calculate and interpret water potential changes when plant cells gain/lose water', 11);
 
 -- B2.3 Cell Specialization
-INSERT INTO biology_checklist_items (section_id, text, sort_order) VALUES
+INSERT OR IGNORE INTO biology_checklist_items (section_id, text, sort_order) VALUES
   ('b2-3-specialization', 'Describe how fertilized egg produces unspecialized cells that differentiate via gene expression', 1),
   ('b2-3-specialization', 'State properties of stem cells: undifferentiated, self-renewing, able to differentiate', 2),
   ('b2-3-specialization', 'Describe location and function of stem cell niches in adult humans', 3),
@@ -125,7 +127,7 @@ INSERT INTO biology_checklist_items (section_id, text, sort_order) VALUES
   ('b2-3-specialization', '[AHL] Describe adaptations of sperm and egg cells', 10);
 
 -- C4.2 Transfers of Energy & Matter
-INSERT INTO biology_checklist_items (section_id, text, sort_order) VALUES
+INSERT OR IGNORE INTO biology_checklist_items (section_id, text, sort_order) VALUES
   ('c4-2-energy-matter', 'C4.2.1 — Describe ecosystems as open systems where both energy and matter can enter and exit', 1),
   ('c4-2-energy-matter', 'C4.2.2 — Explain why sunlight is the principal source of energy for most ecosystems', 2),
   ('c4-2-energy-matter', 'C4.2.7 — Distinguish between photoautotrophs and chemoautotrophs', 3),
@@ -150,7 +152,7 @@ INSERT INTO biology_checklist_items (section_id, text, sort_order) VALUES
   ('c4-2-energy-matter', 'C4.2.21 — Explain the interdependence of aerobic respiration and photosynthesis', 22);
 
 -- C1.3 Photosynthesis
-INSERT INTO biology_checklist_items (section_id, text, sort_order) VALUES
+INSERT OR IGNORE INTO biology_checklist_items (section_id, text, sort_order) VALUES
   ('c1-3-photosynthesis', 'C1.3.1 — Explain transformation of light energy to chemical energy in photosynthesis', 1),
   ('c1-3-photosynthesis', 'C1.3.2 — Describe conversion of CO₂ to glucose using hydrogen from water splitting', 2),
   ('c1-3-photosynthesis', 'C1.3.3 — Identify O₂ as a by-product of photosynthesis', 3),
@@ -173,7 +175,7 @@ INSERT INTO biology_checklist_items (section_id, text, sort_order) VALUES
   ('c1-3-photosynthesis', '[AHL] B2.2.5 — Describe adaptations of the chloroplast for photosynthesis', 20);
 
 -- C1.2 Cell Respiration
-INSERT INTO biology_checklist_items (section_id, text, sort_order) VALUES
+INSERT OR IGNORE INTO biology_checklist_items (section_id, text, sort_order) VALUES
   ('c1-2-respiration', 'C1.2.1 — Describe ATP as the molecule that distributes energy within cells', 1),
   ('c1-2-respiration', 'C1.2.2 — List life processes supplied with energy by ATP', 2),
   ('c1-2-respiration', 'C1.2.3 — Explain energy transfers during interconversions between ATP and ADP', 3),
@@ -197,7 +199,7 @@ INSERT INTO biology_checklist_items (section_id, text, sort_order) VALUES
 -- ─── FLASHCARD TOPICS ────────────────────────────────────────
 
 -- Unit 3 topics
-INSERT INTO biology_flashcard_topics (id, label, color, sort_order) VALUES
+INSERT OR IGNORE INTO biology_flashcard_topics (id, label, color, sort_order) VALUES
   ('a2-1-origins-of-cells', 'A2.1 Origins of Cells', '#7C3AED', 1),
   ('a2-2-cell-structure', 'A2.2 Cell Structure', '#2563EB', 2),
   ('b2-2-organelles', 'B2.2 Organelles', '#0891B2', 3),
@@ -206,7 +208,7 @@ INSERT INTO biology_flashcard_topics (id, label, color, sort_order) VALUES
   ('b2-3-cell-specialization', 'B2.3 Cell Specialization', '#DC2626', 6);
 
 -- Unit 4 topics
-INSERT INTO biology_flashcard_topics (id, label, color, sort_order) VALUES
+INSERT OR IGNORE INTO biology_flashcard_topics (id, label, color, sort_order) VALUES
   ('c4-2-energy-matter', 'C4.2 Energy & Matter', '#D97706', 7),
   ('c1-3-photosynthesis', 'C1.3 Photosynthesis', '#16A34A', 8),
   ('c1-2-cell-respiration', 'C1.2 Cell Respiration', '#E11D48', 9);
@@ -215,7 +217,7 @@ INSERT INTO biology_flashcard_topics (id, label, color, sort_order) VALUES
 -- ─── FLASHCARDS ──────────────────────────────────────────────
 
 -- A2.1 Origins of Cells
-INSERT INTO biology_flashcards (topic_id, term, definition, sort_order) VALUES
+INSERT OR IGNORE INTO biology_flashcards (topic_id, term, definition, sort_order) VALUES
   ('a2-1-origins-of-cells', 'What were the key atmospheric conditions on early Earth?', 'Lack of free O₂ and ozone; high concentrations of CO₂ and CH₄; higher temperatures; greater UV penetration.', 1),
   ('a2-1-origins-of-cells', 'Why does the absence of oxygen on early Earth matter?', 'Without O₂, there was no ozone layer, allowing UV to drive chemical reactions. Reducing conditions allowed organic molecules to accumulate without oxidation.', 2),
   ('a2-1-origins-of-cells', 'What did the Miller-Urey experiment demonstrate?', 'By simulating early Earth conditions (H₂, CH₄, NH₃, H₂O, electrical sparks), amino acids and other organic molecules were produced — evidence that carbon compounds could form abiotically.', 3),
@@ -226,7 +228,7 @@ INSERT INTO biology_flashcards (topic_id, term, definition, sort_order) VALUES
   ('a2-1-origins-of-cells', 'Why do hydrothermal vents support LUCA evolution?', 'Deep-sea vents provide chemical energy gradients, mineral surfaces, warm water, and reducing conditions similar to early Earth — plus fossilized evidence of ancient vent precipitates.', 8);
 
 -- A2.2 Cell Structure
-INSERT INTO biology_flashcards (topic_id, term, definition, sort_order) VALUES
+INSERT OR IGNORE INTO biology_flashcards (topic_id, term, definition, sort_order) VALUES
   ('a2-2-cell-structure', 'State the three tenets of cell theory.', '1. All living things are made of cells. 2. Cells are the basic unit of life. 3. All cells arise from pre-existing cells.', 1),
   ('a2-2-cell-structure', 'What is the formula for microscope magnification?', 'Magnification = Image size ÷ Actual size. All values must be in the same units. (M = I/A)', 2),
   ('a2-2-cell-structure', 'What are the three structures common to ALL cells?', '1. Plasma membrane. 2. Cytoplasm. 3. DNA (genetic material).', 3),
@@ -238,7 +240,7 @@ INSERT INTO biology_flashcards (topic_id, term, definition, sort_order) VALUES
   ('a2-2-cell-structure', '[AHL] What is endosymbiotic theory?', 'Mitochondria and chloroplasts evolved from free-living prokaryotes engulfed by a host cell. Evidence: double membrane, own circular DNA, 70S ribosomes, binary fission.', 9);
 
 -- B2.2 Organelles
-INSERT INTO biology_flashcards (topic_id, term, definition, sort_order) VALUES
+INSERT OR IGNORE INTO biology_flashcards (topic_id, term, definition, sort_order) VALUES
   ('b2-2-organelles', 'Define organelle.', 'A discrete subunit within a cell (membrane-bound or not), adapted to perform a specific function.', 1),
   ('b2-2-organelles', 'Classify organelles by membrane type.', 'No membrane: ribosomes. Single membrane: lysosome, Golgi, vesicles, ER, vacuole. Double membrane: nucleus, mitochondria, chloroplasts.', 2),
   ('b2-2-organelles', 'Why is it advantageous to separate the nucleus from cytoplasm?', 'Allows gene regulation; mRNA can be processed before translation; protects DNA from cytoplasmic enzymes; transcription and translation are separated.', 3),
@@ -248,7 +250,7 @@ INSERT INTO biology_flashcards (topic_id, term, definition, sort_order) VALUES
   ('b2-2-organelles', '[AHL] What is the function of the Golgi apparatus?', 'Receives vesicles from RER; modifies, processes (glycosylation), sorts, and packages proteins into vesicles for secretion or delivery to lysosomes.', 7);
 
 -- B2.1 Membranes & Transport
-INSERT INTO biology_flashcards (topic_id, term, definition, sort_order) VALUES
+INSERT OR IGNORE INTO biology_flashcards (topic_id, term, definition, sort_order) VALUES
   ('b2-1-membranes', 'Why do phospholipids spontaneously form bilayers?', 'Phospholipids are amphipathic: hydrophilic heads face outward (towards water); hydrophobic tails face inward. This minimizes free energy.', 1),
   ('b2-1-membranes', 'What is the fluid mosaic model?', 'The membrane is a dynamic (fluid) phospholipid bilayer with a mosaic of integral/peripheral proteins, cholesterol, glycoproteins, and glycolipids.', 2),
   ('b2-1-membranes', 'What can cross the membrane by simple diffusion?', 'Small non-polar molecules: O₂, CO₂, N₂. Small uncharged polar molecules (water slowly). Large polar molecules, ions, and glucose cannot.', 3),
@@ -262,7 +264,7 @@ INSERT INTO biology_flashcards (topic_id, term, definition, sort_order) VALUES
   ('b2-1-membranes', '[AHL] What is secondary active transport?', 'Uses the Na⁺ gradient (from Na⁺/K⁺ pump) to drive transport of another molecule (e.g. glucose) into a cell via a cotransporter — no direct ATP used.', 11);
 
 -- D2.3 Water Potential
-INSERT INTO biology_flashcards (topic_id, term, definition, sort_order) VALUES
+INSERT OR IGNORE INTO biology_flashcards (topic_id, term, definition, sort_order) VALUES
   ('d2-3-water-potential', 'Define water potential (Ψ).', '[AHL] Potential energy of water per unit volume relative to pure water. Units: MPa. Pure water has Ψ = 0; dissolved solutes make Ψ negative.', 1),
   ('d2-3-water-potential', 'What is the equation for water potential?', '[AHL] Ψ = Ψs + Ψp. Ψs = solute potential (always negative). Ψp = pressure potential (usually positive in turgid cells).', 2),
   ('d2-3-water-potential', 'What happens to a plant cell in a hypotonic solution?', 'Water enters by osmosis → cell swells → turgor pressure builds → cell becomes turgid. Cell wall prevents lysis.', 3),
@@ -271,7 +273,7 @@ INSERT INTO biology_flashcards (topic_id, term, definition, sort_order) VALUES
   ('d2-3-water-potential', 'Why are isotonic solutions used medically?', 'Same solute concentration as blood/cells prevents osmotic damage. Used for organ preservation, IV fluids, wound irrigation.', 6);
 
 -- B2.3 Cell Specialization
-INSERT INTO biology_flashcards (topic_id, term, definition, sort_order) VALUES
+INSERT OR IGNORE INTO biology_flashcards (topic_id, term, definition, sort_order) VALUES
   ('b2-3-cell-specialization', 'What are stem cells?', 'Undifferentiated cells that can: (1) self-renew by division, and (2) differentiate into specialized cell types.', 1),
   ('b2-3-cell-specialization', 'Totipotent vs. pluripotent vs. multipotent?', 'Totipotent: any cell including placenta (zygote). Pluripotent: all three germ layers but not placenta (embryonic stem cells). Multipotent: limited lineage (blood stem cells).', 2),
   ('b2-3-cell-specialization', 'How does cell differentiation occur?', 'Specific genes are switched on/off in response to chemical signals (morphogens), producing proteins that give the cell its specialized structure and function.', 3),
@@ -279,7 +281,7 @@ INSERT INTO biology_flashcards (topic_id, term, definition, sort_order) VALUES
   ('b2-3-cell-specialization', 'Why is high SA:Vol important for cells?', 'Exchange of nutrients, gases, and waste occurs across the cell surface. High SA:Vol ensures efficient diffusion. Large cells may not be supplied fast enough.', 5);
 
 -- C4.2 Energy & Matter
-INSERT INTO biology_flashcards (topic_id, term, definition, sort_order) VALUES
+INSERT OR IGNORE INTO biology_flashcards (topic_id, term, definition, sort_order) VALUES
   ('c4-2-energy-matter', 'Open system vs. closed system?', 'Open system: both energy AND matter can enter and exit. Closed system: only energy exchange. Ecosystems are open systems.', 1),
   ('c4-2-energy-matter', 'Where does the energy for most ecosystems originate?', 'Sunlight (solar energy) — captured by photoautotrophs via photosynthesis.', 2),
   ('c4-2-energy-matter', 'Define photoautotroph.', 'An organism that uses light to synthesise organic molecules from inorganic substances (e.g. plants, algae, cyanobacteria).', 3),
@@ -294,7 +296,7 @@ INSERT INTO biology_flashcards (topic_id, term, definition, sort_order) VALUES
   ('c4-2-energy-matter', 'How are aerobic respiration and photosynthesis interdependent?', 'Respiration depends on O₂ from photosynthesis. Photosynthesis depends on CO₂ from respiration. Both cycle O₂ and CO₂.', 12);
 
 -- C1.3 Photosynthesis
-INSERT INTO biology_flashcards (topic_id, term, definition, sort_order) VALUES
+INSERT OR IGNORE INTO biology_flashcards (topic_id, term, definition, sort_order) VALUES
   ('c1-3-photosynthesis', 'Overall equation for photosynthesis?', 'CO₂ + H₂O → Glucose + O₂ (using light energy). Light energy is transformed into chemical energy stored in glucose.', 1),
   ('c1-3-photosynthesis', 'Why is O₂ a by-product of photosynthesis?', 'O₂ is released from the splitting (photolysis) of water molecules: H₂O → 2H⁺ + 2e⁻ + ½O₂. The O₂ comes from water, not CO₂.', 2),
   ('c1-3-photosynthesis', 'What is chromatography used for?', 'To separate and identify photosynthetic pigments (chlorophyll a, b, carotenoids, xanthophylls) based on different solubilities/Rf values.', 3),
@@ -310,7 +312,7 @@ INSERT INTO biology_flashcards (topic_id, term, definition, sort_order) VALUES
   ('c1-3-photosynthesis', '[AHL] How is RuBP regenerated?', '5 molecules of TP (using ATP) regenerate 3 molecules of RuBP. Requires ATP from the light-dependent reactions.', 13);
 
 -- C1.2 Cell Respiration
-INSERT INTO biology_flashcards (topic_id, term, definition, sort_order) VALUES
+INSERT OR IGNORE INTO biology_flashcards (topic_id, term, definition, sort_order) VALUES
   ('c1-2-cell-respiration', 'What is ATP and why is it the energy currency?', 'Adenosine Triphosphate. Distributes energy within cells. Soluble, cannot pass membranes, releases manageable energy amounts, rapidly regenerated from ADP + Pi.', 1),
   ('c1-2-cell-respiration', 'How does ATP release energy?', 'ATP is hydrolysed: ATP + H₂O → ADP + Pi + energy. Energy from the terminal phosphate bond drives cellular work.', 2),
   ('c1-2-cell-respiration', 'Four life processes that use ATP?', '1. Active transport (Na⁺/K⁺ pump)  2. Biosynthesis (protein synthesis)  3. Muscle contraction  4. Cell division / DNA replication', 3),
@@ -329,7 +331,7 @@ INSERT INTO biology_flashcards (topic_id, term, definition, sort_order) VALUES
 -- ─── MCQ QUESTIONS ───────────────────────────────────────────
 
 -- A2.1 Origins of Cells
-INSERT INTO biology_mcq_questions (id, category, difficulty, question_text, option_a, option_b, option_c, option_d, correct_option, explanation, sort_order) VALUES
+INSERT OR IGNORE INTO biology_mcq_questions (id, category, difficulty, question_text, option_a, option_b, option_c, option_d, correct_option, explanation, sort_order) VALUES
   ('bio_mcq1', 'A2.1 Origins of Cells', 'SL/HL', 'Which condition of early Earth allowed abiotic synthesis of organic compounds?', 'High atmospheric oxygen concentration', 'Absence of free oxygen and abundant UV radiation', 'Presence of ozone blocking UV light', 'Low concentrations of carbon dioxide', 1, 'Early Earth lacked free O₂ and ozone, allowing UV radiation to drive chemical reactions and organic molecules to accumulate without being oxidised.', 1),
   ('bio_mcq2', 'A2.1 Origins of Cells', 'SL/HL', 'The Miller-Urey experiment provided evidence that:', 'RNA was the first self-replicating molecule', 'Life originated at deep-sea hydrothermal vents', 'Amino acids can form abiotically under early Earth conditions', 'Vesicles formed spontaneously from fatty acids', 2, 'Miller and Urey simulated early Earth conditions and successfully produced amino acids, demonstrating that organic molecules can form from inorganic precursors.', 2),
   ('bio_mcq3', 'A2.1 Origins of Cells', 'SL/HL', 'Which property makes RNA a candidate for the first molecule of life?', 'It is double-stranded and stable', 'It can both store information and catalyze reactions', 'It is found only in the nucleus', 'It is more stable than DNA at high temperatures', 1, 'RNA can store genetic information (like DNA) and catalyze chemical reactions (ribozymes), meaning a single molecule type could perform both functions needed for early life.', 3),
@@ -340,7 +342,7 @@ INSERT INTO biology_mcq_questions (id, category, difficulty, question_text, opti
   ('bio_mcq8', 'A2.1 Origins of Cells', 'HL', 'Evidence for LUCA evolving near hydrothermal vents includes:', 'Fossil cells in meteorites', 'Fossilized precipitates in ancient seafloor vents and conserved genomic sequences', 'DNA extracted directly from vent rock', 'Presence of ozone in surrounding water', 1, 'Ancient hydrothermal vent precipitates contain fossilized evidence, and genomic analysis shows conserved sequences consistent with a thermophilic ancestor.', 8);
 
 -- A2.2 Cell Structure
-INSERT INTO biology_mcq_questions (id, category, difficulty, question_text, option_a, option_b, option_c, option_d, correct_option, explanation, sort_order) VALUES
+INSERT OR IGNORE INTO biology_mcq_questions (id, category, difficulty, question_text, option_a, option_b, option_c, option_d, correct_option, explanation, sort_order) VALUES
   ('bio_mcq9', 'A2.2 Cell Structure', 'SL/HL', 'A cell drawn in a microscope image is 60 mm wide. The actual cell is 30 µm. What is the magnification?', '×2', '×200', '×2000', '×20', 2, 'Convert: 60 mm = 60,000 µm. Magnification = 60,000 ÷ 30 = ×2000.', 9),
   ('bio_mcq10', 'A2.2 Cell Structure', 'SL/HL', 'Which is the correct order of increasing size?', 'Protein → virus → bacterium → eukaryotic cell', 'Eukaryotic cell → bacterium → virus → protein', 'Virus → protein → bacterium → eukaryotic cell', 'Bacterium → virus → protein → eukaryotic cell', 0, 'From smallest to largest: proteins (~1–10 nm) → viruses (~20–300 nm) → bacteria (~1–5 µm) → eukaryotic cells (~10–100 µm).', 10),
   ('bio_mcq11', 'A2.2 Cell Structure', 'SL/HL', 'Which feature is present in prokaryotes but NOT eukaryotes?', 'Ribosomes', 'Plasma membrane', '70S ribosomes and nucleoid region', 'DNA', 2, 'Prokaryotes have 70S ribosomes (vs. 80S in eukaryotes) and a nucleoid region (vs. membrane-bound nucleus).', 11),
@@ -351,7 +353,7 @@ INSERT INTO biology_mcq_questions (id, category, difficulty, question_text, opti
   ('bio_mcq16', 'A2.2 Cell Structure', 'HL', 'What is an advantage of multicellularity?', 'Simpler organization than unicellular organisms', 'All cells perform the same function', 'Cells can specialize, allowing division of labour', 'Unicellular organisms live longer', 2, 'Multicellularity allows cell specialization and division of labour, enabling more complex and efficient organisms.', 16);
 
 -- B2.2 Organelles
-INSERT INTO biology_mcq_questions (id, category, difficulty, question_text, option_a, option_b, option_c, option_d, correct_option, explanation, sort_order) VALUES
+INSERT OR IGNORE INTO biology_mcq_questions (id, category, difficulty, question_text, option_a, option_b, option_c, option_d, correct_option, explanation, sort_order) VALUES
   ('bio_mcq17', 'B2.2 Organelles', 'SL/HL', 'What is the correct protein secretion pathway?', 'Golgi → RER → plasma membrane', 'RER → Golgi → vesicles → plasma membrane', 'Golgi → lysosome → RER', 'RER → lysosome → Golgi', 1, 'Proteins are synthesised on RER-bound ribosomes, transported in vesicles to the Golgi for processing, then packaged in vesicles for exocytosis.', 17),
   ('bio_mcq18', 'B2.2 Organelles', 'SL/HL', 'Which organelle has no membrane?', 'Lysosome', 'Mitochondrion', 'Ribosome', 'Vacuole', 2, 'Ribosomes are not membrane-bound. They are complex structures of rRNA and protein found free in cytoplasm or attached to RER.', 18),
   ('bio_mcq19', 'B2.2 Organelles', 'SL/HL', 'Which correctly describes Golgi and RER?', 'Golgi: ATP production. RER: protein synthesis for secretion', 'Golgi: processing of proteins. RER: synthesis of proteins for secretion', 'Golgi: protein synthesis for secretion. RER: ATP production', 'Both synthesize lipids only', 1, 'RER synthesises proteins (for secretion/membranes) and Golgi processes, modifies, sorts, and packages those proteins.', 19),
@@ -360,7 +362,7 @@ INSERT INTO biology_mcq_questions (id, category, difficulty, question_text, opti
   ('bio_mcq22', 'B2.2 Organelles', 'HL', 'Which organelle produces surfactant in the lungs?', 'Type I pneumocytes', 'Ribosomes in the matrix', 'Type II pneumocytes', 'Smooth ER in alveolar cells', 2, 'Type II pneumocytes secrete pulmonary surfactant which reduces surface tension in alveoli, preventing collapse during exhalation.', 22);
 
 -- B2.1 Membranes
-INSERT INTO biology_mcq_questions (id, category, difficulty, question_text, option_a, option_b, option_c, option_d, correct_option, explanation, sort_order) VALUES
+INSERT OR IGNORE INTO biology_mcq_questions (id, category, difficulty, question_text, option_a, option_b, option_c, option_d, correct_option, explanation, sort_order) VALUES
   ('bio_mcq23', 'B2.1 Membranes', 'SL/HL', 'What do diffusion and osmosis have in common?', 'They only occur in living cells', 'They require membrane transport proteins', 'They are both passive processes', 'Movement is against the concentration gradient', 2, 'Both diffusion and osmosis are passive processes — they move substances down concentration gradients without requiring ATP.', 23),
   ('bio_mcq24', 'B2.1 Membranes', 'SL/HL', 'Which molecules can cross the phospholipid bilayer by simple diffusion?', 'Glucose and sodium ions', 'O₂, CO₂, and small non-polar molecules', 'Large proteins and charged ions only', 'Water can never cross by simple diffusion', 1, 'Small non-polar molecules like O₂ and CO₂ can dissolve in and pass through the hydrophobic core of the bilayer.', 24),
   ('bio_mcq25', 'B2.1 Membranes', 'SL/HL', 'Facilitated diffusion requires:', 'ATP and a concentration gradient', 'A channel protein and movement against the gradient', 'A channel or carrier protein and movement down a concentration gradient', 'ATP and a pump protein', 2, 'Facilitated diffusion is passive (no ATP), uses channel or carrier proteins, and moves substances down their concentration gradient.', 25),
@@ -371,7 +373,7 @@ INSERT INTO biology_mcq_questions (id, category, difficulty, question_text, opti
   ('bio_mcq30', 'B2.1 Membranes', 'HL', 'In secondary active transport of glucose in the small intestine:', 'Glucose moves against its gradient powered directly by ATP', 'Glucose moves with Na⁺ down the Na⁺ gradient maintained by the Na⁺/K⁺ pump', 'Glucose moves by simple diffusion through the bilayer', 'Glucose requires aquaporins to cross', 1, 'The Na⁺ gradient (created by Na⁺/K⁺ pump using ATP) drives glucose cotransport — glucose moves with Na⁺ via SGLT.', 30);
 
 -- D2.3 Water Potential
-INSERT INTO biology_mcq_questions (id, category, difficulty, question_text, option_a, option_b, option_c, option_d, correct_option, explanation, sort_order) VALUES
+INSERT OR IGNORE INTO biology_mcq_questions (id, category, difficulty, question_text, option_a, option_b, option_c, option_d, correct_option, explanation, sort_order) VALUES
   ('bio_mcq31', 'D2.3 Water Potential', 'SL/HL', 'Which term describes a solution with lower solute concentration than the cell?', 'Hypertonic', 'Isotonic', 'Hypotonic', 'Isosmotic', 2, 'A hypotonic solution has lower solute concentration (higher water potential) than the cell''s cytoplasm.', 31),
   ('bio_mcq32', 'D2.3 Water Potential', 'SL/HL', 'What happens to a red blood cell in a hypotonic solution?', 'It shrinks', 'It remains unchanged', 'It swells and may lyse', 'It becomes plasmolysed', 2, 'Water enters the RBC by osmosis (higher water potential outside). Without a cell wall, the cell swells and may burst (haemolyse).', 32),
   ('bio_mcq33', 'D2.3 Water Potential', 'SL/HL', 'Why does a plant cell not burst in a hypotonic solution?', 'The plasma membrane is too thick', 'The rigid cell wall provides back-pressure limiting further water entry', 'Aquaporins close to prevent water entry', 'The vacuole absorbs excess water', 1, 'The rigid cellulose cell wall exerts turgor pressure that opposes further water entry, preventing lysis.', 33),
@@ -381,7 +383,7 @@ INSERT INTO biology_mcq_questions (id, category, difficulty, question_text, opti
   ('bio_mcq37', 'D2.3 Water Potential', 'HL', 'Water always moves:', 'From lower Ψ to higher Ψ', 'From higher Ψ to lower Ψ', 'From higher solute potential to lower solute potential', 'From higher pressure potential to lower pressure potential regardless of Ψ', 1, 'Water moves from regions of higher water potential (more free water/less solute) to lower water potential.', 37);
 
 -- B2.3 Cell Specialization
-INSERT INTO biology_mcq_questions (id, category, difficulty, question_text, option_a, option_b, option_c, option_d, correct_option, explanation, sort_order) VALUES
+INSERT OR IGNORE INTO biology_mcq_questions (id, category, difficulty, question_text, option_a, option_b, option_c, option_d, correct_option, explanation, sort_order) VALUES
   ('bio_mcq38', 'B2.3 Cell Specialization', 'SL/HL', 'Which stem cell type can form all cells including extraembryonic tissue?', 'Multipotent', 'Unipotent', 'Pluripotent', 'Totipotent', 3, 'Totipotent cells (e.g. zygote) can differentiate into every cell type including placental (extraembryonic) tissue.', 38),
   ('bio_mcq39', 'B2.3 Cell Specialization', 'SL/HL', 'As a cell grows larger, what happens to its SA:Vol ratio?', 'It increases', 'It stays the same', 'It decreases', 'It first increases then decreases', 2, 'Volume grows as r³ but surface area as r². So SA:Vol decreases as cells grow larger.', 39),
   ('bio_mcq40', 'B2.3 Cell Specialization', 'SL/HL', 'Why is high SA:Vol important for cells?', 'It allows cells to store more energy', 'It ensures adequate exchange of nutrients and waste across the cell surface', 'It reduces the need for organelles', 'It increases DNA replication rate', 1, 'Exchange of materials occurs across the cell surface. Higher SA:Vol ratio means more surface relative to volume for efficient exchange.', 40),
@@ -390,7 +392,7 @@ INSERT INTO biology_mcq_questions (id, category, difficulty, question_text, opti
   ('bio_mcq43', 'B2.3 Cell Specialization', 'HL', 'Which sperm cell feature provides energy for motility?', 'Large yolk reserves', 'Numerous mitochondria in the midpiece', 'The acrosome at the head', 'Ribosomes along the flagellum', 1, 'The midpiece of sperm is packed with mitochondria that generate ATP to power the flagellum for swimming.', 43);
 
 -- C4.2 Energy & Matter
-INSERT INTO biology_mcq_questions (id, category, difficulty, question_text, option_a, option_b, option_c, option_d, correct_option, explanation, sort_order) VALUES
+INSERT OR IGNORE INTO biology_mcq_questions (id, category, difficulty, question_text, option_a, option_b, option_c, option_d, correct_option, explanation, sort_order) VALUES
   ('bio_mcq44', 'C4.2 Energy & Matter', 'SL/HL', 'Which correctly describes an open system?', 'Energy enters and exits, but matter cannot', 'Neither energy nor matter can enter or exit', 'Both energy and matter can enter and exit freely', 'Only matter can enter or exit', 2, 'An open system allows both energy and matter to enter and exit — ecosystems are open systems.', 44),
   ('bio_mcq45', 'C4.2 Energy & Matter', 'SL/HL', 'What happens to sunlight energy entering an ecosystem?', 'It is stored permanently in biomass', 'It is transformed to chemical energy in autotrophs, then lost as heat through respiration', 'It is transferred intact through every trophic level', 'It is immediately released as heat', 1, 'Light energy is converted to chemical energy by autotrophs, then progressively lost as heat through respiration at each trophic level.', 45),
   ('bio_mcq46', 'C4.2 Energy & Matter', 'SL/HL', 'Grass (500,000 kJ) → Rabbit → Fox → Eagle. Energy available to eagle?', '5,000 kJ', '500 kJ', '50 kJ', '50,000 kJ', 1, 'Using the 10% rule: 500,000 → 50,000 → 5,000 → 500 kJ at eagle level (three 10% transfers).', 46),
@@ -402,7 +404,7 @@ INSERT INTO biology_mcq_questions (id, category, difficulty, question_text, opti
   ('bio_mcq52', 'C4.2 Energy & Matter', 'SL/HL', 'Net primary production (NPP) is:', 'Total energy absorbed by producers from sunlight', 'Gross primary production minus producers'' own respiration', 'Energy transferred from producers to primary consumers', 'Total biomass of all autotrophs', 1, 'NPP = GPP – respiration losses by producers. It represents the energy available for growth and consumers.', 52);
 
 -- C1.3 Photosynthesis
-INSERT INTO biology_mcq_questions (id, category, difficulty, question_text, option_a, option_b, option_c, option_d, correct_option, explanation, sort_order) VALUES
+INSERT OR IGNORE INTO biology_mcq_questions (id, category, difficulty, question_text, option_a, option_b, option_c, option_d, correct_option, explanation, sort_order) VALUES
   ('bio_mcq53', 'C1.3 Photosynthesis', 'SL/HL', 'The overall equation for photosynthesis is:', 'Glucose + O₂ → CO₂ + H₂O + ATP', 'CO₂ + H₂O → Glucose + O₂ (using light energy)', 'Glucose → Pyruvate + 2 ATP + 2 NADH', 'CO₂ + O₂ → Glucose + H₂O', 1, 'Photosynthesis uses light energy to convert CO₂ and H₂O into glucose and oxygen.', 53),
   ('bio_mcq54', 'C1.3 Photosynthesis', 'SL/HL', 'The O₂ released in photosynthesis comes from:', 'Carbon dioxide', 'Glucose', 'Water (H₂O)', 'NADPH', 2, 'Oxygen is released from the photolysis (splitting) of water molecules, not from CO₂.', 54),
   ('bio_mcq55', 'C1.3 Photosynthesis', 'SL/HL', 'In chromatography of leaf pigments, which travels furthest?', 'Chlorophyll a', 'Chlorophyll b', 'Carotene (least polar, most soluble in solvent)', 'Xanthophyll', 2, 'Carotene is the least polar pigment and most soluble in the organic solvent, so it travels furthest up the paper.', 55),
@@ -415,7 +417,7 @@ INSERT INTO biology_mcq_questions (id, category, difficulty, question_text, opti
   ('bio_mcq62', 'C1.3 Photosynthesis', 'HL', 'Multiple pigment types in a photosystem provides the advantage of:', 'Independent CO₂ fixation', 'Absorbing a broader range of wavelengths, increasing light capture efficiency', 'Preventing photobleaching by UV absorption', 'Providing structural support to thylakoids', 1, 'Different pigments absorb different wavelengths, maximising the range of the spectrum that can be harvested and funnelled to the reaction centre.', 62);
 
 -- C1.2 Cell Respiration
-INSERT INTO biology_mcq_questions (id, category, difficulty, question_text, option_a, option_b, option_c, option_d, correct_option, explanation, sort_order) VALUES
+INSERT OR IGNORE INTO biology_mcq_questions (id, category, difficulty, question_text, option_a, option_b, option_c, option_d, correct_option, explanation, sort_order) VALUES
   ('bio_mcq63', 'C1.2 Cell Respiration', 'SL/HL', 'ATP in cells is best described as:', 'Long-term energy storage in muscle', 'Distributing energy within cells, coupling energy-releasing to energy-consuming reactions', 'Carrying genetic information', 'Transporting oxygen to mitochondria', 1, 'ATP is the universal energy currency — it couples exergonic reactions to endergonic reactions within cells.', 63),
   ('bio_mcq64', 'C1.2 Cell Respiration', 'SL/HL', 'When ATP is hydrolysed to ADP and Pi:', 'Energy is absorbed from surroundings', 'The phosphate bond reforms immediately', 'Energy is released for cellular work', 'CO₂ is produced', 2, 'Hydrolysis of ATP releases energy that can be used for active transport, biosynthesis, muscle contraction, etc.', 64),
   ('bio_mcq65', 'C1.2 Cell Respiration', 'SL/HL', 'Anaerobic respiration in human muscle produces:', 'Ethanol and CO₂', 'Lactate (lactic acid)', 'Acetyl-CoA', 'Citric acid', 1, 'In humans, anaerobic respiration converts pyruvate to lactate to regenerate NAD⁺ for continued glycolysis.', 65),
@@ -431,7 +433,7 @@ INSERT INTO biology_mcq_questions (id, category, difficulty, question_text, opti
 -- ─── WRITTEN QUESTIONS ───────────────────────────────────────
 
 -- A2.1 Origins of Cells
-INSERT INTO biology_written_questions (id, category, difficulty, question_type, marks, question_text, mark_scheme, sort_order) VALUES
+INSERT OR IGNORE INTO biology_written_questions (id, category, difficulty, question_type, marks, question_text, mark_scheme, sort_order) VALUES
   ('bio_wr1', 'A2.1 Origins of Cells', 'SL/HL', 'short_answer', 3, 'Outline the conditions on early Earth that would have allowed the formation of organic compounds. [3 marks]', '[1] Lack of free oxygen / reducing atmosphere (no O₂)
 [1] High concentrations of CO₂ / CH₄ / NH₃ / H₂; no ozone layer allowing high UV penetration (UV as energy source)
 [1] Higher temperatures compared to today / volcanic activity provided energy', 1),
@@ -446,7 +448,7 @@ INSERT INTO biology_written_questions (id, category, difficulty, question_type, 
 [1] Conserved genes/sequences across all domains of life (e.g. ribosomal RNA genes)', 4);
 
 -- A2.2 Cell Structure
-INSERT INTO biology_written_questions (id, category, difficulty, question_type, marks, question_text, mark_scheme, sort_order) VALUES
+INSERT OR IGNORE INTO biology_written_questions (id, category, difficulty, question_type, marks, question_text, mark_scheme, sort_order) VALUES
   ('bio_wr5', 'A2.2 Cell Structure', 'SL/HL', 'short_answer', 2, 'A student observes an Amoeba and draws it 80 mm wide. The actual diameter is 200 µm. Calculate the magnification. Show working. [2 marks]', '[1] Convert: 80 mm = 80,000 µm
 [1] Magnification = 80,000 ÷ 200 = ×400', 5),
   ('bio_wr6', 'A2.2 Cell Structure', 'SL/HL', 'short_answer', 3, 'Compare the structure of prokaryotic and eukaryotic cells. Include three differences. [3 marks]', '[1] Prokaryotes: no membrane-bound nucleus (nucleoid); eukaryotes: membrane-bound nucleus
@@ -462,7 +464,7 @@ INSERT INTO biology_written_questions (id, category, difficulty, question_type, 
 [1] Own circular DNA, 70S ribosomes, and binary fission — all prokaryotic features', 8);
 
 -- B2.2 Organelles
-INSERT INTO biology_written_questions (id, category, difficulty, question_type, marks, question_text, mark_scheme, sort_order) VALUES
+INSERT OR IGNORE INTO biology_written_questions (id, category, difficulty, question_type, marks, question_text, mark_scheme, sort_order) VALUES
   ('bio_wr9', 'B2.2 Organelles', 'SL/HL', 'short_answer', 2, 'State two advantages of compartmentalization in eukaryotic cells. [2 marks]', '[1] Different pH or ionic conditions can be maintained in separate compartments (e.g. lysosomes at low pH)
 [1] Incompatible reactions can be separated / reactive metabolites contained / concentration of reactants controlled locally', 9),
   ('bio_wr10', 'B2.2 Organelles', 'HL', 'short_answer', 5, 'Describe the structure of a mitochondrion and relate each feature to its function. [5 marks]', '[1] Outer membrane: smooth, permeable to small molecules via porins — allows substrates to enter
@@ -475,7 +477,7 @@ INSERT INTO biology_written_questions (id, category, difficulty, question_type, 
 [1] RER-bound ribosomes: produce proteins destined for secretion, membrane insertion, or delivery to lysosomes', 11);
 
 -- B2.1 Membranes
-INSERT INTO biology_written_questions (id, category, difficulty, question_type, marks, question_text, mark_scheme, sort_order) VALUES
+INSERT OR IGNORE INTO biology_written_questions (id, category, difficulty, question_type, marks, question_text, mark_scheme, sort_order) VALUES
   ('bio_wr12', 'B2.1 Membranes', 'SL/HL', 'short_answer', 3, 'Explain how the structure of the phospholipid bilayer makes it an effective barrier. [3 marks]', '[1] Phospholipids are amphipathic: hydrophilic heads face outward (aqueous environments)
 [1] Hydrophobic fatty acid tails face inward, forming a non-polar core
 [1] This hydrophobic core is impermeable to ions, polar molecules, and large molecules; only small non-polar molecules pass freely', 12),
@@ -495,7 +497,7 @@ INSERT INTO biology_written_questions (id, category, difficulty, question_type, 
 [1] At LOW temperatures: disrupts close packing of saturated tails → prevents rigidity. Acts as a fluidity buffer.', 16);
 
 -- D2.3 Water Potential
-INSERT INTO biology_written_questions (id, category, difficulty, question_type, marks, question_text, mark_scheme, sort_order) VALUES
+INSERT OR IGNORE INTO biology_written_questions (id, category, difficulty, question_type, marks, question_text, mark_scheme, sort_order) VALUES
   ('bio_wr17', 'D2.3 Water Potential', 'SL/HL', 'short_answer', 4, 'Outline the effects of placing plant tissue in a hypertonic solution. [4 marks]', '[1] Hypertonic solution has higher solute concentration / lower water potential than cell
 [1] Water moves out of cell by osmosis (from higher Ψ inside to lower Ψ outside)
 [1] Cell loses turgor / becomes flaccid
@@ -509,7 +511,7 @@ INSERT INTO biology_written_questions (id, category, difficulty, question_type, 
 [1] At equilibrium: cell Ψ = 0 MPa (Ψp = +0.7 MPa); cell is fully turgid', 19);
 
 -- B2.3 Cell Specialization
-INSERT INTO biology_written_questions (id, category, difficulty, question_type, marks, question_text, mark_scheme, sort_order) VALUES
+INSERT OR IGNORE INTO biology_written_questions (id, category, difficulty, question_type, marks, question_text, mark_scheme, sort_order) VALUES
   ('bio_wr20', 'B2.3 Cell Specialization', 'SL/HL', 'short_answer', 3, 'Distinguish between totipotent, pluripotent, and multipotent stem cells. [3 marks]', '[1] Totipotent: can differentiate into ALL cell types including extraembryonic (placenta); found in very early embryo
 [1] Pluripotent: can form cells of all three germ layers but NOT extraembryonic tissue; e.g. embryonic stem cells
 [1] Multipotent: limited to a specific tissue lineage; e.g. haematopoietic stem cells (blood cells)', 20),
@@ -519,7 +521,7 @@ INSERT INTO biology_written_questions (id, category, difficulty, question_type, 
 [1] If too large: volume needing supplies exceeds the surface capacity → diffusion alone cannot meet metabolic demands', 21);
 
 -- C4.2 Energy & Matter
-INSERT INTO biology_written_questions (id, category, difficulty, question_type, marks, question_text, mark_scheme, sort_order) VALUES
+INSERT OR IGNORE INTO biology_written_questions (id, category, difficulty, question_type, marks, question_text, mark_scheme, sort_order) VALUES
   ('bio_wr22', 'C4.2 Energy & Matter', 'SL/HL', 'short_answer', 2, 'Distinguish between a carbon source and a carbon sink. Give one example of each. [2 marks]', '[1] Carbon source: releases more CO₂ than it absorbs (net release); e.g. fossil fuel combustion, deforestation
 [1] Carbon sink: absorbs more CO₂ than it releases (net removal); e.g. tropical rainforest, peat bog, ocean', 22),
   ('bio_wr23', 'C4.2 Energy & Matter', 'SL/HL', 'short_answer', 3, 'Explain why food chains rarely have more than four or five trophic levels. [3 marks]', '[1] Approximately 90% of energy is lost at each trophic level (only ~10% transferred)
@@ -536,7 +538,7 @@ INSERT INTO biology_written_questions (id, category, difficulty, question_type, 
 [1] T3 → T4 (tertiary consumers): 10% × 100,000 = 10,000 kJ', 26);
 
 -- C1.3 Photosynthesis
-INSERT INTO biology_written_questions (id, category, difficulty, question_type, marks, question_text, mark_scheme, sort_order) VALUES
+INSERT OR IGNORE INTO biology_written_questions (id, category, difficulty, question_type, marks, question_text, mark_scheme, sort_order) VALUES
   ('bio_wr27', 'C1.3 Photosynthesis', 'SL/HL', 'short_answer', 3, 'Explain why light intensity, CO₂ concentration, and temperature can all act as limiting factors for photosynthesis. [3 marks]', '[1] Light intensity: needed for light-dependent reactions (excite electrons, split water, produce ATP/NADPH); insufficient light limits these
 [1] CO₂: substrate for carbon fixation by Rubisco in Calvin cycle; low CO₂ limits GP production
 [1] Temperature: affects enzyme-catalysed reactions; too low slows them; too high denatures enzymes', 27),
@@ -559,7 +561,7 @@ INSERT INTO biology_written_questions (id, category, difficulty, question_type, 
 [1] H⁺ flows through ATP synthase from lumen to stroma; energy drives ADP + Pi → ATP', 32);
 
 -- C1.2 Cell Respiration
-INSERT INTO biology_written_questions (id, category, difficulty, question_type, marks, question_text, mark_scheme, sort_order) VALUES
+INSERT OR IGNORE INTO biology_written_questions (id, category, difficulty, question_type, marks, question_text, mark_scheme, sort_order) VALUES
   ('bio_wr33', 'C1.2 Cell Respiration', 'SL/HL', 'short_answer', 3, 'Explain the role of ATP in active transport across cell membranes. [3 marks]', '[1] Active transport moves substances against their concentration gradient, requiring energy
 [1] ATP is hydrolysed to ADP + Pi; released energy drives conformational changes in pump proteins (e.g. Na⁺/K⁺ ATPase)
 [1] This allows ions/molecules to be moved against their gradient across the membrane', 33),

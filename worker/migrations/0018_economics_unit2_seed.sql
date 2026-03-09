@@ -14,7 +14,7 @@ INSERT OR REPLACE INTO economics_category_colors (category, color) VALUES
   ('3.7 Supply-Side Policies', '#F97316');
 
 -- ─── CHECKLIST SECTIONS ──────────────────────────────────────
-INSERT INTO economics_checklist_sections (id, title, color, unit, sort_order) VALUES
+INSERT OR IGNORE INTO economics_checklist_sections (id, title, color, unit, sort_order) VALUES
   ('econ-3-1-measuring', '3.1 — Measuring Economic Activity', '#2563EB', '2', 18),
   ('econ-3-2-adas', '3.2 — Aggregate Demand & Aggregate Supply', '#059669', '2', 19),
   ('econ-3-3-objectives', '3.3 — Macroeconomic Objectives', '#7C3AED', '2', 20),
@@ -26,7 +26,7 @@ INSERT INTO economics_checklist_sections (id, title, color, unit, sort_order) VA
 -- ─── CHECKLIST ITEMS ─────────────────────────────────────────
 
 -- 3.1 Measuring Economic Activity
-INSERT INTO economics_checklist_items (section_id, text, sort_order) VALUES
+INSERT OR IGNORE INTO economics_checklist_items (section_id, text, sort_order) VALUES
   ('econ-3-1-measuring', 'Explain the circular flow of income model (households, firms, government, financial sector, foreign sector)', 1),
   ('econ-3-1-measuring', 'Define injections (I, G, X) and leakages/withdrawals (S, T, M)', 2),
   ('econ-3-1-measuring', 'Explain the three methods of measuring national income: output, income, expenditure', 3),
@@ -39,7 +39,7 @@ INSERT INTO economics_checklist_items (section_id, text, sort_order) VALUES
   ('econ-3-1-measuring', 'Distinguish between actual growth (increase in real GDP) and potential growth (increase in productive capacity)', 10);
 
 -- 3.2 Aggregate Demand & Aggregate Supply
-INSERT INTO economics_checklist_items (section_id, text, sort_order) VALUES
+INSERT OR IGNORE INTO economics_checklist_items (section_id, text, sort_order) VALUES
   ('econ-3-2-adas', 'Define AD and state the formula: AD = C + I + G + (X – M)', 1),
   ('econ-3-2-adas', 'Draw and explain the downward-sloping AD curve (wealth effect, interest rate effect, international trade effect)', 2),
   ('econ-3-2-adas', 'List and explain determinants/shifters of each component: C, I, G, X, M', 3),
@@ -54,7 +54,7 @@ INSERT INTO economics_checklist_items (section_id, text, sort_order) VALUES
   ('econ-3-2-adas', '(HL) Calculate the multiplier effect of a change in injections on national income', 12);
 
 -- 3.3 Macroeconomic Objectives
-INSERT INTO economics_checklist_items (section_id, text, sort_order) VALUES
+INSERT OR IGNORE INTO economics_checklist_items (section_id, text, sort_order) VALUES
   ('econ-3-3-objectives', 'List the four main macroeconomic objectives (growth, low unemployment, low inflation, sustainable government debt)', 1),
   ('econ-3-3-objectives', 'Define economic growth and distinguish SR growth (AD shift) from LR growth (LRAS shift)', 2),
   ('econ-3-3-objectives', 'Explain consequences of economic growth (rising living standards, but also inequality, environmental damage)', 3),
@@ -74,7 +74,7 @@ INSERT INTO economics_checklist_items (section_id, text, sort_order) VALUES
   ('econ-3-3-objectives', 'Explain potential conflicts between macroeconomic objectives (e.g. growth vs inflation, low unemployment vs inflation – Phillips curve)', 17);
 
 -- 3.4 Inequality and Poverty
-INSERT INTO economics_checklist_items (section_id, text, sort_order) VALUES
+INSERT OR IGNORE INTO economics_checklist_items (section_id, text, sort_order) VALUES
   ('econ-3-4-inequality', 'Distinguish between income inequality and wealth inequality', 1),
   ('econ-3-4-inequality', 'Draw and interpret a Lorenz curve', 2),
   ('econ-3-4-inequality', 'Define and calculate the Gini coefficient (0 = perfect equality, 1 = perfect inequality)', 3),
@@ -85,7 +85,7 @@ INSERT INTO economics_checklist_items (section_id, text, sort_order) VALUES
   ('econ-3-4-inequality', '(HL) Calculate proportional, progressive, and regressive tax rates from data', 8);
 
 -- 3.5 Monetary Policy
-INSERT INTO economics_checklist_items (section_id, text, sort_order) VALUES
+INSERT OR IGNORE INTO economics_checklist_items (section_id, text, sort_order) VALUES
   ('econ-3-5-monetary', 'Define monetary policy and state its goals', 1),
   ('econ-3-5-monetary', 'Explain the role of the central bank', 2),
   ('econ-3-5-monetary', 'Explain how interest rates affect C, I, and therefore AD', 3),
@@ -99,7 +99,7 @@ INSERT INTO economics_checklist_items (section_id, text, sort_order) VALUES
   ('econ-3-5-monetary', 'Evaluate strengths and weaknesses of monetary policy (time lags, liquidity trap, blunt instrument)', 11);
 
 -- 3.6 Fiscal Policy
-INSERT INTO economics_checklist_items (section_id, text, sort_order) VALUES
+INSERT OR IGNORE INTO economics_checklist_items (section_id, text, sort_order) VALUES
   ('econ-3-6-fiscal', 'Define fiscal policy: use of government spending (G) and taxation (T)', 1),
   ('econ-3-6-fiscal', 'Distinguish between current expenditure and capital expenditure', 2),
   ('econ-3-6-fiscal', 'Define transfer payments', 3),
@@ -111,7 +111,7 @@ INSERT INTO economics_checklist_items (section_id, text, sort_order) VALUES
   ('econ-3-6-fiscal', 'Evaluate strengths and weaknesses of fiscal policy (time lags, political constraints, budget deficit)', 9);
 
 -- 3.7 Supply-Side Policies
-INSERT INTO economics_checklist_items (section_id, text, sort_order) VALUES
+INSERT OR IGNORE INTO economics_checklist_items (section_id, text, sort_order) VALUES
   ('econ-3-7-ssp', 'Define supply-side policies and their goal (shift LRAS right)', 1),
   ('econ-3-7-ssp', 'Distinguish market-based SSPs from interventionist SSPs', 2),
   ('econ-3-7-ssp', 'Market-based: deregulation, privatisation, trade liberalisation, labour market reforms, tax cuts', 3),
@@ -122,7 +122,7 @@ INSERT INTO economics_checklist_items (section_id, text, sort_order) VALUES
   ('econ-3-7-ssp', 'Evaluate SSPs: long time lags, uncertain outcomes, inequality effects, market-based vs interventionist trade-offs', 8);
 
 -- ─── DIAGRAM CHECKLIST SECTIONS ──────────────────────────────
-INSERT INTO economics_checklist_sections (id, title, color, unit, sort_order) VALUES
+INSERT OR IGNORE INTO economics_checklist_sections (id, title, color, unit, sort_order) VALUES
   ('econ-u2-diag-natinc', 'Diagrams: National Income & Business Cycle (3.1)', '#0284C7', '2', 25),
   ('econ-u2-diag-adas', 'Diagrams: AD/AS Models (3.2)', '#059669', '2', 26),
   ('econ-u2-diag-labour', 'Diagrams: Labour Market & Unemployment (3.3)', '#7C3AED', '2', 27),
@@ -133,12 +133,12 @@ INSERT INTO economics_checklist_sections (id, title, color, unit, sort_order) VA
 -- ─── DIAGRAM CHECKLIST ITEMS ─────────────────────────────────
 
 -- Diagrams: National Income & Business Cycle
-INSERT INTO economics_checklist_items (section_id, text, sort_order) VALUES
+INSERT OR IGNORE INTO economics_checklist_items (section_id, text, sort_order) VALUES
   ('econ-u2-diag-natinc', 'Circular flow model', 1),
   ('econ-u2-diag-natinc', 'Business cycle diagram', 2);
 
 -- Diagrams: AD/AS Models
-INSERT INTO economics_checklist_items (section_id, text, sort_order) VALUES
+INSERT OR IGNORE INTO economics_checklist_items (section_id, text, sort_order) VALUES
   ('econ-u2-diag-adas', 'Downward-sloping AD', 1),
   ('econ-u2-diag-adas', 'Shifts of AD', 2),
   ('econ-u2-diag-adas', 'Upward-sloping SRAS + shifts', 3),
@@ -151,19 +151,19 @@ INSERT INTO economics_checklist_items (section_id, text, sort_order) VALUES
   ('econ-u2-diag-adas', 'Cost-push inflation (SRAS shifts left)', 10);
 
 -- Diagrams: Labour Market & Unemployment
-INSERT INTO economics_checklist_items (section_id, text, sort_order) VALUES
+INSERT OR IGNORE INTO economics_checklist_items (section_id, text, sort_order) VALUES
   ('econ-u2-diag-labour', 'Labour market equilibrium', 1),
   ('econ-u2-diag-labour', 'Structural unemployment', 2),
   ('econ-u2-diag-labour', 'Cyclical unemployment', 3),
   ('econ-u2-diag-labour', 'Minimum wage diagram', 4);
 
 -- Diagrams: Inequality
-INSERT INTO economics_checklist_items (section_id, text, sort_order) VALUES
+INSERT OR IGNORE INTO economics_checklist_items (section_id, text, sort_order) VALUES
   ('econ-u2-diag-ineq', 'Lorenz curve with 45° line', 1),
   ('econ-u2-diag-ineq', 'Two Lorenz curves showing different Gini coefficients', 2);
 
 -- Diagrams: Policy
-INSERT INTO economics_checklist_items (section_id, text, sort_order) VALUES
+INSERT OR IGNORE INTO economics_checklist_items (section_id, text, sort_order) VALUES
   ('econ-u2-diag-policy', 'Expansionary monetary policy (money market + AD/AS)', 1),
   ('econ-u2-diag-policy', 'Contractionary monetary policy', 2),
   ('econ-u2-diag-policy', 'Expansionary fiscal policy (AD shifts right)', 3),
@@ -172,13 +172,13 @@ INSERT INTO economics_checklist_items (section_id, text, sort_order) VALUES
   ('econ-u2-diag-policy', 'Crowding out', 6);
 
 -- Diagrams: Phillips Curve
-INSERT INTO economics_checklist_items (section_id, text, sort_order) VALUES
+INSERT OR IGNORE INTO economics_checklist_items (section_id, text, sort_order) VALUES
   ('econ-u2-diag-phillips', 'Short-run Phillips curve', 1),
   ('econ-u2-diag-phillips', 'Long-run Phillips curve vertical at NRU', 2),
   ('econ-u2-diag-phillips', 'Shift of SRPC due to supply shock', 3);
 
 -- ─── FLASHCARD TOPICS ────────────────────────────────────────
-INSERT INTO economics_flashcard_topics (id, label, color, unit, sort_order) VALUES
+INSERT OR IGNORE INTO economics_flashcard_topics (id, label, color, unit, sort_order) VALUES
   ('econ-u2-gdp-adas', 'GDP & AD/AS Framework', '#2563EB', '2', 8),
   ('econ-u2-unemp-infl', 'Unemployment & Inflation', '#7C3AED', '2', 9),
   ('econ-u2-policy', 'Macro Policy', '#DC2626', '2', 10),
@@ -187,7 +187,7 @@ INSERT INTO economics_flashcard_topics (id, label, color, unit, sort_order) VALU
 -- ─── FLASHCARDS ──────────────────────────────────────────────
 
 -- GDP & AD/AS Framework (14 cards)
-INSERT INTO economics_flashcards (topic_id, term, definition, formula, sort_order) VALUES
+INSERT OR IGNORE INTO economics_flashcards (topic_id, term, definition, formula, sort_order) VALUES
   ('econ-u2-gdp-adas', 'GDP', 'Total monetary value of all final goods and services produced within a country''s borders in a given time period.', NULL, 1),
   ('econ-u2-gdp-adas', 'GNI', 'GDP + net factor income from abroad. Measures total income earned by a country''s citizens regardless of where they produce.', NULL, 2),
   ('econ-u2-gdp-adas', 'Real vs Nominal GDP', 'Nominal = current prices. Real = adjusted for inflation using a base year or GDP deflator. Real GDP shows true output changes.', NULL, 3),
@@ -204,7 +204,7 @@ INSERT INTO economics_flashcards (topic_id, term, definition, formula, sort_orde
   ('econ-u2-gdp-adas', 'MPC / MPS', 'MPC = marginal propensity to consume. MPS = marginal propensity to save. MPC + MPS = 1 (in simple model).', NULL, 14);
 
 -- Unemployment & Inflation (12 cards)
-INSERT INTO economics_flashcards (topic_id, term, definition, formula, sort_order) VALUES
+INSERT OR IGNORE INTO economics_flashcards (topic_id, term, definition, formula, sort_order) VALUES
   ('econ-u2-unemp-infl', 'Structural unemployment', 'Caused by changes in the structure of the economy (technology, declining industries). Skills mismatch.', NULL, 1),
   ('econ-u2-unemp-infl', 'Cyclical unemployment', 'Caused by a fall in AD during a recession. Also called demand-deficient unemployment.', NULL, 2),
   ('econ-u2-unemp-infl', 'Natural rate of unemployment', 'The unemployment rate when the economy is at full employment. NRU = frictional + structural + seasonal.', NULL, 3),
@@ -219,7 +219,7 @@ INSERT INTO economics_flashcards (topic_id, term, definition, formula, sort_orde
   ('econ-u2-unemp-infl', 'Lorenz curve', 'A graph showing cumulative % of income/wealth vs cumulative % of population. 45° line = perfect equality. The bow = inequality.', NULL, 12);
 
 -- Macro Policy (10 cards)
-INSERT INTO economics_flashcards (topic_id, term, definition, formula, sort_order) VALUES
+INSERT OR IGNORE INTO economics_flashcards (topic_id, term, definition, formula, sort_order) VALUES
   ('econ-u2-policy', 'Monetary policy', 'Central bank use of interest rates and money supply to influence AD and achieve macroeconomic objectives.', NULL, 1),
   ('econ-u2-policy', 'Open market operations (HL)', 'Central bank buying/selling government bonds to increase/decrease money supply and influence interest rates.', NULL, 2),
   ('econ-u2-policy', 'Quantitative easing (HL)', 'Large-scale purchase of financial assets by the central bank when interest rates are at/near zero. Injects liquidity into the economy.', NULL, 3),
@@ -232,7 +232,7 @@ INSERT INTO economics_flashcards (topic_id, term, definition, formula, sort_orde
   ('econ-u2-policy', 'Market-based SSPs', 'Deregulation, privatisation, trade liberalisation, labour market flexibility, tax cuts. Reduce government intervention.', NULL, 10);
 
 -- Inequality & Growth (4 cards)
-INSERT INTO economics_flashcards (topic_id, term, definition, formula, sort_order) VALUES
+INSERT OR IGNORE INTO economics_flashcards (topic_id, term, definition, formula, sort_order) VALUES
   ('econ-u2-inequality', 'Gini coefficient', 'A number between 0 (perfect equality) and 1 (perfect inequality). Calculated from the Lorenz curve.', NULL, 1),
   ('econ-u2-inequality', 'Absolute poverty', 'Income below a defined threshold needed to meet basic needs (World Bank: $2.15/day PPP).', NULL, 2),
   ('econ-u2-inequality', 'Relative poverty', 'Income below a certain percentage of the median income in a specific country (e.g. below 60% of median).', NULL, 3),
@@ -241,7 +241,7 @@ INSERT INTO economics_flashcards (topic_id, term, definition, formula, sort_orde
 -- ─── MCQ QUESTIONS ───────────────────────────────────────────
 
 -- 3.1 Measuring Economic Activity (Q1-5)
-INSERT INTO economics_mcq_questions (id, category, difficulty, unit, question_text, option_a, option_b, option_c, option_d, correct_option, explanation, sort_order) VALUES
+INSERT OR IGNORE INTO economics_mcq_questions (id, category, difficulty, unit, question_text, option_a, option_b, option_c, option_d, correct_option, explanation, sort_order) VALUES
   ('econ-u2-mcq-01', '3.1 Measuring Economic Activity', 'SL/HL', '2',
    'GDP is best defined as:',
    'The total value of all transactions in an economy',
@@ -283,7 +283,7 @@ INSERT INTO economics_mcq_questions (id, category, difficulty, unit, question_te
    2, 'Recovery/expansion follows a trough; real GDP rises, unemployment begins to fall.', 45);
 
 -- 3.2 AD/AS (Q6-11)
-INSERT INTO economics_mcq_questions (id, category, difficulty, unit, question_text, option_a, option_b, option_c, option_d, correct_option, explanation, sort_order) VALUES
+INSERT OR IGNORE INTO economics_mcq_questions (id, category, difficulty, unit, question_text, option_a, option_b, option_c, option_d, correct_option, explanation, sort_order) VALUES
   ('econ-u2-mcq-06', '3.2 AD/AS', 'SL/HL', '2',
    'The AD curve slopes downward because of:',
    'The law of demand',
@@ -333,7 +333,7 @@ INSERT INTO economics_mcq_questions (id, category, difficulty, unit, question_te
    2, 'k = 1/(1–MPC) = 1/(1–0.8) = 1/0.2 = 5. A $1 injection leads to a $5 increase in national income.', 51);
 
 -- 3.3 Macroeconomic Objectives (Q12-17)
-INSERT INTO economics_mcq_questions (id, category, difficulty, unit, question_text, option_a, option_b, option_c, option_d, correct_option, explanation, sort_order) VALUES
+INSERT OR IGNORE INTO economics_mcq_questions (id, category, difficulty, unit, question_text, option_a, option_b, option_c, option_d, correct_option, explanation, sort_order) VALUES
   ('econ-u2-mcq-12', '3.3 Macroeconomic Objectives', 'SL/HL', '2',
    'Structural unemployment is caused by:',
    'A fall in aggregate demand',
@@ -383,7 +383,7 @@ INSERT INTO economics_mcq_questions (id, category, difficulty, unit, question_te
    2, 'Deflation actually increases real wages (same nominal wage buys more). The other three are genuine costs of deflation.', 57);
 
 -- 3.4 Inequality (Q18-19)
-INSERT INTO economics_mcq_questions (id, category, difficulty, unit, question_text, option_a, option_b, option_c, option_d, correct_option, explanation, sort_order) VALUES
+INSERT OR IGNORE INTO economics_mcq_questions (id, category, difficulty, unit, question_text, option_a, option_b, option_c, option_d, correct_option, explanation, sort_order) VALUES
   ('econ-u2-mcq-18', '3.4 Inequality', 'SL/HL', '2',
    'The Lorenz curve shows:',
    'The relationship between inflation and unemployment',
@@ -401,7 +401,7 @@ INSERT INTO economics_mcq_questions (id, category, difficulty, unit, question_te
    2, 'Gini ranges from 0 (perfect equality) to 1 (perfect inequality). 0.65 is very high – extreme income concentration.', 59);
 
 -- 3.5 Monetary Policy (Q20-22)
-INSERT INTO economics_mcq_questions (id, category, difficulty, unit, question_text, option_a, option_b, option_c, option_d, correct_option, explanation, sort_order) VALUES
+INSERT OR IGNORE INTO economics_mcq_questions (id, category, difficulty, unit, question_text, option_a, option_b, option_c, option_d, correct_option, explanation, sort_order) VALUES
   ('econ-u2-mcq-20', '3.5 Monetary Policy', 'SL/HL', '2',
    'Expansionary monetary policy involves the central bank:',
    'Raising interest rates',
@@ -427,7 +427,7 @@ INSERT INTO economics_mcq_questions (id, category, difficulty, unit, question_te
    1, 'QE = large-scale asset purchases when interest rates hit the zero lower bound (liquidity trap).', 62);
 
 -- 3.6 Fiscal Policy (Q23-25)
-INSERT INTO economics_mcq_questions (id, category, difficulty, unit, question_text, option_a, option_b, option_c, option_d, correct_option, explanation, sort_order) VALUES
+INSERT OR IGNORE INTO economics_mcq_questions (id, category, difficulty, unit, question_text, option_a, option_b, option_c, option_d, correct_option, explanation, sort_order) VALUES
   ('econ-u2-mcq-23', '3.6 Fiscal Policy', 'SL/HL', '2',
    'Expansionary fiscal policy involves:',
    'Cutting government spending',
@@ -453,7 +453,7 @@ INSERT INTO economics_mcq_questions (id, category, difficulty, unit, question_te
    1, 'Government borrowing competes with private borrowers for funds, pushing up interest rates and reducing private sector I and C.', 65);
 
 -- 3.7 Supply-Side Policies (Q26-28)
-INSERT INTO economics_mcq_questions (id, category, difficulty, unit, question_text, option_a, option_b, option_c, option_d, correct_option, explanation, sort_order) VALUES
+INSERT OR IGNORE INTO economics_mcq_questions (id, category, difficulty, unit, question_text, option_a, option_b, option_c, option_d, correct_option, explanation, sort_order) VALUES
   ('econ-u2-mcq-26', '3.7 Supply-Side Policies', 'SL/HL', '2',
    'Which of the following is a market-based supply-side policy?',
    'Increased government spending on education',
@@ -479,7 +479,7 @@ INSERT INTO economics_mcq_questions (id, category, difficulty, unit, question_te
    2, 'SSPs improve productive capacity, shifting LRAS right, allowing sustainable non-inflationary growth.', 68);
 
 -- 3.3 Macroeconomic Objectives (Q29-30)
-INSERT INTO economics_mcq_questions (id, category, difficulty, unit, question_text, option_a, option_b, option_c, option_d, correct_option, explanation, sort_order) VALUES
+INSERT OR IGNORE INTO economics_mcq_questions (id, category, difficulty, unit, question_text, option_a, option_b, option_c, option_d, correct_option, explanation, sort_order) VALUES
   ('econ-u2-mcq-29', '3.3 Macroeconomic Objectives', 'SL/HL', '2',
    'The Phillips curve suggests a trade-off between:',
    'Economic growth and government debt',
@@ -499,7 +499,7 @@ INSERT INTO economics_mcq_questions (id, category, difficulty, unit, question_te
 -- ─── WRITTEN QUESTIONS ───────────────────────────────────────
 
 -- Q1: AD/AS & Macroeconomic Equilibrium
-INSERT INTO economics_written_questions (id, category, difficulty, question_type, unit, marks, question_text, mark_scheme, label, sort_order) VALUES
+INSERT OR IGNORE INTO economics_written_questions (id, category, difficulty, question_type, unit, marks, question_text, mark_scheme, label, sort_order) VALUES
   ('econ-u2-wr-01a', '3.2 AD/AS', 'SL/HL', 'short_answer', '2', 10,
    'Using AD/AS diagrams, explain the difference between demand-pull inflation and cost-push inflation.',
    'Definition of inflation [1]
@@ -521,7 +521,7 @@ Evaluation: effectiveness depends on cause of inflation, transmission mechanism,
    'Q1(b)', 10);
 
 -- Q2: Fiscal Policy & Multiplier
-INSERT INTO economics_written_questions (id, category, difficulty, question_type, unit, marks, question_text, mark_scheme, label, sort_order) VALUES
+INSERT OR IGNORE INTO economics_written_questions (id, category, difficulty, question_type, unit, marks, question_text, mark_scheme, label, sort_order) VALUES
   ('econ-u2-wr-02a', '3.6 Fiscal Policy', 'SL/HL', 'short_answer', '2', 10,
    'Using a diagram, explain how expansionary fiscal policy can be used to close a recessionary gap.',
    'Definition of fiscal policy and recessionary gap [1–2]
@@ -544,7 +544,7 @@ Real-world examples (e.g. Singapore infrastructure investment, US tax cuts, Nord
    'Q2(b)', 12);
 
 -- Q3: Inequality & Poverty
-INSERT INTO economics_written_questions (id, category, difficulty, question_type, unit, marks, question_text, mark_scheme, label, sort_order) VALUES
+INSERT OR IGNORE INTO economics_written_questions (id, category, difficulty, question_type, unit, marks, question_text, mark_scheme, label, sort_order) VALUES
   ('econ-u2-wr-03a', '3.4 Inequality', 'SL/HL', 'short_answer', '2', 10,
    'Using a Lorenz curve diagram, explain how income inequality is measured.',
    'Definition of income inequality [1]
@@ -566,7 +566,7 @@ Evaluation: no single policy is sufficient; most effective as a package; depends
    'Q3(b)', 14);
 
 -- Q4: Unemployment & Supply-Side Policies
-INSERT INTO economics_written_questions (id, category, difficulty, question_type, unit, marks, question_text, mark_scheme, label, sort_order) VALUES
+INSERT OR IGNORE INTO economics_written_questions (id, category, difficulty, question_type, unit, marks, question_text, mark_scheme, label, sort_order) VALUES
   ('econ-u2-wr-04a', '3.7 Supply-Side Policies', 'SL/HL', 'short_answer', '2', 10,
    'Using appropriate diagrams, explain how supply-side policies can reduce the natural rate of unemployment.',
    'Definition of NRU and supply-side policies [1–2]

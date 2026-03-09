@@ -3,6 +3,10 @@
 -- Syllabus: 2.1–2.12 (First Assessment 2024)
 -- ============================================================
 
+-- Clear autoincrement tables to prevent duplicates on re-run
+DELETE FROM economics_checklist_items;
+DELETE FROM economics_flashcards;
+
 -- ─── CATEGORY COLORS ─────────────────────────────────────────
 INSERT OR REPLACE INTO economics_category_colors (category, color) VALUES
   ('2.1 Demand', '#2563EB'),
@@ -19,7 +23,7 @@ INSERT OR REPLACE INTO economics_category_colors (category, color) VALUES
   ('2.12 Equity', '#6366F1');
 
 -- ─── CHECKLIST SECTIONS ──────────────────────────────────────
-INSERT INTO economics_checklist_sections (id, title, color, unit, sort_order) VALUES
+INSERT OR IGNORE INTO economics_checklist_sections (id, title, color, unit, sort_order) VALUES
   ('econ-2-1-demand', '2.1 — Demand', '#2563EB', '1', 1),
   ('econ-2-2-supply', '2.2 — Supply', '#059669', '1', 2),
   ('econ-2-3-equilibrium', '2.3 — Competitive Market Equilibrium', '#7C3AED', '1', 3),
@@ -36,7 +40,7 @@ INSERT INTO economics_checklist_sections (id, title, color, unit, sort_order) VA
 -- ─── CHECKLIST ITEMS ─────────────────────────────────────────
 
 -- 2.1 Demand
-INSERT INTO economics_checklist_items (section_id, text, sort_order) VALUES
+INSERT OR IGNORE INTO economics_checklist_items (section_id, text, sort_order) VALUES
   ('econ-2-1-demand', 'Define demand and effective demand', 1),
   ('econ-2-1-demand', 'State and explain the law of demand', 2),
   ('econ-2-1-demand', 'Draw and label a demand curve (price on y-axis, quantity on x-axis)', 3),
@@ -46,7 +50,7 @@ INSERT INTO economics_checklist_items (section_id, text, sort_order) VALUES
   ('econ-2-1-demand', 'Explain the difference between substitutes and complements', 7);
 
 -- 2.2 Supply
-INSERT INTO economics_checklist_items (section_id, text, sort_order) VALUES
+INSERT OR IGNORE INTO economics_checklist_items (section_id, text, sort_order) VALUES
   ('econ-2-2-supply', 'Define supply', 1),
   ('econ-2-2-supply', 'State and explain the law of supply', 2),
   ('econ-2-2-supply', 'Draw and label a supply curve', 3),
@@ -55,7 +59,7 @@ INSERT INTO economics_checklist_items (section_id, text, sort_order) VALUES
   ('econ-2-2-supply', 'Draw and explain the effect of a change in supply on equilibrium price and quantity', 6);
 
 -- 2.3 Competitive Market Equilibrium
-INSERT INTO economics_checklist_items (section_id, text, sort_order) VALUES
+INSERT OR IGNORE INTO economics_checklist_items (section_id, text, sort_order) VALUES
   ('econ-2-3-equilibrium', 'Define equilibrium price and equilibrium quantity', 1),
   ('econ-2-3-equilibrium', 'Draw and explain a supply-and-demand diagram showing equilibrium', 2),
   ('econ-2-3-equilibrium', 'Explain the concepts of excess supply (surplus) and excess demand (shortage)', 3),
@@ -65,7 +69,7 @@ INSERT INTO economics_checklist_items (section_id, text, sort_order) VALUES
   ('econ-2-3-equilibrium', 'Explain community (social) surplus = consumer surplus + producer surplus', 7);
 
 -- 2.4 Critique of Maximising Behaviour
-INSERT INTO economics_checklist_items (section_id, text, sort_order) VALUES
+INSERT OR IGNORE INTO economics_checklist_items (section_id, text, sort_order) VALUES
   ('econ-2-4-behavioural', 'Explain the assumptions of rational consumer choice (utility maximisation, perfect information, transitivity)', 1),
   ('econ-2-4-behavioural', 'Outline at least three behavioural economics concepts (bounded rationality, bounded self-control, bounded selfishness)', 2),
   ('econ-2-4-behavioural', 'Explain cognitive biases: anchoring, framing, availability heuristic', 3),
@@ -73,7 +77,7 @@ INSERT INTO economics_checklist_items (section_id, text, sort_order) VALUES
   ('econ-2-4-behavioural', 'Explain why firms may not always profit-maximise (satisficing, corporate social responsibility, revenue maximisation)', 5);
 
 -- 2.5 Elasticity of Demand
-INSERT INTO economics_checklist_items (section_id, text, sort_order) VALUES
+INSERT OR IGNORE INTO economics_checklist_items (section_id, text, sort_order) VALUES
   ('econ-2-5-ped', 'Define price elasticity of demand (PED) and calculate it using the formula', 1),
   ('econ-2-5-ped', 'Classify PED values: elastic (>1), inelastic (<1), unit elastic (=1), perfectly elastic, perfectly inelastic', 2),
   ('econ-2-5-ped', 'Draw PED diagrams for each classification', 3),
@@ -85,13 +89,13 @@ INSERT INTO economics_checklist_items (section_id, text, sort_order) VALUES
   ('econ-2-5-ped', 'Interpret XED values: substitutes (XED > 0), complements (XED < 0)', 9);
 
 -- 2.6 Elasticity of Supply
-INSERT INTO economics_checklist_items (section_id, text, sort_order) VALUES
+INSERT OR IGNORE INTO economics_checklist_items (section_id, text, sort_order) VALUES
   ('econ-2-6-pes', 'Define price elasticity of supply (PES) and calculate it', 1),
   ('econ-2-6-pes', 'Explain determinants of PES (time, spare capacity, stock availability, factor mobility)', 2),
   ('econ-2-6-pes', 'Draw PES diagrams for elastic, inelastic, unit elastic, perfectly elastic, and perfectly inelastic supply', 3);
 
 -- 2.7 Role of Government in Microeconomics
-INSERT INTO economics_checklist_items (section_id, text, sort_order) VALUES
+INSERT OR IGNORE INTO economics_checklist_items (section_id, text, sort_order) VALUES
   ('econ-2-7-govt', 'Explain reasons for government intervention in markets', 1),
   ('econ-2-7-govt', 'Define, draw, and analyse the effects of indirect taxes (specific and ad valorem) on markets', 2),
   ('econ-2-7-govt', 'Explain tax incidence and how PED/PES affect who bears the tax burden', 3),
@@ -101,7 +105,7 @@ INSERT INTO economics_checklist_items (section_id, text, sort_order) VALUES
   ('econ-2-7-govt', 'Explain price floors (minimum prices) with a diagram and their consequences (surpluses, inefficiency)', 7);
 
 -- 2.8 Market Failure: Externalities & Common Pool Resources
-INSERT INTO economics_checklist_items (section_id, text, sort_order) VALUES
+INSERT OR IGNORE INTO economics_checklist_items (section_id, text, sort_order) VALUES
   ('econ-2-8-extern', 'Define market failure', 1),
   ('econ-2-8-extern', 'Distinguish between private costs/benefits and social (external) costs/benefits', 2),
   ('econ-2-8-extern', 'Define and draw diagrams for negative externalities of production and consumption', 3),
@@ -113,21 +117,21 @@ INSERT INTO economics_checklist_items (section_id, text, sort_order) VALUES
   ('econ-2-8-extern', 'Discuss responses to threats to common pool resources', 9);
 
 -- 2.9 Market Failure: Public Goods
-INSERT INTO economics_checklist_items (section_id, text, sort_order) VALUES
+INSERT OR IGNORE INTO economics_checklist_items (section_id, text, sort_order) VALUES
   ('econ-2-9-public', 'Define public goods (non-rivalrous and non-excludable)', 1),
   ('econ-2-9-public', 'Explain the free-rider problem', 2),
   ('econ-2-9-public', 'Distinguish between public goods, private goods, common pool resources, and club goods', 3),
   ('econ-2-9-public', 'Explain why the free market under-provides public goods', 4);
 
 -- 2.10 Market Failure: Asymmetric Information
-INSERT INTO economics_checklist_items (section_id, text, sort_order) VALUES
+INSERT OR IGNORE INTO economics_checklist_items (section_id, text, sort_order) VALUES
   ('econ-2-10-asym', 'Define asymmetric information', 1),
   ('econ-2-10-asym', 'Explain adverse selection with an example', 2),
   ('econ-2-10-asym', 'Explain moral hazard with an example', 3),
   ('econ-2-10-asym', 'Discuss government responses to asymmetric information (regulation, legislation, provision of information)', 4);
 
 -- 2.11 Market Failure: Market Power (HL)
-INSERT INTO economics_checklist_items (section_id, text, sort_order) VALUES
+INSERT OR IGNORE INTO economics_checklist_items (section_id, text, sort_order) VALUES
   ('econ-2-11-power', 'Explain revenue concepts: total revenue, average revenue, marginal revenue', 1),
   ('econ-2-11-power', 'Distinguish the four market structures: perfect competition, monopolistic competition, oligopoly, monopoly', 2),
   ('econ-2-11-power', 'Draw short-run and long-run diagrams for perfect competition', 3),
@@ -140,12 +144,12 @@ INSERT INTO economics_checklist_items (section_id, text, sort_order) VALUES
   ('econ-2-11-power', 'Evaluate advantages and disadvantages of monopoly/oligopoly vs competition', 10);
 
 -- 2.12 The Market's Inability to Achieve Equity
-INSERT INTO economics_checklist_items (section_id, text, sort_order) VALUES
+INSERT OR IGNORE INTO economics_checklist_items (section_id, text, sort_order) VALUES
   ('econ-2-12-equity', 'Explain why markets may generate inequitable outcomes', 1),
   ('econ-2-12-equity', 'Discuss the role of government in promoting equity through taxation and transfer payments', 2);
 
 -- ─── FLASHCARD TOPICS ────────────────────────────────────────
-INSERT INTO economics_flashcard_topics (id, label, color, unit, sort_order) VALUES
+INSERT OR IGNORE INTO economics_flashcard_topics (id, label, color, unit, sort_order) VALUES
   ('econ-u1-key-defs', 'Core Market Concepts', '#2563EB', '1', 1),
   ('econ-u1-govt-mf', 'Government & Market Failure', '#F97316', '1', 2),
   ('econ-u1-structures', 'Market Structures & Behaviour', '#E11D48', '1', 3);
@@ -153,7 +157,7 @@ INSERT INTO economics_flashcard_topics (id, label, color, unit, sort_order) VALU
 -- ─── FLASHCARDS ──────────────────────────────────────────────
 
 -- Core Market Concepts (14 cards)
-INSERT INTO economics_flashcards (topic_id, term, definition, formula, sort_order) VALUES
+INSERT OR IGNORE INTO economics_flashcards (topic_id, term, definition, formula, sort_order) VALUES
   ('econ-u1-key-defs', 'Demand', 'The willingness and ability of consumers to purchase a good or service at various prices in a given time period.', NULL, 1),
   ('econ-u1-key-defs', 'Law of demand', 'As the price of a good rises, quantity demanded falls, ceteris paribus (inverse relationship).', NULL, 2),
   ('econ-u1-key-defs', 'Supply', 'The willingness and ability of producers to offer a good or service for sale at various prices in a given time period.', NULL, 3),
@@ -170,7 +174,7 @@ INSERT INTO economics_flashcards (topic_id, term, definition, formula, sort_orde
   ('econ-u1-key-defs', 'PES', 'Price elasticity of supply = (% change in Qs) / (% change in P). Always positive. Depends on time, spare capacity, factor mobility.', 'PES = %ΔQs / %ΔP', 14);
 
 -- Government & Market Failure (14 cards)
-INSERT INTO economics_flashcards (topic_id, term, definition, formula, sort_order) VALUES
+INSERT OR IGNORE INTO economics_flashcards (topic_id, term, definition, formula, sort_order) VALUES
   ('econ-u1-govt-mf', 'Indirect tax', 'A tax imposed on expenditure (not income). Shifts supply curve left. Can be specific (fixed amount per unit) or ad valorem (percentage of price).', NULL, 1),
   ('econ-u1-govt-mf', 'Subsidy', 'A payment by the government to producers to lower costs and encourage production. Shifts supply curve right.', NULL, 2),
   ('econ-u1-govt-mf', 'Price ceiling', 'A maximum price set by the government below the equilibrium price. Leads to shortages, black markets, and reduced quality.', NULL, 3),
@@ -187,7 +191,7 @@ INSERT INTO economics_flashcards (topic_id, term, definition, formula, sort_orde
   ('econ-u1-govt-mf', 'Moral hazard', 'Post-transaction problem where one party takes more risks because they are protected from the consequences.', NULL, 14);
 
 -- Market Structures & Behaviour (8 cards)
-INSERT INTO economics_flashcards (topic_id, term, definition, formula, sort_order) VALUES
+INSERT OR IGNORE INTO economics_flashcards (topic_id, term, definition, formula, sort_order) VALUES
   ('econ-u1-structures', 'Profit maximisation', 'Occurs where MR = MC. The firm produces the output at which the additional revenue from the last unit equals the additional cost.', NULL, 1),
   ('econ-u1-structures', 'Perfect competition', 'Many firms, homogeneous product, no barriers to entry/exit, perfect information. Firms are price takers (AR = MR = P).', NULL, 2),
   ('econ-u1-structures', 'Monopolistic competition', 'Many firms, differentiated products, low barriers to entry. Earns supernormal profit in SR; normal profit in LR.', NULL, 3),
@@ -200,7 +204,7 @@ INSERT INTO economics_flashcards (topic_id, term, definition, formula, sort_orde
 -- ─── MCQ QUESTIONS ───────────────────────────────────────────
 
 -- 2.1 Demand (Q1-2)
-INSERT INTO economics_mcq_questions (id, category, difficulty, unit, question_text, option_a, option_b, option_c, option_d, correct_option, explanation, sort_order) VALUES
+INSERT OR IGNORE INTO economics_mcq_questions (id, category, difficulty, unit, question_text, option_a, option_b, option_c, option_d, correct_option, explanation, sort_order) VALUES
   ('econ-u1-mcq-01', '2.1 Demand', 'SL/HL', '1',
    'Which of the following would cause a movement along the demand curve for coffee, rather than a shift?',
    'A rise in the price of tea',
@@ -218,7 +222,7 @@ INSERT INTO economics_mcq_questions (id, category, difficulty, unit, question_te
    1, 'When a substitute becomes more expensive, consumers switch to the original good, increasing its demand (rightward shift).', 2);
 
 -- 2.2 Supply (Q3-5)
-INSERT INTO economics_mcq_questions (id, category, difficulty, unit, question_text, option_a, option_b, option_c, option_d, correct_option, explanation, sort_order) VALUES
+INSERT OR IGNORE INTO economics_mcq_questions (id, category, difficulty, unit, question_text, option_a, option_b, option_c, option_d, correct_option, explanation, sort_order) VALUES
   ('econ-u1-mcq-03', '2.5 Elasticity of Demand', 'SL/HL', '1',
    'A good with a negative income elasticity of demand is classified as:',
    'A normal good',
@@ -244,7 +248,7 @@ INSERT INTO economics_mcq_questions (id, category, difficulty, unit, question_te
    1, 'Better technology lowers costs of production, shifting supply rightward, which reduces equilibrium price and increases quantity.', 5);
 
 -- 2.3 Equilibrium (Q6-7)
-INSERT INTO economics_mcq_questions (id, category, difficulty, unit, question_text, option_a, option_b, option_c, option_d, correct_option, explanation, sort_order) VALUES
+INSERT OR IGNORE INTO economics_mcq_questions (id, category, difficulty, unit, question_text, option_a, option_b, option_c, option_d, correct_option, explanation, sort_order) VALUES
   ('econ-u1-mcq-06', '2.3 Competitive Market Equilibrium', 'SL/HL', '1',
    'If the market price is above the equilibrium price, there will be:',
    'Excess demand',
@@ -262,7 +266,7 @@ INSERT INTO economics_mcq_questions (id, category, difficulty, unit, question_te
    1, 'Consumer surplus is the area below the demand curve and above the market price, representing the extra benefit consumers receive.', 7);
 
 -- 2.4 Behavioural Economics (Q8-9)
-INSERT INTO economics_mcq_questions (id, category, difficulty, unit, question_text, option_a, option_b, option_c, option_d, correct_option, explanation, sort_order) VALUES
+INSERT OR IGNORE INTO economics_mcq_questions (id, category, difficulty, unit, question_text, option_a, option_b, option_c, option_d, correct_option, explanation, sort_order) VALUES
   ('econ-u1-mcq-08', '2.4 Behavioural Economics', 'SL/HL', '1',
    'Bounded rationality refers to the idea that:',
    'Consumers always maximise utility',
@@ -280,7 +284,7 @@ INSERT INTO economics_mcq_questions (id, category, difficulty, unit, question_te
    2, 'Nudge theory uses choice architecture to influence behaviour without restricting options or changing economic incentives.', 9);
 
 -- 2.5 Elasticity of Demand (Q10-12)
-INSERT INTO economics_mcq_questions (id, category, difficulty, unit, question_text, option_a, option_b, option_c, option_d, correct_option, explanation, sort_order) VALUES
+INSERT OR IGNORE INTO economics_mcq_questions (id, category, difficulty, unit, question_text, option_a, option_b, option_c, option_d, correct_option, explanation, sort_order) VALUES
   ('econ-u1-mcq-10', '2.5 Elasticity of Demand', 'SL/HL', '1',
    'If the price of a good rises by 10% and quantity demanded falls by 5%, the PED is:',
    '-2.0',
@@ -306,7 +310,7 @@ INSERT INTO economics_mcq_questions (id, category, difficulty, unit, question_te
    1, 'Positive XED means when the price of Y rises, demand for X also rises – indicating they are substitutes.', 12);
 
 -- 2.6 Elasticity of Supply (Q13)
-INSERT INTO economics_mcq_questions (id, category, difficulty, unit, question_text, option_a, option_b, option_c, option_d, correct_option, explanation, sort_order) VALUES
+INSERT OR IGNORE INTO economics_mcq_questions (id, category, difficulty, unit, question_text, option_a, option_b, option_c, option_d, correct_option, explanation, sort_order) VALUES
   ('econ-u1-mcq-13', '2.6 Elasticity of Supply', 'SL/HL', '1',
    'Price elasticity of supply is likely to be higher when:',
    'Firms have no spare capacity',
@@ -316,7 +320,7 @@ INSERT INTO economics_mcq_questions (id, category, difficulty, unit, question_te
    2, 'When factors of production are mobile and can be easily redirected, firms can respond more readily to price changes, making supply more elastic.', 13);
 
 -- 2.7 Government Intervention (Q14-17)
-INSERT INTO economics_mcq_questions (id, category, difficulty, unit, question_text, option_a, option_b, option_c, option_d, correct_option, explanation, sort_order) VALUES
+INSERT OR IGNORE INTO economics_mcq_questions (id, category, difficulty, unit, question_text, option_a, option_b, option_c, option_d, correct_option, explanation, sort_order) VALUES
   ('econ-u1-mcq-14', '2.7 Government Intervention', 'SL/HL', '1',
    'The imposition of a specific indirect tax on a good will:',
    'Shift the demand curve leftward',
@@ -350,7 +354,7 @@ INSERT INTO economics_mcq_questions (id, category, difficulty, unit, question_te
    2, 'When demand is inelastic, consumers are less responsive to price changes, so they absorb a greater share of the tax.', 17);
 
 -- 2.8 Externalities & CPR (Q18-21)
-INSERT INTO economics_mcq_questions (id, category, difficulty, unit, question_text, option_a, option_b, option_c, option_d, correct_option, explanation, sort_order) VALUES
+INSERT OR IGNORE INTO economics_mcq_questions (id, category, difficulty, unit, question_text, option_a, option_b, option_c, option_d, correct_option, explanation, sort_order) VALUES
   ('econ-u1-mcq-18', '2.8 Externalities & Common Pool Resources', 'SL/HL', '1',
    'A negative externality of production occurs when:',
    'MSC > MPC',
@@ -384,7 +388,7 @@ INSERT INTO economics_mcq_questions (id, category, difficulty, unit, question_te
    1, 'Common pool resources (rivalrous, non-excludable) are overexploited because individuals acting in self-interest deplete the shared resource.', 21);
 
 -- 2.9 Public Goods (Q22-23)
-INSERT INTO economics_mcq_questions (id, category, difficulty, unit, question_text, option_a, option_b, option_c, option_d, correct_option, explanation, sort_order) VALUES
+INSERT OR IGNORE INTO economics_mcq_questions (id, category, difficulty, unit, question_text, option_a, option_b, option_c, option_d, correct_option, explanation, sort_order) VALUES
   ('econ-u1-mcq-22', '2.9 Public Goods', 'SL/HL', '1',
    'Which pair of characteristics defines a public good?',
    'Rivalrous and excludable',
@@ -402,7 +406,7 @@ INSERT INTO economics_mcq_questions (id, category, difficulty, unit, question_te
    1, 'Since public goods are non-excludable, people can benefit without contributing, so private firms have no incentive to provide them.', 23);
 
 -- 2.10 Asymmetric Information (Q24-25)
-INSERT INTO economics_mcq_questions (id, category, difficulty, unit, question_text, option_a, option_b, option_c, option_d, correct_option, explanation, sort_order) VALUES
+INSERT OR IGNORE INTO economics_mcq_questions (id, category, difficulty, unit, question_text, option_a, option_b, option_c, option_d, correct_option, explanation, sort_order) VALUES
   ('econ-u1-mcq-24', '2.10 Asymmetric Information', 'SL/HL', '1',
    'Adverse selection occurs when:',
    'Consumers have full information about a product',
@@ -420,7 +424,7 @@ INSERT INTO economics_mcq_questions (id, category, difficulty, unit, question_te
    1, 'Moral hazard is a post-transaction problem: once insured, individuals may behave more recklessly since they are shielded from consequences.', 25);
 
 -- 2.11 Market Structures (Q26-29, HL)
-INSERT INTO economics_mcq_questions (id, category, difficulty, unit, question_text, option_a, option_b, option_c, option_d, correct_option, explanation, sort_order) VALUES
+INSERT OR IGNORE INTO economics_mcq_questions (id, category, difficulty, unit, question_text, option_a, option_b, option_c, option_d, correct_option, explanation, sort_order) VALUES
   ('econ-u1-mcq-26', '2.11 Market Structures', 'HL', '1',
    'In perfect competition, firms are price takers because:',
    'There are high barriers to entry',
@@ -454,7 +458,7 @@ INSERT INTO economics_mcq_questions (id, category, difficulty, unit, question_te
    1, 'The kinked demand curve explains why oligopolists tend to keep prices stable: rivals match price cuts but ignore price rises, creating a kink.', 29);
 
 -- 2.12 Equity (Q30, SL/HL)
-INSERT INTO economics_mcq_questions (id, category, difficulty, unit, question_text, option_a, option_b, option_c, option_d, correct_option, explanation, sort_order) VALUES
+INSERT OR IGNORE INTO economics_mcq_questions (id, category, difficulty, unit, question_text, option_a, option_b, option_c, option_d, correct_option, explanation, sort_order) VALUES
   ('econ-u1-mcq-30', '2.12 Equity', 'SL/HL', '1',
    'Which of the following best explains why free markets may fail to achieve equity?',
    'Markets always produce at allocative efficiency',
@@ -466,7 +470,7 @@ INSERT INTO economics_mcq_questions (id, category, difficulty, unit, question_te
 -- ─── WRITTEN QUESTIONS ───────────────────────────────────────
 
 -- Q1: Demand, Supply & Equilibrium
-INSERT INTO economics_written_questions (id, category, difficulty, question_type, unit, marks, question_text, mark_scheme, label, sort_order) VALUES
+INSERT OR IGNORE INTO economics_written_questions (id, category, difficulty, question_type, unit, marks, question_text, mark_scheme, label, sort_order) VALUES
   ('econ-u1-wr-01a', '2.3 Competitive Market Equilibrium', 'SL/HL', 'short_answer', '1', 10,
    'Using a diagram, explain how a market reaches equilibrium and define consumer and producer surplus.',
    '• Definition of equilibrium price and quantity (where Qd = Qs) [1–2 marks]
@@ -489,7 +493,7 @@ INSERT INTO economics_written_questions (id, category, difficulty, question_type
    'Paper 1 (b)', 2);
 
 -- Q2: Externalities
-INSERT INTO economics_written_questions (id, category, difficulty, question_type, unit, marks, question_text, mark_scheme, label, sort_order) VALUES
+INSERT OR IGNORE INTO economics_written_questions (id, category, difficulty, question_type, unit, marks, question_text, mark_scheme, label, sort_order) VALUES
   ('econ-u1-wr-02a', '2.8 Externalities & Common Pool Resources', 'SL/HL', 'short_answer', '1', 10,
    'Using an appropriate diagram, explain why a negative externality of production leads to market failure.',
    '• Definition of negative externality of production and market failure [1–2 marks]
@@ -513,7 +517,7 @@ INSERT INTO economics_written_questions (id, category, difficulty, question_type
    'Paper 1 (b)', 4);
 
 -- Q3: Elasticity
-INSERT INTO economics_written_questions (id, category, difficulty, question_type, unit, marks, question_text, mark_scheme, label, sort_order) VALUES
+INSERT OR IGNORE INTO economics_written_questions (id, category, difficulty, question_type, unit, marks, question_text, mark_scheme, label, sort_order) VALUES
   ('econ-u1-wr-03a', '2.5 Elasticity of Demand', 'SL/HL', 'short_answer', '1', 10,
    'Explain, using diagrams, the difference between price elastic and price inelastic demand, and outline the factors that determine PED.',
    '• Definition of PED with formula [1–2 marks]
@@ -535,7 +539,7 @@ INSERT INTO economics_written_questions (id, category, difficulty, question_type
    'Paper 1 (b)', 6);
 
 -- Q4: Market Structures (HL)
-INSERT INTO economics_written_questions (id, category, difficulty, question_type, unit, marks, question_text, mark_scheme, label, sort_order) VALUES
+INSERT OR IGNORE INTO economics_written_questions (id, category, difficulty, question_type, unit, marks, question_text, mark_scheme, label, sort_order) VALUES
   ('econ-u1-wr-04a', '2.11 Market Structures', 'HL', 'short_answer', '1', 10,
    'Using diagrams, compare the short-run equilibrium of a firm in perfect competition with that of a monopolist.',
    '• Diagram for perfect competition: horizontal AR = MR = D; U-shaped MC and AC curves; profit-max at MR = MC [2–3 marks]

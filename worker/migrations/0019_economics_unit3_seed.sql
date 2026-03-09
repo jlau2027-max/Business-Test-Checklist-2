@@ -17,7 +17,7 @@ INSERT OR REPLACE INTO economics_category_colors (category, color) VALUES
   ('4.10 Strategies for Development', '#9333EA');
 
 -- ─── CHECKLIST SECTIONS ──────────────────────────────────────
-INSERT INTO economics_checklist_sections (id, title, color, unit, sort_order) VALUES
+INSERT OR IGNORE INTO economics_checklist_sections (id, title, color, unit, sort_order) VALUES
   ('econ-4-1-trade', '4.1 — Benefits of International Trade', '#2563EB', '3', 31),
   ('econ-4-2-protection', '4.2 — Types of Trade Protection', '#059669', '3', 32),
   ('econ-4-3-arguments', '4.3 — Arguments For and Against Trade Protection', '#7C3AED', '3', 33),
@@ -32,7 +32,7 @@ INSERT INTO economics_checklist_sections (id, title, color, unit, sort_order) VA
 -- ─── CHECKLIST ITEMS ─────────────────────────────────────────
 
 -- 4.1 Benefits of International Trade
-INSERT INTO economics_checklist_items (section_id, text, sort_order) VALUES
+INSERT OR IGNORE INTO economics_checklist_items (section_id, text, sort_order) VALUES
   ('econ-4-1-trade', 'Explain the benefits of free trade (greater choice, lower prices, economies of scale, increased competition, efficient resource allocation)', 1),
   ('econ-4-1-trade', 'Define and calculate absolute advantage', 2),
   ('econ-4-1-trade', 'Define and calculate comparative advantage using opportunity cost ratios', 3),
@@ -41,7 +41,7 @@ INSERT INTO economics_checklist_items (section_id, text, sort_order) VALUES
   ('econ-4-1-trade', '(HL) Explain limitations of the theory of comparative advantage (transport costs, assumptions of constant costs, factor immobility, externalities)', 6);
 
 -- 4.2 Types of Trade Protection
-INSERT INTO economics_checklist_items (section_id, text, sort_order) VALUES
+INSERT OR IGNORE INTO economics_checklist_items (section_id, text, sort_order) VALUES
   ('econ-4-2-protection', 'Define trade protection/protectionism', 1),
   ('econ-4-2-protection', 'Draw and analyse a tariff diagram (domestic S, domestic D, world supply price, tariff effects on price, quantity, imports, welfare)', 2),
   ('econ-4-2-protection', 'Identify on the diagram: consumer surplus loss, producer surplus gain, government revenue, welfare/deadweight loss', 3),
@@ -51,13 +51,13 @@ INSERT INTO economics_checklist_items (section_id, text, sort_order) VALUES
   ('econ-4-2-protection', 'Explain administrative barriers (red tape, standards, licensing requirements)', 7);
 
 -- 4.3 Arguments For and Against Trade Protection
-INSERT INTO economics_checklist_items (section_id, text, sort_order) VALUES
+INSERT OR IGNORE INTO economics_checklist_items (section_id, text, sort_order) VALUES
   ('econ-4-3-arguments', 'Arguments for: infant industry, national security, protection of domestic jobs, anti-dumping, revenue, strategic trade policy', 1),
   ('econ-4-3-arguments', 'Arguments against: higher prices, reduced choice, retaliation, inefficiency, rent-seeking, loss of comparative advantage', 2),
   ('econ-4-3-arguments', 'Evaluate: protection rarely achieves its goals in the long run; may be justified temporarily for infant industries', 3);
 
 -- 4.4 Economic Integration
-INSERT INTO economics_checklist_items (section_id, text, sort_order) VALUES
+INSERT OR IGNORE INTO economics_checklist_items (section_id, text, sort_order) VALUES
   ('econ-4-4-integration', 'Define and distinguish: preferential trade agreement, free trade area, customs union, common market, economic/monetary union', 1),
   ('econ-4-4-integration', 'Explain trade creation and trade diversion with examples', 2),
   ('econ-4-4-integration', 'Explain advantages and disadvantages of trading blocs (e.g. EU, ASEAN, USMCA)', 3),
@@ -65,7 +65,7 @@ INSERT INTO economics_checklist_items (section_id, text, sort_order) VALUES
   ('econ-4-4-integration', '(HL) Explain advantages and disadvantages of monetary union (e.g. Eurozone)', 5);
 
 -- 4.5 Exchange Rates
-INSERT INTO economics_checklist_items (section_id, text, sort_order) VALUES
+INSERT OR IGNORE INTO economics_checklist_items (section_id, text, sort_order) VALUES
   ('econ-4-5-exchange', 'Define exchange rate (price of one currency in terms of another)', 1),
   ('econ-4-5-exchange', 'Draw a currency supply-and-demand diagram', 2),
   ('econ-4-5-exchange', 'Explain factors affecting demand and supply of a currency (trade flows, investment flows, speculation, interest rates, inflation rates, government intervention)', 3),
@@ -78,7 +78,7 @@ INSERT INTO economics_checklist_items (section_id, text, sort_order) VALUES
   ('econ-4-5-exchange', '(HL) Draw and explain the J-curve effect (trade balance initially worsens after depreciation before improving)', 10);
 
 -- 4.6 Balance of Payments
-INSERT INTO economics_checklist_items (section_id, text, sort_order) VALUES
+INSERT OR IGNORE INTO economics_checklist_items (section_id, text, sort_order) VALUES
   ('econ-4-6-bop', 'Define balance of payments (record of all economic transactions between residents and rest of world)', 1),
   ('econ-4-6-bop', 'Explain the current account (trade in goods, trade in services, primary income, secondary income/transfers)', 2),
   ('econ-4-6-bop', 'Explain the capital account (capital transfers, non-produced non-financial assets)', 3),
@@ -90,14 +90,14 @@ INSERT INTO economics_checklist_items (section_id, text, sort_order) VALUES
   ('econ-4-6-bop', 'Discuss methods to correct a persistent current account deficit (depreciation, expenditure switching, expenditure reducing, supply-side policies)', 9);
 
 -- 4.7 Sustainable Development
-INSERT INTO economics_checklist_items (section_id, text, sort_order) VALUES
+INSERT OR IGNORE INTO economics_checklist_items (section_id, text, sort_order) VALUES
   ('econ-4-7-sustainable', 'Define sustainable development (meeting present needs without compromising future generations)', 1),
   ('econ-4-7-sustainable', 'Explain the relationship between economic growth and environmental sustainability', 2),
   ('econ-4-7-sustainable', 'Outline the UN Sustainable Development Goals (SDGs)', 3),
   ('econ-4-7-sustainable', '(HL) Explain the relationship between sustainability and poverty (poverty traps, environmental degradation, resource depletion)', 4);
 
 -- 4.8 Measuring Development
-INSERT INTO economics_checklist_items (section_id, text, sort_order) VALUES
+INSERT OR IGNORE INTO economics_checklist_items (section_id, text, sort_order) VALUES
   ('econ-4-8-measuring', 'Distinguish between economic growth and economic development', 1),
   ('econ-4-8-measuring', 'Explain single indicators of development: GDP per capita (PPP), health indicators, education indicators', 2),
   ('econ-4-8-measuring', 'Explain composite indicators: HDI (health, education, income), GII, MPI', 3),
@@ -105,14 +105,14 @@ INSERT INTO economics_checklist_items (section_id, text, sort_order) VALUES
   ('econ-4-8-measuring', 'Explain the relationship between economic growth and economic development (growth is necessary but not sufficient)', 5);
 
 -- 4.9 Barriers to Development
-INSERT INTO economics_checklist_items (section_id, text, sort_order) VALUES
+INSERT OR IGNORE INTO economics_checklist_items (section_id, text, sort_order) VALUES
   ('econ-4-9-barriers', 'Explain poverty cycles/traps (low income → low savings → low investment → low growth)', 1),
   ('econ-4-9-barriers', 'Explain economic barriers: lack of capital, rising commodity dependence, unfavourable terms of trade, debt', 2),
   ('econ-4-9-barriers', 'Explain political/social barriers: corruption, weak institutions, conflict, gender inequality', 3),
   ('econ-4-9-barriers', 'Explain role of international trade barriers, brain drain, geography/climate', 4);
 
 -- 4.10 Strategies for Development
-INSERT INTO economics_checklist_items (section_id, text, sort_order) VALUES
+INSERT OR IGNORE INTO economics_checklist_items (section_id, text, sort_order) VALUES
   ('econ-4-10-strategies', 'Trade strategies: import substitution (ISI), export promotion, trade liberalisation, fair trade', 1),
   ('econ-4-10-strategies', 'Market-based strategies: trade liberalisation, privatisation, deregulation, FDI attraction', 2),
   ('econ-4-10-strategies', 'Interventionist strategies: industrial policy, investment in human capital, infrastructure, redistribution', 3),
@@ -122,7 +122,7 @@ INSERT INTO economics_checklist_items (section_id, text, sort_order) VALUES
   ('econ-4-10-strategies', 'Role of microfinance and fair trade', 7);
 
 -- ─── DIAGRAM CHECKLIST SECTIONS ──────────────────────────────
-INSERT INTO economics_checklist_sections (id, title, color, unit, sort_order) VALUES
+INSERT OR IGNORE INTO economics_checklist_sections (id, title, color, unit, sort_order) VALUES
   ('econ-u3-diag-trade', 'Diagrams: Trade & Protection (4.1–4.3)', '#0284C7', '3', 41),
   ('econ-u3-diag-exchange', 'Diagrams: Exchange Rates (4.5)', '#DC2626', '3', 42),
   ('econ-u3-diag-bop', 'Diagrams: Balance of Payments (4.6)', '#0891B2', '3', 43),
@@ -131,7 +131,7 @@ INSERT INTO economics_checklist_sections (id, title, color, unit, sort_order) VA
 -- ─── DIAGRAM CHECKLIST ITEMS ─────────────────────────────────
 
 -- Diagrams: Trade & Protection
-INSERT INTO economics_checklist_items (section_id, text, sort_order) VALUES
+INSERT OR IGNORE INTO economics_checklist_items (section_id, text, sort_order) VALUES
   ('econ-u3-diag-trade', 'PPC diagram showing comparative advantage and gains from trade', 1),
   ('econ-u3-diag-trade', 'Tariff diagram (Pw, Pw+t, domestic S/D, government revenue, deadweight loss triangles)', 2),
   ('econ-u3-diag-trade', 'Quota diagram (Pw, Pq, domestic S/D, quota rent area)', 3),
@@ -139,7 +139,7 @@ INSERT INTO economics_checklist_items (section_id, text, sort_order) VALUES
   ('econ-u3-diag-trade', 'Export subsidy diagram', 5);
 
 -- Diagrams: Exchange Rates
-INSERT INTO economics_checklist_items (section_id, text, sort_order) VALUES
+INSERT OR IGNORE INTO economics_checklist_items (section_id, text, sort_order) VALUES
   ('econ-u3-diag-exchange', 'Currency S/D diagram (floating): equilibrium exchange rate', 1),
   ('econ-u3-diag-exchange', 'Appreciation diagram (D shifts right or S shifts left)', 2),
   ('econ-u3-diag-exchange', 'Depreciation diagram (S shifts right or D shifts left)', 3),
@@ -147,17 +147,17 @@ INSERT INTO economics_checklist_items (section_id, text, sort_order) VALUES
   ('econ-u3-diag-exchange', '(HL) J-curve diagram (trade balance vs time after depreciation)', 5);
 
 -- Diagrams: Balance of Payments
-INSERT INTO economics_checklist_items (section_id, text, sort_order) VALUES
+INSERT OR IGNORE INTO economics_checklist_items (section_id, text, sort_order) VALUES
   ('econ-u3-diag-bop', 'Balance of payments structure diagram (current + capital + financial = 0)', 1);
 
 -- Diagrams: Development
-INSERT INTO economics_checklist_items (section_id, text, sort_order) VALUES
+INSERT OR IGNORE INTO economics_checklist_items (section_id, text, sort_order) VALUES
   ('econ-u3-diag-dev', 'Poverty cycle/trap diagram', 1),
   ('econ-u3-diag-dev', 'Harrod-Domar model diagram (if applicable)', 2),
   ('econ-u3-diag-dev', 'HDI components diagram', 3);
 
 -- ─── FLASHCARD TOPICS ────────────────────────────────────────
-INSERT INTO economics_flashcard_topics (id, label, color, unit, sort_order) VALUES
+INSERT OR IGNORE INTO economics_flashcard_topics (id, label, color, unit, sort_order) VALUES
   ('econ-u3-trade', 'Trade Theory & Protection', '#2563EB', '3', 12),
   ('econ-u3-integration', 'Economic Integration', '#D97706', '3', 13),
   ('econ-u3-exchange', 'Exchange Rates & BoP', '#DC2626', '3', 14),
@@ -166,7 +166,7 @@ INSERT INTO economics_flashcard_topics (id, label, color, unit, sort_order) VALU
 -- ─── FLASHCARDS ──────────────────────────────────────────────
 
 -- Trade Theory & Protection (8 cards)
-INSERT INTO economics_flashcards (topic_id, term, definition, formula, sort_order) VALUES
+INSERT OR IGNORE INTO economics_flashcards (topic_id, term, definition, formula, sort_order) VALUES
   ('econ-u3-trade', 'Absolute advantage', 'A country can produce a good using fewer resources (or more output per unit of input) than another country.', NULL, 1),
   ('econ-u3-trade', 'Comparative advantage', 'A country can produce a good at a lower opportunity cost than another country. Basis for mutually beneficial trade.', NULL, 2),
   ('econ-u3-trade', 'Tariff', 'A tax on imported goods. Raises domestic price, reduces imports, creates deadweight loss, generates government revenue.', NULL, 3),
@@ -177,7 +177,7 @@ INSERT INTO economics_flashcards (topic_id, term, definition, formula, sort_orde
   ('econ-u3-trade', 'Dumping', 'Selling exports below production cost or domestic price. Anti-dumping duties can be imposed as a countermeasure.', NULL, 8);
 
 -- Economic Integration (7 cards)
-INSERT INTO economics_flashcards (topic_id, term, definition, formula, sort_order) VALUES
+INSERT OR IGNORE INTO economics_flashcards (topic_id, term, definition, formula, sort_order) VALUES
   ('econ-u3-integration', 'Free trade area (FTA)', 'Member countries remove tariffs between themselves but maintain independent external tariffs (e.g. original NAFTA).', NULL, 1),
   ('econ-u3-integration', 'Customs union', 'FTA + common external tariff on non-members (e.g. EU customs union, Mercosur).', NULL, 2),
   ('econ-u3-integration', 'Common market', 'Customs union + free movement of labour and capital (e.g. EU single market).', NULL, 3),
@@ -187,7 +187,7 @@ INSERT INTO economics_flashcards (topic_id, term, definition, formula, sort_orde
   ('econ-u3-integration', 'WTO', 'World Trade Organisation: promotes free trade, enforces trade rules, resolves disputes. Key principles: MFN, reciprocity, transparency.', NULL, 7);
 
 -- Exchange Rates & BoP (10 cards)
-INSERT INTO economics_flashcards (topic_id, term, definition, formula, sort_order) VALUES
+INSERT OR IGNORE INTO economics_flashcards (topic_id, term, definition, formula, sort_order) VALUES
   ('econ-u3-exchange', 'Exchange rate', 'The price of one currency expressed in terms of another currency.', NULL, 1),
   ('econ-u3-exchange', 'Appreciation', 'An increase in the value of a currency under a floating system. Makes exports more expensive, imports cheaper.', NULL, 2),
   ('econ-u3-exchange', 'Depreciation', 'A decrease in the value of a currency under a floating system. Makes exports cheaper, imports more expensive.', NULL, 3),
@@ -200,7 +200,7 @@ INSERT INTO economics_flashcards (topic_id, term, definition, formula, sort_orde
   ('econ-u3-exchange', 'Terms of trade', '(Index of export prices / Index of import prices) x 100. Rising ToT = can buy more imports per unit of exports.', '(Px/Pm) x 100', 10);
 
 -- Development (13 cards)
-INSERT INTO economics_flashcards (topic_id, term, definition, formula, sort_order) VALUES
+INSERT OR IGNORE INTO economics_flashcards (topic_id, term, definition, formula, sort_order) VALUES
   ('econ-u3-development', 'Sustainable development', 'Meeting present needs without compromising future generations'' ability to meet theirs (Brundtland, 1987).', NULL, 1),
   ('econ-u3-development', 'HDI', 'Human Development Index: composite of life expectancy, education (mean + expected years), and GNI per capita (PPP). Range 0–1.', NULL, 2),
   ('econ-u3-development', 'MPI', 'Multidimensional Poverty Index: measures overlapping deprivations in health, education, and living standards at household level.', NULL, 3),
@@ -217,7 +217,7 @@ INSERT INTO economics_flashcards (topic_id, term, definition, formula, sort_orde
 
 -- ─── MCQ QUESTIONS ───────────────────────────────────────────
 
-INSERT INTO economics_mcq_questions (id, category, difficulty, unit, question_text, option_a, option_b, option_c, option_d, correct_option, explanation, sort_order) VALUES
+INSERT OR IGNORE INTO economics_mcq_questions (id, category, difficulty, unit, question_text, option_a, option_b, option_c, option_d, correct_option, explanation, sort_order) VALUES
   ('econ-u3-mcq-01', '4.1 Trade', 'SL/HL', '3',
    'Country A can produce 10 units of cloth or 5 units of wine. Country B can produce 8 units of cloth or 8 units of wine. Which country has the comparative advantage in wine?',
    'Country A',
@@ -298,7 +298,7 @@ INSERT INTO economics_mcq_questions (id, category, difficulty, unit, question_te
    'Tariffs must be eliminated immediately',
    1, 'MFN = non-discrimination. If you lower tariffs for one member, you must do the same for all (with exceptions for FTAs/customs unions).', 80);
 
-INSERT INTO economics_mcq_questions (id, category, difficulty, unit, question_text, option_a, option_b, option_c, option_d, correct_option, explanation, sort_order) VALUES
+INSERT OR IGNORE INTO economics_mcq_questions (id, category, difficulty, unit, question_text, option_a, option_b, option_c, option_d, correct_option, explanation, sort_order) VALUES
   ('econ-u3-mcq-11', '4.5 Exchange Rates', 'SL/HL', '3',
    'If the demand for US dollars increases relative to the euro, the US dollar will:',
    'Depreciate against the euro',
@@ -379,7 +379,7 @@ INSERT INTO economics_mcq_questions (id, category, difficulty, unit, question_te
    'Joining a free trade area',
    1, 'ISI uses tariffs and quotas to protect fledgling domestic industries. Criticised for creating inefficiency and reducing competitiveness long-term.', 90);
 
-INSERT INTO economics_mcq_questions (id, category, difficulty, unit, question_text, option_a, option_b, option_c, option_d, correct_option, explanation, sort_order) VALUES
+INSERT OR IGNORE INTO economics_mcq_questions (id, category, difficulty, unit, question_text, option_a, option_b, option_c, option_d, correct_option, explanation, sort_order) VALUES
   ('econ-u3-mcq-21', '4.10 Strategies for Development', 'SL/HL', '3',
    'Foreign Direct Investment (FDI) can benefit developing countries by:',
    'Always reducing inequality',
@@ -463,7 +463,7 @@ INSERT INTO economics_mcq_questions (id, category, difficulty, unit, question_te
 -- ─── WRITTEN QUESTIONS ───────────────────────────────────────
 
 -- Q1: Trade Protection
-INSERT INTO economics_written_questions (id, category, difficulty, question_type, unit, marks, question_text, mark_scheme, label, sort_order) VALUES
+INSERT OR IGNORE INTO economics_written_questions (id, category, difficulty, question_type, unit, marks, question_text, mark_scheme, label, sort_order) VALUES
   ('econ-u3-wr-01a', '4.2 Trade Protection', 'SL/HL', 'short_answer', '3', 10,
    'Using a tariff diagram, explain the effects of a tariff on an imported good.',
    'Definition of tariff [1]
@@ -485,7 +485,7 @@ Evaluation: success depends on government competence, sunset clauses, industry p
    'Q1(b)', 18);
 
 -- Q2: Exchange Rates
-INSERT INTO economics_written_questions (id, category, difficulty, question_type, unit, marks, question_text, mark_scheme, label, sort_order) VALUES
+INSERT OR IGNORE INTO economics_written_questions (id, category, difficulty, question_type, unit, marks, question_text, mark_scheme, label, sort_order) VALUES
   ('econ-u3-wr-02a', '4.5 Exchange Rates', 'SL/HL', 'short_answer', '3', 10,
    'Using a supply and demand diagram for a currency, explain how a floating exchange rate is determined and what might cause a depreciation.',
    'Definition of exchange rate and floating system [1–2]
@@ -507,7 +507,7 @@ Evaluation: depends on cause of depreciation, economy''s trade structure, and wh
    'Q2(b)', 20);
 
 -- Q3: Economic Development
-INSERT INTO economics_written_questions (id, category, difficulty, question_type, unit, marks, question_text, mark_scheme, label, sort_order) VALUES
+INSERT OR IGNORE INTO economics_written_questions (id, category, difficulty, question_type, unit, marks, question_text, mark_scheme, label, sort_order) VALUES
   ('econ-u3-wr-03a', '4.8 Measuring Development', 'SL/HL', 'short_answer', '3', 10,
    'Explain the difference between economic growth and economic development, and outline how development can be measured.',
    'Definition of economic growth (increase in real GDP) vs economic development (improvement in living standards, freedoms, capabilities) [2–3]
@@ -527,7 +527,7 @@ Evaluation: FDI is neither inherently good nor bad; outcomes depend on governmen
    'Q3(b)', 22);
 
 -- Q4: Balance of Payments & Current Account
-INSERT INTO economics_written_questions (id, category, difficulty, question_type, unit, marks, question_text, mark_scheme, label, sort_order) VALUES
+INSERT OR IGNORE INTO economics_written_questions (id, category, difficulty, question_type, unit, marks, question_text, mark_scheme, label, sort_order) VALUES
   ('econ-u3-wr-04a', '4.6 Balance of Payments', 'SL/HL', 'short_answer', '3', 10,
    'Explain the structure of the balance of payments and the relationship between the current account and the financial account.',
    'Definition of BoP [1]

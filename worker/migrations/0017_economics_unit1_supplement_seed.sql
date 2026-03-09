@@ -5,7 +5,7 @@
 -- ============================================================
 
 -- ─── DIAGRAM CHECKLIST SECTIONS ──────────────────────────────
-INSERT INTO economics_checklist_sections (id, title, color, unit, sort_order) VALUES
+INSERT OR IGNORE INTO economics_checklist_sections (id, title, color, unit, sort_order) VALUES
   ('econ-diag-ds', 'Diagrams: Demand & Supply (2.1–2.3)', '#0284C7', '1', 13),
   ('econ-diag-elast', 'Diagrams: Elasticity (2.5–2.6)', '#B91C1C', '1', 14),
   ('econ-diag-govt', 'Diagrams: Government Intervention (2.7)', '#EA580C', '1', 15),
@@ -15,7 +15,7 @@ INSERT INTO economics_checklist_sections (id, title, color, unit, sort_order) VA
 -- ─── DIAGRAM CHECKLIST ITEMS ─────────────────────────────────
 
 -- Diagrams: Demand & Supply
-INSERT INTO economics_checklist_items (section_id, text, sort_order) VALUES
+INSERT OR IGNORE INTO economics_checklist_items (section_id, text, sort_order) VALUES
   ('econ-diag-ds', 'Demand curve (downward-sloping, with axes labelled P and Q)', 1),
   ('econ-diag-ds', 'Supply curve (upward-sloping, with axes labelled P and Q)', 2),
   ('econ-diag-ds', 'Equilibrium diagram (D and S intersecting; label Pe, Qe)', 3),
@@ -26,7 +26,7 @@ INSERT INTO economics_checklist_items (section_id, text, sort_order) VALUES
   ('econ-diag-ds', 'Consumer surplus and producer surplus areas on equilibrium diagram', 8);
 
 -- Diagrams: Elasticity
-INSERT INTO economics_checklist_items (section_id, text, sort_order) VALUES
+INSERT OR IGNORE INTO economics_checklist_items (section_id, text, sort_order) VALUES
   ('econ-diag-elast', 'Perfectly elastic demand (horizontal line)', 1),
   ('econ-diag-elast', 'Perfectly inelastic demand (vertical line)', 2),
   ('econ-diag-elast', 'Relatively elastic demand (shallow curve)', 3),
@@ -37,7 +37,7 @@ INSERT INTO economics_checklist_items (section_id, text, sort_order) VALUES
   ('econ-diag-elast', 'Perfectly elastic and perfectly inelastic supply', 8);
 
 -- Diagrams: Government Intervention
-INSERT INTO economics_checklist_items (section_id, text, sort_order) VALUES
+INSERT OR IGNORE INTO economics_checklist_items (section_id, text, sort_order) VALUES
   ('econ-diag-govt', 'Specific indirect tax: parallel upward shift of S, showing tax wedge, consumer/producer incidence, government revenue, welfare loss', 1),
   ('econ-diag-govt', 'Ad valorem tax: pivoting upward shift of S (widens with price)', 2),
   ('econ-diag-govt', 'Tax incidence with elastic demand vs inelastic demand (side-by-side comparison)', 3),
@@ -46,7 +46,7 @@ INSERT INTO economics_checklist_items (section_id, text, sort_order) VALUES
   ('econ-diag-govt', 'Price floor (above equilibrium): showing surplus', 6);
 
 -- Diagrams: Externalities & Market Failure
-INSERT INTO economics_checklist_items (section_id, text, sort_order) VALUES
+INSERT OR IGNORE INTO economics_checklist_items (section_id, text, sort_order) VALUES
   ('econ-diag-extern', 'Negative externality of production: MPC, MSC (above MPC), D=MSB=MPB; welfare loss triangle', 1),
   ('econ-diag-extern', 'Negative externality of consumption: D=MPB, MSB (below MPB), S=MPC=MSC; welfare loss triangle', 2),
   ('econ-diag-extern', 'Positive externality of production: MPC, MSC (below MPC), D=MSB=MPB; welfare gain triangle', 3),
@@ -56,7 +56,7 @@ INSERT INTO economics_checklist_items (section_id, text, sort_order) VALUES
   ('econ-diag-extern', 'Tradeable permits diagram (supply of permits is vertical/perfectly inelastic)', 7);
 
 -- Diagrams: Market Structures (HL)
-INSERT INTO economics_checklist_items (section_id, text, sort_order) VALUES
+INSERT OR IGNORE INTO economics_checklist_items (section_id, text, sort_order) VALUES
   ('econ-diag-struct', 'Perfect competition SR: horizontal AR=MR=D; U-shaped MC, ATC; profit/loss shading', 1),
   ('econ-diag-struct', 'Perfect competition LR: AR=MR tangent to minimum of ATC (normal profit)', 2),
   ('econ-diag-struct', 'Monopolistic competition SR: downward-sloping AR, MR below; supernormal profit', 3),
@@ -67,7 +67,7 @@ INSERT INTO economics_checklist_items (section_id, text, sort_order) VALUES
   ('econ-diag-struct', 'Collusive oligopoly (cartel): acts like monopoly diagram', 8);
 
 -- ─── FLASHCARD TOPICS ────────────────────────────────────────
-INSERT INTO economics_flashcard_topics (id, label, color, unit, sort_order) VALUES
+INSERT OR IGNORE INTO economics_flashcard_topics (id, label, color, unit, sort_order) VALUES
   ('econ-u1-rwe', 'Real-World Examples', '#059669', '1', 4),
   ('econ-u1-formulas', 'Key Formulas', '#D97706', '1', 5),
   ('econ-u1-exam-tips', 'Exam Technique Tips', '#DC2626', '1', 6),
@@ -75,7 +75,7 @@ INSERT INTO economics_flashcard_topics (id, label, color, unit, sort_order) VALU
 
 -- ─── FLASHCARDS: Real-World Examples (31 cards) ──────────────
 
-INSERT INTO economics_flashcards (topic_id, term, definition, formula, sort_order) VALUES
+INSERT OR IGNORE INTO economics_flashcards (topic_id, term, definition, formula, sort_order) VALUES
   ('econ-u1-rwe', 'Gallium export restrictions (China)', 'China restricted exports of gallium (used in semiconductors), illustrating the rationing function of the price mechanism when supply is limited. (2.1–2.3)', NULL, 1),
   ('econ-u1-rwe', 'COVID-19 mask market', 'During the pandemic, demand for masks surged (rightward shift of D) while supply was initially constrained, leading to price spikes before new suppliers entered. (2.1–2.3)', NULL, 2),
   ('econ-u1-rwe', 'OPEC oil supply decisions', 'OPEC supply decisions shift the global supply curve, directly affecting equilibrium price and quantity of crude oil. (2.1–2.3)', NULL, 3),
@@ -110,7 +110,7 @@ INSERT INTO economics_flashcards (topic_id, term, definition, formula, sort_orde
 
 -- ─── FLASHCARDS: Key Formulas (9 cards, excluding PED/YED/XED/PES already in Pack 1) ──
 
-INSERT INTO economics_flashcards (topic_id, term, definition, formula, sort_order) VALUES
+INSERT OR IGNORE INTO economics_flashcards (topic_id, term, definition, formula, sort_order) VALUES
   ('econ-u1-formulas', 'Total Revenue (TR)', 'The total income a firm receives from selling its output. Key relationship: if PED elastic, lower P raises TR; if inelastic, raise P.', 'TR = P × Q', 1),
   ('econ-u1-formulas', 'Tax Revenue', 'The total revenue the government collects from an indirect tax. Shown as a rectangular area on the diagram.', 'Tax Revenue = tax per unit × Q(after tax)', 2),
   ('econ-u1-formulas', 'Government Subsidy Cost', 'The total cost to the government of providing a per-unit subsidy. Shown as a rectangular area on the diagram.', 'Subsidy Cost = subsidy per unit × Q(after subsidy)', 3),
@@ -123,7 +123,7 @@ INSERT INTO economics_flashcards (topic_id, term, definition, formula, sort_orde
 
 -- ─── FLASHCARDS: Exam Technique Tips (11 cards) ─────────────
 
-INSERT INTO economics_flashcards (topic_id, term, definition, formula, sort_order) VALUES
+INSERT OR IGNORE INTO economics_flashcards (topic_id, term, definition, formula, sort_order) VALUES
   ('econ-u1-exam-tips', 'Subsidy incidence: producer on top', 'When drawing subsidy incidence, the producer benefit is the TOP portion and consumer benefit is BELOW. This is the opposite of indirect tax diagrams.', NULL, 1),
   ('econ-u1-exam-tips', 'Use PED to evaluate tax/subsidy', 'For inelastic goods (cigarettes, petrol), the tax burden falls more on consumers and demand falls less – high revenue but little behaviour change. For elastic goods, tax is more effective at reducing quantity but raises less revenue.', NULL, 2),
   ('econ-u1-exam-tips', '15-mark evaluation framework', 'Structure: (1) challenges of measuring externalities, (2) degree of effectiveness of solution, (3) whether a multi-faceted approach is needed, (4) unintended consequences, (5) stakeholder impacts.', NULL, 3),
@@ -138,7 +138,7 @@ INSERT INTO economics_flashcards (topic_id, term, definition, formula, sort_orde
 
 -- ─── FLASHCARDS: Advanced Concepts (30 cards — all verified unique vs Pack 1) ──
 
-INSERT INTO economics_flashcards (topic_id, term, definition, formula, sort_order) VALUES
+INSERT OR IGNORE INTO economics_flashcards (topic_id, term, definition, formula, sort_order) VALUES
   ('econ-u1-advanced', 'Income effect', 'As the price of a good falls, the consumer''s real income (purchasing power) increases, so they can afford to buy more of the good.', NULL, 1),
   ('econ-u1-advanced', 'Substitution effect', 'As the price of a good falls, it becomes relatively cheaper compared to substitutes, so consumers switch to it, increasing Qd.', NULL, 2),
   ('econ-u1-advanced', 'Diminishing marginal utility', 'As a consumer consumes more units of a good, the additional satisfaction (utility) from each extra unit decreases. Explains the downward slope of demand.', NULL, 3),
@@ -172,7 +172,7 @@ INSERT INTO economics_flashcards (topic_id, term, definition, formula, sort_orde
 
 -- ─── ADDITIONAL MCQ QUESTIONS (10, sort_order 31–40) ─────────
 
-INSERT INTO economics_mcq_questions (id, category, difficulty, unit, question_text, option_a, option_b, option_c, option_d, correct_option, explanation, sort_order) VALUES
+INSERT OR IGNORE INTO economics_mcq_questions (id, category, difficulty, unit, question_text, option_a, option_b, option_c, option_d, correct_option, explanation, sort_order) VALUES
   ('econ-u1-mcq-31', '2.1 Demand', 'SL/HL', '1',
    'The income effect of a price decrease means:',
    'The good becomes relatively cheaper than substitutes',

@@ -33,6 +33,8 @@ if (path === '/chemistry') window.location.replace('/chemistry/checklist')
 if (path === '/physics') window.location.replace('/physics/checklist')
 if (path === '/sports-science') window.location.replace('/sports-science/checklist')
 if (path === '/economics') window.location.replace('/economics/checklist')
+if (path === '/ess') window.location.replace('/ess/checklist')
+if (path === '/spanish') window.location.replace('/spanish/checklist')
 
 // Determine page and props
 let Page = LandingPage
@@ -78,6 +80,16 @@ if (path.startsWith('/business/')) {
   Page = App
   const tabMap = { checklist: 'checklist', flashcards: 'flashcards', 'multi-choice': 'practice', written: 'written' }
   pageProps = { initialTab: tabMap[sub] || 'checklist', subject: 'economics' }
+} else if (path.startsWith('/ess/')) {
+  const sub = path.split('/')[2]
+  Page = App
+  const tabMap = { checklist: 'checklist', flashcards: 'flashcards', 'multi-choice': 'practice', written: 'written' }
+  pageProps = { initialTab: tabMap[sub] || 'checklist', subject: 'ess' }
+} else if (path.startsWith('/spanish/')) {
+  const sub = path.split('/')[2]
+  Page = App
+  const tabMap = { checklist: 'checklist', flashcards: 'flashcards', 'multi-choice': 'practice', written: 'written' }
+  pageProps = { initialTab: tabMap[sub] || 'checklist', subject: 'spanish' }
 } else if (path === '/dashboard') {
   Page = DashboardPage
 } else if (path === '/admin') {
@@ -110,6 +122,8 @@ const SUBJECT_LABELS = {
   physics: 'IB Physics',
   'sports-science': 'IB Sports Science',
   economics: 'IB Economics',
+  ess: 'IB ESS',
+  spanish: 'IB Spanish',
 }
 const TAB_LABELS = {
   checklist: 'Checklist',

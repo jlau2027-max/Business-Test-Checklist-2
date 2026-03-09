@@ -9,7 +9,7 @@ INSERT OR REPLACE INTO physics_category_colors (category, color) VALUES
 
 -- ─── MCQ QUESTIONS ─────────────────────────────────────────
 
-INSERT INTO physics_mcq_questions (id, category, difficulty, unit, question_text, option_a, option_b, option_c, option_d, correct_option, explanation, sort_order) VALUES
+INSERT OR IGNORE INTO physics_mcq_questions (id, category, difficulty, unit, question_text, option_a, option_b, option_c, option_d, correct_option, explanation, sort_order) VALUES
   ('phys-c1-mcq-01', 'C.1 Simple Harmonic Motion', 'SL/HL', 'C',
    'A particle performs simple harmonic motion (SHM). What is the phase difference between the displacement and the acceleration of the particle?',
    '0',
@@ -213,7 +213,7 @@ INSERT INTO physics_mcq_questions (id, category, difficulty, unit, question_text
 
 -- ─── WRITTEN QUESTIONS ───────────────────────────────────────
 
-INSERT INTO physics_written_questions (id, category, difficulty, question_type, unit, marks, question_text, mark_scheme, label, sort_order) VALUES
+INSERT OR IGNORE INTO physics_written_questions (id, category, difficulty, question_type, unit, marks, question_text, mark_scheme, label, sort_order) VALUES
   ('phys-c1-wr-01', 'C.1 Simple Harmonic Motion', 'SL/HL', 'short_answer', 'C', 2,
    'A particle in a metal sheet performs simple harmonic oscillations. When the displacement of P is 3.2 μm the magnitude of its acceleration is 7.9 m s⁻². Calculate the magnitude of the acceleration of P when its displacement is 2.3 μm. [2]',
    '✓ Expression or statement showing acceleration is proportional to displacement [1]

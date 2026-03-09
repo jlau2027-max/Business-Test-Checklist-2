@@ -12,7 +12,7 @@ INSERT OR REPLACE INTO chemistry_category_colors (category, color) VALUES
   ('R1.3 Fuels & Combustion', '#D97706');
 
 -- ─── CHECKLIST SECTIONS ──────────────────────────────────────
-INSERT INTO chemistry_checklist_sections (id, title, color, unit, sort_order) VALUES
+INSERT OR IGNORE INTO chemistry_checklist_sections (id, title, color, unit, sort_order) VALUES
   ('s3-2-organic-fund', 'S3.2 — Organic Chemistry Fundamentals', '#16A34A', '5', 27),
   ('r1-1-energy-changes', 'R1.1 — Energy Changes in Reactions', '#DC2626', '5', 28),
   ('r1-2-enthalpy-calc', 'R1.2 — Enthalpy Calculations', '#7C3AED', '5', 29),
@@ -21,7 +21,7 @@ INSERT INTO chemistry_checklist_sections (id, title, color, unit, sort_order) VA
 -- ─── CHECKLIST ITEMS ─────────────────────────────────────────
 
 -- S3.2 Organic Chemistry Fundamentals
-INSERT INTO chemistry_checklist_items (section_id, text, sort_order) VALUES
+INSERT OR IGNORE INTO chemistry_checklist_items (section_id, text, sort_order) VALUES
   ('s3-2-organic-fund', 'Represent organic compounds using empirical, molecular, condensed structural, full structural, skeletal and stereochemical formulas', 1),
   ('s3-2-organic-fund', 'Interconvert between molecular, skeletal and structural formulas', 2),
   ('s3-2-organic-fund', 'Identify functional groups: halogeno, hydroxyl, carbonyl, carboxyl, alkoxy, amino, amido, ester, phenyl', 3),
@@ -32,7 +32,7 @@ INSERT INTO chemistry_checklist_items (section_id, text, sort_order) VALUES
   ('s3-2-organic-fund', 'Recognise chain, position and functional group structural isomers', 8);
 
 -- R1.1 Energy Changes in Reactions
-INSERT INTO chemistry_checklist_items (section_id, text, sort_order) VALUES
+INSERT OR IGNORE INTO chemistry_checklist_items (section_id, text, sort_order) VALUES
   ('r1-1-energy-changes', 'Understand the difference between heat (transfer of kinetic energy) and temperature (average kinetic energy)', 1),
   ('r1-1-energy-changes', 'Distinguish between system and surroundings in a chemical reaction', 2),
   ('r1-1-energy-changes', 'Classify reactions as exothermic (negative delta-H) or endothermic (positive delta-H)', 3),
@@ -43,7 +43,7 @@ INSERT INTO chemistry_checklist_items (section_id, text, sort_order) VALUES
   ('r1-1-energy-changes', 'Understand assumptions in calorimetry (no heat loss, density/specific heat capacity of solution = water)', 8);
 
 -- R1.2 Enthalpy Calculations
-INSERT INTO chemistry_checklist_items (section_id, text, sort_order) VALUES
+INSERT OR IGNORE INTO chemistry_checklist_items (section_id, text, sort_order) VALUES
   ('r1-2-enthalpy-calc', 'Understand that bond-breaking is endothermic and bond-forming is exothermic', 1),
   ('r1-2-enthalpy-calc', 'Calculate enthalpy changes using average bond enthalpy data', 2),
   ('r1-2-enthalpy-calc', 'State Hess''s Law: the enthalpy change is independent of the pathway between initial and final states', 3),
@@ -54,7 +54,7 @@ INSERT INTO chemistry_checklist_items (section_id, text, sort_order) VALUES
   ('r1-2-enthalpy-calc', 'Interpret and determine values from a Born-Haber cycle for uni- and divalent ions [AHL]', 8);
 
 -- R1.3 Fuels and Combustion
-INSERT INTO chemistry_checklist_items (section_id, text, sort_order) VALUES
+INSERT OR IGNORE INTO chemistry_checklist_items (section_id, text, sort_order) VALUES
   ('r1-3-fuels-combust', 'Write balanced equations for complete combustion of hydrocarbons and alcohols', 1),
   ('r1-3-fuels-combust', 'Write balanced equations for incomplete combustion (producing CO and/or C)', 2),
   ('r1-3-fuels-combust', 'Compare fossil fuels (coal, crude oil, natural gas) in terms of composition, advantages and disadvantages', 3),
@@ -64,7 +64,7 @@ INSERT INTO chemistry_checklist_items (section_id, text, sort_order) VALUES
   ('r1-3-fuels-combust', 'Understand why biofuels are considered more carbon-neutral than fossil fuels', 7);
 
 -- ─── FLASHCARD TOPICS ────────────────────────────────────────
-INSERT INTO chemistry_flashcard_topics (id, label, color, unit, sort_order) VALUES
+INSERT OR IGNORE INTO chemistry_flashcard_topics (id, label, color, unit, sort_order) VALUES
   ('chem-u5-organic', 'S3.2 Organic Chemistry', '#16A34A', '5', 25),
   ('chem-u5-energy', 'R1.1 Energy Changes', '#DC2626', '5', 26),
   ('chem-u5-enthalpy', 'R1.2 Enthalpy Calculations', '#7C3AED', '5', 27),
@@ -73,7 +73,7 @@ INSERT INTO chemistry_flashcard_topics (id, label, color, unit, sort_order) VALU
 -- ─── FLASHCARDS ──────────────────────────────────────────────
 
 -- S3.2 Organic Chemistry
-INSERT INTO chemistry_flashcards (topic_id, term, definition, formula, sort_order) VALUES
+INSERT OR IGNORE INTO chemistry_flashcards (topic_id, term, definition, formula, sort_order) VALUES
   ('chem-u5-organic', 'What is a homologous series?', 'A family of compounds with the same general formula and functional group, similar chemical properties, a trend in physical properties, and whose successive members differ by a CH2 group.', NULL, 1),
   ('chem-u5-organic', 'What is a functional group?', 'An atom or group of atoms within a compound that determines the chemical properties of that compound.', NULL, 2),
   ('chem-u5-organic', 'What are structural isomers?', 'Molecules with the same molecular formula but different structural formulas (different connectivities). Types: chain, position, and functional group isomers.', NULL, 3),
@@ -84,7 +84,7 @@ INSERT INTO chemistry_flashcards (topic_id, term, definition, formula, sort_orde
   ('chem-u5-organic', 'Name the functional group: -COO-', 'Ester linkage. Found in esters. Formed from an alcohol and carboxylic acid reacting together.', NULL, 8);
 
 -- R1.1 Energy Changes
-INSERT INTO chemistry_flashcards (topic_id, term, definition, formula, sort_order) VALUES
+INSERT OR IGNORE INTO chemistry_flashcards (topic_id, term, definition, formula, sort_order) VALUES
   ('chem-u5-energy', 'Define temperature', 'The average kinetic energy of the particles in a system.', NULL, 1),
   ('chem-u5-energy', 'Define heat', 'The transfer of kinetic energy between objects at different temperatures.', NULL, 2),
   ('chem-u5-energy', 'What is an exothermic reaction?', 'A reaction where energy is released from the system to the surroundings. Delta-H is negative. The temperature of the surroundings increases.', NULL, 3),
@@ -96,7 +96,7 @@ INSERT INTO chemistry_flashcards (topic_id, term, definition, formula, sort_orde
   ('chem-u5-energy', 'What is average bond enthalpy?', 'The energy needed to break one mole of a bond in a gaseous molecule, averaged across a range of similar chemical environments.', NULL, 9);
 
 -- R1.2 Enthalpy Calculations
-INSERT INTO chemistry_flashcards (topic_id, term, definition, formula, sort_order) VALUES
+INSERT OR IGNORE INTO chemistry_flashcards (topic_id, term, definition, formula, sort_order) VALUES
   ('chem-u5-enthalpy', 'State Hess''s Law', 'The enthalpy change for a reaction is independent of the route taken, provided the initial and final conditions (reactants and products) are the same.', NULL, 1),
   ('chem-u5-enthalpy', 'Define standard enthalpy of formation', 'The enthalpy change when one mole of a compound is formed from its constituent elements in their standard states, under standard conditions (298 K, 100 kPa).', NULL, 2),
   ('chem-u5-enthalpy', 'Define standard enthalpy of combustion', 'The enthalpy change when one mole of a substance undergoes complete combustion in oxygen under standard conditions.', NULL, 3),
@@ -108,14 +108,14 @@ INSERT INTO chemistry_flashcards (topic_id, term, definition, formula, sort_orde
   ('chem-u5-enthalpy', 'What is first ionisation energy? [AHL]', 'The energy required to remove one mole of electrons from one mole of gaseous atoms to form gaseous unipositive ions: M(g) -> M+(g) + e-.', NULL, 9);
 
 -- R1.3 Fuels & Combustion
-INSERT INTO chemistry_flashcards (topic_id, term, definition, formula, sort_order) VALUES
+INSERT OR IGNORE INTO chemistry_flashcards (topic_id, term, definition, formula, sort_order) VALUES
   ('chem-u5-fuels', 'What is a biofuel?', 'A fuel produced from biological fixation of carbon over a short period of time through photosynthesis. Examples: biodiesel, bioethanol, biomethane.', NULL, 1),
   ('chem-u5-fuels', 'Why are biofuels considered carbon-neutral?', 'The CO2 released during combustion was recently absorbed by plants during photosynthesis, so no net CO2 is added to the atmosphere over the fuel''s lifecycle.', NULL, 2),
   ('chem-u5-fuels', 'What is complete combustion?', 'Combustion in excess oxygen producing only CO2 and H2O as products.', NULL, 3),
   ('chem-u5-fuels', 'What is incomplete combustion?', 'Combustion in limited oxygen producing CO (carbon monoxide) and/or C (soot/carbon) along with H2O.', NULL, 4);
 
 -- ─── MCQ QUESTIONS ───────────────────────────────────────────
-INSERT INTO chemistry_mcq_questions (id, category, difficulty, unit, question_text, option_a, option_b, option_c, option_d, correct_option, explanation, sort_order) VALUES
+INSERT OR IGNORE INTO chemistry_mcq_questions (id, category, difficulty, unit, question_text, option_a, option_b, option_c, option_d, correct_option, explanation, sort_order) VALUES
   ('chem-u5-mcq-01', 'S3.2 Organic Chemistry Fundamentals', 'SL/HL', '5',
    'A homologous series is best described as a family of compounds that:',
    'Have the same empirical formula',
@@ -237,7 +237,7 @@ INSERT INTO chemistry_mcq_questions (id, category, difficulty, unit, question_te
    0, 'Butan-1-ol and butan-2-ol have the same molecular formula and functional group (-OH) but differ in the position of the hydroxyl group on the carbon chain.', 85);
 
 -- ─── WRITTEN QUESTIONS ───────────────────────────────────────
-INSERT INTO chemistry_written_questions (id, category, difficulty, question_type, unit, marks, question_text, mark_scheme, sort_order) VALUES
+INSERT OR IGNORE INTO chemistry_written_questions (id, category, difficulty, question_type, unit, marks, question_text, mark_scheme, sort_order) VALUES
   ('chem-u5-wr-01', 'S3.2 Organic Chemistry Fundamentals', 'SL/HL', 'short_answer', '5', 4,
    'Define the term ''homologous series'' and state three features of a homologous series. [4]',
    'A family of compounds with the same general formula and functional group [1]\nSuccessive members differ by CH2 [1]\nSimilar chemical properties [1]\nTrend/gradation in physical properties [1]',

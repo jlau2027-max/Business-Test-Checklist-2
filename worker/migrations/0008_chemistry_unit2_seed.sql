@@ -13,7 +13,7 @@ INSERT OR REPLACE INTO chemistry_category_colors (category, color) VALUES
   ('Errors & Uncertainties', '#DC2626');
 
 -- ─── CHECKLIST SECTIONS ──────────────────────────────────────
-INSERT INTO chemistry_checklist_sections (id, title, color, unit, sort_order) VALUES
+INSERT OR IGNORE INTO chemistry_checklist_sections (id, title, color, unit, sort_order) VALUES
   ('s1-4-5-concentration', 'S1.4.5 — Concentration & Solutions', '#2563EB', '2', 6),
   ('s1-4-6-avogadro', 'S1.4.6 — Avogadro''s Law & Molar Volume', '#7C3AED', '2', 7),
   ('s1-5-ideal-gas', 'S1.5 — Ideal Gas Model', '#0891B2', '2', 8),
@@ -25,7 +25,7 @@ INSERT INTO chemistry_checklist_sections (id, title, color, unit, sort_order) VA
 -- ─── CHECKLIST ITEMS ─────────────────────────────────────────
 
 -- S1.4.5 Concentration & Solutions
-INSERT INTO chemistry_checklist_items (section_id, text, sort_order) VALUES
+INSERT OR IGNORE INTO chemistry_checklist_items (section_id, text, sort_order) VALUES
   ('s1-4-5-concentration', 'Define solute, solvent, and solution', 1),
   ('s1-4-5-concentration', 'Calculate molar concentration using c = n / V', 2),
   ('s1-4-5-concentration', 'Convert between cm³ and dm³ (divide by 1000)', 3),
@@ -38,7 +38,7 @@ INSERT INTO chemistry_checklist_items (section_id, text, sort_order) VALUES
   ('s1-4-5-concentration', 'Understand the purpose of rinsing the beaker/rod into the volumetric flask', 10);
 
 -- S1.4.6 Avogadro's Law & Molar Volume
-INSERT INTO chemistry_checklist_items (section_id, text, sort_order) VALUES
+INSERT OR IGNORE INTO chemistry_checklist_items (section_id, text, sort_order) VALUES
   ('s1-4-6-avogadro', 'State Avogadro''s law (equal volumes, same T & P, equal number of molecules)', 1),
   ('s1-4-6-avogadro', 'Know the molar volume at STP = 22.7 dm³ mol⁻¹', 2),
   ('s1-4-6-avogadro', 'Use gas volume ratios from balanced equations', 3),
@@ -46,7 +46,7 @@ INSERT INTO chemistry_checklist_items (section_id, text, sort_order) VALUES
   ('s1-4-6-avogadro', 'Determine leftover gases when reactants are not in stoichiometric ratio', 5);
 
 -- S1.5 Ideal Gas Model
-INSERT INTO chemistry_checklist_items (section_id, text, sort_order) VALUES
+INSERT OR IGNORE INTO chemistry_checklist_items (section_id, text, sort_order) VALUES
   ('s1-5-ideal-gas', 'List the assumptions of the ideal gas model (no volume, no IMFs, elastic collisions, random motion)', 1),
   ('s1-5-ideal-gas', 'Explain why real gases deviate at low T and high P', 2),
   ('s1-5-ideal-gas', 'State and use the ideal gas equation PV = nRT (R = 8.31 J K⁻¹ mol⁻¹)', 3),
@@ -58,7 +58,7 @@ INSERT INTO chemistry_checklist_items (section_id, text, sort_order) VALUES
   ('s1-5-ideal-gas', 'Sketch and interpret P-V, V-T, and P-T graphs', 9);
 
 -- R2.1.3–R2.1.4 Limiting & Excess Reagents
-INSERT INTO chemistry_checklist_items (section_id, text, sort_order) VALUES
+INSERT OR IGNORE INTO chemistry_checklist_items (section_id, text, sort_order) VALUES
   ('r2-1-limiting', 'Define limiting reagent and excess reagent', 1),
   ('r2-1-limiting', 'Identify the limiting reagent by comparing mole ratios', 2),
   ('r2-1-limiting', 'Calculate the theoretical yield from the limiting reagent', 3),
@@ -66,7 +66,7 @@ INSERT INTO chemistry_checklist_items (section_id, text, sort_order) VALUES
   ('r2-1-limiting', 'Balance chemical equations', 5);
 
 -- R2.1.5 Percentage Yield & Atom Economy
-INSERT INTO chemistry_checklist_items (section_id, text, sort_order) VALUES
+INSERT OR IGNORE INTO chemistry_checklist_items (section_id, text, sort_order) VALUES
   ('r2-1-yield', 'Calculate percentage yield = (actual / theoretical) × 100', 1),
   ('r2-1-yield', 'Explain reasons why percentage yield < 100%', 2),
   ('r2-1-yield', 'Calculate atom economy = (Mᵣ desired product / Mᵣ all products) × 100', 3),
@@ -74,7 +74,7 @@ INSERT INTO chemistry_checklist_items (section_id, text, sort_order) VALUES
   ('r2-1-yield', 'Understand the difference between atom economy and percentage yield', 5);
 
 -- Titration & Volumetric Analysis
-INSERT INTO chemistry_checklist_items (section_id, text, sort_order) VALUES
+INSERT OR IGNORE INTO chemistry_checklist_items (section_id, text, sort_order) VALUES
   ('u2-titration', 'Describe the procedure for an acid–base titration', 1),
   ('u2-titration', 'Calculate unknown concentrations from titration data', 2),
   ('u2-titration', 'Define primary standard and secondary standard', 3),
@@ -83,7 +83,7 @@ INSERT INTO chemistry_checklist_items (section_id, text, sort_order) VALUES
   ('u2-titration', 'Calculate concordant titre values and use the mean', 6);
 
 -- Errors & Uncertainties
-INSERT INTO chemistry_checklist_items (section_id, text, sort_order) VALUES
+INSERT OR IGNORE INTO chemistry_checklist_items (section_id, text, sort_order) VALUES
   ('u2-errors', 'Define random error and systematic error', 1),
   ('u2-errors', 'Define precision and accuracy', 2),
   ('u2-errors', 'Calculate percentage uncertainty from absolute uncertainty', 3),
@@ -93,7 +93,7 @@ INSERT INTO chemistry_checklist_items (section_id, text, sort_order) VALUES
 
 
 -- ─── FLASHCARD TOPICS ────────────────────────────────────────
-INSERT INTO chemistry_flashcard_topics (id, label, color, unit, sort_order) VALUES
+INSERT OR IGNORE INTO chemistry_flashcard_topics (id, label, color, unit, sort_order) VALUES
   ('chem-u2-concentration', 'S1.4.5 Concentration & Solutions', '#2563EB', '2', 6),
   ('chem-u2-gas-laws', 'S1.4.6–S1.5 Gas Laws', '#7C3AED', '2', 7),
   ('chem-u2-stoich', 'R2.1 Limiting Reagents, Yield & Atom Economy', '#D97706', '2', 8),
@@ -104,7 +104,7 @@ INSERT INTO chemistry_flashcard_topics (id, label, color, unit, sort_order) VALU
 -- ─── FLASHCARDS ──────────────────────────────────────────────
 
 -- Concentration & Solutions
-INSERT INTO chemistry_flashcards (topic_id, term, definition, formula, sort_order) VALUES
+INSERT OR IGNORE INTO chemistry_flashcards (topic_id, term, definition, formula, sort_order) VALUES
   ('chem-u2-concentration', 'Solute, Solvent, Solution', 'Solute = substance dissolved. Solvent = liquid it dissolves in. Solution = resulting mixture.', NULL, 1),
   ('chem-u2-concentration', 'Molar concentration', 'The amount of substance (in mol) per unit volume (in dm³) of solution.', 'c = n / V', 2),
   ('chem-u2-concentration', 'n = C × V', 'Moles = concentration (mol dm⁻³) × volume (dm³).', 'n = C × V', 3),
@@ -113,7 +113,7 @@ INSERT INTO chemistry_flashcards (topic_id, term, definition, formula, sort_orde
   ('chem-u2-concentration', 'Primary standard', 'A substance that is highly pure (≥99.9%), stable, soluble in water, and has a high molar mass. Used to prepare standard solutions directly by weighing.', NULL, 6);
 
 -- Gas Laws
-INSERT INTO chemistry_flashcards (topic_id, term, definition, formula, sort_order) VALUES
+INSERT OR IGNORE INTO chemistry_flashcards (topic_id, term, definition, formula, sort_order) VALUES
   ('chem-u2-gas-laws', 'Avogadro''s law', 'Equal volumes of all gases at the same temperature and pressure contain equal numbers of molecules.', NULL, 1),
   ('chem-u2-gas-laws', 'Molar volume at STP', 'The volume occupied by one mole of any ideal gas at STP (273.15 K, 100 kPa) = 22.7 dm³ mol⁻¹.', 'Vₘ = 22.7 dm³ mol⁻¹', 2),
   ('chem-u2-gas-laws', 'Ideal gas', 'A theoretical gas with particles that have no volume, no intermolecular forces, and undergo perfectly elastic collisions.', NULL, 3),
@@ -125,7 +125,7 @@ INSERT INTO chemistry_flashcards (topic_id, term, definition, formula, sort_orde
   ('chem-u2-gas-laws', 'Gay-Lussac''s law', 'P ∝ T at constant volume (direct relationship).', 'P₁/T₁ = P₂/T₂', 9);
 
 -- Stoichiometry: Limiting, Yield, Atom Economy
-INSERT INTO chemistry_flashcards (topic_id, term, definition, formula, sort_order) VALUES
+INSERT OR IGNORE INTO chemistry_flashcards (topic_id, term, definition, formula, sort_order) VALUES
   ('chem-u2-stoich', 'Limiting reagent', 'The reactant that is completely used up first in a reaction. It determines the maximum amount of product (theoretical yield).', NULL, 1),
   ('chem-u2-stoich', 'Excess reagent', 'The reactant that is not completely used up; some remains after the reaction.', NULL, 2),
   ('chem-u2-stoich', 'Percentage yield', 'A measure of how much product was actually obtained compared to the theoretical maximum.', '% yield = (actual yield / theoretical yield) × 100', 3),
@@ -133,13 +133,13 @@ INSERT INTO chemistry_flashcards (topic_id, term, definition, formula, sort_orde
   ('chem-u2-stoich', 'Why high atom economy matters', 'Less waste is produced, fewer resources are consumed, and the process is more sustainable (greener chemistry).', NULL, 5);
 
 -- Titration & Standards
-INSERT INTO chemistry_flashcards (topic_id, term, definition, formula, sort_order) VALUES
+INSERT OR IGNORE INTO chemistry_flashcards (topic_id, term, definition, formula, sort_order) VALUES
   ('chem-u2-titration', 'Mole (recap)', 'A unit used to measure the number of atoms, molecules, or ions. 1 mol = 6.02 × 10²³ particles (Avogadro''s constant).', NULL, 1),
   ('chem-u2-titration', 'Molar mass (M)', 'The mass of one mole of a substance, in g mol⁻¹. Numerically equal to the relative atomic/molecular mass.', NULL, 2),
   ('chem-u2-titration', 'n = m / M', 'Moles = mass (g) / molar mass (g mol⁻¹).', 'n = m / M', 3);
 
 -- Errors & Uncertainties
-INSERT INTO chemistry_flashcards (topic_id, term, definition, formula, sort_order) VALUES
+INSERT OR IGNORE INTO chemistry_flashcards (topic_id, term, definition, formula, sort_order) VALUES
   ('chem-u2-errors', 'Random error', 'Unpredictable variations in measurements that cause scatter. Reduced by averaging multiple trials.', NULL, 1),
   ('chem-u2-errors', 'Systematic error', 'A consistent offset in measurements caused by flawed methodology or equipment. Cannot be reduced by averaging.', NULL, 2),
   ('chem-u2-errors', 'Precision', 'How close repeated measurements are to each other (low scatter = high precision).', NULL, 3),
@@ -147,7 +147,7 @@ INSERT INTO chemistry_flashcards (topic_id, term, definition, formula, sort_orde
   ('chem-u2-errors', 'Percentage error', 'Compares experimental result to the accepted/theoretical value.', '% error = |(theoretical − experimental) / theoretical| × 100', 5);
 
 -- Unit Conversions
-INSERT INTO chemistry_flashcards (topic_id, term, definition, formula, sort_order) VALUES
+INSERT OR IGNORE INTO chemistry_flashcards (topic_id, term, definition, formula, sort_order) VALUES
   ('chem-u2-conversions', 'cm³ to dm³', 'Divide by 1000. E.g. 250 cm³ = 0.250 dm³.', '1 dm³ = 1000 cm³', 1),
   ('chem-u2-conversions', '°C to K', 'Add 273.15. E.g. 25°C = 298.15 K.', 'K = °C + 273.15', 2),
   ('chem-u2-conversions', 'cm³ to m³', 'Divide by 1,000,000. E.g. 500 cm³ = 5.00 × 10⁻⁴ m³.', '1 m³ = 10⁶ cm³', 3),
@@ -156,7 +156,7 @@ INSERT INTO chemistry_flashcards (topic_id, term, definition, formula, sort_orde
 
 -- ─── MCQ QUESTIONS ───────────────────────────────────────────
 
-INSERT INTO chemistry_mcq_questions (id, category, difficulty, unit, question_text, option_a, option_b, option_c, option_d, correct_option, explanation, sort_order) VALUES
+INSERT OR IGNORE INTO chemistry_mcq_questions (id, category, difficulty, unit, question_text, option_a, option_b, option_c, option_d, correct_option, explanation, sort_order) VALUES
   ('chem-u2-mcq-01', 'S1.4.5 Concentration & Solutions', 'SL/HL', '2',
    'What is the number of moles in 250 cm³ of 2.00 mol dm⁻³ NaCl solution?',
    '0.125 mol',
@@ -310,7 +310,7 @@ INSERT INTO chemistry_mcq_questions (id, category, difficulty, unit, question_te
 
 -- ─── WRITTEN QUESTIONS ───────────────────────────────────────
 
-INSERT INTO chemistry_written_questions (id, category, difficulty, question_type, unit, marks, question_text, mark_scheme, sort_order) VALUES
+INSERT OR IGNORE INTO chemistry_written_questions (id, category, difficulty, question_type, unit, marks, question_text, mark_scheme, sort_order) VALUES
   ('chem-u2-wr-01', 'S1.4.5 Concentration & Solutions', 'SL/HL', 'short_answer', '2', 2,
    'Calculate the number of moles in 600.0 cm³ of 0.500 mol dm⁻³ CuSO₄ solution.',
    '[1] V = 600.0 / 1000 = 0.6000 dm³

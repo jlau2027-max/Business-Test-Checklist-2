@@ -16,7 +16,7 @@ INSERT OR REPLACE INTO chemistry_category_colors (category, color) VALUES
   ('S2.4 Bonding Triangle, Alloys & Materials', '#9333EA');
 
 -- ─── CHECKLIST SECTIONS ──────────────────────────────────────
-INSERT INTO chemistry_checklist_sections (id, title, color, unit, sort_order) VALUES
+INSERT OR IGNORE INTO chemistry_checklist_sections (id, title, color, unit, sort_order) VALUES
   ('s3-1-periodic-table', 'S3.1.1–3.1.2 — Structure of the Periodic Table', '#2563EB', '4', 18),
   ('s3-1-periodic-trends', 'S3.1.3 — Periodic Trends', '#7C3AED', '4', 19),
   ('s3-1-group-oxides', 'S3.1.4–3.1.5 — Group Trends & Oxides', '#0891B2', '4', 20),
@@ -30,7 +30,7 @@ INSERT INTO chemistry_checklist_sections (id, title, color, unit, sort_order) VA
 -- ─── CHECKLIST ITEMS ─────────────────────────────────────────
 
 -- S3.1.1–3.1.2 Structure of the Periodic Table
-INSERT INTO chemistry_checklist_items (section_id, text, sort_order) VALUES
+INSERT OR IGNORE INTO chemistry_checklist_items (section_id, text, sort_order) VALUES
   ('s3-1-periodic-table', 'Identify the positions of metals, metalloids, and non-metals', 1),
   ('s3-1-periodic-table', 'Label the s, p, d, and f blocks on a blank periodic table', 2),
   ('s3-1-periodic-table', 'Know the period number = outer energy level occupied by electrons', 3),
@@ -39,7 +39,7 @@ INSERT INTO chemistry_checklist_items (section_id, text, sort_order) VALUES
   ('s3-1-periodic-table', 'Identify alkali metals, alkaline earth metals, transition metals, halogens, and noble gases', 6);
 
 -- S3.1.3 Periodic Trends
-INSERT INTO chemistry_checklist_items (section_id, text, sort_order) VALUES
+INSERT OR IGNORE INTO chemistry_checklist_items (section_id, text, sort_order) VALUES
   ('s3-1-periodic-trends', 'Define periodicity and explain why trends repeat across periods', 1),
   ('s3-1-periodic-trends', 'Explain the trend in atomic radius across a period (decreasing) and down a group (increasing)', 2),
   ('s3-1-periodic-trends', 'Explain the trend in ionic radius, including comparison of cations vs anions', 3),
@@ -50,7 +50,7 @@ INSERT INTO chemistry_checklist_items (section_id, text, sort_order) VALUES
   ('s3-1-periodic-trends', 'Understand why d-block elements have relatively constant atomic radii and ionisation energies', 8);
 
 -- S3.1.4–3.1.5 Group Trends & Oxides
-INSERT INTO chemistry_checklist_items (section_id, text, sort_order) VALUES
+INSERT OR IGNORE INTO chemistry_checklist_items (section_id, text, sort_order) VALUES
   ('s3-1-group-oxides', 'Describe increasing metallic character down Group 1 (reactions with water)', 1),
   ('s3-1-group-oxides', 'Describe decreasing non-metallic character down Group 17 (displacement reactions)', 2),
   ('s3-1-group-oxides', 'Write equations for Group 1/2 metal oxide reactions with water (basic solutions)', 3),
@@ -59,13 +59,13 @@ INSERT INTO chemistry_checklist_items (section_id, text, sort_order) VALUES
   ('s3-1-group-oxides', 'Classify Period 3 oxides (Na₂O, MgO, Al₂O₃, SiO₂, P₄O₁₀, SO₃, Cl₂O₇)', 6);
 
 -- S3.1.6 Oxidation States
-INSERT INTO chemistry_checklist_items (section_id, text, sort_order) VALUES
+INSERT OR IGNORE INTO chemistry_checklist_items (section_id, text, sort_order) VALUES
   ('s3-1-oxidation-states', 'Define oxidation state and explain why elements in their elemental form have an oxidation state of zero', 1),
   ('s3-1-oxidation-states', 'Apply the rules for assigning oxidation states (O = −2, H = +1, etc.)', 2),
   ('s3-1-oxidation-states', 'Deduce oxidation states of atoms in compounds and polyatomic ions', 3);
 
 -- S2.1 Ionic Bonding
-INSERT INTO chemistry_checklist_items (section_id, text, sort_order) VALUES
+INSERT OR IGNORE INTO chemistry_checklist_items (section_id, text, sort_order) VALUES
   ('s2-1-ionic-bonding', 'Explain that metals lose electrons to form cations and non-metals gain electrons to form anions', 1),
   ('s2-1-ionic-bonding', 'Predict the charge of an ion from electron configuration', 2),
   ('s2-1-ionic-bonding', 'Define an ionic bond as the electrostatic attraction between oppositely charged ions', 3),
@@ -76,7 +76,7 @@ INSERT INTO chemistry_checklist_items (section_id, text, sort_order) VALUES
   ('s2-1-ionic-bonding', 'Compare melting points of NaCl vs MgO using charge and ionic radius', 8);
 
 -- S2.2 Covalent Bonding
-INSERT INTO chemistry_checklist_items (section_id, text, sort_order) VALUES
+INSERT OR IGNORE INTO chemistry_checklist_items (section_id, text, sort_order) VALUES
   ('s2-2-covalent-bonding', 'Define a covalent bond as the electrostatic attraction between shared electrons and nuclei', 1),
   ('s2-2-covalent-bonding', 'State and apply the octet rule (and its limitations: BF₃, SF₆, PCl₅)', 2),
   ('s2-2-covalent-bonding', 'Draw Lewis structures for molecules and ions with up to 4 electron pairs per atom', 3),
@@ -87,7 +87,7 @@ INSERT INTO chemistry_checklist_items (section_id, text, sort_order) VALUES
   ('s2-2-covalent-bonding', 'Explain properties of allotropes of carbon (hardness, conductivity, etc.)', 8);
 
 -- AHL Resonance & Formal Charge
-INSERT INTO chemistry_checklist_items (section_id, text, sort_order) VALUES
+INSERT OR IGNORE INTO chemistry_checklist_items (section_id, text, sort_order) VALUES
   ('s2-2-resonance-fc', 'Draw resonance structures for molecules/ions (O₃, NO₂⁻, CO₃²⁻, N₂O)', 1),
   ('s2-2-resonance-fc', 'Understand that the actual structure is a resonance hybrid with delocalised electrons', 2),
   ('s2-2-resonance-fc', 'Use bond length data to support the idea of intermediate bond order', 3),
@@ -96,14 +96,14 @@ INSERT INTO chemistry_checklist_items (section_id, text, sort_order) VALUES
   ('s2-2-resonance-fc', 'Know that negative formal charges are best placed on more electronegative atoms', 6);
 
 -- S2.3 Metallic Bonding
-INSERT INTO chemistry_checklist_items (section_id, text, sort_order) VALUES
+INSERT OR IGNORE INTO chemistry_checklist_items (section_id, text, sort_order) VALUES
   ('s2-3-metallic-bonding', 'Define a metallic bond as the electrostatic attraction between cations and delocalised electrons', 1),
   ('s2-3-metallic-bonding', 'Explain electrical conductivity, thermal conductivity, and malleability of metals', 2),
   ('s2-3-metallic-bonding', 'Know that metallic bond strength depends on cation charge and ionic radius', 3),
   ('s2-3-metallic-bonding', 'Explain trends in melting/boiling points of s- and p-block metals across a period and down a group', 4);
 
 -- S2.4 Bonding Triangle, Alloys & Materials
-INSERT INTO chemistry_checklist_items (section_id, text, sort_order) VALUES
+INSERT OR IGNORE INTO chemistry_checklist_items (section_id, text, sort_order) VALUES
   ('s2-4-bonding-triangle', 'Understand bonding as a continuum (ionic–covalent–metallic) represented by the van Arkel–Ketelaar triangle', 1),
   ('s2-4-bonding-triangle', 'Determine position on the triangle using average electronegativity and electronegativity difference', 2),
   ('s2-4-bonding-triangle', 'Predict properties of a compound from its position on the bonding triangle', 3),
@@ -111,7 +111,7 @@ INSERT INTO chemistry_checklist_items (section_id, text, sort_order) VALUES
   ('s2-4-bonding-triangle', 'Explain why alloys are harder/less malleable (different-sized atoms disrupt layers)', 5);
 
 -- ─── FLASHCARD TOPICS ────────────────────────────────────────
-INSERT INTO chemistry_flashcard_topics (id, label, color, unit, sort_order) VALUES
+INSERT OR IGNORE INTO chemistry_flashcard_topics (id, label, color, unit, sort_order) VALUES
   ('chem-u4-periodicity', 'S3.1 Periodic Trends', '#2563EB', '4', 18),
   ('chem-u4-group-oxides', 'S3.1 Group Trends & Oxides', '#0891B2', '4', 19),
   ('chem-u4-ionic', 'S2.1 Ionic Bonding', '#DC2626', '4', 20),
@@ -123,7 +123,7 @@ INSERT INTO chemistry_flashcard_topics (id, label, color, unit, sort_order) VALU
 -- ─── FLASHCARDS ──────────────────────────────────────────────
 
 -- Periodic Trends
-INSERT INTO chemistry_flashcards (topic_id, term, definition, formula, sort_order) VALUES
+INSERT OR IGNORE INTO chemistry_flashcards (topic_id, term, definition, formula, sort_order) VALUES
   ('chem-u4-periodicity', 'Define: Atomic radius', 'Half the distance between the nuclei of two bonded atoms of the same element.', NULL, 1),
   ('chem-u4-periodicity', 'Define: Ionisation energy', 'Energy required to remove one mole of electrons from one mole of gaseous atoms to form gaseous cations.', NULL, 2),
   ('chem-u4-periodicity', 'Define: Electron affinity', 'Energy change when one mole of electrons is added to one mole of gaseous atoms to form gaseous anions.', NULL, 3),
@@ -135,7 +135,7 @@ INSERT INTO chemistry_flashcards (topic_id, term, definition, formula, sort_orde
   ('chem-u4-periodicity', 'Why is IE of S < P?', 'S has a paired electron in one 3p orbital; electron-electron repulsion makes it easier to remove.', NULL, 9);
 
 -- Group Trends & Oxides
-INSERT INTO chemistry_flashcards (topic_id, term, definition, formula, sort_order) VALUES
+INSERT OR IGNORE INTO chemistry_flashcards (topic_id, term, definition, formula, sort_order) VALUES
   ('chem-u4-group-oxides', 'Define: Oxidation state', 'A number showing the number of electrons lost, gained, or shared. The charge an atom would have if the compound were ionic.', NULL, 1),
   ('chem-u4-group-oxides', 'Define: Allotropes', 'Different structural forms of the same element in the same physical state (e.g. diamond & graphite).', NULL, 2),
   ('chem-u4-group-oxides', 'Period 3 oxides: basic to acidic?', 'Na₂O, MgO (basic) → Al₂O₃ (amphoteric) → SiO₂, P₄O₁₀, SO₃, Cl₂O₇ (acidic).', NULL, 3),
@@ -144,13 +144,13 @@ INSERT INTO chemistry_flashcards (topic_id, term, definition, formula, sort_orde
   ('chem-u4-group-oxides', 'Group 1 reactivity with water: trend?', 'Increases down the group (Li → Cs). Lower ionisation energy = easier electron loss = more vigorous reaction.', NULL, 6);
 
 -- Ionic Bonding
-INSERT INTO chemistry_flashcards (topic_id, term, definition, formula, sort_order) VALUES
+INSERT OR IGNORE INTO chemistry_flashcards (topic_id, term, definition, formula, sort_order) VALUES
   ('chem-u4-ionic', 'Define: Ionic bond', 'Electrostatic attraction between oppositely charged ions in a lattice.', NULL, 1),
   ('chem-u4-ionic', 'Properties of ionic compounds?', 'High m.p., conduct when molten/dissolved, brittle, often soluble in water, non-volatile.', NULL, 2),
   ('chem-u4-ionic', 'Why does MgO have a higher m.p. than NaCl?', 'Mg²⁺/O²⁻ have higher charges and smaller radii → much stronger electrostatic attraction.', NULL, 3);
 
 -- Covalent Bonding
-INSERT INTO chemistry_flashcards (topic_id, term, definition, formula, sort_order) VALUES
+INSERT OR IGNORE INTO chemistry_flashcards (topic_id, term, definition, formula, sort_order) VALUES
   ('chem-u4-covalent', 'Define: Covalent bond', 'Electrostatic attraction between a shared pair of electrons and the positively charged nuclei.', NULL, 1),
   ('chem-u4-covalent', 'Define: Coordination bond', 'A covalent bond where both electrons in the shared pair come from the same atom (e.g. NH₃ → BF₃).', NULL, 2),
   ('chem-u4-covalent', 'Octet rule exceptions?', 'Electron deficient: BF₃ (6 e⁻). Expanded octet: SF₆ (12 e⁻), PCl₅ (10 e⁻). Also NO (odd electron).', NULL, 3),
@@ -158,23 +158,23 @@ INSERT INTO chemistry_flashcards (topic_id, term, definition, formula, sort_orde
   ('chem-u4-covalent', 'Diamond vs Graphite structure?', 'Diamond: each C bonded to 4 others (tetrahedral), very hard, insulator. Graphite: each C bonded to 3 (layers), delocalised e⁻, conducts, soft/slippery.', NULL, 5);
 
 -- Resonance & Formal Charge (AHL)
-INSERT INTO chemistry_flashcards (topic_id, term, definition, formula, sort_order) VALUES
+INSERT OR IGNORE INTO chemistry_flashcards (topic_id, term, definition, formula, sort_order) VALUES
   ('chem-u4-resonance', 'What is a resonance hybrid?', 'The actual structure of a molecule, which is an average/blend of all valid resonance structures.', NULL, 1),
   ('chem-u4-resonance', 'Formal charge formula?', 'FC = (valence e⁻) – (lone pair e⁻) – ½(bonding e⁻). Preferred structure has lowest formal charges.', 'FC = V - L - B/2', 2);
 
 -- Metallic Bonding
-INSERT INTO chemistry_flashcards (topic_id, term, definition, formula, sort_order) VALUES
+INSERT OR IGNORE INTO chemistry_flashcards (topic_id, term, definition, formula, sort_order) VALUES
   ('chem-u4-metallic', 'Define: Metallic bond', 'Electrostatic attraction between a lattice of cations and a sea of delocalised electrons.', NULL, 1),
   ('chem-u4-metallic', 'Metallic bond strength across Period 3?', 'Increases Na → Mg → Al: more delocalised electrons, higher cation charge, smaller cation radius.', NULL, 2);
 
 -- Bonding Triangle & Alloys
-INSERT INTO chemistry_flashcards (topic_id, term, definition, formula, sort_order) VALUES
+INSERT OR IGNORE INTO chemistry_flashcards (topic_id, term, definition, formula, sort_order) VALUES
   ('chem-u4-bonding-tri', 'Define: Alloy', 'A homogeneous mixture of a metal with other metals or non-metals, with enhanced properties.', NULL, 1),
   ('chem-u4-bonding-tri', 'Bonding triangle axes?', 'x-axis: average electronegativity (increases →). y-axis: electronegativity difference (increases ↑). Vertices: metallic, ionic, covalent.', NULL, 2),
   ('chem-u4-bonding-tri', 'Why are alloys harder than pure metals?', 'Different-sized atoms disrupt the regular arrangement of layers, preventing them from sliding over each other.', NULL, 3);
 
 -- ─── MCQ QUESTIONS ───────────────────────────────────────────
-INSERT INTO chemistry_mcq_questions (id, category, difficulty, unit, question_text, option_a, option_b, option_c, option_d, correct_option, explanation, sort_order) VALUES
+INSERT OR IGNORE INTO chemistry_mcq_questions (id, category, difficulty, unit, question_text, option_a, option_b, option_c, option_d, correct_option, explanation, sort_order) VALUES
   ('chem-u4-mcq-01', 'S3.1 Periodic Trends', 'SL/HL', '4',
    'Which property generally increases across a period from left to right?',
    'Atomic radius',
@@ -296,7 +296,7 @@ INSERT INTO chemistry_mcq_questions (id, category, difficulty, unit, question_te
    0, 'Group 1 metal oxides react with water to form metal hydroxides. Na₂O + H₂O → 2NaOH (alkaline solution).', 70);
 
 -- ─── WRITTEN QUESTIONS ───────────────────────────────────────
-INSERT INTO chemistry_written_questions (id, category, difficulty, question_type, unit, marks, question_text, mark_scheme, sort_order) VALUES
+INSERT OR IGNORE INTO chemistry_written_questions (id, category, difficulty, question_type, unit, marks, question_text, mark_scheme, sort_order) VALUES
   ('chem-u4-wr-01', 'S3.1 Periodic Trends', 'SL/HL', 'short_answer', '4', 3,
    'Explain why atomic radius decreases across Period 3 from sodium to chlorine. [3]',
    '✓ Increasing number of protons / increasing nuclear charge across the period [1]\n✓ Electrons are added to the same energy level / same shielding [1]\n✓ Greater effective nuclear charge pulls the electron cloud closer to the nucleus [1]',

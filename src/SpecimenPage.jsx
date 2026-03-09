@@ -17,159 +17,7 @@ function saveLS(key, value) {
 }
 
 // ─── Specimen Questions Data (fallback) ─────────────────────────────────────
-const SPECIMEN_QUESTIONS_FALLBACK = [
-  {
-    id: "spec_a",
-    label: "(a)",
-    question: "Define the term direct costs.",
-    marks: 2,
-    markscheme: `A direct cost is a cost that can be specifically traced / attributed to a particular product, department, or project.
-
-Award [1] for a basic definition that conveys the idea of a cost linked to production.
-Award [2] for a clear definition that includes the concept of traceability to a specific product/output.
-
-Examples of direct costs include raw materials and direct labour.`,
-  },
-  {
-    id: "spec_b",
-    label: "(b)",
-    question: "Explain one advantage and one disadvantage to NorthHaven Dairy (NHD) of leasing its new automated bottling machines rather than purchasing them outright.",
-    marks: 4,
-    markscheme: `Advantage of leasing (award up to [2]):
-• Lower upfront costs — leasing allows NHD to acquire the automated bottling machines without a large capital outlay [1], preserving cash flow for other operational needs such as marketing or raw material procurement [1].
-• Flexibility — leasing allows NHD to upgrade to newer technology at the end of the lease term [1], avoiding the risk of obsolescence [1].
-• Tax benefits — lease payments can often be deducted as a business expense [1], reducing NHD's taxable income [1].
-
-Disadvantage of leasing (award up to [2]):
-• Higher long-term cost — while individual lease payments may be lower, the total cost over time can exceed the purchase price [1], reducing NHD's long-term profitability [1].
-• No ownership — at the end of the lease, NHD does not own the machines [1], meaning they have no asset to show on their balance sheet or to resell [1].
-• Restrictions — lease agreements may limit how NHD can use or modify the equipment [1], reducing operational flexibility [1].
-
-Accept any reasonable advantage/disadvantage with appropriate application to NHD.
-Award [1] for identification, [1] for explanation/development with reference to NHD.`,
-  },
-  {
-    id: "spec_c1",
-    label: "(c)(i)",
-    question: `Using the financial information below, calculate the profit margin for NHD. Show your working.
-
-Financial Information for NHD:
-• Sales Revenue: $2,400,000
-• Cost of Goods Sold (COGS): $1,440,000
-• Operating Expenses: $600,000
-• Net Profit (before tax): $360,000
-• Total Assets: $3,000,000
-• Total Liabilities: $1,200,000
-• Capital Employed: $1,800,000`,
-    marks: 2,
-    markscheme: `Profit Margin = (Net Profit / Sales Revenue) × 100
-
-Profit Margin = ($360,000 / $2,400,000) × 100 = 15%
-
-Award [1] for correct formula or working.
-Award [1] for correct answer of 15%.
-
-If no working is shown but the answer is correct, award [2].
-If the formula is correct but the answer is wrong due to arithmetic error, award [1].`,
-  },
-  {
-    id: "spec_c2",
-    label: "(c)(ii)",
-    question: "Using the financial information above, calculate the return on capital employed (ROCE) for NHD. Show your working.",
-    marks: 2,
-    markscheme: `ROCE = (Net Profit before tax / Capital Employed) × 100
-
-ROCE = ($360,000 / $1,800,000) × 100 = 20%
-
-Award [1] for correct formula or working.
-Award [1] for correct answer of 20%.
-
-If no working is shown but the answer is correct, award [2].
-If the formula is correct but the answer is wrong due to arithmetic error, award [1].`,
-  },
-  {
-    id: "spec_d",
-    label: "(d)",
-    question: `Construct a Statement of Profit or Loss for NHD using the following additional financial information:
-
-Additional Financial Information:
-• Interest Expense: $50,000
-• Tax Rate: 25%
-• Sales Revenue: $2,400,000
-• COGS: $1,440,000
-• Operating Expenses: $600,000`,
-    marks: 4,
-    markscheme: `Statement of Profit or Loss for NHD:
-
-Sales Revenue:                   $2,400,000
-Less Cost of Goods Sold:        ($1,440,000)
-─────────────────────────────────────────────
-Gross Profit:                      $960,000
-Less Operating Expenses:          ($600,000)
-─────────────────────────────────────────────
-Operating Profit:                  $360,000
-Less Interest Expense:             ($50,000)
-─────────────────────────────────────────────
-Net Profit before Tax:             $310,000
-Less Tax (25%):                    ($77,500)
-─────────────────────────────────────────────
-Net Profit after Tax:              $232,500
-
-Award [1] for correct Gross Profit ($960,000).
-Award [1] for correct Operating Profit ($360,000).
-Award [1] for correct Net Profit before Tax ($310,000).
-Award [1] for correct Net Profit after Tax ($232,500).
-
-Accept alternative correct layouts. If one error carries through (own figure rule / OFR), award marks for subsequent correct calculations based on the student's own figures.`,
-  },
-  {
-    id: "spec_e",
-    label: "(e)",
-    question: "Evaluate two strategies that NorthHaven Dairy (NHD) could use to improve its profit margin.",
-    marks: 10,
-    markscheme: `Possible strategies include but are not limited to:
-
-1. Reducing Costs:
-   • NHD could negotiate better prices with suppliers for raw milk and packaging materials to reduce COGS.
-   • Investing in automation (e.g., the new bottling machines) may reduce direct labour costs in the long run.
-   • Streamlining operations to reduce waste (e.g., lean production) could lower operating expenses.
-
-2. Increasing Revenue:
-   • NHD could diversify its product range (e.g., flavoured milks, cheese, yoghurt) to attract new customers and increase sales revenue.
-   • Premium pricing for organic or locally sourced products could increase revenue without proportionally increasing costs.
-   • Expanding distribution channels (e.g., online sales, partnerships with supermarkets) could grow the customer base.
-
-3. Improving Efficiency:
-   • Adopting new technology or processes to improve productivity and reduce per-unit costs.
-   • Training employees to improve output quality and reduce defect rates.
-
-4. Marketing and Branding:
-   • Investing in branding and marketing to build customer loyalty and justify higher prices.
-   • Positioning NHD as a sustainable/local brand may allow premium pricing.
-
-Evaluation should consider:
-• Short-term vs long-term impact of each strategy
-• Feasibility for NHD given its size and market position
-• Potential risks or trade-offs (e.g., cost-cutting may affect quality)
-• Which strategy is more likely to succeed and why
-
-LEVEL DESCRIPTORS:
-
-Level 4 [9–10 marks]:
-A balanced, well-structured response that evaluates two strategies in depth. Analysis is thorough with clear application to NHD. A well-supported conclusion or judgement is offered that considers trade-offs and context.
-
-Level 3 [7–8 marks]:
-A good response that evaluates two strategies with some depth. Analysis is mostly applied to NHD. Some attempt at a conclusion, but it may lack full justification or balance.
-
-Level 2 [4–6 marks]:
-A partial response that identifies two strategies with some explanation. Limited analysis and application to NHD. May describe rather than evaluate. Little or no conclusion.
-
-Level 1 [1–3 marks]:
-A limited response that identifies one or two strategies with little or no explanation. Largely generic with minimal reference to NHD. No evaluation or conclusion.
-
-[0 marks]: No relevant content.`,
-  },
-];
+const SPECIMEN_QUESTIONS_FALLBACK = [];
 
 // ─── Single Question Component ─────────────────────────────────────────────
 function SpecimenQuestion({ q }) {
@@ -420,35 +268,22 @@ export default function SpecimenPage() {
           {/* Exam info banner */}
           <Surface className="rounded-3xl p-4 mb-6">
             <span className="text-sm text-[var(--text-primary)] font-semibold block" style={{ marginBottom: 4 }}>
-              Finance Test — February 2026
+              Specimen Paper
             </span>
             <span className="text-xs text-[var(--text-secondary)] block" style={{ lineHeight: 1.6 }}>
-              Answer all questions. The maximum mark for this test is {totalMarks}. Type your answers in the boxes
+              Answer all questions. Type your answers in the boxes
               below — everything auto-saves. Use "Solve" for AI grading and "Show Markscheme" to reveal the rubric.
             </span>
-            <div className="flex items-center gap-1 mt-2">
-              <span className="text-xs px-1.5 py-0.5 rounded-full" style={{ backgroundColor: "rgba(45,212,191,0.1)", color: "var(--accent-secondary)", fontFamily: "'JSans', sans-serif" }}>
-                {SPECIMEN_QUESTIONS.length} questions
-              </span>
-              <span className="text-xs px-1.5 py-0.5 rounded-full" style={{ backgroundColor: "rgba(139,92,246,0.1)", color: "var(--accent)", fontFamily: "'JSans', sans-serif" }}>
-                {totalMarks} marks
-              </span>
-            </div>
-          </Surface>
-
-          {/* Case study context */}
-          <Surface className="rounded-3xl p-4 mb-6" style={{ border: "1px solid var(--border)" }}>
-            <span className="block text-[var(--accent)] mb-2" style={{ fontSize: 11, fontFamily: "'JSans', sans-serif", letterSpacing: 1 }}>
-              CASE STUDY
-            </span>
-            <span className="block text-[var(--text-primary)] font-semibold mb-1" style={{ fontSize: 14 }}>
-              NorthHaven Dairy (NHD)
-            </span>
-            <span className="block text-[var(--text-secondary)]" style={{ fontSize: 13, lineHeight: 1.7, whiteSpace: "pre-line" }}>
-{`NorthHaven Dairy (NHD) is a medium-sized private limited company based in rural New Zealand. The company specialises in producing and selling a range of dairy products, including fresh milk, cream, butter, and artisan cheese. NHD sources its milk from a network of local farms and has built a strong reputation for quality and sustainability.
-
-Recently, NHD has been considering investing in new automated bottling machines to increase efficiency and reduce labour costs. The company is evaluating whether to lease or purchase these machines outright.`}
-            </span>
+            {SPECIMEN_QUESTIONS.length > 0 && (
+              <div className="flex items-center gap-1 mt-2">
+                <span className="text-xs px-1.5 py-0.5 rounded-full" style={{ backgroundColor: "rgba(45,212,191,0.1)", color: "var(--accent-secondary)", fontFamily: "'JSans', sans-serif" }}>
+                  {SPECIMEN_QUESTIONS.length} questions
+                </span>
+                <span className="text-xs px-1.5 py-0.5 rounded-full" style={{ backgroundColor: "rgba(139,92,246,0.1)", color: "var(--accent)", fontFamily: "'JSans', sans-serif" }}>
+                  {totalMarks} marks
+                </span>
+              </div>
+            )}
           </Surface>
 
           {/* Questions */}

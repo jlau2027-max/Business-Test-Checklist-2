@@ -786,6 +786,12 @@ const ALLOWED_TABLES = [
   "economics_checklist_sections", "economics_checklist_items",
   "economics_flashcard_topics", "economics_flashcards",
   "economics_mcq_questions", "economics_written_questions", "economics_category_colors",
+  "ess_checklist_sections", "ess_checklist_items",
+  "ess_flashcard_topics", "ess_flashcards",
+  "ess_mcq_questions", "ess_written_questions", "ess_category_colors",
+  "spanish_checklist_sections", "spanish_checklist_items",
+  "spanish_flashcard_topics", "spanish_flashcards",
+  "spanish_mcq_questions", "spanish_written_questions", "spanish_category_colors",
 ];
 
 async function getNextId(env, table, prefix) {
@@ -1568,6 +1574,8 @@ const chemH = createSubjectHandlers("chemistry_", "chem_", "#8B5CF6");
 const physH = createSubjectHandlers("physics_", "phys_", "#F59E0B");
 const sportH = createSubjectHandlers("sports_", "sport_", "#EF4444");
 const econH = createSubjectHandlers("economics_", "econ_", "#06B6D4");
+const essH = createSubjectHandlers("ess_", "ess_", "#10B981");
+const spanH = createSubjectHandlers("spanish_", "span_", "#D4915C");
 
 function registerSubjectRoutes(slug, h, path, method, url, request, env) {
   // Public GET routes
@@ -1795,7 +1803,7 @@ export default {
     }
 
     // ── New subjects (factory-based GET routes) ──────────────────────────
-    for (const [slug, h] of [["chemistry", chemH], ["physics", physH], ["sports-science", sportH], ["economics", econH]]) {
+    for (const [slug, h] of [["chemistry", chemH], ["physics", physH], ["sports-science", sportH], ["economics", econH], ["ess", essH], ["spanish", spanH]]) {
       const result = registerSubjectRoutes(slug, h, path, method, url, request, env);
       if (result) return result;
     }
@@ -2067,7 +2075,7 @@ export default {
       }
 
       // --- New subjects (factory-based admin routes) ---
-      for (const [slug, h] of [["chemistry", chemH], ["physics", physH], ["sports-science", sportH], ["economics", econH]]) {
+      for (const [slug, h] of [["chemistry", chemH], ["physics", physH], ["sports-science", sportH], ["economics", econH], ["ess", essH], ["spanish", spanH]]) {
         const result = await registerSubjectAdminRoutes(slug, h, path, method, request, env);
         if (result) return result;
       }

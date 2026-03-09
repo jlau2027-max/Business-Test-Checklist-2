@@ -3,6 +3,10 @@
 -- Syllabus: S1.1, S1.2, S1.3, S1.4, R2.1 (including AHL)
 -- ============================================================
 
+-- Clear autoincrement tables to prevent duplicates on re-run
+DELETE FROM chemistry_checklist_items;
+DELETE FROM chemistry_flashcards;
+
 -- ─── CATEGORY COLORS ─────────────────────────────────────────
 INSERT OR REPLACE INTO chemistry_category_colors (category, color) VALUES
   ('S1.1 Particulate Nature of Matter', '#2563EB'),
@@ -12,7 +16,7 @@ INSERT OR REPLACE INTO chemistry_category_colors (category, color) VALUES
   ('R2.1 Stoichiometry', '#DC2626');
 
 -- ─── CHECKLIST SECTIONS ──────────────────────────────────────
-INSERT INTO chemistry_checklist_sections (id, title, color, unit, sort_order) VALUES
+INSERT OR IGNORE INTO chemistry_checklist_sections (id, title, color, unit, sort_order) VALUES
   ('s1-1-particulate', 'S1.1 — Particulate Nature of Matter', '#2563EB', '1', 1),
   ('s1-2-nucleus', 'S1.2 — The Nucleus', '#7C3AED', '1', 2),
   ('s1-3-electron-config', 'S1.3 — Electron Configuration', '#0891B2', '1', 3),
@@ -22,7 +26,7 @@ INSERT INTO chemistry_checklist_sections (id, title, color, unit, sort_order) VA
 -- ─── CHECKLIST ITEMS ─────────────────────────────────────────
 
 -- S1.1 Particulate Nature of Matter
-INSERT INTO chemistry_checklist_items (section_id, text, sort_order) VALUES
+INSERT OR IGNORE INTO chemistry_checklist_items (section_id, text, sort_order) VALUES
   ('s1-1-particulate', 'Define element, compound, and mixture and give examples of each', 1),
   ('s1-1-particulate', 'Distinguish between physical and chemical properties of elements, compounds, and mixtures', 2),
   ('s1-1-particulate', 'Explain kinetic molecular theory for solids, liquids, and gases', 3),
@@ -33,7 +37,7 @@ INSERT INTO chemistry_checklist_items (section_id, text, sort_order) VALUES
   ('s1-1-particulate', 'Interpret heating/cooling curves and explain plateaux during changes of state', 8);
 
 -- S1.2 The Nucleus
-INSERT INTO chemistry_checklist_items (section_id, text, sort_order) VALUES
+INSERT OR IGNORE INTO chemistry_checklist_items (section_id, text, sort_order) VALUES
   ('s1-2-nucleus', 'Describe the structure of the atom: protons, neutrons, electrons', 1),
   ('s1-2-nucleus', 'Use nuclear notation ᴬ_Z X to find protons, neutrons, electrons', 2),
   ('s1-2-nucleus', 'Calculate protons, neutrons, and electrons for ions (cations and anions)', 3),
@@ -43,7 +47,7 @@ INSERT INTO chemistry_checklist_items (section_id, text, sort_order) VALUES
   ('s1-2-nucleus', '(AHL) Calculate relative atomic mass from mass spectrum data', 7);
 
 -- S1.3 Electron Configuration
-INSERT INTO chemistry_checklist_items (section_id, text, sort_order) VALUES
+INSERT OR IGNORE INTO chemistry_checklist_items (section_id, text, sort_order) VALUES
   ('s1-3-electron-config', 'Describe emission spectra: how excited electrons emit photons', 1),
   ('s1-3-electron-config', 'Relate colour, wavelength, frequency, and energy across the EM spectrum (c = fλ, E = hf)', 2),
   ('s1-3-electron-config', 'Distinguish continuous spectrum from line spectrum', 3),
@@ -62,7 +66,7 @@ INSERT INTO chemistry_checklist_items (section_id, text, sort_order) VALUES
   ('s1-3-electron-config', '(AHL) Deduce group of an element from successive ionisation energy data', 16);
 
 -- S1.4 The Mole
-INSERT INTO chemistry_checklist_items (section_id, text, sort_order) VALUES
+INSERT OR IGNORE INTO chemistry_checklist_items (section_id, text, sort_order) VALUES
   ('s1-4-mole', 'Define the mole and state Avogadro''s constant (6.02 × 10²³ mol⁻¹)', 1),
   ('s1-4-mole', 'Convert between amount (mol), number of particles, and mass (n = m/M)', 2),
   ('s1-4-mole', 'Calculate relative formula mass Mᵣ from relative atomic masses', 3),
@@ -73,14 +77,14 @@ INSERT INTO chemistry_checklist_items (section_id, text, sort_order) VALUES
   ('s1-4-mole', 'Find the value of n in a hydrated salt formula', 8);
 
 -- R2.1 Stoichiometry
-INSERT INTO chemistry_checklist_items (section_id, text, sort_order) VALUES
+INSERT OR IGNORE INTO chemistry_checklist_items (section_id, text, sort_order) VALUES
   ('r2-1-stoichiometry', 'Balance chemical equations including state symbols', 1),
   ('r2-1-stoichiometry', 'Use mole ratios to calculate reacting masses', 2),
   ('r2-1-stoichiometry', 'Convert between mass, moles, and number of particles in stoichiometry problems', 3);
 
 
 -- ─── FLASHCARD TOPICS ────────────────────────────────────────
-INSERT INTO chemistry_flashcard_topics (id, label, color, unit, sort_order) VALUES
+INSERT OR IGNORE INTO chemistry_flashcard_topics (id, label, color, unit, sort_order) VALUES
   ('chem-u1-particulate', 'S1.1 Particulate Nature of Matter', '#2563EB', '1', 1),
   ('chem-u1-nucleus', 'S1.2 The Nucleus', '#7C3AED', '1', 2),
   ('chem-u1-electron', 'S1.3 Electron Configuration', '#0891B2', '1', 3),
@@ -90,7 +94,7 @@ INSERT INTO chemistry_flashcard_topics (id, label, color, unit, sort_order) VALU
 -- ─── FLASHCARDS ──────────────────────────────────────────────
 
 -- S1.1 Particulate Nature of Matter
-INSERT INTO chemistry_flashcards (topic_id, term, definition, formula, sort_order) VALUES
+INSERT OR IGNORE INTO chemistry_flashcards (topic_id, term, definition, formula, sort_order) VALUES
   ('chem-u1-particulate', 'Element', 'A pure substance that cannot be broken down into simpler substances by chemical methods.', NULL, 1),
   ('chem-u1-particulate', 'Compound', 'A substance consisting of atoms of two or more different elements chemically bonded in a fixed ratio.', NULL, 2),
   ('chem-u1-particulate', 'Mixture', 'Two or more substances not chemically bonded, in no fixed ratio, separable by physical methods.', NULL, 3),
@@ -101,14 +105,14 @@ INSERT INTO chemistry_flashcards (topic_id, term, definition, formula, sort_orde
   ('chem-u1-particulate', 'Anhydrous', 'A substance from which all water of crystallisation has been removed.', NULL, 8);
 
 -- S1.2 The Nucleus
-INSERT INTO chemistry_flashcards (topic_id, term, definition, formula, sort_order) VALUES
+INSERT OR IGNORE INTO chemistry_flashcards (topic_id, term, definition, formula, sort_order) VALUES
   ('chem-u1-nucleus', 'Isotopes', 'Atoms of the same element with the same number of protons but different numbers of neutrons.', NULL, 1),
   ('chem-u1-nucleus', 'Relative atomic mass (Aᵣ)', 'Weighted average mass of all naturally occurring isotopes of an element relative to 1/12 the mass of carbon-12.', NULL, 2),
   ('chem-u1-nucleus', 'Atomic number (Z)', 'The number of protons in the nucleus of an atom.', NULL, 3),
   ('chem-u1-nucleus', 'Mass number (A)', 'The total number of protons and neutrons (nucleons) in the nucleus.', NULL, 4);
 
 -- S1.3 Electron Configuration
-INSERT INTO chemistry_flashcards (topic_id, term, definition, formula, sort_order) VALUES
+INSERT OR IGNORE INTO chemistry_flashcards (topic_id, term, definition, formula, sort_order) VALUES
   ('chem-u1-electron', 'Electron configuration', 'The distribution of electrons among available energy levels and sublevels.', NULL, 1),
   ('chem-u1-electron', 'Convergence limit', 'The point in a line spectrum where lines merge; corresponds to ionisation energy.', NULL, 2),
   ('chem-u1-electron', 'First ionisation energy', 'Energy required to remove one mole of electrons from one mole of gaseous atoms to form 1 mol of gaseous unipositive ions.', NULL, 3),
@@ -121,7 +125,7 @@ INSERT INTO chemistry_flashcards (topic_id, term, definition, formula, sort_orde
   ('chem-u1-electron', 'Electromagnetic spectrum', 'The full range of EM radiation: radio waves, microwaves, IR, visible, UV, X-rays, gamma rays.', NULL, 10);
 
 -- S1.4 The Mole
-INSERT INTO chemistry_flashcards (topic_id, term, definition, formula, sort_order) VALUES
+INSERT OR IGNORE INTO chemistry_flashcards (topic_id, term, definition, formula, sort_order) VALUES
   ('chem-u1-mole', 'Mole', 'The SI unit of amount of substance; one mole contains exactly 6.02 × 10²³ entities.', NULL, 1),
   ('chem-u1-mole', 'Avogadro constant (Nₐ)', '6.02 × 10²³ mol⁻¹; the number of entities in one mole.', 'Nₐ = 6.02 × 10²³ mol⁻¹', 2),
   ('chem-u1-mole', 'Molar mass (M)', 'The mass of one mole of a substance, in g mol⁻¹; numerically equal to Mᵣ.', NULL, 3),
@@ -134,7 +138,7 @@ INSERT INTO chemistry_flashcards (topic_id, term, definition, formula, sort_orde
 
 -- ─── MCQ QUESTIONS ───────────────────────────────────────────
 
-INSERT INTO chemistry_mcq_questions (id, category, difficulty, unit, question_text, option_a, option_b, option_c, option_d, correct_option, explanation, sort_order) VALUES
+INSERT OR IGNORE INTO chemistry_mcq_questions (id, category, difficulty, unit, question_text, option_a, option_b, option_c, option_d, correct_option, explanation, sort_order) VALUES
   ('chem-u1-mcq-01', 'S1.1 Particulate Nature of Matter', 'SL/HL', '1',
    'Which statement correctly distinguishes an element from a compound?',
    'An element contains atoms bonded in a fixed ratio.',
@@ -338,7 +342,7 @@ INSERT INTO chemistry_mcq_questions (id, category, difficulty, unit, question_te
 
 -- ─── WRITTEN QUESTIONS ───────────────────────────────────────
 
-INSERT INTO chemistry_written_questions (id, category, difficulty, question_type, unit, marks, question_text, mark_scheme, sort_order) VALUES
+INSERT OR IGNORE INTO chemistry_written_questions (id, category, difficulty, question_type, unit, marks, question_text, mark_scheme, sort_order) VALUES
   ('chem-u1-wr-01a', 'S1.2 The Nucleus', 'SL/HL', 'short_answer', '1', 1,
    '(a) Define the term isotope.',
    '[1] Atoms of the same element with the same number of protons / atomic number but different numbers of neutrons / mass number.',

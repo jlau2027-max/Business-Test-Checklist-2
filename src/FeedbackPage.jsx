@@ -132,7 +132,7 @@ export default function FeedbackPage() {
       onComplete: () => {
         setSubmitted(true);
         try {
-          fetch((import.meta.env.VITE_API_URL || "") + "/api/feedback", {
+          fetch("https://ib-grading-hollen.c9tggsfst9.workers.dev/api/feedback", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(answers),
