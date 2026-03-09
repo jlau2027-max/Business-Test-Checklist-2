@@ -127,12 +127,12 @@ export default function TermsPage() {
           law or third-party rights.
         </p>
 
-        {/* 7 — Purchases */}
-        <h2 style={{ fontSize: 22, fontWeight: 600, marginTop: 36, marginBottom: 12 }}>7) Purchases</h2>
+        {/* 7 — Cost and donations */}
+        <h2 style={{ fontSize: 22, fontWeight: 600, marginTop: 36, marginBottom: 12 }}>7) Cost and donations</h2>
         <p style={{ ...text, marginBottom: 16 }}>
-          The Services are currently offered free of charge. No payment information is collected. If paid
-          features are introduced in the future, these Terms will be updated to reflect the applicable
-          payment terms before any charges apply.
+          The Services are and will always be offered free of charge. There are no paid features or
+          premium tiers. Voluntary donations may be accepted to help cover hosting and infrastructure
+          costs. Donations are entirely optional and do not grant any additional access or privileges.
         </p>
 
         {/* 8 — IP */}
@@ -140,19 +140,20 @@ export default function TermsPage() {
 
         <h3 style={{ fontSize: 16, fontWeight: 600, marginTop: 20, marginBottom: 8 }}>8.1 Our materials</h3>
         <p style={{ ...text, marginBottom: 12 }}>
-          As between you and IBrev, IBrev owns the Services and all associated intellectual property rights,
-          including software, UI design, visual assets, text, and other materials provided by IBrev, except
-          for Your Content and third-party materials.
+          As between you and IBrev, IBrev owns the original aspects of the Services, including its UI design,
+          original text, and other materials created by IBrev, except for Your Content and third-party materials.
         </p>
         <p style={{ ...text, marginBottom: 16 }}>
           Nothing in these Terms transfers ownership of IBrev&rsquo;s intellectual property to you. All rights
           not expressly granted are reserved.
         </p>
 
-        <h3 style={{ fontSize: 16, fontWeight: 600, marginTop: 20, marginBottom: 8 }}>8.2 Third-party materials</h3>
+        <h3 style={{ fontSize: 16, fontWeight: 600, marginTop: 20, marginBottom: 8 }}>8.2 Third-party software and assets</h3>
         <p style={{ ...text, marginBottom: 16 }}>
-          The Services may incorporate third-party libraries, frameworks, or content that are owned by their
-          respective licensors. IBrev does not claim ownership of third-party materials.
+          The Services are built using third-party open-source libraries, frameworks, fonts, icons, and other
+          software assets, each of which is owned by its respective authors and governed by its own licence.
+          IBrev does not claim ownership of any third-party materials. A list of key dependencies and their
+          licences is available in the project source.
         </p>
 
         <h3 style={{ fontSize: 16, fontWeight: 600, marginTop: 20, marginBottom: 8 }}>8.3 Feedback</h3>
