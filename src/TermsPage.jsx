@@ -152,8 +152,7 @@ export default function TermsPage() {
         <p style={{ ...text, marginBottom: 16 }}>
           The Services are built using third-party open-source libraries, frameworks, fonts, icons, and other
           software assets, each of which is owned by its respective authors and governed by its own licence.
-          IBrev does not claim ownership of any third-party materials. A list of key dependencies and their
-          licences is available in the project source.
+          IBrev does not claim ownership of any third-party materials.
         </p>
 
         <h3 style={{ fontSize: 16, fontWeight: 600, marginTop: 20, marginBottom: 8 }}>8.3 Feedback</h3>
