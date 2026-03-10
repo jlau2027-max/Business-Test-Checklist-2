@@ -231,48 +231,45 @@ const ContentCtx = createContext(EMPTY_CONTENT);
 function useContent() { return useContext(ContentCtx); }
 
 
-async function fetchAppContent(api = SUBJECT_CONFIGS.business.api) {
-  const [checklistRaw, mcqRaw, writtenRaw, colorsRaw, topicsRaw] = await Promise.all([
-    api.fetchChecklist(), api.fetchMcqQuestions(), api.fetchWrittenQuestions(), api.fetchCategoryColors(), api.fetchFlashcardTopics(),
+// Phase 1: checklist + colors — renders the default tab immediately
+async function fetchChecklistContent(api) {
+  const [checklistRaw, colorsRaw] = await Promise.all([
+    api.fetchChecklist(), api.fetchCategoryColors(),
   ]);
-
-  // Checklist: API items are {id,text} objects → flatten to strings
   const checklistSections = checklistRaw.map(sec => ({
     ...sec,
     items: sec.items ? sec.items.map(item => typeof item === "string" ? item : item.text) : [],
   }));
+  const catColors = Array.isArray(colorsRaw)
+    ? Object.fromEntries(colorsRaw.map(c => [c.category, c.color]))
+    : colorsRaw;
+  return { checklistSections, catColors };
+}
 
-  // MCQ: remap field names
+// Phase 2: MCQ + written + flashcards — loads in background
+async function fetchRemainingContent(api) {
+  const [mcqRaw, writtenRaw, topicsRaw] = await Promise.all([
+    api.fetchMcqQuestions(), api.fetchWrittenQuestions(), api.fetchFlashcardTopics(),
+  ]);
   const mcqQuestions = mcqRaw.map(q => ({
     id: q.id, cat: q.category, difficulty: q.difficulty, q: q.question_text,
     options: [q.option_a, q.option_b, q.option_c, q.option_d],
     answer: q.correct_option, explanation: q.explanation, unit: q.unit,
   }));
-
-  // Written: remap + split by question_type
   const allWritten = writtenRaw.map(q => ({
     id: q.id, cat: q.category, difficulty: q.difficulty, marks: q.marks,
     q: q.question_text, modelAnswer: q.mark_scheme, _type: q.question_type, unit: q.unit,
   }));
   const writtenQuestions = allWritten.filter(q => q._type === "short_answer");
   const written10MarkQuestions = allWritten.filter(q => q._type === "ten_marker");
-
-  // Colors: array → object map
-  const catColors = Array.isArray(colorsRaw)
-    ? Object.fromEntries(colorsRaw.map(c => [c.category, c.color]))
-    : colorsRaw;
-
-  // Flashcards: fetch topics then cards per topic
   const flashcardCategories = await Promise.all(topicsRaw.map(async t => {
     try {
       const cards = await api.fetchFlashcards(t.id);
       return { id: t.id, label: t.label, color: t.color, unit: t.unit, cards: cards.map(c => ({ term: c.term, def: c.definition, formula: c.formula })) };
     } catch { return { id: t.id, label: t.label, color: t.color, unit: t.unit, cards: [] }; }
   }));
-
   const allCats = ["All", ...Array.from(new Set(mcqQuestions.map(q => q.cat)))];
-
-  return { checklistSections, flashcardCategories, mcqQuestions, writtenQuestions, written10MarkQuestions, catColors, allCats };
+  return { mcqQuestions, writtenQuestions, written10MarkQuestions, flashcardCategories, allCats };
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -940,9 +937,14 @@ export default function App({ initialTab = "checklist", subject = "business" }) 
   const [content, setContent] = useState(EMPTY_CONTENT);
   useEffect(() => {
     let cancelled = false;
-    fetchAppContent(config.api)
-      .then(data => { if (!cancelled) setContent(data); })
-      .catch(err => console.warn("Content API unavailable, using fallback data:", err.message));
+    // Phase 1: checklist + colors — renders default tab immediately
+    fetchChecklistContent(config.api)
+      .then(data => { if (!cancelled) setContent(prev => ({ ...prev, ...data })); })
+      .catch(err => console.warn("Checklist API unavailable:", err.message));
+    // Phase 2: MCQ + written + flashcards — loads in background
+    fetchRemainingContent(config.api)
+      .then(data => { if (!cancelled) setContent(prev => ({ ...prev, ...data })); })
+      .catch(err => console.warn("Content API unavailable:", err.message));
     return () => { cancelled = true; };
   }, [subject]);
 
