@@ -126,6 +126,12 @@ const SUBJECT_CONFIGS = {
     show10Marker: false,
     showSpecimen: false,
     lsPrefix: "sport_",
+    units: [
+      { value: "All", label: "All Units" },
+      { value: "A", label: "A" },
+      { value: "B", label: "B" },
+      { value: "C", label: "C" },
+    ],
     api: {
       fetchChecklist: sportsApi.fetchChecklist, fetchFlashcardTopics: sportsApi.fetchFlashcardTopics,
       fetchFlashcards: sportsApi.fetchFlashcards, fetchMcqQuestions: sportsApi.fetchMcqQuestions,
