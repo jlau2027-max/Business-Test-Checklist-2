@@ -102,7 +102,11 @@ const SUBJECT_CONFIGS = {
     lsPrefix: "phys_",
     units: [
       { value: "All", label: "All Units" },
+      { value: "A", label: "A" },
+      { value: "B", label: "B" },
       { value: "C", label: "C" },
+      { value: "D", label: "D" },
+      { value: "E", label: "E" },
     ],
     api: {
       fetchChecklist: physicsApi.fetchChecklist, fetchFlashcardTopics: physicsApi.fetchFlashcardTopics,
