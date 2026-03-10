@@ -19,7 +19,7 @@ const SUBJECT_CONFIGS = {
   business: {
     subject: "business",
     label: "IB Business Management",
-    subtitle: "Finance Unit",
+    subtitle: "Business",
     accentColor: "var(--accent)",
     accentSoft: "var(--accent-soft)",
     accentGlow: "var(--accent-glow)",
@@ -36,7 +36,7 @@ const SUBJECT_CONFIGS = {
   biology: {
     subject: "biology",
     label: "IB Biology",
-    subtitle: "Unit 3 & 4",
+    subtitle: "Biology",
     accentColor: "var(--color-success)",
     accentSoft: "var(--color-success-soft)",
     accentGlow: "var(--color-success-soft)",
@@ -61,7 +61,7 @@ const SUBJECT_CONFIGS = {
   chemistry: {
     subject: "chemistry",
     label: "IB Chemistry",
-    subtitle: "SL & HL",
+    subtitle: "Chemistry",
     accentColor: "#8B7EB5",
     accentSoft: "#8B7EB520",
     accentGlow: "#8B7EB540",
@@ -91,7 +91,7 @@ const SUBJECT_CONFIGS = {
   physics: {
     subject: "physics",
     label: "IB Physics",
-    subtitle: "SL & HL",
+    subtitle: "Physics",
     accentColor: "#C4A36A",
     accentSoft: "#C4A36A20",
     accentGlow: "#C4A36A40",
@@ -117,7 +117,7 @@ const SUBJECT_CONFIGS = {
   sports: {
     subject: "sports",
     label: "IB Sports Science",
-    subtitle: "SL & HL",
+    subtitle: "Sports Science",
     accentColor: "#B57A7A",
     accentSoft: "#B57A7A20",
     accentGlow: "#B57A7A40",
@@ -135,7 +135,7 @@ const SUBJECT_CONFIGS = {
   economics: {
     subject: "economics",
     label: "IB Economics",
-    subtitle: "SL & HL",
+    subtitle: "Economics",
     accentColor: "#6BA3AD",
     accentSoft: "#6BA3AD20",
     accentGlow: "#6BA3AD40",
@@ -182,7 +182,7 @@ const SUBJECT_CONFIGS = {
   spanish: {
     subject: "spanish",
     label: "IB Spanish",
-    subtitle: "Language Acquisition",
+    subtitle: "Spanish",
     accentColor: "#D4915C",
     accentSoft: "#D4915C20",
     accentGlow: "#D4915C40",
