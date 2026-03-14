@@ -231,13 +231,18 @@ async function handleAdminUsers(env, actorRole) {
   const roleMap = await bulkGetRoles(results.map(r => r.uid), env);
   const enriched = results.map(r => ({ ...r, role: roleMap[r.uid] || null }));
 
-  if (actorRole === "admin" || actorRole === "core") {
-    // Hide users that outrank or equal the actor (except same-role peers)
-    const actorLevel = ROLE_LEVEL[actorRole] || 0;
+  if (actorRole === "core") {
+    // Core: see admins and regular users only (hide origin)
     return json(enriched.filter(r => {
       const targetLevel = ROLE_LEVEL[r.role] || 0;
-      // Show: same role peers, and anyone ranked below
-      return r.role === actorRole || targetLevel < actorLevel;
+      return targetLevel < ROLE_LEVEL["core"];
+    }));
+  }
+  if (actorRole === "admin") {
+    // Admin: see only regular users (hide origin and core)
+    return json(enriched.filter(r => {
+      const targetLevel = ROLE_LEVEL[r.role] || 0;
+      return targetLevel < ROLE_LEVEL["admin"];
     }));
   }
 
