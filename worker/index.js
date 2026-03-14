@@ -564,12 +564,16 @@ let cachedJwks = null;
 let jwksCachedAt = 0;
 const JWKS_CACHE_TTL = 3600_000; // 1 hour
 
+const CLERK_JWKS_URL = "https://clerk.ibrev.org/.well-known/jwks.json";
+
 async function fetchJwks(env) {
   const now = Date.now();
   if (cachedJwks && now - jwksCachedAt < JWKS_CACHE_TTL) {
     return cachedJwks;
   }
-  const res = await fetch(env.CLERK_JWKS_URL);
+  const jwksUrl = env.CLERK_JWKS_URL || CLERK_JWKS_URL;
+  const res = await fetch(jwksUrl);
+  if (!res.ok) throw new Error(`JWKS fetch failed: ${res.status}`);
   const data = await res.json();
   cachedJwks = data.keys;
   jwksCachedAt = now;
@@ -609,7 +613,8 @@ async function verifyClerkJwt(request, env) {
     }
 
     // Check issuer
-    if (env.CLERK_ISSUER && payload.iss !== env.CLERK_ISSUER) {
+    const issuer = env.CLERK_ISSUER || "https://clerk.ibrev.org";
+    if (payload.iss !== issuer) {
       return { error: "Invalid token issuer", status: 401 };
     }
 
@@ -1889,6 +1894,9 @@ export default {
     const stateMatch = path.match(/^\/api\/state\/([^/]+)$/);
     if (stateMatch) {
       const uid = stateMatch[1];
+      const auth = await verifyClerkJwt(request, env);
+      if (auth.error) return json({ error: auth.error }, auth.status);
+      if (auth.payload.sub !== uid) return json({ error: "Forbidden: uid mismatch" }, 403);
       if (request.method === "GET") return handleGetState(uid, env);
       if (request.method === "PUT") return handlePutState(uid, request, env);
       return json({ error: "Method not allowed" }, 405);
@@ -1898,6 +1906,9 @@ export default {
     const attemptsMatch = path.match(/^\/api\/attempts\/([^/]+)$/);
     if (attemptsMatch) {
       const uid = attemptsMatch[1];
+      const auth = await verifyClerkJwt(request, env);
+      if (auth.error) return json({ error: auth.error }, auth.status);
+      if (auth.payload.sub !== uid) return json({ error: "Forbidden: uid mismatch" }, 403);
       if (request.method === "GET") return handleGetAttempts(uid, env);
       if (request.method === "POST") return handlePostAttempt(uid, request, env);
       return json({ error: "Method not allowed" }, 405);
@@ -1905,6 +1916,8 @@ export default {
 
     // Grading: POST / or POST /grade
     if (request.method === "POST" && (path === "/" || path === "/grade")) {
+      const auth = await verifyClerkJwt(request, env);
+      if (auth.error) return json({ error: auth.error }, auth.status);
       return handleGrade(request, env);
     }
 
