@@ -1889,9 +1889,6 @@ export default {
     const stateMatch = path.match(/^\/api\/state\/([^/]+)$/);
     if (stateMatch) {
       const uid = stateMatch[1];
-      const auth = await verifyClerkJwt(request, env);
-      if (auth.error) return json({ error: auth.error }, auth.status);
-      if (auth.payload.sub !== uid) return json({ error: "Forbidden: uid mismatch" }, 403);
       if (request.method === "GET") return handleGetState(uid, env);
       if (request.method === "PUT") return handlePutState(uid, request, env);
       return json({ error: "Method not allowed" }, 405);
@@ -1901,9 +1898,6 @@ export default {
     const attemptsMatch = path.match(/^\/api\/attempts\/([^/]+)$/);
     if (attemptsMatch) {
       const uid = attemptsMatch[1];
-      const auth = await verifyClerkJwt(request, env);
-      if (auth.error) return json({ error: auth.error }, auth.status);
-      if (auth.payload.sub !== uid) return json({ error: "Forbidden: uid mismatch" }, 403);
       if (request.method === "GET") return handleGetAttempts(uid, env);
       if (request.method === "POST") return handlePostAttempt(uid, request, env);
       return json({ error: "Method not allowed" }, 405);
@@ -1911,8 +1905,6 @@ export default {
 
     // Grading: POST / or POST /grade
     if (request.method === "POST" && (path === "/" || path === "/grade")) {
-      const auth = await verifyClerkJwt(request, env);
-      if (auth.error) return json({ error: auth.error }, auth.status);
       return handleGrade(request, env);
     }
 
