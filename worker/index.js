@@ -240,23 +240,24 @@ async function handleAdminUsers(env, actorRole) {
 
 async function bulkGetRoles(uids, env) {
   const roleMap = {};
-  // Clerk user list API supports up to 100 per page
-  try {
-    const userIds = uids.slice(0, 100).map(u => `user_id=${encodeURIComponent(u)}`).join("&");
-    const users = await clerkAPI(env, "GET", `/users?${userIds}&limit=100`);
-    for (const u of users) {
-      roleMap[u.id] = u.public_metadata?.role || null;
-    }
-  } catch { /* fallback: no filtering on API failure */ }
-  // Handle remaining users if more than 100
-  if (uids.length > 100) {
+  // Clerk user list API: use user_id[] for filtering by multiple IDs, max 100 per page
+  for (let i = 0; i < uids.length; i += 100) {
     try {
-      const userIds = uids.slice(100, 200).map(u => `user_id=${encodeURIComponent(u)}`).join("&");
-      const users = await clerkAPI(env, "GET", `/users?${userIds}&limit=100`);
-      for (const u of users) {
-        roleMap[u.id] = u.public_metadata?.role || null;
+      const batch = uids.slice(i, i + 100);
+      const params = batch.map(u => `user_id=${encodeURIComponent(u)}`).join("&");
+      const res = await fetch(`https://api.clerk.com/v1/users?${params}&limit=100`, {
+        headers: {
+          Authorization: `Bearer ${env.CLERK_SECRET_KEY}`,
+          "Content-Type": "application/json",
+        },
+      });
+      if (res.ok) {
+        const users = await res.json();
+        for (const u of users) {
+          roleMap[u.id] = u.public_metadata?.role || null;
+        }
       }
-    } catch { /* fallback */ }
+    } catch { /* fallback: skip batch on failure */ }
   }
   return roleMap;
 }
