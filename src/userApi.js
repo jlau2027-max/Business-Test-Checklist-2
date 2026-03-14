@@ -20,19 +20,28 @@ async function adminFetch(path, method = "GET", body = undefined) {
   return res.json();
 }
 
+// ─── Authenticated fetch helper ─────────────────────────────────────────────
+async function authFetch(path, method = "GET", body = undefined) {
+  const token = await window.Clerk?.session?.getToken();
+  const headers = { "Content-Type": "application/json" };
+  if (token) headers.Authorization = `Bearer ${token}`;
+  const res = await fetch(`${WORKER_URL}${path}`, {
+    method,
+    headers,
+    body: body !== undefined ? JSON.stringify(body) : undefined,
+  });
+  if (!res.ok) throw new Error(`API error ${res.status}`);
+  return res.json();
+}
+
 // ─── Save a single attempt ─────────────────────────────────────────────────
 export async function saveAttempt(uid, attemptData, userInfo = {}) {
-  const res = await fetch(`${WORKER_URL}/api/attempts/${uid}`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
-      ...attemptData,
-      displayName: userInfo.displayName || "Student",
-      email: userInfo.email || "",
-      username: userInfo.username || "",
-    }),
+  return authFetch(`/api/attempts/${uid}`, "POST", {
+    ...attemptData,
+    displayName: userInfo.displayName || "Student",
+    email: userInfo.email || "",
+    username: userInfo.username || "",
   });
-  if (!res.ok) throw new Error("Failed to save attempt");
 }
 
 // ─── Admin: get all users' stats ────────────────────────────────────────────
@@ -72,8 +81,8 @@ export async function changeUserRole(uid, role) {
 
 // ─── Get all attempts for a user ────────────────────────────────────────────
 export async function getUserAttempts(uid) {
-  const res = await fetch(`${WORKER_URL}/api/attempts/${uid}`);
-  return await res.json();
+  const data = await authFetch(`/api/attempts/${uid}`);
+  return Array.isArray(data) ? data : [];
 }
 
 // ─── Compute stats grouped by category ──────────────────────────────────────

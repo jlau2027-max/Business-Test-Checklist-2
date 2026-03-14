@@ -6,6 +6,13 @@ let debounceTimer = null;
 
 const DEBOUNCE_MS = 2000;
 
+async function getAuthHeaders() {
+  const token = await window.Clerk?.session?.getToken();
+  const headers = { "Content-Type": "application/json" };
+  if (token) headers.Authorization = `Bearer ${token}`;
+  return headers;
+}
+
 function isSyncableKey(key) {
   return (
     key.startsWith("written_") ||
@@ -24,11 +31,13 @@ function flush() {
   const uid = currentUid;
   const data = { ...pendingWrites };
   pendingWrites = {};
-  fetch(`${WORKER_URL}/api/state/${uid}`, {
-    method: "PUT",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(data),
-  }).catch((err) => console.error("State sync write failed:", err));
+  getAuthHeaders().then(headers => {
+    fetch(`${WORKER_URL}/api/state/${uid}`, {
+      method: "PUT",
+      headers,
+      body: JSON.stringify(data),
+    }).catch((err) => console.error("State sync write failed:", err));
+  });
 }
 
 // Queue a cloud write (called from each page's saveLS function)
@@ -44,7 +53,9 @@ export async function initStateSync(uid) {
   currentUid = uid;
 
   try {
-    const res = await fetch(`${WORKER_URL}/api/state/${uid}`);
+    const headers = await getAuthHeaders();
+    const res = await fetch(`${WORKER_URL}/api/state/${uid}`, { headers });
+    if (!res.ok) throw new Error(`State fetch failed: ${res.status}`);
     const cloudData = await res.json();
 
     // Cloud wins: overwrite localStorage with cloud values
@@ -69,7 +80,7 @@ export async function initStateSync(uid) {
     if (Object.keys(toUpload).length > 0) {
       await fetch(`${WORKER_URL}/api/state/${uid}`, {
         method: "PUT",
-        headers: { "Content-Type": "application/json" },
+        headers,
         body: JSON.stringify(toUpload),
       });
     }
