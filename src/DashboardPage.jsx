@@ -78,16 +78,7 @@ export default function DashboardPage() {
   const categoryStats = computeCategoryStats(attempts);
   const wrongAnswers = getWrongAnswers(attempts);
 
-  if (authLoading || loading) return (
-    <div className="min-h-screen" style={{ backgroundColor: "var(--bg-base)", color: "var(--text-primary)" }}>
-      <Sidebar activeSubject="dashboard" />
-      <main id="main-content" style={{ marginLeft: "var(--sidebar-width, 240px)", transition: "margin-left 0.2s cubic-bezier(0.4, 0, 0.2, 1)" }}>
-        <div className="flex items-center justify-center h-[60vh]">
-          <span className="text-[var(--text-muted)] text-sm">Loading…</span>
-        </div>
-      </main>
-    </div>
-  );
+  if (authLoading) return null;
 
   return (
     <div className="min-h-screen" style={{ backgroundColor: "var(--bg-base)", color: "var(--text-primary)" }}>
