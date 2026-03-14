@@ -310,7 +310,7 @@ export default function HistoryPage() {
       <div style={{ marginLeft: "var(--sidebar-width, 240px)", transition: "margin-left 0.2s cubic-bezier(0.4, 0, 0.2, 1)" }}>
 
       <PageHeader>
-        <HeaderBadge label="IB History" bg="var(--color-danger-soft)" color="var(--color-danger)" />
+        <HeaderBadge label="IB Group 3" bg="var(--color-danger-soft)" color="var(--color-danger)" />
         <HeaderTitle>
           {paper === "paper2" ? "Paper 2 \u2014 Specimen" : "Paper 3 \u2014 Specimen"}
         </HeaderTitle>

@@ -281,7 +281,7 @@ export default function BiologyPage() {
 
       {/* Header */}
       <PageHeader>
-        <HeaderBadge label="IB Biology" bg="var(--color-success-soft)" color="var(--color-success)" />
+        <HeaderBadge label="IB Group 4" bg="var(--color-success-soft)" color="var(--color-success)" />
         <HeaderTitle>
           {paper === "paper1" ? "Paper 1 \u2014 Specimen" : "Paper 2 \u2014 Specimen"}
         </HeaderTitle>

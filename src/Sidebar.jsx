@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback } from "react";
 import { Button } from "@heroui/react";
 import { useAuth } from "./AuthContext.jsx";
-import { House, Briefcase, Clock, TrendingUp, Leaf, FlaskConical, Atom, Activity, Languages, Trees, LayoutGrid, ChevronsLeft, ChevronsRight, Menu, X } from "lucide-react";
+import { House, Briefcase, Clock, TrendingUp, Leaf, FlaskConical, Atom, Activity, Languages, Trees, LayoutGrid, UserRound, ChevronsLeft, ChevronsRight, Menu, X } from "lucide-react";
 
 const EXPANDED = 240;
 const COLLAPSED = 56;
@@ -94,7 +94,13 @@ export default function Sidebar({ activeSubject }) {
   const closeMobile = useCallback(() => setMobileOpen(false), []);
 
   const allSections = user
-    ? [...SECTIONS, { items: [{ label: "Dashboard", href: "/dashboard", subject: "dashboard", Icon: LayoutGrid, color: "var(--accent)" }] }]
+    ? [...SECTIONS, {
+        heading: "Account",
+        items: [
+          { label: "Dashboard", href: "/dashboard", subject: "dashboard", Icon: LayoutGrid, color: "var(--accent)" },
+          { label: "Account", href: "https://accounts.ibrev.org/user", subject: "account", Icon: UserRound, color: "var(--text-secondary)" },
+        ],
+      }]
     : SECTIONS;
 
   // ─── Mobile: floating hamburger trigger ────────────────────────
@@ -356,7 +362,7 @@ export default function Sidebar({ activeSubject }) {
               return active ? (
                 <div key={s.label} style={{ marginBottom: 2 }}>{linkContent}</div>
               ) : (
-                <a key={s.label} href={s.href} style={{ textDecoration: "none", display: "block", marginBottom: 2 }} onClick={isMobile ? closeMobile : undefined}>
+                <a key={s.label} href={s.href} style={{ textDecoration: "none", display: "block", marginBottom: 2 }} onClick={isMobile ? closeMobile : undefined} {...(s.href.startsWith("http") ? { target: "_blank", rel: "noopener noreferrer" } : {})}>
                   {linkContent}
                 </a>
               );

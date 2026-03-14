@@ -19,7 +19,7 @@ import {
 const SUBJECT_CONFIGS = {
   business: {
     subject: "business",
-    label: "IB Business Management",
+    label: "IB Group 3",
     subtitle: "Business",
     accentColor: "var(--accent)",
     accentSoft: "var(--accent-soft)",
@@ -36,7 +36,7 @@ const SUBJECT_CONFIGS = {
   },
   biology: {
     subject: "biology",
-    label: "IB Biology",
+    label: "IB Group 4",
     subtitle: "Biology",
     accentColor: "var(--color-success)",
     accentSoft: "var(--color-success-soft)",
@@ -61,7 +61,7 @@ const SUBJECT_CONFIGS = {
   },
   chemistry: {
     subject: "chemistry",
-    label: "IB Chemistry",
+    label: "IB Group 4",
     subtitle: "Chemistry",
     accentColor: "#8B7EB5",
     accentSoft: "#8B7EB520",
@@ -91,7 +91,7 @@ const SUBJECT_CONFIGS = {
   },
   physics: {
     subject: "physics",
-    label: "IB Physics",
+    label: "IB Group 4",
     subtitle: "Physics",
     accentColor: "#C4A36A",
     accentSoft: "#C4A36A20",
@@ -117,7 +117,7 @@ const SUBJECT_CONFIGS = {
   },
   sports: {
     subject: "sports",
-    label: "IB Sports Science",
+    label: "IB Group 4",
     subtitle: "Sports Science",
     accentColor: "#B57A7A",
     accentSoft: "#B57A7A20",
@@ -141,7 +141,7 @@ const SUBJECT_CONFIGS = {
   },
   economics: {
     subject: "economics",
-    label: "IB Economics",
+    label: "IB Group 3",
     subtitle: "Economics",
     accentColor: "#6BA3AD",
     accentSoft: "#6BA3AD20",
@@ -165,7 +165,7 @@ const SUBJECT_CONFIGS = {
   },
   ess: {
     subject: "ess",
-    label: "IB ESS",
+    label: "IB Group 4",
     subtitle: "Environmental Systems & Societies",
     accentColor: "#7AAD6B",
     accentSoft: "#7AAD6B20",
@@ -194,7 +194,7 @@ const SUBJECT_CONFIGS = {
   },
   spanish: {
     subject: "spanish",
-    label: "IB Spanish",
+    label: "IB Group 2",
     subtitle: "Spanish",
     accentColor: "#D4915C",
     accentSoft: "#D4915C20",

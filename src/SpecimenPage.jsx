@@ -208,7 +208,7 @@ export default function SpecimenPage() {
       <div style={{ marginLeft: "var(--sidebar-width, 240px)", transition: "margin-left 0.2s cubic-bezier(0.4, 0, 0.2, 1)" }}>
 
       <PageHeader>
-        <HeaderBadge label="IB Revision" bg="var(--accent-secondary-soft)" color="var(--accent-secondary)" />
+        <HeaderBadge label="IB Group 3" bg="var(--accent-secondary-soft)" color="var(--accent-secondary)" />
         <HeaderTitle>Specimen Paper</HeaderTitle>
         <div className="flex items-center justify-center">
           <a href="/business/checklist" style={{ textDecoration: "none" }}>
