@@ -254,27 +254,27 @@ function UserDetail({ uid, displayName, onBack }) {
 }
 
 // ─── Role permission helpers ────────────────────────────────────────────────
-// origin: all powers + role management | two: ban/unban/signout (admin & below) | admin: ban/unban/signout (normal users only)
-const ROLE_LEVEL = { origin: 3, two: 2, admin: 1 };
+// origin: all powers + role management | core: ban/unban/signout (admin & below) | admin: ban/unban/signout (normal users only)
+const ROLE_LEVEL = { origin: 3, core: 2, admin: 1 };
 const canActOn = (actorRole, targetRole) => {
   const actorLevel = ROLE_LEVEL[actorRole] || 0;
   const targetLevel = ROLE_LEVEL[targetRole] || 0;
   return actorLevel > targetLevel;
 };
-const canBanUnban = (role) => ["origin", "two", "admin"].includes(role);
+const canBanUnban = (role) => ["origin", "core", "admin"].includes(role);
 const canEditProfile = (role) => role === "origin";
 const canChangeRole = (role) => role === "origin";
 
 const ROLE_OPTIONS = [
   { value: "origin", label: "Origin — Full access + role management" },
-  { value: "two", label: "Two — Ban/Unban/Sign Out" },
+  { value: "core", label: "Core — Ban/Unban/Sign Out" },
   { value: "admin", label: "Admin — Content management" },
   { value: "__none__", label: "None — Remove admin access" },
 ];
 
 const ROLE_COLORS = {
   origin: "var(--color-danger)",
-  two: "var(--accent-tertiary)",
+  core: "var(--accent-tertiary)",
   admin: "var(--accent)",
 };
 

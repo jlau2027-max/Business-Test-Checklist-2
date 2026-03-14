@@ -513,7 +513,7 @@ async function handleAdminChangeRole(request, env) {
   const { uid, role } = await request.json();
   if (!uid) return json({ error: "Missing uid" }, 400);
 
-  const validRoles = ["origin", "two", "admin"];
+  const validRoles = ["origin", "core", "admin"];
   if (role !== null && !validRoles.includes(role)) {
     return json({ error: "Invalid role" }, 400);
   }
@@ -530,13 +530,13 @@ async function handleAdminChangeRole(request, env) {
 
 // ─── Auth / Clerk JWT verification ────────────────────────────────────────
 
-const EDIT_ROLES = ["origin", "two", "admin"];
-const DELETE_ROLES = ["origin", "two", "admin"];
-const ADMIN_ROLES = ["origin", "two", "admin"];
+const EDIT_ROLES = ["origin", "core", "admin"];
+const DELETE_ROLES = ["origin", "core", "admin"];
+const ADMIN_ROLES = ["origin", "core", "admin"];
 const ROLE_CHANGE_ROLES = ["origin"];
 
-// Role hierarchy: origin > two > admin > (no role)
-const ROLE_LEVEL = { origin: 3, two: 2, admin: 1 };
+// Role hierarchy: origin > core > admin > (no role)
+const ROLE_LEVEL = { origin: 3, core: 2, admin: 1 };
 function canActOn(actorRole, targetRole) {
   const actorLevel = ROLE_LEVEL[actorRole] || 0;
   const targetLevel = ROLE_LEVEL[targetRole] || 0;
@@ -1828,9 +1828,9 @@ export default {
       return handleAdminUsers(env, auth.role);
     }
 
-    // Admin: PUT /api/admin/users/status (origin and two only)
+    // Admin: PUT /api/admin/users/status (origin and core only)
     if (path === "/api/admin/users/status" && request.method === "PUT") {
-      const auth = await requireAuth(request, env, ["origin", "two"]);
+      const auth = await requireAuth(request, env, ["origin", "core"]);
       if (auth.response) return auth.response;
       return handleAdminUpdateStatus(request, env, auth.role);
     }
