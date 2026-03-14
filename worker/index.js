@@ -1570,6 +1570,7 @@ function createSubjectHandlers(tbl, idPre, defaultColor) {
   };
 }
 
+const histH = createSubjectHandlers("history_", "hist_", "#C4A36A");
 const chemH = createSubjectHandlers("chemistry_", "chem_", "#8B5CF6");
 const physH = createSubjectHandlers("physics_", "phys_", "#F59E0B");
 const sportH = createSubjectHandlers("sports_", "sport_", "#EF4444");
@@ -1803,7 +1804,7 @@ export default {
     }
 
     // ── New subjects (factory-based GET routes) ──────────────────────────
-    for (const [slug, h] of [["chemistry", chemH], ["physics", physH], ["sports-science", sportH], ["economics", econH], ["ess", essH], ["spanish", spanH]]) {
+    for (const [slug, h] of [["history", histH], ["chemistry", chemH], ["physics", physH], ["sports-science", sportH], ["economics", econH], ["ess", essH], ["spanish", spanH]]) {
       const result = registerSubjectRoutes(slug, h, path, method, url, request, env);
       if (result) return result;
     }
@@ -2075,7 +2076,7 @@ export default {
       }
 
       // --- New subjects (factory-based admin routes) ---
-      for (const [slug, h] of [["chemistry", chemH], ["physics", physH], ["sports-science", sportH], ["economics", econH], ["ess", essH], ["spanish", spanH]]) {
+      for (const [slug, h] of [["history", histH], ["chemistry", chemH], ["physics", physH], ["sports-science", sportH], ["economics", econH], ["ess", essH], ["spanish", spanH]]) {
         const result = await registerSubjectAdminRoutes(slug, h, path, method, request, env);
         if (result) return result;
       }
