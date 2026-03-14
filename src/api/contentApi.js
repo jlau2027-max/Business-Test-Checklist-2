@@ -459,6 +459,7 @@ function createSubjectApi(slug) {
   };
 }
 
+export const historyApi = createSubjectApi("history");
 export const chemistryApi = createSubjectApi("chemistry");
 export const physicsApi = createSubjectApi("physics");
 export const sportsApi = createSubjectApi("sports-science");

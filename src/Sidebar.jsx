@@ -24,7 +24,7 @@ const SECTIONS = [
     heading: "Group 3",
     items: [
       { label: "Business", href: "/business/checklist", subject: "business", Icon: Briefcase, color: "var(--accent)" },
-      { label: "History", href: "/history/specimen", subject: "history", Icon: Clock, color: "var(--accent-tertiary)" },
+      { label: "History", href: "/history/checklist", subject: "history", Icon: Clock, color: "var(--accent-tertiary)" },
       { label: "Economics", href: "/economics/checklist", subject: "economics", Icon: TrendingUp, color: "#6BA3AD" },
     ],
   },

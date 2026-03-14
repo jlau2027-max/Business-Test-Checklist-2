@@ -32,7 +32,7 @@ const path = window.location.pathname
 
 // Backward-compat redirects for old URLs
 if (path === '/specimen') window.location.replace('/business/specimen')
-if (path === '/history') window.location.replace('/history/specimen')
+if (path === '/history') window.location.replace('/history/checklist')
 if (path === '/biology') window.location.replace('/biology/checklist')
 if (path === '/business') window.location.replace('/business/checklist')
 if (path === '/chemistry') window.location.replace('/chemistry/checklist')
@@ -55,8 +55,15 @@ if (path.startsWith('/business/')) {
     const tabMap = { checklist: 'checklist', flashcards: 'flashcards', 'multi-choice': 'practice', written: 'written' }
     pageProps = { initialTab: tabMap[sub] || 'checklist' }
   }
-} else if (path === '/history/specimen') {
-  Page = HistoryPage
+} else if (path.startsWith('/history/')) {
+  const sub = path.split('/')[2]
+  if (sub === 'specimen') {
+    Page = HistoryPage
+  } else {
+    Page = App
+    const tabMap = { checklist: 'checklist', flashcards: 'flashcards', 'multi-choice': 'practice', written: 'written' }
+    pageProps = { initialTab: tabMap[sub] || 'checklist', subject: 'history' }
+  }
 } else if (path.startsWith('/biology/')) {
   const sub = path.split('/')[2]
   if (sub === 'specimen') {
@@ -119,10 +126,11 @@ const PAGE_TITLES = {
   '/privacy': 'Privacy Policy — IBrev',
   '/terms': 'Terms of Service — IBrev',
   '/feedback': 'Feedback — IBrev',
-  '/history/specimen': 'IB History Specimen — IBrev',
+  '/history/specimen': 'IB History — Specimen — IBrev',
 }
 const SUBJECT_LABELS = {
   business: 'IB Business',
+  history: 'IB History',
   biology: 'IB Biology',
   chemistry: 'IB Chemistry',
   physics: 'IB Physics',

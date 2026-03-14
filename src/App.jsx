@@ -12,7 +12,7 @@ import SupportButton from "./components/SupportButton.jsx";
 import {
   fetchFlashcardTopics, fetchFlashcards, fetchMcqQuestions, fetchWrittenQuestions, fetchChecklist, fetchCategoryColors,
   fetchBiologyFlashcardTopics, fetchBiologyFlashcards, fetchBiologyMcqQuestions, fetchBiologyWrittenQuestions, fetchBiologyChecklist, fetchBiologyCategoryColors,
-  chemistryApi, physicsApi, sportsApi, economicsApi, essApi, spanishApi,
+  historyApi, chemistryApi, physicsApi, sportsApi, economicsApi, essApi, spanishApi,
 } from "./api/contentApi.js";
 
 // ─── Subject configuration ──────────────────────────────────────────────────
@@ -32,6 +32,24 @@ const SUBJECT_CONFIGS = {
     api: {
       fetchChecklist, fetchFlashcardTopics, fetchFlashcards,
       fetchMcqQuestions, fetchWrittenQuestions, fetchCategoryColors,
+    },
+  },
+  history: {
+    subject: "history",
+    label: "IB Group 3",
+    subtitle: "History",
+    accentColor: "var(--accent-tertiary)",
+    accentSoft: "var(--accent-tertiary-soft, rgba(196,163,106,0.12))",
+    accentGlow: "var(--accent-tertiary-soft, rgba(196,163,106,0.25))",
+    labelColor: "var(--accent-tertiary)",
+    basePath: "/history",
+    show10Marker: false,
+    showSpecimen: true,
+    lsPrefix: "hist_",
+    api: {
+      fetchChecklist: historyApi.fetchChecklist, fetchFlashcardTopics: historyApi.fetchFlashcardTopics,
+      fetchFlashcards: historyApi.fetchFlashcards, fetchMcqQuestions: historyApi.fetchMcqQuestions,
+      fetchWrittenQuestions: historyApi.fetchWrittenQuestions, fetchCategoryColors: historyApi.fetchCategoryColors,
     },
   },
   biology: {
