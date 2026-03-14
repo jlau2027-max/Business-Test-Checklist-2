@@ -7,7 +7,8 @@ import Sidebar from "./Sidebar.jsx";
 import { useAuth } from "./AuthContext.jsx";
 import { ListChecks, Layers, CircleDot, PenLine } from "lucide-react";
 import { useAttemptTracker } from "./useAttemptTracker.js";
-import { syncToCloud } from "./stateSync.js";
+import { loadLS, saveLS } from "./utils/localStorage.js";
+import SupportButton from "./components/SupportButton.jsx";
 import {
   fetchFlashcardTopics, fetchFlashcards, fetchMcqQuestions, fetchWrittenQuestions, fetchChecklist, fetchCategoryColors,
   fetchBiologyFlashcardTopics, fetchBiologyFlashcards, fetchBiologyMcqQuestions, fetchBiologyWrittenQuestions, fetchBiologyChecklist, fetchBiologyCategoryColors,
@@ -218,16 +219,6 @@ const SUBJECT_CONFIGS = {
 const SubjectConfigCtx = createContext(SUBJECT_CONFIGS.business);
 function useSubjectConfig() { return useContext(SubjectConfigCtx); }
 
-// ─── localStorage helpers ──────────────────────────────────────────────────
-function loadLS(key, fallback) {
-  try { const v = localStorage.getItem(key); return v !== null ? JSON.parse(v) : fallback; }
-  catch { return fallback; }
-}
-function saveLS(key, value) {
-  try { localStorage.setItem(key, JSON.stringify(value)); } catch {}
-  syncToCloud(key, value);
-}
-
 
 // ─────────────────────────────────────────────────────────────────────────────
 // CONTENT CONTEXT — all content is fetched from the database
@@ -308,13 +299,13 @@ function ChecklistView() {
       {/* Progress card */}
       <Surface className="rounded-3xl p-6 mb-6">
         <div className="flex items-center justify-between mb-1">
-          <span className="text-sm text-[var(--text-secondary)]" style={{fontFamily:"'JSans', sans-serif"}}>Overall Progress</span>
+          <span className="text-sm text-[var(--text-secondary)]">Overall Progress</span>
           <span className="text-2xl font-extrabold" style={{color: progColor}}>{progress}%</span>
         </div>
         <ProgressBar value={progress} color={progColor} animated />
         <div className="flex items-center justify-between mt-3">
           <span className="text-xs text-[var(--text-muted)]">{checkedCount} of {totalItems} topics covered</span>
-          <span className="text-xs px-2 py-0.5 rounded-full" style={{fontFamily:"'JSans', sans-serif", backgroundColor:"var(--color-success-soft)", color:"var(--color-success)"}}>auto-saved</span>
+          <span className="text-xs px-2 py-0.5 rounded-full" style={{backgroundColor:"var(--color-success-soft)", color:"var(--color-success)"}}>auto-saved</span>
         </div>
       </Surface>
 
@@ -334,7 +325,7 @@ function ChecklistView() {
             <Accordion.Item key={section.id} id={section.id} className="bg-[var(--bg-card)] rounded-2xl overflow-hidden">
               <Accordion.Heading>
                 <Accordion.Trigger className="w-full flex items-center gap-2 px-5 py-3.5 hover:bg-[var(--bg-input)] transition-colors">
-                  {!isOpen && <span className="text-xs px-2 py-0.5 rounded-full font-bold" style={{backgroundColor: section.color + "22", color: section.color, fontFamily: "'JSans', sans-serif"}}>{sectionChecked}/{section.items.length}</span>}
+                  {!isOpen && <span className="text-xs px-2 py-0.5 rounded-full font-bold" style={{backgroundColor: section.color + "22", color: section.color}}>{sectionChecked}/{section.items.length}</span>}
                   <span className="text-sm font-semibold" style={{color: allDone ? section.color : "var(--text-primary)"}}>{allDone && "✓ "}{section.title}</span>
                   <Accordion.Indicator className="ml-auto shrink-0 text-[var(--text-muted)]">
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polyline points="6 9 12 15 18 9"/></svg>
@@ -430,8 +421,8 @@ function FlashCard({card, catColor}) {
           <span className="block text-[13px] text-[var(--text-body)]" style={{lineHeight:1.65}}>{card.def}</span>
           {card.formula && (
             <div className="mt-2 p-2" style={{ background: "var(--bg-base)", borderRadius: 8, borderLeft: `3px solid ${catColor}` }}>
-              <span className="block text-[10px] text-current mb-1" style={{fontFamily:"'JSans', sans-serif", letterSpacing:1, color:catColor}}>FORMULA</span>
-              <span className="block text-[12px] text-[var(--accent)]" style={{fontFamily:"'JSans', sans-serif"}}>{card.formula}</span>
+              <span className="block text-[10px] text-current mb-1" style={{letterSpacing:1, color:catColor}}>FORMULA</span>
+              <span className="block text-[12px] text-[var(--accent)]">{card.formula}</span>
             </div>
           )}
         </div>
@@ -459,7 +450,6 @@ function FlashcardsView() {
             onPress={()=>{ setActiveCat(cat.id); saveLS(`${lsPrefix}fc_cat`, cat.id); setCardIdx(0); }}
             className="rounded-full text-xs"
             style={{
-              fontFamily: "'JSans', sans-serif",
               backgroundColor: activeCat===cat.id ? cat.color : "var(--bg-input)",
               color: activeCat===cat.id ? "#fff" : "var(--text-secondary)",
               border: `1px solid ${activeCat===cat.id ? cat.color : "var(--border)"}`,
@@ -472,7 +462,7 @@ function FlashcardsView() {
 
       {/* Progress */}
       <div className="flex items-center justify-between mb-4">
-        <span className="text-xs text-[var(--text-muted)]" style={{fontFamily:"'JSans', sans-serif"}}>{cardIdx+1} / {currentCat.cards.length} — {currentCat.label}</span>
+        <span className="text-xs text-[var(--text-muted)]">{cardIdx+1} / {currentCat.cards.length} — {currentCat.label}</span>
         <div style={{background:"var(--bg-input)",borderRadius:99,height:4,width:140,overflow:"hidden"}}>
           <div style={{width:`${((cardIdx+1)/currentCat.cards.length)*100}%`,height:"100%",background:currentCat.color,borderRadius:99,transition:"width 0.3s"}}/>
         </div>
@@ -522,9 +512,9 @@ function MCQItem({q, displayNum}) {
     <Surface variant="secondary" className="rounded-2xl mb-2 overflow-hidden" style={{ transition:"all 0.2s" }}>
       <div style={{borderLeft:`4px solid ${color}`,padding:"18px 20px"}}>
         <div className="flex gap-2 mb-2 flex-wrap">
-          <span className="text-xs px-2 py-0.5 rounded-full" style={{fontFamily:"'JSans', sans-serif",backgroundColor:color,color:"#fff"}}>MCQ</span>
-          <span className="text-xs px-2 py-0.5 rounded-full" style={{fontFamily:"'JSans', sans-serif",backgroundColor:color+"22",color:color}}>{ q.cat}</span>
-          <span className="text-xs px-2 py-0.5 rounded-full" style={{fontFamily:"'JSans', sans-serif",backgroundColor:"var(--bg-elevated)",color:"var(--text-secondary)"}}>{q.difficulty}</span>
+          <span className="text-xs px-2 py-0.5 rounded-full" style={{backgroundColor:color,color:"#fff"}}>MCQ</span>
+          <span className="text-xs px-2 py-0.5 rounded-full" style={{backgroundColor:color+"22",color:color}}>{ q.cat}</span>
+          <span className="text-xs px-2 py-0.5 rounded-full" style={{backgroundColor:"var(--bg-elevated)",color:"var(--text-secondary)"}}>{q.difficulty}</span>
         </div>
         <span className="block text-[15px] text-[var(--text-primary)] font-semibold" style={{lineHeight:1.6}}>Q{displayNum}. {q.q}</span>
       </div>
@@ -563,7 +553,7 @@ function MCQItem({q, displayNum}) {
                       background:confirmed&&isCorrect?"var(--color-success)":confirmed&&isSelected&&!isCorrect?"var(--color-danger)":isSelected?color:"var(--border)",
                       display:"flex",alignItems:"center",justifyContent:"center",
                     }}>
-                      <span className="text-[11px] text-white font-bold" style={{fontFamily:"'JSans', sans-serif"}}>
+                      <span className="text-[11px] text-white font-bold">
                         {confirmed&&isCorrect?"✓":confirmed&&isSelected&&!isCorrect?"✗":String.fromCharCode(65+i)}
                       </span>
                     </div>
@@ -591,7 +581,7 @@ function MCQItem({q, displayNum}) {
           <Alert status={selected===q.answer ? "success" : "danger"} className="mt-1 rounded-2xl" style={{backgroundColor: (selected===q.answer ? "var(--color-success)" : "var(--color-danger)") + "11", border: `1px solid ${selected===q.answer ? "var(--color-success)" : "var(--color-danger)"}44`}}>
             <Alert.Indicator />
             <Alert.Content>
-              <Alert.Title style={{fontFamily: "'JSans', sans-serif", fontSize: 12}}>{selected===q.answer ? "Correct!" : "Incorrect"}</Alert.Title>
+              <Alert.Title style={{fontSize: 12}}>{selected===q.answer ? "Correct!" : "Incorrect"}</Alert.Title>
               <Alert.Description>
                 <span className="text-sm text-[var(--text-secondary)] leading-relaxed">{q.explanation}</span>
                 <Button variant="ghost" size="sm" className="mt-2 text-[var(--text-secondary)]" onPress={()=>{setSelected(null);setConfirmed(false);resetTimer();}}>Try Again</Button>
@@ -634,7 +624,6 @@ function PracticeView() {
                 color: active ? "#fff" : "var(--text-secondary)",
                 border: `1px solid ${active ? c : "var(--border)"}`,
                 boxShadow: "none",
-                fontFamily: "'JSans', sans-serif",
               }}
             >
               {cat}
@@ -644,7 +633,7 @@ function PracticeView() {
       </div>
 
       {/* Summary */}
-      <span className="block text-xs text-[var(--text-muted)] mb-6" style={{fontFamily:"'JSans', sans-serif"}}>
+      <span className="block text-xs text-[var(--text-muted)] mb-6">
         Showing {filtered.length} question{filtered.length!==1?"s":""}{filterCat!=="All"?` · ${filterCat}`:""}
       </span>
 
@@ -714,9 +703,9 @@ function WrittenPracticeItem({q, displayNum}) {
     <Surface variant="secondary" className="rounded-2xl mb-4 overflow-hidden">
       <div style={{borderLeft:`4px solid ${color}`, padding:"18px 20px"}}>
         <div className="flex gap-2 mb-2 flex-wrap">
-          <span className="text-xs px-2 py-0.5 rounded-full" style={{fontFamily:"'JSans', sans-serif",backgroundColor:color+"22", color}}>{q.cat}</span>
-          <span className="text-xs px-2 py-0.5 rounded-full" style={{fontFamily:"'JSans', sans-serif",backgroundColor:"var(--bg-elevated)", color:"var(--text-secondary)"}}>{q.difficulty}</span>
-          <span className="text-xs px-2 py-0.5 rounded-full ml-auto" style={{fontFamily:"'JSans', sans-serif",backgroundColor:"var(--color-warning-soft)", color:"var(--color-warning)", border:"1px solid var(--color-warning)"}}>[ {q.marks} marks ]</span>
+          <span className="text-xs px-2 py-0.5 rounded-full" style={{backgroundColor:color+"22", color}}>{q.cat}</span>
+          <span className="text-xs px-2 py-0.5 rounded-full" style={{backgroundColor:"var(--bg-elevated)", color:"var(--text-secondary)"}}>{q.difficulty}</span>
+          <span className="text-xs px-2 py-0.5 rounded-full ml-auto" style={{backgroundColor:"var(--color-warning-soft)", color:"var(--color-warning)", border:"1px solid var(--color-warning)"}}>[ {q.marks} marks ]</span>
         </div>
         <span className="block text-[15px] text-[var(--text-primary)] font-semibold" style={{lineHeight:1.6, whiteSpace:"pre-line"}}>Q{displayNum}. {q.q}</span>
       </div>
@@ -731,7 +720,7 @@ function WrittenPracticeItem({q, displayNum}) {
           disabled={grading}
           fullWidth
           className="rounded-2xl bg-[var(--bg-card)] border border-[var(--border)] text-[var(--text-primary)] text-sm leading-relaxed placeholder:text-[var(--text-muted)] p-3 mb-2"
-          style={{ fontFamily: "'JSans', sans-serif", resize: "vertical" }}
+          style={{ resize: "vertical" }}
         />
 
         <div className="flex items-center gap-2">
@@ -743,7 +732,6 @@ function WrittenPracticeItem({q, displayNum}) {
             isDisabled={!answer.trim() || grading}
             style={{
               background: answer.trim() && !grading ? "var(--accent)" : "var(--bg-elevated)",
-              fontFamily: "'JSans', sans-serif",
             }}
           >
             {({isPending}) => <>
@@ -759,11 +747,10 @@ function WrittenPracticeItem({q, displayNum}) {
               : "rounded-full"
             }
             onPress={()=>setRevealed(r=>!r)}
-            style={revealed ? { fontFamily: "'JSans', sans-serif" } : {
+            style={revealed ? undefined : {
               backgroundColor: color,
               color: "#fff",
               border: "none",
-              fontFamily: "'JSans', sans-serif",
             }}
           >
             {revealed ? "Hide Markscheme" : "Show Markscheme"}
@@ -773,7 +760,6 @@ function WrittenPracticeItem({q, displayNum}) {
               size="sm"
               variant="ghost"
               className="rounded-full text-[var(--text-secondary)]"
-              style={{ fontFamily: "'JSans', sans-serif" }}
               onPress={()=>{ setAnswer(""); setGradeResult(null); saveLS(`${lsPrefix}written_ans_${q.id}`, ""); saveLS(`${lsPrefix}written_grade_${q.id}`, null); }}
             >
               Clear
@@ -786,7 +772,7 @@ function WrittenPracticeItem({q, displayNum}) {
           <Alert status={gradeResult.score == null ? "warning" : scorePct >= 0.75 ? "success" : scorePct >= 0.4 ? "warning" : "danger"} className="mt-4 rounded-2xl" style={{backgroundColor: (gradeResult.score == null ? "var(--text-secondary)" : scoreColor) + "11", border: `1px solid ${gradeResult.score == null ? "var(--text-secondary)" : scoreColor}44`}}>
             <Alert.Indicator />
             <Alert.Content>
-              <Alert.Title style={{fontFamily: "'JSans', sans-serif", fontSize: 12}}>{gradeResult.score != null ? `AI Score: ${gradeResult.score}/${gradeResult.maxMarks || q.marks}` : "Grading Error"}</Alert.Title>
+              <Alert.Title style={{fontSize: 12}}>{gradeResult.score != null ? `AI Score: ${gradeResult.score}/${gradeResult.maxMarks || q.marks}` : "Grading Error"}</Alert.Title>
               <Alert.Description>
                 {gradeResult.score != null && <ProgressBar value={scorePct * 100} color={scoreColor} animated className="mb-2" />}
                 <span className="text-sm text-[var(--text-secondary)] leading-relaxed">{gradeResult.feedback}</span>
@@ -797,7 +783,7 @@ function WrittenPracticeItem({q, displayNum}) {
 
         {revealed && (
           <div className="mt-4 pt-4 border-t border-[var(--border)]">
-            <span className="block text-[11px] text-[var(--color-success)] mb-2" style={{fontFamily:"'JSans', sans-serif", letterSpacing:1}}>MARKSCHEME</span>
+            <span className="block text-[11px] text-[var(--color-success)] mb-2" style={{letterSpacing:1}}>MARKSCHEME</span>
             <span className="block text-[13px] text-[var(--text-secondary)]" style={{lineHeight:1.7, whiteSpace:"pre-line"}}>{q.modelAnswer}</span>
           </div>
         )}
@@ -847,7 +833,6 @@ function WrittenPracticeView() {
             fontSize: 15,
             lineHeight: 1,
             boxShadow: mode === "short" ? "0 0 16px var(--accent-glow)" : "none",
-            fontFamily: "'JSans', sans-serif",
           }}
         >
           Short Answer
@@ -865,7 +850,6 @@ function WrittenPracticeView() {
               fontSize: 15,
               lineHeight: 1,
               boxShadow: mode === "10mark" ? "0 0 16px var(--color-danger-soft)" : "none",
-              fontFamily: "'JSans', sans-serif",
             }}
           >
             10 Marker
@@ -883,7 +867,6 @@ function WrittenPracticeView() {
                 border: "2px solid var(--accent-secondary)",
                 fontSize: 15,
                 lineHeight: 1,
-                fontFamily: "'JSans', sans-serif",
               }}
             >
               Specimen →
@@ -909,7 +892,6 @@ function WrittenPracticeView() {
                   color: active ? "#fff" : "var(--text-secondary)",
                   border: `1px solid ${active ? c : "var(--border)"}`,
                   boxShadow: "none",
-                  fontFamily: "'JSans', sans-serif",
                 }}
               >
                 {cat}
@@ -919,7 +901,7 @@ function WrittenPracticeView() {
         </div>
       )}
 
-      <span className="block text-xs text-[var(--text-muted)] mb-6" style={{fontFamily:"'JSans', sans-serif"}}>
+      <span className="block text-xs text-[var(--text-muted)] mb-6">
         Showing {filtered.length} question{filtered.length!==1?"s":""}{mode === "short" && filterCat!=="All"?` · ${filterCat}`:""}
         {mode === "10mark" ? " · 10 Markers" : ""}
       </span>
@@ -982,7 +964,7 @@ export default function App({ initialTab = "checklist", subject = "business" }) 
   return (
     <SubjectConfigCtx.Provider value={config}>
     <ContentCtx.Provider value={filteredContent}>
-    <div className="min-h-screen bg-[var(--bg-base)]" style={{fontFamily:"'JSans', sans-serif",color:"var(--text-primary)"}}>
+    <div className="min-h-screen bg-[var(--bg-base)]" style={{color:"var(--text-primary)"}}>
 
       <Sidebar activeSubject={config.subject} />
 
@@ -1000,7 +982,7 @@ export default function App({ initialTab = "checklist", subject = "business" }) 
       >
         <div className="max-w-5xl mx-auto pt-4 pb-2 px-4">
           <div className="flex items-center justify-center mb-2.5" style={{ position: "relative" }}>
-            <span className="text-xs px-2.5 py-1 rounded-full uppercase font-bold tracking-widest" style={{fontFamily: "'JSans', sans-serif", backgroundColor: config.accentSoft, color: config.labelColor}}>
+            <span className="text-xs px-2.5 py-1 rounded-full uppercase font-bold tracking-widest" style={{backgroundColor: config.accentSoft, color: config.labelColor}}>
               {config.label}
             </span>
             <LoginButton />
@@ -1019,7 +1001,6 @@ export default function App({ initialTab = "checklist", subject = "business" }) 
                   <Tabs.Tab key={t.value} id={t.value}
                     render={(domProps) => <a {...domProps} href={t.href} style={{textDecoration:"none", flex:1, textAlign:"center"}} />}
                     className="text-[13px] font-semibold py-2.5 text-[var(--text-muted)] data-[selected=true]:text-[var(--text-primary)]"
-                    style={{fontFamily: "'JSans', sans-serif"}}
                   >
                     <span style={{ display: "inline-flex", alignItems: "center", gap: 6 }}>
                       <t.Icon size={14} strokeWidth={2} />
@@ -1052,7 +1033,6 @@ export default function App({ initialTab = "checklist", subject = "business" }) 
                     color: active ? "#fff" : "var(--text-secondary)",
                     border: `1px solid ${active ? config.accentColor : "var(--border)"}`,
                     boxShadow: active ? `0 0 12px ${config.accentGlow}` : "none",
-                    fontFamily: "'JSans', sans-serif",
                     minWidth: u.value === "All" ? 90 : 40,
                   }}
                 >
@@ -1068,37 +1048,7 @@ export default function App({ initialTab = "checklist", subject = "business" }) 
         {tab==="written" && <WrittenPracticeView/>}
       </div>
 
-      {/* Floating support button */}
-      <a
-        href="https://donate.stripe.com/aFa7sN64kbjBdj8ayH4ow01"
-        target="_blank"
-        rel="noopener noreferrer"
-        style={{
-          position: "fixed",
-          bottom: 20,
-          right: 20,
-          zIndex: 999,
-          width: 48,
-          height: 48,
-          borderRadius: "50%",
-          backgroundColor: "var(--accent)",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          boxShadow: "0 4px 14px rgba(124,111,255,0.4)",
-          border: "none",
-          cursor: "pointer",
-          textDecoration: "none",
-          transition: "transform 0.2s, box-shadow 0.2s",
-        }}
-        aria-label="Support us"
-        onMouseEnter={e => { e.currentTarget.style.transform = "scale(1.1)"; e.currentTarget.style.boxShadow = "0 6px 20px rgba(124,111,255,0.6)"; const p = e.currentTarget.querySelector("path"); if(p) p.style.fill = "#fff"; }}
-        onMouseLeave={e => { e.currentTarget.style.transform = "scale(1)"; e.currentTarget.style.boxShadow = "0 4px 14px rgba(124,111,255,0.4)"; const p = e.currentTarget.querySelector("path"); if(p) p.style.fill = "none"; }}
-      >
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-          <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" style={{transition:"fill 0.25s ease"}}/>
-        </svg>
-      </a>
+      <SupportButton />
 
       <Analytics />
     </main>

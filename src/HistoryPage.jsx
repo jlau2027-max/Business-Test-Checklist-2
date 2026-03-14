@@ -1,21 +1,12 @@
 import { useState, useEffect } from "react";
 import { Button, TextArea, Spinner, Skeleton, Surface } from "@heroui/react";
 import { fetchHistoryQuestions } from "./api/contentApi.js";
-import LoginButton from "./LoginButton.jsx";
+import { loadLS, saveLS } from "./utils/localStorage.js";
 import Sidebar from "./Sidebar.jsx";
 import { useAuth } from "./AuthContext.jsx";
 import { useAttemptTracker } from "./useAttemptTracker.js";
-import { syncToCloud } from "./stateSync.js";
-
-// ─── localStorage helpers ──────────────────────────────────────────────────
-function loadLS(key, fallback) {
-  try { const v = localStorage.getItem(key); return v !== null ? JSON.parse(v) : fallback; }
-  catch { return fallback; }
-}
-function saveLS(key, value) {
-  try { localStorage.setItem(key, JSON.stringify(value)); } catch {}
-  syncToCloud(key, value);
-}
+import SupportButton from "./components/SupportButton.jsx";
+import PageHeader, { HeaderBadge, HeaderTitle } from "./components/PageHeader.jsx";
 
 // ─── Level Descriptors (Paper 2 — shared across all Paper 2 questions) ────
 const LEVEL_DESCRIPTORS = `Level Descriptors (15 marks):
@@ -110,13 +101,13 @@ function HistoryQuestion({ q, levelDescriptors, prefix }) {
       <div className="flex items-start gap-2 mb-2" style={{ flexWrap: "nowrap" }}>
         <span
           className="text-sm px-2 py-1 rounded-full font-bold"
-          style={{ backgroundColor: "var(--color-danger-soft)", color: "var(--color-danger)", border: "none", flexShrink: 0, fontFamily: "'JSans', sans-serif" }}
+          style={{ backgroundColor: "var(--color-danger-soft)", color: "var(--color-danger)", border: "none", flexShrink: 0 }}
         >
           Q{q.number}
         </span>
         <span
           className="text-xs px-1.5 py-0.5 rounded-full font-semibold"
-          style={{ backgroundColor: "var(--accent-soft)", color: "var(--accent)", border: "none", flexShrink: 0, fontFamily: "'JSans', sans-serif" }}
+          style={{ backgroundColor: "var(--accent-soft)", color: "var(--accent)", border: "none", flexShrink: 0 }}
         >
           {q.marks} marks
         </span>
@@ -135,7 +126,7 @@ function HistoryQuestion({ q, levelDescriptors, prefix }) {
         rows={16}
         fullWidth
         className="rounded-2xl mb-2 bg-[var(--bg-base)] border border-[var(--border)] text-[var(--text-primary)] text-sm leading-[1.7] placeholder:text-[var(--text-muted)] focus:border-[var(--color-danger)] p-3"
-        style={{ fontFamily: "'JSans', sans-serif", resize: "vertical" }}
+        style={{ resize: "vertical" }}
       />
 
       {/* Action buttons */}
@@ -146,7 +137,7 @@ function HistoryQuestion({ q, levelDescriptors, prefix }) {
           onPress={handleSolve}
           isDisabled={!answer.trim()}
           className="rounded-full bg-[var(--color-danger)] text-white"
-          style={{ fontFamily: "'JSans', sans-serif" }}
+
         >
           {({isPending}) => <>
             {isPending && <Spinner color="current" size="sm" />}
@@ -159,7 +150,7 @@ function HistoryQuestion({ q, levelDescriptors, prefix }) {
           variant="ghost"
           onPress={() => setRevealed((r) => !r)}
           className={`rounded-full ${revealed ? "text-[var(--text-secondary)]" : "bg-[var(--accent)] text-white"}`}
-          style={{ fontFamily: "'JSans', sans-serif" }}
+
         >
           {revealed ? "Hide Markscheme" : "Show Markscheme"}
         </Button>
@@ -169,7 +160,7 @@ function HistoryQuestion({ q, levelDescriptors, prefix }) {
           variant="ghost"
           onPress={() => setLevelsRevealed((r) => !r)}
           className={`rounded-full ${levelsRevealed ? "text-[var(--text-secondary)]" : "bg-[var(--color-warning)] text-black"}`}
-          style={{ fontFamily: "'JSans', sans-serif" }}
+
         >
           {levelsRevealed ? "Hide Levels" : "Level Descriptors"}
         </Button>
@@ -180,13 +171,13 @@ function HistoryQuestion({ q, levelDescriptors, prefix }) {
             variant="ghost"
             onPress={handleClear}
             className="rounded-full text-[var(--text-secondary)]"
-            style={{ fontFamily: "'JSans', sans-serif" }}
+  
           >
             Clear
           </Button>
         )}
 
-        <span className="text-xs px-1.5 py-0.5 rounded-full ml-auto" style={{ backgroundColor: "rgba(248,113,113,0.1)", color: "var(--color-danger)", fontFamily: "'JSans', sans-serif" }}>
+        <span className="text-xs px-1.5 py-0.5 rounded-full ml-auto" style={{ backgroundColor: "rgba(248,113,113,0.1)", color: "var(--color-danger)" }}>
           auto-saved
         </span>
       </div>
@@ -202,7 +193,6 @@ function HistoryQuestion({ q, levelDescriptors, prefix }) {
                   backgroundColor: gradeResult.score >= gradeResult.maxMarks * 0.7 ? "var(--color-success-soft)" : gradeResult.score >= gradeResult.maxMarks * 0.4 ? "var(--color-warning-soft)" : "var(--color-danger-soft)",
                   color: gradeResult.score >= gradeResult.maxMarks * 0.7 ? "var(--color-success)" : gradeResult.score >= gradeResult.maxMarks * 0.4 ? "var(--color-warning)" : "var(--color-danger)",
                   border: "none",
-                  fontFamily: "'JSans', sans-serif",
                 }}
               >
                 {gradeResult.score} / {gradeResult.maxMarks}
@@ -218,7 +208,7 @@ function HistoryQuestion({ q, levelDescriptors, prefix }) {
       {/* Markscheme reveal */}
       {revealed && (
         <div className="mt-4 pt-4" style={{ borderTop: "1px solid var(--border)" }}>
-          <span className="block text-[var(--color-success)] mb-2" style={{ fontSize: 11, fontFamily: "'JSans', sans-serif", letterSpacing: 1 }}>
+          <span className="block text-[var(--color-success)] mb-2" style={{ fontSize: 11, letterSpacing: 1 }}>
             MARKSCHEME
           </span>
           <span className="block text-[var(--text-secondary)]" style={{ fontSize: 13, lineHeight: 1.7, whiteSpace: "pre-line" }}>
@@ -230,7 +220,7 @@ function HistoryQuestion({ q, levelDescriptors, prefix }) {
       {/* Level descriptors reveal */}
       {levelsRevealed && (
         <div className="mt-4 pt-4" style={{ borderTop: "1px solid var(--border)" }}>
-          <span className="block text-[var(--color-warning)] mb-2" style={{ fontSize: 11, fontFamily: "'JSans', sans-serif", letterSpacing: 1 }}>
+          <span className="block text-[var(--color-warning)] mb-2" style={{ fontSize: 11, letterSpacing: 1 }}>
             LEVEL DESCRIPTORS
           </span>
           <span className="block text-[var(--text-secondary)]" style={{ fontSize: 13, lineHeight: 1.7, whiteSpace: "pre-line" }}>
@@ -313,68 +303,42 @@ export default function HistoryPage() {
   const loading = paper === "paper2" ? loadingP2 : loadingP3;
 
   return (
-    <div className="min-h-screen" style={{ backgroundColor: "var(--bg-base)", fontFamily: "'JSans', sans-serif", color: "var(--text-primary)" }}>
+    <div className="min-h-screen" style={{ backgroundColor: "var(--bg-base)", color: "var(--text-primary)" }}>
 
       <Sidebar activeSubject="history" />
 
       <div style={{ marginLeft: "var(--sidebar-width, 240px)", transition: "margin-left 0.2s cubic-bezier(0.4, 0, 0.2, 1)" }}>
 
-      {/* Header */}
-      <div
-        style={{
-          position: "sticky",
-          top: 0,
-          zIndex: 100,
-          background: "var(--bg-header)",
-          backdropFilter: "blur(12px)",
-          WebkitBackdropFilter: "blur(12px)",
-          borderBottom: "1px solid var(--border-header)",
-        }}
-      >
-        <div className="max-w-4xl mx-auto py-2 px-4">
-          <div className="flex items-center justify-center mb-1" style={{ position: "relative" }}>
-            <span
-              className="text-xs px-2 py-0.5 rounded-full uppercase font-bold"
-              style={{ letterSpacing: 2, backgroundColor: "var(--color-danger-soft)", color: "var(--color-danger)", border: "none", fontFamily: "'JSans', sans-serif" }}
+      <PageHeader>
+        <HeaderBadge label="IB History" bg="var(--color-danger-soft)" color="var(--color-danger)" />
+        <HeaderTitle>
+          {paper === "paper2" ? "Paper 2 \u2014 Specimen" : "Paper 3 \u2014 Specimen"}
+        </HeaderTitle>
+        {/* Paper 2 / Paper 3 tabs */}
+        <div className="flex items-center justify-center gap-1 pb-1">
+          {[
+            { key: "paper2", label: "Paper 2" },
+            { key: "paper3", label: "Paper 3" },
+          ].map(t => (
+            <Button
+              key={t.key}
+              size="sm"
+              onPress={() => setPaper(t.key)}
+              className="rounded-full font-semibold text-[13px]"
+              style={{
+                backgroundColor: paper === t.key ? "var(--text-primary)" : "transparent",
+                color: paper === t.key ? "var(--bg-base)" : "var(--text-muted)",
+                border: paper === t.key ? "none" : "1px solid var(--border)",
+                height: 34,
+                paddingLeft: 16,
+                paddingRight: 16,
+              }}
             >
-              IB History
-            </span>
-            <LoginButton />
-          </div>
-          <span
-            className="text-center block font-extrabold text-[var(--text-primary)]"
-            style={{ fontSize: "clamp(22px, 4vw, 30px)", letterSpacing: -0.5 }}
-          >
-            {paper === "paper2" ? "Paper 2 \u2014 Specimen" : "Paper 3 \u2014 Specimen"}
-          </span>
-
-          {/* Paper 2 / Paper 3 tabs */}
-          <div className="flex items-center justify-center gap-1 pb-1">
-            {[
-              { key: "paper2", label: "Paper 2" },
-              { key: "paper3", label: "Paper 3" },
-            ].map(t => (
-              <Button
-                key={t.key}
-                size="sm"
-                onPress={() => setPaper(t.key)}
-                className="rounded-full font-semibold text-[13px]"
-                style={{
-                  fontFamily: "'JSans', sans-serif",
-                  backgroundColor: paper === t.key ? "var(--text-primary)" : "transparent",
-                  color: paper === t.key ? "var(--bg-base)" : "var(--text-muted)",
-                  border: paper === t.key ? "none" : "1px solid var(--border)",
-                  height: 34,
-                  paddingLeft: 16,
-                  paddingRight: 16,
-                }}
-              >
-                {t.label}
-              </Button>
-            ))}
-          </div>
+              {t.label}
+            </Button>
+          ))}
         </div>
-      </div>
+      </PageHeader>
 
       {/* Content */}
       <div className="max-w-4xl mx-auto py-6 px-3">
@@ -392,13 +356,13 @@ export default function HistoryPage() {
                 : "Answer three questions. Each question is worth 15 marks. The maximum mark for this paper is 45. 2 hours 30 minutes. Type your essay answers below \u2014 everything auto-saves. Use \"Solve\" for AI grading, \"Show Markscheme\" for the rubric, and \"Level Descriptors\" for the marking bands."}
             </span>
             <div className="flex items-center gap-1 mt-2">
-              <span className="text-xs px-1.5 py-0.5 rounded-full" style={{ backgroundColor: "rgba(248,113,113,0.1)", color: "var(--color-danger)", fontFamily: "'JSans', sans-serif" }}>
+              <span className="text-xs px-1.5 py-0.5 rounded-full" style={{ backgroundColor: "rgba(248,113,113,0.1)", color: "var(--color-danger)" }}>
                 {questions.length} questions
               </span>
-              <span className="text-xs px-1.5 py-0.5 rounded-full" style={{ backgroundColor: "rgba(139,92,246,0.1)", color: "var(--accent)", fontFamily: "'JSans', sans-serif" }}>
+              <span className="text-xs px-1.5 py-0.5 rounded-full" style={{ backgroundColor: "rgba(139,92,246,0.1)", color: "var(--accent)" }}>
                 {topics.length} topics
               </span>
-              <span className="text-xs px-1.5 py-0.5 rounded-full" style={{ backgroundColor: "rgba(251,191,36,0.1)", color: "var(--color-warning)", fontFamily: "'JSans', sans-serif" }}>
+              <span className="text-xs px-1.5 py-0.5 rounded-full" style={{ backgroundColor: "rgba(251,191,36,0.1)", color: "var(--color-warning)" }}>
                 15 marks each
               </span>
             </div>
@@ -428,7 +392,7 @@ export default function HistoryPage() {
                 <div key={topic} className="mb-6">
                   <span
                     className="block text-[var(--color-danger)] font-bold uppercase mb-4"
-                    style={{ fontSize: 11, fontFamily: "'JSans', sans-serif", letterSpacing: 1 }}
+                    style={{ fontSize: 11, letterSpacing: 1 }}
                   >
                     {topic}
                   </span>
@@ -443,37 +407,7 @@ export default function HistoryPage() {
         </div>
       </div>
 
-      {/* Floating support button */}
-      <a
-        href="https://donate.stripe.com/aFa7sN64kbjBdj8ayH4ow01"
-        target="_blank"
-        rel="noopener noreferrer"
-        style={{
-          position: "fixed",
-          bottom: 20,
-          right: 20,
-          zIndex: 999,
-          width: 48,
-          height: 48,
-          borderRadius: "50%",
-          backgroundColor: "var(--accent)",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          boxShadow: "0 4px 14px rgba(124,111,255,0.4)",
-          border: "none",
-          cursor: "pointer",
-          textDecoration: "none",
-          transition: "transform 0.2s, box-shadow 0.2s",
-        }}
-        title="Support us"
-        onMouseEnter={e => { e.currentTarget.style.transform = "scale(1.1)"; e.currentTarget.style.boxShadow = "0 6px 20px rgba(124,111,255,0.6)"; const p = e.currentTarget.querySelector("path"); if(p) p.style.fill = "#fff"; }}
-        onMouseLeave={e => { e.currentTarget.style.transform = "scale(1)"; e.currentTarget.style.boxShadow = "0 4px 14px rgba(124,111,255,0.4)"; const p = e.currentTarget.querySelector("path"); if(p) p.style.fill = "none"; }}
-      >
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-          <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" style={{transition:"fill 0.25s ease"}}/>
-        </svg>
-      </a>
+      <SupportButton />
     </div>
     </div>
   );

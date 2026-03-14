@@ -2,9 +2,10 @@ import { useState, useEffect } from "react";
 import { Button, Surface } from "@heroui/react";
 import { SignInButton } from "@clerk/react";
 import { useAuth } from "./AuthContext.jsx";
-import LoginButton from "./LoginButton.jsx";
 import Sidebar from "./Sidebar.jsx";
 import ProgressBar from "./components/ProgressBar.jsx";
+import SupportButton from "./components/SupportButton.jsx";
+import PageHeader, { HeaderBadge, HeaderTitle } from "./components/PageHeader.jsx";
 import {
   getUserAttempts,
   computeCategoryStats,
@@ -41,10 +42,10 @@ function formatTime(ms) {
 function StatCard({ label, value, sub, color = "var(--accent)" }) {
   return (
     <Surface className="rounded-2xl p-4" style={{ flex: 1, minWidth: 160 }}>
-      <span className="block text-[var(--text-muted)] mb-1" style={{ fontSize: 11, fontFamily: "'JSans', sans-serif", letterSpacing: 1 }}>
+      <span className="block text-[var(--text-muted)] mb-1" style={{ fontSize: 11, letterSpacing: 1 }}>
         {label}
       </span>
-      <span className="block font-extrabold" style={{ fontSize: 28, color, fontFamily: "'JSans', sans-serif" }}>
+      <span className="block font-extrabold" style={{ fontSize: 28, color }}>
         {value}
       </span>
       {sub && (
@@ -80,44 +81,23 @@ export default function DashboardPage() {
   if (authLoading) return null;
 
   return (
-    <div className="min-h-screen" style={{ backgroundColor: "var(--bg-base)", fontFamily: "'JSans', sans-serif", color: "var(--text-primary)" }}>
+    <div className="min-h-screen" style={{ backgroundColor: "var(--bg-base)", color: "var(--text-primary)" }}>
       <Sidebar activeSubject="dashboard" />
 
       <main id="main-content" style={{ marginLeft: "var(--sidebar-width, 240px)", transition: "margin-left 0.2s cubic-bezier(0.4, 0, 0.2, 1)" }}>
 
-      {/* Header */}
-      <div
-        style={{
-          position: "sticky",
-          top: 0,
-          zIndex: 100,
-          background: "var(--bg-header)",
-          backdropFilter: "blur(12px)",
-          WebkitBackdropFilter: "blur(12px)",
-          borderBottom: "1px solid var(--border-header)",
-        }}
-      >
-        <div className="max-w-4xl mx-auto py-2 px-4">
-          <div className="flex items-center justify-center mb-1" style={{ position: "relative" }}>
-            <span
-              className="text-xs px-2 py-0.5 rounded-full uppercase font-bold"
-              style={{ letterSpacing: 2, backgroundColor: "var(--accent-soft)", color: "var(--accent)", border: "none", fontFamily: "'JSans', sans-serif" }}
-            >
-              Analytics
-            </span>
-            <LoginButton />
-          </div>
-          <h1
-            className="text-center block font-extrabold text-[var(--text-primary)]"
-            style={{ fontSize: "clamp(22px, 4vw, 30px)", letterSpacing: -0.5, margin: 0 }}
-          >
-            Your Dashboard
-          </h1>
-          <span className="text-center block text-xs text-[var(--text-muted)] mb-2">
-            Track your revision progress and performance
-          </span>
-        </div>
-      </div>
+      <PageHeader>
+        <HeaderBadge label="Analytics" />
+        <h1
+          className="text-center block font-extrabold text-[var(--text-primary)]"
+          style={{ fontSize: "clamp(22px, 4vw, 30px)", letterSpacing: -0.5, margin: 0 }}
+        >
+          Your Dashboard
+        </h1>
+        <span className="text-center block text-xs text-[var(--text-muted)] mb-2">
+          Track your revision progress and performance
+        </span>
+      </PageHeader>
 
       <div className="max-w-4xl mx-auto py-6 px-3">
         {!user ? (
@@ -191,7 +171,7 @@ export default function DashboardPage() {
 
             {/* Category Breakdown */}
             <Surface className="rounded-2xl p-4">
-              <span className="block text-[var(--text-muted)] mb-4" style={{ fontSize: 11, fontFamily: "'JSans', sans-serif", letterSpacing: 1 }}>
+              <span className="block text-[var(--text-muted)] mb-4" style={{ fontSize: 11, letterSpacing: 1 }}>
                 PERFORMANCE BY TOPIC
               </span>
               <div className="flex flex-col gap-4">
@@ -209,16 +189,16 @@ export default function DashboardPage() {
                           </div>
                           <div className="flex items-center gap-1">
                             {cat.mcqAccuracy != null && (
-                              <span className="text-xs px-1.5 py-0.5 rounded-full" style={{ backgroundColor: color + "22", color, border: "none", fontFamily: "'JSans', sans-serif" }}>
+                              <span className="text-xs px-1.5 py-0.5 rounded-full" style={{ backgroundColor: color + "22", color, border: "none" }}>
                                 MCQ: {cat.mcqAccuracy}%
                               </span>
                             )}
                             {cat.writtenAvg != null && (
-                              <span className="text-xs px-1.5 py-0.5 rounded-full" style={{ backgroundColor: color + "22", color, border: "none", fontFamily: "'JSans', sans-serif" }}>
+                              <span className="text-xs px-1.5 py-0.5 rounded-full" style={{ backgroundColor: color + "22", color, border: "none" }}>
                                 Written: {cat.writtenAvg}%
                               </span>
                             )}
-                            <span className="text-[var(--text-muted)]" style={{ fontSize: 11, fontFamily: "'JSans', sans-serif" }}>
+                            <span className="text-[var(--text-muted)]" style={{ fontSize: 11 }}>
                               {cat.totalAttempts} attempt{cat.totalAttempts !== 1 ? "s" : ""} · avg {formatTime(cat.avgTimeMs)}
                             </span>
                           </div>
@@ -236,7 +216,7 @@ export default function DashboardPage() {
             {/* Wrong Answers */}
             {wrongAnswers.length > 0 && (
               <Surface className="rounded-2xl p-4">
-                <span className="block text-[var(--text-muted)] mb-4" style={{ fontSize: 11, fontFamily: "'JSans', sans-serif", letterSpacing: 1 }}>
+                <span className="block text-[var(--text-muted)] mb-4" style={{ fontSize: 11, letterSpacing: 1 }}>
                   QUESTIONS TO REVIEW ({wrongAnswers.length})
                 </span>
                 <div className="flex flex-col gap-2">
@@ -249,7 +229,6 @@ export default function DashboardPage() {
                             backgroundColor: a.isCorrect === false ? "var(--color-danger-soft)" : "var(--color-warning-soft)",
                             color: a.isCorrect === false ? "var(--color-danger)" : "var(--color-warning)",
                             border: "none",
-                            fontFamily: "'JSans', sans-serif",
                           }}
                         >
                           {a.questionType === "mcq" ? "MCQ — Wrong" : `${a.score}/${a.maxMarks}`}
@@ -260,13 +239,12 @@ export default function DashboardPage() {
                             backgroundColor: (CAT_COLORS[a.category] || "var(--accent)") + "22",
                             color: CAT_COLORS[a.category] || "var(--accent)",
                             border: "none",
-                            fontFamily: "'JSans', sans-serif",
                           }}
                         >
                           {a.category}
                         </span>
                         {a.timeSpentMs > 0 && (
-                          <span className="text-[var(--text-muted)] ml-auto" style={{ fontSize: 10, fontFamily: "'JSans', sans-serif" }}>
+                          <span className="text-[var(--text-muted)] ml-auto" style={{ fontSize: 10 }}>
                             {formatTime(a.timeSpentMs)}
                           </span>
                         )}
@@ -282,7 +260,7 @@ export default function DashboardPage() {
 
             {/* Recent Activity */}
             <Surface className="rounded-2xl p-4">
-              <span className="block text-[var(--text-muted)] mb-4" style={{ fontSize: 11, fontFamily: "'JSans', sans-serif", letterSpacing: 1 }}>
+              <span className="block text-[var(--text-muted)] mb-4" style={{ fontSize: 11, letterSpacing: 1 }}>
                 RECENT ACTIVITY
               </span>
               <div className="flex flex-col gap-1">
@@ -299,19 +277,19 @@ export default function DashboardPage() {
                         backgroundColor: isGood ? "var(--color-success)" : "var(--color-danger)",
                         flexShrink: 0,
                       }} />
-                      <span className="text-xs px-1.5 py-0.5 rounded-full" style={{ backgroundColor: color + "22", color, border: "none", fontFamily: "'JSans', sans-serif", flexShrink: 0 }}>
+                      <span className="text-xs px-1.5 py-0.5 rounded-full" style={{ backgroundColor: color + "22", color, border: "none", flexShrink: 0 }}>
                         {a.questionType.toUpperCase()}
                       </span>
                       <span className="text-[var(--text-secondary)] truncate" style={{ fontSize: 12, flex: 1 }}>
                         {a.category} — {a.questionId}
                       </span>
-                      <span className="text-[var(--text-muted)]" style={{ fontSize: 11, fontFamily: "'JSans', sans-serif", flexShrink: 0 }}>
+                      <span className="text-[var(--text-muted)]" style={{ fontSize: 11, flexShrink: 0 }}>
                         {a.questionType === "mcq"
                           ? (a.isCorrect ? "Correct" : "Wrong")
                           : (a.score != null ? `${a.score}/${a.maxMarks}` : "—")}
                       </span>
                       {a.timeSpentMs > 0 && (
-                        <span className="text-[var(--text-muted)]" style={{ fontSize: 10, fontFamily: "'JSans', sans-serif", flexShrink: 0 }}>
+                        <span className="text-[var(--text-muted)]" style={{ fontSize: 10, flexShrink: 0 }}>
                           {formatTime(a.timeSpentMs)}
                         </span>
                       )}
@@ -324,37 +302,7 @@ export default function DashboardPage() {
         )}
       </div>
 
-      {/* Floating support button */}
-      <a
-        href="https://donate.stripe.com/aFa7sN64kbjBdj8ayH4ow01"
-        target="_blank"
-        rel="noopener noreferrer"
-        style={{
-          position: "fixed",
-          bottom: 20,
-          right: 20,
-          zIndex: 999,
-          width: 48,
-          height: 48,
-          borderRadius: "50%",
-          backgroundColor: "var(--accent)",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          boxShadow: "0 4px 14px rgba(124,111,255,0.4)",
-          border: "none",
-          cursor: "pointer",
-          textDecoration: "none",
-          transition: "transform 0.2s, box-shadow 0.2s",
-        }}
-        aria-label="Support us"
-        onMouseEnter={e => { e.currentTarget.style.transform = "scale(1.1)"; e.currentTarget.style.boxShadow = "0 6px 20px rgba(124,111,255,0.6)"; }}
-        onMouseLeave={e => { e.currentTarget.style.transform = "scale(1)"; e.currentTarget.style.boxShadow = "0 4px 14px rgba(124,111,255,0.4)"; }}
-      >
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-          <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" style={{ transition: "fill 0.25s ease" }} />
-        </svg>
-      </a>
+      <SupportButton />
     </main>
     </div>
   );
