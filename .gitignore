@@ -27,6 +27,3 @@ key.env
 
 # Environment variables
 key.env
-anthropic.env
-*.env
-.env*
