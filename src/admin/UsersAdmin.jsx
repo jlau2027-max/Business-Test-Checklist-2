@@ -482,9 +482,6 @@ export default function UsersAdmin() {
                         <Table.Row key={u.uid} className="hover:bg-[var(--bg-input)] transition-colors">
                           <Table.Cell style={cellStyle} onClick={selectUser}>
                             <span className="font-semibold text-[var(--text-primary)] text-[13px]">{u.displayName || "Student"}</span>
-                            {u.role && (
-                              <span className="ml-1.5 text-[9px] px-1.5 py-0.5 rounded-full font-medium" style={{ backgroundColor: ROLE_COLORS[u.role] || "var(--text-muted)", color: "#fff", fontFamily: "'JSans', sans-serif" }}>{u.role}</span>
-                            )}
                           </Table.Cell>
                           <Table.Cell style={cellStyle} onClick={selectUser}>
                             <span className="text-[var(--text-secondary)] text-xs" style={{ fontFamily: "'JSans', sans-serif" }}>{u.username || "---"}</span>
