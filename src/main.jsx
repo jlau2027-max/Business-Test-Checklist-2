@@ -196,6 +196,7 @@ createRoot(document.getElementById('root')).render(
     >
       <AuthProvider>
         <AuthGate isPublic={isPublicPage}>
+          <a href="#main-content" className="skip-nav">Skip to content</a>
           <Suspense fallback={PageSpinner}>
             <Page {...pageProps} />
           </Suspense>

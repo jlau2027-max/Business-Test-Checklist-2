@@ -380,7 +380,7 @@ function ChecklistView() {
 
       <span className="text-center block text-xs text-[var(--text-muted)] mt-6">
         Click any item to mark it as revised ·{" "}
-        <span className="text-[var(--accent)] cursor-pointer" onClick={()=>{ setChecked({}); saveLS(`${lsPrefix}checklist_checked`, {}); }}>Reset all</span>
+        <button type="button" className="text-[var(--accent)] cursor-pointer bg-transparent border-none text-xs" style={{font:"inherit"}} onClick={()=>{ setChecked({}); saveLS(`${lsPrefix}checklist_checked`, {}); }}>Reset all</button>
       </span>
     </div>
   );
@@ -388,12 +388,21 @@ function ChecklistView() {
 
 function FlashCard({card, catColor}) {
   const [flipped,setFlipped]=useState(false);
+  const handleKeyDown = (e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); setFlipped(f=>!f); } };
   return (
-    <div className="flashcard-container" onClick={()=>setFlipped(f=>!f)}>
+    <div
+      className="flashcard-container"
+      onClick={()=>setFlipped(f=>!f)}
+      onKeyDown={handleKeyDown}
+      role="button"
+      tabIndex={0}
+      aria-label={flipped ? `Definition: ${card.def}` : `Flashcard: ${card.term}. Press to reveal`}
+    >
       <div className={`flashcard-inner${flipped ? " flipped" : ""}`}>
         {/* Front */}
         <div
           className="flashcard-face bg-[var(--bg-input)]"
+          aria-hidden={flipped}
           style={{
             border: "1px solid var(--border)",
             boxShadow: "0 2px 8px rgba(0,0,0,0.3)",
@@ -402,13 +411,14 @@ function FlashCard({card, catColor}) {
             textAlign: "center",
           }}
         >
-          <span className="block text-[11px] uppercase text-[var(--text-muted)] mb-4" style={{fontFamily:"'JSans', sans-serif", letterSpacing:2}}>TERM</span>
+          <span className="block text-[11px] uppercase text-[var(--text-muted)] mb-4" style={{letterSpacing:2}}>TERM</span>
           <span className="block text-[20px] font-bold text-[var(--text-primary)]" style={{lineHeight:1.3}}>{card.term}</span>
           <span className="block text-[11px] text-[var(--text-muted)] mt-6">tap to reveal</span>
         </div>
         {/* Back */}
         <div
           className="flashcard-face flashcard-back bg-[var(--bg-input)]"
+          aria-hidden={!flipped}
           style={{
             border: "1px solid var(--border)",
             boxShadow: "0 2px 8px rgba(0,0,0,0.3)",
@@ -416,7 +426,7 @@ function FlashCard({card, catColor}) {
             overflowY: "auto",
           }}
         >
-          <span className="block text-[11px] uppercase text-[var(--text-muted)] mb-2" style={{fontFamily:"'JSans', sans-serif", letterSpacing:2}}>DEFINITION</span>
+          <span className="block text-[11px] uppercase text-[var(--text-muted)] mb-2" style={{letterSpacing:2}}>DEFINITION</span>
           <span className="block text-[13px] text-[var(--text-body)]" style={{lineHeight:1.65}}>{card.def}</span>
           {card.formula && (
             <div className="mt-2 p-2" style={{ background: "var(--bg-base)", borderRadius: 8, borderLeft: `3px solid ${catColor}` }}>
@@ -716,6 +726,7 @@ function WrittenPracticeItem({q, displayNum}) {
           value={answer}
           onChange={(e) => setAnswer(e.target.value)}
           placeholder="Type your answer here..."
+          aria-label={`Your answer to question ${displayNum}`}
           rows={5}
           disabled={grading}
           fullWidth
@@ -975,7 +986,7 @@ export default function App({ initialTab = "checklist", subject = "business" }) 
 
       <Sidebar activeSubject={config.subject} />
 
-      <div style={{ marginLeft: "var(--sidebar-width, 240px)", transition: "margin-left 0.2s cubic-bezier(0.4, 0, 0.2, 1)" }}>
+      <main id="main-content" style={{ marginLeft: "var(--sidebar-width, 240px)", transition: "margin-left 0.2s cubic-bezier(0.4, 0, 0.2, 1)" }}>
 
       {/* Sticky header with glassmorphism */}
       <div
@@ -1080,17 +1091,17 @@ export default function App({ initialTab = "checklist", subject = "business" }) 
           textDecoration: "none",
           transition: "transform 0.2s, box-shadow 0.2s",
         }}
-        title="Support us"
+        aria-label="Support us"
         onMouseEnter={e => { e.currentTarget.style.transform = "scale(1.1)"; e.currentTarget.style.boxShadow = "0 6px 20px rgba(124,111,255,0.6)"; const p = e.currentTarget.querySelector("path"); if(p) p.style.fill = "#fff"; }}
         onMouseLeave={e => { e.currentTarget.style.transform = "scale(1)"; e.currentTarget.style.boxShadow = "0 4px 14px rgba(124,111,255,0.4)"; const p = e.currentTarget.querySelector("path"); if(p) p.style.fill = "none"; }}
       >
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
           <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" style={{transition:"fill 0.25s ease"}}/>
         </svg>
       </a>
 
       <Analytics />
-    </div>
+    </main>
     </div>
     </ContentCtx.Provider>
     </SubjectConfigCtx.Provider>

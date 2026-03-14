@@ -58,6 +58,7 @@ export default function ShortAnswerQuestion({
         value={studentAnswer}
         onChange={(e) => setStudentAnswer(e.target.value)}
         placeholder="Type your answer here..."
+        aria-label={`Your answer to: ${question}`}
         disabled={submitted}
         rows={5}
         fullWidth

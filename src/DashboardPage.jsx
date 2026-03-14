@@ -83,7 +83,7 @@ export default function DashboardPage() {
     <div className="min-h-screen" style={{ backgroundColor: "var(--bg-base)", fontFamily: "'JSans', sans-serif", color: "var(--text-primary)" }}>
       <Sidebar activeSubject="dashboard" />
 
-      <div style={{ marginLeft: "var(--sidebar-width, 240px)", transition: "margin-left 0.2s cubic-bezier(0.4, 0, 0.2, 1)" }}>
+      <main id="main-content" style={{ marginLeft: "var(--sidebar-width, 240px)", transition: "margin-left 0.2s cubic-bezier(0.4, 0, 0.2, 1)" }}>
 
       {/* Header */}
       <div
@@ -107,12 +107,12 @@ export default function DashboardPage() {
             </span>
             <LoginButton />
           </div>
-          <span
+          <h1
             className="text-center block font-extrabold text-[var(--text-primary)]"
-            style={{ fontSize: "clamp(22px, 4vw, 30px)", letterSpacing: -0.5 }}
+            style={{ fontSize: "clamp(22px, 4vw, 30px)", letterSpacing: -0.5, margin: 0 }}
           >
             Your Dashboard
-          </span>
+          </h1>
           <span className="text-center block text-xs text-[var(--text-muted)] mb-2">
             Track your revision progress and performance
           </span>
@@ -123,7 +123,7 @@ export default function DashboardPage() {
         {!user ? (
           /* Guest prompt */
           <Surface className="rounded-3xl p-6 text-center">
-            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="var(--text-muted)" strokeWidth="1.5" strokeLinecap="round" style={{ marginBottom: 16 }}>
+            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="var(--text-muted)" strokeWidth="1.5" strokeLinecap="round" style={{ marginBottom: 16 }} aria-hidden="true">
               <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
               <circle cx="12" cy="7" r="4"/>
             </svg>
@@ -347,15 +347,15 @@ export default function DashboardPage() {
           textDecoration: "none",
           transition: "transform 0.2s, box-shadow 0.2s",
         }}
-        title="Support us"
+        aria-label="Support us"
         onMouseEnter={e => { e.currentTarget.style.transform = "scale(1.1)"; e.currentTarget.style.boxShadow = "0 6px 20px rgba(124,111,255,0.6)"; }}
         onMouseLeave={e => { e.currentTarget.style.transform = "scale(1)"; e.currentTarget.style.boxShadow = "0 4px 14px rgba(124,111,255,0.4)"; }}
       >
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
           <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" style={{ transition: "fill 0.25s ease" }} />
         </svg>
       </a>
-    </div>
+    </main>
     </div>
   );
 }

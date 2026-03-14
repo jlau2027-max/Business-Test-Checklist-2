@@ -1,11 +1,12 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { Button } from "@heroui/react";
 import { useAuth } from "./AuthContext.jsx";
-import { House, Briefcase, Clock, TrendingUp, Leaf, FlaskConical, Atom, Activity, Languages, Trees, LayoutGrid, ChevronsLeft, ChevronsRight } from "lucide-react";
+import { House, Briefcase, Clock, TrendingUp, Leaf, FlaskConical, Atom, Activity, Languages, Trees, LayoutGrid, ChevronsLeft, ChevronsRight, Menu, X } from "lucide-react";
 
 const EXPANDED = 240;
 const COLLAPSED = 56;
 const LS_KEY = "sidebar_collapsed";
+const MOBILE_BP = 768;
 
 const SECTIONS = [
   {
@@ -45,46 +46,186 @@ export default function Sidebar({ activeSubject }) {
     try { return localStorage.getItem(LS_KEY) === "1"; } catch { return false; }
   });
 
+  // Mobile state
+  const [isMobile, setIsMobile] = useState(() => window.innerWidth < MOBILE_BP);
+  const [mobileOpen, setMobileOpen] = useState(false);
+
+  // Track viewport
+  useEffect(() => {
+    const mq = window.matchMedia(`(max-width: ${MOBILE_BP - 1}px)`);
+    const handler = (e) => {
+      setIsMobile(e.matches);
+      if (!e.matches) setMobileOpen(false); // close drawer when resizing to desktop
+    };
+    mq.addEventListener("change", handler);
+    return () => mq.removeEventListener("change", handler);
+  }, []);
+
   const width = collapsed ? COLLAPSED : EXPANDED;
 
-  // Sync CSS variable so page content can read it
+  // Sync CSS variable — 0 on mobile so content fills full width
   useEffect(() => {
-    document.documentElement.style.setProperty("--sidebar-width", `${width}px`);
+    document.documentElement.style.setProperty("--sidebar-width", isMobile ? "0px" : `${width}px`);
     try { localStorage.setItem(LS_KEY, collapsed ? "1" : "0"); } catch {}
-  }, [collapsed, width]);
+  }, [collapsed, width, isMobile]);
 
-  // Set initial value on mount
   useEffect(() => {
-    document.documentElement.style.setProperty("--sidebar-width", `${width}px`);
+    document.documentElement.style.setProperty("--sidebar-width", isMobile ? "0px" : `${width}px`);
   }, []);
+
+  // Lock body scroll when mobile drawer is open
+  useEffect(() => {
+    if (mobileOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
+    return () => { document.body.style.overflow = ""; };
+  }, [mobileOpen]);
+
+  // Close drawer on Escape
+  useEffect(() => {
+    if (!mobileOpen) return;
+    const handler = (e) => { if (e.key === "Escape") setMobileOpen(false); };
+    window.addEventListener("keydown", handler);
+    return () => window.removeEventListener("keydown", handler);
+  }, [mobileOpen]);
+
+  const closeMobile = useCallback(() => setMobileOpen(false), []);
 
   const allSections = user
     ? [...SECTIONS, { items: [{ label: "Dashboard", href: "/dashboard", subject: "dashboard", Icon: LayoutGrid, color: "var(--accent)" }] }]
     : SECTIONS;
 
+  // ─── Mobile: floating hamburger trigger ────────────────────────
+  const mobileToggle = isMobile && !mobileOpen && (
+    <button
+      type="button"
+      onClick={() => setMobileOpen(true)}
+      aria-label="Open navigation"
+      style={{
+        position: "fixed",
+        top: 12,
+        left: 12,
+        zIndex: 201,
+        width: 40,
+        height: 40,
+        borderRadius: 10,
+        border: "1px solid var(--border)",
+        background: "var(--bg-card)",
+        color: "var(--text-secondary)",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        cursor: "pointer",
+        boxShadow: "0 2px 8px rgba(0,0,0,0.08)",
+      }}
+    >
+      <Menu size={18} strokeWidth={2} />
+    </button>
+  );
+
+  // ─── Mobile: backdrop overlay ──────────────────────────────────
+  const mobileOverlay = isMobile && mobileOpen && (
+    <div
+      onClick={closeMobile}
+      aria-hidden="true"
+      style={{
+        position: "fixed",
+        inset: 0,
+        zIndex: 199,
+        backgroundColor: "rgba(0,0,0,0.4)",
+        transition: "opacity 0.2s ease",
+      }}
+    />
+  );
+
+  // ─── Sidebar nav styles (desktop vs mobile) ───────────────────
+  const navStyle = isMobile
+    ? {
+        position: "fixed",
+        top: 0,
+        left: 0,
+        width: EXPANDED,
+        maxWidth: "85vw",
+        height: "100vh",
+        zIndex: 200,
+        backgroundColor: "var(--bg-base)",
+        borderRight: "1px solid var(--bg-input)",
+        display: "flex",
+        flexDirection: "column",
+        padding: "24px 14px 20px",
+        gap: 0,
+        overflowY: "auto",
+        overflowX: "hidden",
+        transform: mobileOpen ? "translateX(0)" : "translateX(-100%)",
+        transition: "transform 0.25s cubic-bezier(0.4, 0, 0.2, 1)",
+        boxShadow: mobileOpen ? "4px 0 24px rgba(0,0,0,0.15)" : "none",
+      }
+    : {
+        position: "fixed",
+        top: 0,
+        left: 0,
+        width,
+        height: "100vh",
+        zIndex: 200,
+        backgroundColor: "var(--bg-base)",
+        borderRight: "1px solid var(--bg-input)",
+        display: "flex",
+        flexDirection: "column",
+        padding: collapsed ? "24px 6px 20px 0" : "24px 14px 20px",
+        gap: 0,
+        overflowY: "auto",
+        overflowX: "hidden",
+        transition: "width 0.2s cubic-bezier(0.4, 0, 0.2, 1), padding 0.2s cubic-bezier(0.4, 0, 0.2, 1)",
+      };
+
+  // On mobile, sidebar is always "expanded" (labels visible)
+  const isCollapsed = isMobile ? false : collapsed;
+
   return (
-      <div
-        style={{
-          position: "fixed",
-          top: 0,
-          left: 0,
-          width,
-          height: "100vh",
-          zIndex: 200,
-          backgroundColor: "var(--bg-base)",
-          borderRight: "1px solid var(--bg-input)",
-          display: "flex",
-          flexDirection: "column",
-          padding: collapsed ? "24px 6px 20px 0" : "24px 14px 20px",
-          gap: 0,
-          fontFamily: "'JSans', sans-serif",
-          overflowY: "auto",
-          overflowX: "hidden",
-          transition: "width 0.2s cubic-bezier(0.4, 0, 0.2, 1), padding 0.2s cubic-bezier(0.4, 0, 0.2, 1)",
-        }}
+    <>
+      {mobileToggle}
+      {mobileOverlay}
+      <nav
+        aria-label="Subjects"
+        style={navStyle}
       >
-        {/* Logo / brand + collapse toggle */}
-        {collapsed ? (
+        {/* Logo / brand + collapse/close toggle */}
+        {isMobile ? (
+          // Mobile: brand + close button
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "space-between",
+              padding: "0 10px",
+              marginBottom: 20,
+              height: 40,
+            }}
+          >
+            <span style={{ fontSize: 18, fontWeight: 700, letterSpacing: -0.5, color: "var(--text-primary)", whiteSpace: "nowrap" }}>
+              IBrev.org
+            </span>
+            <button
+              onClick={closeMobile}
+              aria-label="Close navigation"
+              style={{
+                background: "none",
+                border: "none",
+                cursor: "pointer",
+                color: "var(--text-muted)",
+                padding: 4,
+                borderRadius: 6,
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+            >
+              <X size={18} />
+            </button>
+          </div>
+        ) : isCollapsed ? (
           <button
             onClick={() => setCollapsed(false)}
             style={{
@@ -148,7 +289,7 @@ export default function Sidebar({ activeSubject }) {
         {allSections.map((section, si) => (
           <div key={si}>
             {/* Group heading — hidden when collapsed */}
-            {section.heading && !collapsed && (
+            {section.heading && !isCollapsed && (
               <span
                 style={{
                   display: "block",
@@ -166,7 +307,7 @@ export default function Sidebar({ activeSubject }) {
               </span>
             )}
             {/* Thin divider when collapsed between groups */}
-            {section.heading && collapsed && (
+            {section.heading && isCollapsed && (
               <div style={{ height: 1, backgroundColor: "var(--bg-input)", margin: "10px 8px 8px" }} />
             )}
 
@@ -179,27 +320,26 @@ export default function Sidebar({ activeSubject }) {
                   render={(props) => <button {...props} />}
                   className="w-full font-medium text-sm"
                   style={{
-                    height: 40,
+                    height: isMobile ? 44 : 40,
                     borderRadius: 10,
-                    paddingLeft: collapsed ? 0 : 10,
-                    gap: collapsed ? 0 : 10,
-                    justifyContent: collapsed ? "center" : "flex-start",
-                    fontFamily: "'JSans', sans-serif",
+                    paddingLeft: isCollapsed ? 0 : 10,
+                    gap: isCollapsed ? 0 : 10,
+                    justifyContent: isCollapsed ? "center" : "flex-start",
                     backgroundColor: active ? "var(--bg-input)" : "transparent",
                     color: active ? "var(--text-primary)" : "var(--text-secondary)",
                     border: "none",
                     transition: "all 0.15s ease",
                   }}
-                  title={collapsed ? s.label : undefined}
+                  title={isCollapsed ? s.label : undefined}
                 >
                   {/* Icon */}
-                  <span style={{ width: 20, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, opacity: active ? 1 : 0.55, transition: "opacity 0.15s ease", marginLeft: collapsed ? 12 : 0 }}>
+                  <span style={{ width: 20, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, opacity: active ? 1 : 0.55, transition: "opacity 0.15s ease", marginLeft: isCollapsed ? 12 : 0 }}>
                     <s.Icon size={16} color={active ? s.color : "currentColor"} strokeWidth={2} />
                   </span>
                   {/* Label — hidden when collapsed */}
-                  {!collapsed && s.label}
+                  {!isCollapsed && s.label}
                   {/* Active indicator bar */}
-                  {active && !collapsed && (
+                  {active && !isCollapsed && (
                     <span
                       style={{
                         marginLeft: "auto",
@@ -216,7 +356,7 @@ export default function Sidebar({ activeSubject }) {
               return active ? (
                 <div key={s.label} style={{ marginBottom: 2 }}>{linkContent}</div>
               ) : (
-                <a key={s.label} href={s.href} style={{ textDecoration: "none", display: "block", marginBottom: 2 }}>
+                <a key={s.label} href={s.href} style={{ textDecoration: "none", display: "block", marginBottom: 2 }} onClick={isMobile ? closeMobile : undefined}>
                   {linkContent}
                 </a>
               );
@@ -225,6 +365,7 @@ export default function Sidebar({ activeSubject }) {
         ))}
 
         <div style={{ flex: 1 }} />
-      </div>
+      </nav>
+    </>
   );
 }
