@@ -15,7 +15,7 @@ export default function LoginButton() {
             className="rounded-full border-[var(--border)] text-[var(--text-secondary)] text-[13px] font-semibold px-3 min-w-[auto] h-8 bg-transparent"
             style={{
               position: "absolute",
-              right: 0,
+              right: 44,
               top: "50%",
               transform: "translateY(-50%)",
               fontFamily: "'JSans', sans-serif",
@@ -41,7 +41,7 @@ function GreetingWithAvatar({ isAdmin }) {
         <div
           style={{
             position: "absolute",
-            right: 0,
+            right: 44,
             top: "50%",
             transform: "translateY(-50%)",
             display: "flex",
