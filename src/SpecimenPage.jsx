@@ -26,9 +26,12 @@ function SpecimenQuestion({ q }) {
     setGrading(true);
     setGradeResult(null);
     try {
+      const token = await window.Clerk?.session?.getToken();
+      const headers = { "Content-Type": "application/json" };
+      if (token) headers.Authorization = `Bearer ${token}`;
       const res = await fetch("https://ib-grading-hollen.c9tggsfst9.workers.dev", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers,
         body: JSON.stringify({
           question: q.question,
           studentAnswer: answer,
