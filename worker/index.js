@@ -240,24 +240,26 @@ async function handleAdminUsers(env, actorRole) {
 
 async function bulkGetRoles(uids, env) {
   const roleMap = {};
-  // Clerk user list API: use user_id[] for filtering by multiple IDs, max 100 per page
+  if (!env.CLERK_SECRET_KEY) return roleMap;
+  // Clerk Backend API requires user_id[] bracket syntax for array params
   for (let i = 0; i < uids.length; i += 100) {
     try {
       const batch = uids.slice(i, i + 100);
-      const params = batch.map(u => `user_id=${encodeURIComponent(u)}`).join("&");
+      const params = batch.map(u => `user_id[]=${encodeURIComponent(u)}`).join("&");
       const res = await fetch(`https://api.clerk.com/v1/users?${params}&limit=100`, {
         headers: {
           Authorization: `Bearer ${env.CLERK_SECRET_KEY}`,
-          "Content-Type": "application/json",
         },
       });
       if (res.ok) {
-        const users = await res.json();
+        const data = await res.json();
+        // Clerk returns a plain array of user objects
+        const users = Array.isArray(data) ? data : (data.data || data || []);
         for (const u of users) {
           roleMap[u.id] = u.public_metadata?.role || null;
         }
       }
-    } catch { /* fallback: skip batch on failure */ }
+    } catch { /* skip batch on failure */ }
   }
   return roleMap;
 }
