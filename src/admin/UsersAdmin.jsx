@@ -254,9 +254,15 @@ function UserDetail({ uid, displayName, onBack }) {
 }
 
 // ─── Role permission helpers ────────────────────────────────────────────────
-// origin: all powers + change roles | two: ban/unban/signout/edit | admin: ban/unban/signout | viewer: read-only
+// origin: all powers + role management | two: ban/unban/signout (admin & below) | admin: ban/unban/signout (normal users only)
+const ROLE_LEVEL = { origin: 3, two: 2, admin: 1 };
+const canActOn = (actorRole, targetRole) => {
+  const actorLevel = ROLE_LEVEL[actorRole] || 0;
+  const targetLevel = ROLE_LEVEL[targetRole] || 0;
+  return actorLevel > targetLevel;
+};
 const canBanUnban = (role) => ["origin", "two", "admin"].includes(role);
-const canEdit = (role) => ["origin", "two"].includes(role);
+const canEditProfile = (role) => role === "origin";
 const canChangeRole = (role) => role === "origin";
 
 const ROLE_OPTIONS = [
@@ -459,6 +465,9 @@ export default function UsersAdmin() {
                         <Table.Row key={u.uid} className="hover:bg-[var(--bg-input)] transition-colors">
                           <Table.Cell style={cellStyle} onClick={selectUser}>
                             <span className="font-semibold text-[var(--text-primary)] text-[13px]">{u.displayName || "Student"}</span>
+                            {u.role && (
+                              <span className="ml-1.5 text-[9px] px-1.5 py-0.5 rounded-full font-medium" style={{ backgroundColor: ROLE_COLORS[u.role] || "var(--text-muted)", color: "#fff", fontFamily: "'JSans', sans-serif" }}>{u.role}</span>
+                            )}
                           </Table.Cell>
                           <Table.Cell style={cellStyle} onClick={selectUser}>
                             <span className="text-[var(--text-secondary)] text-xs" style={{ fontFamily: "'JSans', sans-serif" }}>{u.username || "---"}</span>
@@ -513,7 +522,7 @@ export default function UsersAdmin() {
                           </Table.Cell>
                           <Table.Cell style={{ padding: "10px 12px", borderBottom: "1px solid var(--bg-input)" }}>
                             <div className="flex gap-1 flex-nowrap">
-                              {canBanUnban(role) && (
+                              {canBanUnban(role) && canActOn(role, u.role) && (
                                 <>
                                   {(u.accountStatus || "active") !== "banned" ? (
                                     <Button size="sm" className="rounded-full" onPress={() => handleBan(u.uid)} style={{backgroundColor: "var(--color-danger)", color: "#fff", border: "none", fontFamily: "'JSans', sans-serif", fontSize: 10,}}>Ban</Button>
@@ -523,7 +532,7 @@ export default function UsersAdmin() {
                                   <Button size="sm" className="rounded-full" onPress={() => handleForceSignOut(u.uid)} style={{backgroundColor: "var(--color-warning)", color: "#000", border: "none", fontFamily: "'JSans', sans-serif", fontSize: 10,}}>Sign Out</Button>
                                 </>
                               )}
-                              {canEdit(role) && (
+                              {canEditProfile(role) && canActOn(role, u.role) && (
                                 <Button size="sm" className="rounded-full" onPress={() => openEditFn(u)} style={{backgroundColor: "var(--accent)", color: "#fff", border: "none", fontFamily: "'JSans', sans-serif", fontSize: 10,}}>Edit</Button>
                               )}
                               {canChangeRole(role) && (

@@ -227,17 +227,15 @@ async function handleAdminUsers(env, actorRole) {
      ORDER BY lastActive DESC`
   ).all();
 
-  // For admin role, filter out origin and two users
+  // Attach each user's role and filter based on actor's hierarchy
+  const roleMap = await bulkGetRoles(results.map(r => r.uid), env);
+  const enriched = results.map(r => ({ ...r, role: roleMap[r.uid] || null }));
+
   if (actorRole === "admin") {
-    const roleMap = await bulkGetRoles(results.map(r => r.uid), env);
-    const filtered = results.filter(r => {
-      const role = roleMap[r.uid] || null;
-      return canActOn(actorRole, role);
-    });
-    return json(filtered);
+    return json(enriched.filter(r => canActOn(actorRole, r.role)));
   }
 
-  return json(results);
+  return json(enriched);
 }
 
 async function bulkGetRoles(uids, env) {
