@@ -3,9 +3,9 @@ import { useUser, useClerk } from "@clerk/react";
 
 const AuthContext = createContext(null);
 
-const EDIT_ROLES = ['origin', 'two', 'admin', 'editor'];
+const EDIT_ROLES = ['origin', 'two', 'admin'];
 const DELETE_ROLES = ['origin', 'two', 'admin'];
-const ADMIN_ROLES = ['origin', 'two', 'admin', 'editor', 'viewer'];
+const ADMIN_ROLES = ['origin', 'two', 'admin'];
 
 export function useAuth() {
   const ctx = useContext(AuthContext);

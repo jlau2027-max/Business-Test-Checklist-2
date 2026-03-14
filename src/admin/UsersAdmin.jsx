@@ -261,9 +261,8 @@ const canChangeRole = (role) => role === "origin";
 
 const ROLE_OPTIONS = [
   { value: "origin", label: "Origin — Full access + role management" },
-  { value: "two", label: "Two — Ban/Unban/Sign Out/Edit" },
-  { value: "admin", label: "Admin — Ban/Unban/Sign Out" },
-  { value: "viewer", label: "Viewer — Read-only" },
+  { value: "two", label: "Two — Ban/Unban/Sign Out" },
+  { value: "admin", label: "Admin — Content management" },
   { value: "__none__", label: "None — Remove admin access" },
 ];
 
@@ -271,7 +270,6 @@ const ROLE_COLORS = {
   origin: "var(--color-danger)",
   two: "var(--accent-tertiary)",
   admin: "var(--accent)",
-  viewer: "var(--cat-cashflow)",
 };
 
 export default function UsersAdmin() {
@@ -530,9 +528,6 @@ export default function UsersAdmin() {
                               )}
                               {canChangeRole(role) && (
                                 <Button size="sm" className="rounded-full" onPress={() => openRoleChange(u)} style={{backgroundColor: "var(--accent-tertiary)", color: "#fff", border: "none", fontFamily: "'JSans', sans-serif", fontSize: 10,}}>Role</Button>
-                              )}
-                              {role === "viewer" && (
-                                <span className="text-[10px] text-[var(--text-muted)]" style={{ fontFamily: "'JSans', sans-serif" }}>View only</span>
                               )}
                             </div>
                           </Table.Cell>
