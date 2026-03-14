@@ -289,6 +289,7 @@ export default function UsersAdmin() {
   const [roleModalOpened, setRoleModalOpened] = useState(false);
   const [roleTarget, setRoleTarget] = useState(null);
   const [selectedRole, setSelectedRole] = useState(null);
+  const [roleConfirmOpen, setRoleConfirmOpen] = useState(false);
 
   useEffect(() => {
     if (!isAdmin) {
@@ -378,16 +379,32 @@ export default function UsersAdmin() {
     setRoleModalOpened(true);
   };
 
-  const handleRoleSubmit = async () => {
+  const handleRoleNext = () => {
+    if (!roleTarget || !selectedRole) return;
+    setRoleModalOpened(false);
+    setRoleConfirmOpen(true);
+  };
+
+  const handleRoleConfirm = async () => {
     if (!roleTarget || !selectedRole) return;
     try {
       const newRole = selectedRole === "__none__" ? null : selectedRole;
       await changeUserRole(roleTarget.uid, newRole);
-      setRoleModalOpened(false);
+      setRoleConfirmOpen(false);
       setRoleTarget(null);
+      setSelectedRole(null);
+      // Update local state
+      setUsersData((prev) =>
+        prev.map((u) => u.uid === roleTarget.uid ? { ...u, role: newRole } : u)
+      );
     } catch (err) {
       console.error("Failed to change role:", err);
     }
+  };
+
+  const handleRoleConfirmCancel = () => {
+    setRoleConfirmOpen(false);
+    setRoleModalOpened(true);
   };
 
   if (authLoading || loading) {
@@ -606,13 +623,25 @@ export default function UsersAdmin() {
               </Modal.Heading>
             </Modal.Header>
             <Modal.Body>
+              <div className="mb-3">
+                <span className="text-[var(--text-secondary)] text-[11px] tracking-wider" style={{ fontFamily: "'JSans', sans-serif" }}>CURRENT ROLE</span>
+                <div className="mt-1">
+                  <span className="text-xs px-2 py-1 rounded-full font-medium" style={{
+                    backgroundColor: ROLE_COLORS[roleTarget?.role] || "var(--text-muted)",
+                    color: "#fff",
+                    fontFamily: "'JSans', sans-serif",
+                  }}>
+                    {roleTarget?.role || "User"}
+                  </span>
+                </div>
+              </div>
               <Select
                 className="w-full"
-                placeholder="Choose a role..."
+                placeholder="Choose a new role..."
                 value={selectedRole}
                 onChange={(val) => setSelectedRole(val)}
               >
-                <Label className="text-[var(--text-secondary)] text-[11px] tracking-wider mb-1" style={{ fontFamily: "'JSans', sans-serif" }}>Select Role</Label>
+                <Label className="text-[var(--text-secondary)] text-[11px] tracking-wider mb-1" style={{ fontFamily: "'JSans', sans-serif" }}>New Role</Label>
                 <Select.Trigger className="bg-[var(--bg-input)] border border-[var(--border)] text-[var(--text-primary)] rounded-full" style={{ fontFamily: "'JSans', sans-serif" }}>
                   <Select.Value />
                   <Select.Indicator />
@@ -631,7 +660,52 @@ export default function UsersAdmin() {
             </Modal.Body>
             <Modal.Footer>
               <Button variant="outline" className="rounded-full border-[var(--border)] text-[var(--text-secondary)] bg-transparent" onPress={() => setRoleModalOpened(false)} style={{ fontFamily: "'JSans', sans-serif", fontSize: 12 }}>Cancel</Button>
-              <button type="button" onClick={handleRoleSubmit} disabled={!selectedRole} className="rounded-full px-4 py-2 text-xs font-semibold" style={{ fontFamily: "'JSans', sans-serif", backgroundColor: selectedRole ? "var(--accent-tertiary)" : "var(--border)", color: selectedRole ? "var(--text-primary)" : "var(--text-muted)", border: "none", cursor: selectedRole ? "pointer" : "not-allowed" }}>Save Role</button>
+              <button type="button" onClick={handleRoleNext} disabled={!selectedRole} className="rounded-full px-4 py-2 text-xs font-semibold" style={{ fontFamily: "'JSans', sans-serif", backgroundColor: selectedRole ? "var(--accent-tertiary)" : "var(--border)", color: selectedRole ? "var(--text-primary)" : "var(--text-muted)", border: "none", cursor: selectedRole ? "pointer" : "not-allowed" }}>Continue</button>
+            </Modal.Footer>
+          </Modal.Dialog>
+        </Modal.Container>
+      </Modal.Backdrop>
+
+      {/* Role Change Confirmation Modal */}
+      <Modal.Backdrop
+        variant="opaque"
+        isKeyboardDismissDisabled={false}
+        isOpen={roleConfirmOpen}
+        onOpenChange={(open) => { if (!open) handleRoleConfirmCancel(); }}
+      >
+        <Modal.Container>
+          <Modal.Dialog className="sm:max-w-sm" style={{ backgroundColor: "var(--bg-card)", border: "1px solid var(--border)" }}>
+            <Modal.CloseTrigger />
+            <Modal.Header style={{ borderBottom: "1px solid var(--border)" }}>
+              <Modal.Heading style={{ color: "var(--text-primary)", fontWeight: 700, fontFamily: "'JSans', sans-serif", fontSize: 14 }}>
+                Confirm Role Change
+              </Modal.Heading>
+            </Modal.Header>
+            <Modal.Body>
+              <p className="text-[var(--text-secondary)] text-xs leading-relaxed" style={{ fontFamily: "'JSans', sans-serif" }}>
+                You are about to change the role for <strong className="text-[var(--text-primary)]">{roleTarget?.displayName || "User"}</strong>:
+              </p>
+              <div className="flex items-center gap-2 mt-3 justify-center">
+                <span className="text-xs px-2 py-1 rounded-full font-medium" style={{
+                  backgroundColor: ROLE_COLORS[roleTarget?.role] || "var(--text-muted)",
+                  color: "#fff",
+                  fontFamily: "'JSans', sans-serif",
+                }}>
+                  {roleTarget?.role || "User"}
+                </span>
+                <span className="text-[var(--text-muted)] text-xs" style={{ fontFamily: "'JSans', sans-serif" }}>&rarr;</span>
+                <span className="text-xs px-2 py-1 rounded-full font-medium" style={{
+                  backgroundColor: selectedRole === "__none__" ? "var(--text-muted)" : (ROLE_COLORS[selectedRole] || "var(--text-muted)"),
+                  color: "#fff",
+                  fontFamily: "'JSans', sans-serif",
+                }}>
+                  {selectedRole === "__none__" ? "User" : (ROLE_OPTIONS.find(o => o.value === selectedRole)?.value || selectedRole)}
+                </span>
+              </div>
+            </Modal.Body>
+            <Modal.Footer>
+              <Button variant="outline" className="rounded-full border-[var(--border)] text-[var(--text-secondary)] bg-transparent" onPress={handleRoleConfirmCancel} style={{ fontFamily: "'JSans', sans-serif", fontSize: 12 }}>Cancel</Button>
+              <button type="button" onClick={handleRoleConfirm} className="rounded-full px-4 py-2 text-xs font-semibold" style={{ fontFamily: "'JSans', sans-serif", backgroundColor: "var(--color-danger)", color: "#fff", border: "none", cursor: "pointer" }}>Confirm Change</button>
             </Modal.Footer>
           </Modal.Dialog>
         </Modal.Container>
