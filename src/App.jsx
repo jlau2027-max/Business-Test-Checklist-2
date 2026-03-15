@@ -634,6 +634,8 @@ const HISTORY_UNIT_LABELS = {
   "P2-COLD": "Paper 2 · The Cold War",
   "P2-DEMO": "Paper 2 · Democratic States",
   "P2-INDP": "Paper 2 · Independence Movements",
+  "P3-AME":  "Paper 3 · History of the Americas",
+  "P3-EUR":  "Paper 3 · History of Europe",
 };
 const HISTORY_UNIT_ORDER = Object.keys(HISTORY_UNIT_LABELS);
 
