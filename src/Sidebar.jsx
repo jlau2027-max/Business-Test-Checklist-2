@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback } from "react";
 import { Button } from "@heroui/react";
+import { useUser } from "@clerk/react";
 import { useAuth } from "./AuthContext.jsx";
 import { House, Briefcase, Clock, TrendingUp, Leaf, FlaskConical, Atom, Activity, Languages, Trees, LayoutGrid, UserRound, ChevronsLeft, ChevronsRight, Menu, X } from "lucide-react";
 
@@ -40,8 +41,16 @@ const SECTIONS = [
   },
 ];
 
+const ROLE_LABEL = { origin: "Origin", core: "Core", admin: "Admin" };
+const ROLE_COLOR = {
+  origin: "var(--accent-tertiary)",
+  core: "var(--accent-secondary)",
+  admin: "var(--accent)",
+};
+
 export default function Sidebar({ activeSubject }) {
-  const { user } = useAuth();
+  const { user, role } = useAuth();
+  const { user: clerkUser } = useUser();
   const [collapsed, setCollapsed] = useState(() => {
     try { return localStorage.getItem(LS_KEY) === "1"; } catch { return false; }
   });
@@ -371,6 +380,62 @@ export default function Sidebar({ activeSubject }) {
         ))}
 
         <div style={{ flex: 1 }} />
+
+        {/* User footer */}
+        {user && clerkUser && (
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: isCollapsed ? 0 : 10,
+              justifyContent: isCollapsed ? "center" : "flex-start",
+              padding: isCollapsed ? "12px 0" : "12px 10px",
+              borderTop: "1px solid var(--bg-input)",
+              marginTop: 8,
+            }}
+          >
+            <img
+              src={clerkUser.imageUrl}
+              alt=""
+              style={{
+                width: 28,
+                height: 28,
+                borderRadius: "50%",
+                flexShrink: 0,
+                marginLeft: isCollapsed ? 12 : 0,
+              }}
+            />
+            {!isCollapsed && (
+              <div style={{ minWidth: 0, overflow: "hidden" }}>
+                <div
+                  style={{
+                    fontSize: 13,
+                    fontWeight: 600,
+                    color: "var(--text-primary)",
+                    whiteSpace: "nowrap",
+                    overflow: "hidden",
+                    textOverflow: "ellipsis",
+                    lineHeight: 1.3,
+                  }}
+                >
+                  {clerkUser.firstName || clerkUser.username || "Student"}
+                </div>
+                {role && ROLE_LABEL[role] && (
+                  <div
+                    style={{
+                      fontSize: 11,
+                      fontWeight: 500,
+                      color: ROLE_COLOR[role],
+                      lineHeight: 1.3,
+                    }}
+                  >
+                    {ROLE_LABEL[role]}
+                  </div>
+                )}
+              </div>
+            )}
+          </div>
+        )}
       </nav>
     </>
   );
