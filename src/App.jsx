@@ -1,6 +1,6 @@
 import { useState, useEffect, useMemo, createContext, useContext } from "react";
 import { Analytics } from "@vercel/analytics/react";
-import { Button, TextArea, Spinner, Alert, Checkbox, Tabs, RadioGroup, Radio, Accordion, Surface, ComboBox, Input, ListBox, Header, Separator } from "@heroui/react";
+import { Button, TextArea, Spinner, Alert, Checkbox, Tabs, RadioGroup, Radio, Accordion, Surface, ComboBox, Input, ListBox, Header, Separator, Pagination } from "@heroui/react";
 import ProgressBar from "./components/ProgressBar.jsx";
 import LoginButton from "./LoginButton.jsx";
 import Sidebar from "./Sidebar.jsx";
@@ -14,6 +14,60 @@ import {
   fetchBiologyFlashcardTopics, fetchBiologyFlashcards, fetchBiologyMcqQuestions, fetchBiologyWrittenQuestions, fetchBiologyChecklist, fetchBiologyCategoryColors,
   historyApi, chemistryApi, physicsApi, sportsApi, economicsApi, essApi, spanishApi,
 } from "./api/contentApi.js";
+
+// ─── Pagination helpers ─────────────────────────────────────────────────────
+const PAGE_SIZE = 20;
+
+function getPageNumbers(page, totalPages) {
+  const pages = [];
+  if (totalPages <= 7) {
+    for (let i = 1; i <= totalPages; i++) pages.push(i);
+  } else {
+    pages.push(1);
+    if (page > 3) pages.push("ellipsis");
+    for (let i = Math.max(2, page - 1); i <= Math.min(totalPages - 1, page + 1); i++) pages.push(i);
+    if (page < totalPages - 2) pages.push("ellipsis");
+    pages.push(totalPages);
+  }
+  return pages;
+}
+
+function QuestionPagination({ page, setPage, totalItems, label = "questions" }) {
+  const totalPages = Math.ceil(totalItems / PAGE_SIZE);
+  if (totalPages <= 1) return null;
+  const startItem = (page - 1) * PAGE_SIZE + 1;
+  const endItem = Math.min(page * PAGE_SIZE, totalItems);
+  return (
+    <Pagination size="md" className="mt-8 mb-4">
+      <Pagination.Summary>
+        Showing {startItem}\u2013{endItem} of {totalItems} {label}
+      </Pagination.Summary>
+      <Pagination.Content>
+        <Pagination.Item>
+          <Pagination.Previous isDisabled={page === 1} onPress={() => { setPage(p => p - 1); window.scrollTo({ top: 0, behavior: "smooth" }); }}>
+            <Pagination.PreviousIcon />
+            <span>Previous</span>
+          </Pagination.Previous>
+        </Pagination.Item>
+        {getPageNumbers(page, totalPages).map((p, i) =>
+          p === "ellipsis" ? (
+            <Pagination.Item key={`e-${i}`}><Pagination.Ellipsis /></Pagination.Item>
+          ) : (
+            <Pagination.Item key={p}>
+              <Pagination.Link isActive={p === page} onPress={() => { setPage(p); window.scrollTo({ top: 0, behavior: "smooth" }); }}>{p}</Pagination.Link>
+            </Pagination.Item>
+          )
+        )}
+        <Pagination.Item>
+          <Pagination.Next isDisabled={page === totalPages} onPress={() => { setPage(p => p + 1); window.scrollTo({ top: 0, behavior: "smooth" }); }}>
+            <span>Next</span>
+            <Pagination.NextIcon />
+          </Pagination.Next>
+        </Pagination.Item>
+      </Pagination.Content>
+    </Pagination>
+  );
+}
 
 // ─── Subject configuration ──────────────────────────────────────────────────
 const SUBJECT_CONFIGS = {
@@ -694,6 +748,7 @@ function FlashcardComboBox({ flashcardCategories, activeCat, onSelect }) {
 function PracticeView() {
   const { mcqQuestions, allCats, catColors } = useContent();
   const [filterCat,setFilterCat]=useState("All");
+  const [page, setPage] = useState(1);
 
   const catMatchFn = (qCat, fCat) => {
     if (fCat === "All") return true;
@@ -701,7 +756,14 @@ function PracticeView() {
     return normalise(qCat) === normalise(fCat);
   };
 
+  // Reset page when filter changes
+  useEffect(() => setPage(1), [filterCat]);
+
   const filtered = mcqQuestions.filter(q => catMatchFn(q.cat, filterCat));
+  const totalPages = Math.ceil(filtered.length / PAGE_SIZE);
+  const paged = filtered.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
+  const startItem = filtered.length > 0 ? (page - 1) * PAGE_SIZE + 1 : 0;
+  const endItem = Math.min(page * PAGE_SIZE, filtered.length);
 
   return (
     <div style={{maxWidth:1060,margin:"0 auto",padding:"0 0 40px"}}>
@@ -712,16 +774,23 @@ function PracticeView() {
 
       {/* Summary */}
       <span className="block text-xs text-[var(--text-muted)] mb-6">
-        Showing {filtered.length} question{filtered.length!==1?"s":""}{filterCat!=="All"?` · ${filterCat}`:""}
+        {filtered.length === 0
+          ? "No questions match this filter"
+          : totalPages > 1
+            ? `Showing ${startItem}\u2013${endItem} of ${filtered.length} questions${filterCat!=="All"?` \u00b7 ${filterCat}`:""}`
+            : `Showing ${filtered.length} question${filtered.length!==1?"s":""}${filterCat!=="All"?` \u00b7 ${filterCat}`:""}`
+        }
       </span>
 
       {filtered.length === 0 && (
         <span className="text-center block py-10 text-[var(--text-muted)] text-sm">No questions match this filter.</span>
       )}
 
-      {filtered.map((q, i) => (
-        <MCQItem key={q.id} q={q} displayNum={i + 1} />
+      {paged.map((q, i) => (
+        <MCQItem key={q.id} q={q} displayNum={(page - 1) * PAGE_SIZE + i + 1} />
       ))}
+
+      <QuestionPagination page={page} setPage={setPage} totalItems={filtered.length} />
     </div>
   );
 }
@@ -878,6 +947,7 @@ function WrittenPracticeView() {
   const { show10Marker, showSpecimen, basePath } = useSubjectConfig();
   const [mode, setMode] = useState("short"); // "short" or "10mark"
   const [filterCat, setFilterCat] = useState("All");
+  const [page, setPage] = useState(1);
 
   const writtenCats = ["All", ...Array.from(new Set(writtenQuestions.map(q => q.cat)))];
 
@@ -887,9 +957,16 @@ function WrittenPracticeView() {
     return normalise(qCat) === normalise(fCat);
   };
 
+  // Reset page when filter or mode changes
+  useEffect(() => setPage(1), [filterCat, mode]);
+
   const filtered = mode === "10mark"
     ? written10MarkQuestions
     : writtenQuestions.filter(q => catMatchFn(q.cat, filterCat));
+  const totalPages = Math.ceil(filtered.length / PAGE_SIZE);
+  const paged = filtered.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
+  const startItem = filtered.length > 0 ? (page - 1) * PAGE_SIZE + 1 : 0;
+  const endItem = Math.min(page * PAGE_SIZE, filtered.length);
 
   return (
     <div style={{maxWidth:1060, margin:"0 auto", padding:"0 0 40px"}}>
@@ -964,7 +1041,7 @@ function WrittenPracticeView() {
       )}
 
       <span className="block text-xs text-[var(--text-muted)] mb-6">
-        Showing {filtered.length} question{filtered.length!==1?"s":""}{mode === "short" && filterCat!=="All"?` · ${filterCat}`:""}
+        Showing {filtered.length > 0 ? `${startItem}–${endItem} of ` : ""}{filtered.length} question{filtered.length!==1?"s":""}{mode === "short" && filterCat!=="All"?` · ${filterCat}`:""}
         {mode === "10mark" ? " · 10 Markers" : ""}
       </span>
 
@@ -972,9 +1049,11 @@ function WrittenPracticeView() {
         <span className="text-center block py-10 text-[var(--text-muted)] text-sm">No questions match this filter.</span>
       )}
 
-      {filtered.map((q, i) => (
-        <WrittenPracticeItem key={q.id} q={q} displayNum={i + 1} />
+      {paged.map((q, i) => (
+        <WrittenPracticeItem key={q.id} q={q} displayNum={(page - 1) * PAGE_SIZE + i + 1} />
       ))}
+
+      <QuestionPagination page={page} setPage={setPage} totalItems={filtered.length} />
     </div>
   );
 }
