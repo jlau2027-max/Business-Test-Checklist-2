@@ -398,8 +398,8 @@ export default function Sidebar({ activeSubject }) {
               src={clerkUser.imageUrl}
               alt=""
               style={{
-                width: 32,
-                height: 32,
+                width: 36,
+                height: 36,
                 borderRadius: "50%",
                 flexShrink: 0,
                 marginLeft: isCollapsed ? 12 : 0,
@@ -415,7 +415,7 @@ export default function Sidebar({ activeSubject }) {
                     whiteSpace: "nowrap",
                     overflow: "hidden",
                     textOverflow: "ellipsis",
-                    lineHeight: 1.3,
+                    lineHeight: 1.4,
                   }}
                 >
                   {clerkUser.firstName || clerkUser.username || "Student"}
@@ -426,7 +426,7 @@ export default function Sidebar({ activeSubject }) {
                       fontSize: 12,
                       fontWeight: 500,
                       color: ROLE_COLOR[role],
-                      lineHeight: 1.3,
+                      lineHeight: 1.4,
                     }}
                   >
                     {ROLE_LABEL[role]}
