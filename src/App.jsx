@@ -64,13 +64,6 @@ const SUBJECT_CONFIGS = {
     show10Marker: false,
     showSpecimen: false,
     lsPrefix: "bio_",
-    units: [
-      { value: "All", label: "All Units" },
-      { value: "A", label: "A" },
-      { value: "B", label: "B" },
-      { value: "C", label: "C" },
-      { value: "D", label: "D" },
-    ],
     api: {
       fetchChecklist: fetchBiologyChecklist, fetchFlashcardTopics: fetchBiologyFlashcardTopics,
       fetchFlashcards: fetchBiologyFlashcards, fetchMcqQuestions: fetchBiologyMcqQuestions,
@@ -89,18 +82,6 @@ const SUBJECT_CONFIGS = {
     show10Marker: false,
     showSpecimen: false,
     lsPrefix: "chem_",
-    units: [
-      { value: "All", label: "All Units" },
-      { value: "1", label: "1" },
-      { value: "2", label: "2" },
-      { value: "3", label: "3" },
-      { value: "4", label: "4" },
-      { value: "5", label: "5" },
-      { value: "6a", label: "6a" },
-      { value: "7", label: "7" },
-      { value: "8a", label: "8a" },
-      { value: "9", label: "9" },
-    ],
     api: {
       fetchChecklist: chemistryApi.fetchChecklist, fetchFlashcardTopics: chemistryApi.fetchFlashcardTopics,
       fetchFlashcards: chemistryApi.fetchFlashcards, fetchMcqQuestions: chemistryApi.fetchMcqQuestions,
@@ -119,14 +100,6 @@ const SUBJECT_CONFIGS = {
     show10Marker: false,
     showSpecimen: false,
     lsPrefix: "phys_",
-    units: [
-      { value: "All", label: "All Units" },
-      { value: "A", label: "A" },
-      { value: "B", label: "B" },
-      { value: "C", label: "C" },
-      { value: "D", label: "D" },
-      { value: "E", label: "E" },
-    ],
     api: {
       fetchChecklist: physicsApi.fetchChecklist, fetchFlashcardTopics: physicsApi.fetchFlashcardTopics,
       fetchFlashcards: physicsApi.fetchFlashcards, fetchMcqQuestions: physicsApi.fetchMcqQuestions,
@@ -145,12 +118,6 @@ const SUBJECT_CONFIGS = {
     show10Marker: false,
     showSpecimen: false,
     lsPrefix: "sport_",
-    units: [
-      { value: "All", label: "All Units" },
-      { value: "A", label: "A" },
-      { value: "B", label: "B" },
-      { value: "C", label: "C" },
-    ],
     api: {
       fetchChecklist: sportsApi.fetchChecklist, fetchFlashcardTopics: sportsApi.fetchFlashcardTopics,
       fetchFlashcards: sportsApi.fetchFlashcards, fetchMcqQuestions: sportsApi.fetchMcqQuestions,
@@ -169,12 +136,6 @@ const SUBJECT_CONFIGS = {
     show10Marker: false,
     showSpecimen: false,
     lsPrefix: "econ_",
-    units: [
-      { value: "All", label: "All Units" },
-      { value: "1", label: "1" },
-      { value: "2", label: "2" },
-      { value: "3", label: "3" },
-    ],
     api: {
       fetchChecklist: economicsApi.fetchChecklist, fetchFlashcardTopics: economicsApi.fetchFlashcardTopics,
       fetchFlashcards: economicsApi.fetchFlashcards, fetchMcqQuestions: economicsApi.fetchMcqQuestions,
@@ -193,17 +154,6 @@ const SUBJECT_CONFIGS = {
     show10Marker: false,
     showSpecimen: false,
     lsPrefix: "ess_",
-    units: [
-      { value: "All", label: "All Units" },
-      { value: "1", label: "1" },
-      { value: "2", label: "2" },
-      { value: "3", label: "3" },
-      { value: "4", label: "4" },
-      { value: "5", label: "5" },
-      { value: "6", label: "6" },
-      { value: "7", label: "7" },
-      { value: "8", label: "8" },
-    ],
     api: {
       fetchChecklist: essApi.fetchChecklist, fetchFlashcardTopics: essApi.fetchFlashcardTopics,
       fetchFlashcards: essApi.fetchFlashcards, fetchMcqQuestions: essApi.fetchMcqQuestions,
@@ -222,11 +172,6 @@ const SUBJECT_CONFIGS = {
     show10Marker: false,
     showSpecimen: false,
     lsPrefix: "span_",
-    units: [
-      { value: "All", label: "All Units" },
-      { value: "Ingenio Humano", label: "Ingenio Humano" },
-      { value: "Cómo nos cuidamos", label: "Cómo nos cuidamos" },
-    ],
     api: {
       fetchChecklist: spanishApi.fetchChecklist, fetchFlashcardTopics: spanishApi.fetchFlashcardTopics,
       fetchFlashcards: spanishApi.fetchFlashcards, fetchMcqQuestions: spanishApi.fetchMcqQuestions,
@@ -1045,10 +990,6 @@ export default function App({ initialTab = "checklist", subject = "business" }) 
     const urlMap = { checklist: 'checklist', flashcards: 'flashcards', practice: 'multi-choice', written: 'written' };
     window.location.href = `${config.basePath}/${urlMap[t] || t}`;
   };
-  // Unit filter (biology only)
-  const [unit, setUnit] = useState(() => loadLS(`${config.lsPrefix}unit_tab`, "All"));
-  useEffect(() => { saveLS(`${config.lsPrefix}unit_tab`, unit); }, [unit, config.lsPrefix]);
-
   // Content state — always starts empty, populated from API
   const [content, setContent] = useState(EMPTY_CONTENT);
   useEffect(() => {
@@ -1064,23 +1005,9 @@ export default function App({ initialTab = "checklist", subject = "business" }) 
     return () => { cancelled = true; };
   }, [subject]);
 
-  // Filtered content by unit (passthrough when no units config or "All")
-  const filteredContent = useMemo(() => {
-    if (!config.units || unit === "All") return content;
-    return {
-      ...content,
-      checklistSections: content.checklistSections.filter(s => s.unit === unit),
-      flashcardCategories: content.flashcardCategories.filter(c => c.unit === unit),
-      mcqQuestions: content.mcqQuestions.filter(q => q.unit === unit),
-      writtenQuestions: content.writtenQuestions.filter(q => q.unit === unit),
-      written10MarkQuestions: content.written10MarkQuestions.filter(q => q.unit === unit),
-      allCats: ["All", ...Array.from(new Set(content.mcqQuestions.filter(q => q.unit === unit).map(q => q.cat)))],
-    };
-  }, [content, unit, config.units]);
-
   return (
     <SubjectConfigCtx.Provider value={config}>
-    <ContentCtx.Provider value={filteredContent}>
+    <ContentCtx.Provider value={content}>
     <div className="min-h-screen bg-[var(--bg-base)]" style={{color:"var(--text-primary)"}}>
 
       <Sidebar activeSubject={config.subject} />
@@ -1134,31 +1061,7 @@ export default function App({ initialTab = "checklist", subject = "business" }) 
 
       {/* Content */}
       <div className="max-w-5xl mx-auto py-8 px-4">
-        {/* Unit filter (biology) */}
-        {config.units && (
-          <div className="flex gap-2 justify-center mb-6">
-            {config.units.map(u => {
-              const active = unit === u.value;
-              return (
-                <Button
-                  key={u.value}
-                  size="sm"
-                  className="rounded-full font-semibold"
-                  onPress={() => setUnit(u.value)}
-                  style={{
-                    backgroundColor: active ? config.accentColor : "var(--bg-input)",
-                    color: active ? "#fff" : "var(--text-secondary)",
-                    border: `1px solid ${active ? config.accentColor : "var(--border)"}`,
-                    boxShadow: active ? `0 0 12px ${config.accentGlow}` : "none",
-                    minWidth: u.value === "All" ? 90 : 40,
-                  }}
-                >
-                  {u.label}
-                </Button>
-              );
-            })}
-          </div>
-        )}
+        {/* Unit filter removed — ComboBox handles grouping by unit */}
         {tab==="checklist" && <ChecklistView/>}
         {tab==="flashcards" && <FlashcardsView/>}
         {tab==="practice" && <PracticeView/>}
