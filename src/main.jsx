@@ -149,20 +149,32 @@ const STATIC_META = {
 function setMeta(title, description, canonicalPath) {
   document.title = title
   const url = `https://ibrev.org${canonicalPath || path}`
+  const ogImage = 'https://ibrev.org/preview.png'
   // Helper to set or create a meta tag
   const set = (attr, key, content) => {
     if (!content) return
     let el = document.querySelector(`meta[${attr}="${key}"]`)
     if (!el) { el = document.createElement('meta'); el.setAttribute(attr, key); document.head.appendChild(el) }
-    el.setAttribute(attr === 'property' ? 'content' : 'content', content)
+    el.setAttribute('content', content)
   }
-  if (description) set('name', 'description', description)
+  // Core OG tags (og:title, og:type, og:image, og:url, og:description)
   set('property', 'og:title', title)
-  if (description) set('property', 'og:description', description)
+  set('property', 'og:type', 'website')
+  set('property', 'og:image', ogImage)
+  set('property', 'og:image:width', '1200')
+  set('property', 'og:image:height', '630')
   set('property', 'og:url', url)
+  if (description) set('property', 'og:description', description)
+  set('property', 'og:site_name', 'IBrev')
+  set('property', 'og:locale', 'en_GB')
+  // Meta description
+  if (description) set('name', 'description', description)
+  // Twitter card
+  set('name', 'twitter:card', 'summary_large_image')
   set('name', 'twitter:title', title)
   if (description) set('name', 'twitter:description', description)
-  // Update canonical
+  set('name', 'twitter:image', ogImage)
+  // Canonical
   const canon = document.querySelector('link[rel="canonical"]')
   if (canon) canon.setAttribute('href', url)
 }
