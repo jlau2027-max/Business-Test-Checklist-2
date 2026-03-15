@@ -1,6 +1,6 @@
 import { useState, useEffect, useMemo, createContext, useContext } from "react";
 import { Analytics } from "@vercel/analytics/react";
-import { Button, TextArea, Spinner, Alert, Checkbox, Tabs, RadioGroup, Radio, Accordion, Surface } from "@heroui/react";
+import { Button, TextArea, Spinner, Alert, Checkbox, Tabs, RadioGroup, Radio, Accordion, Surface, ComboBox, Input, ListBox, Header, Separator } from "@heroui/react";
 import ProgressBar from "./components/ProgressBar.jsx";
 import LoginButton from "./LoginButton.jsx";
 import Sidebar from "./Sidebar.jsx";
@@ -451,7 +451,7 @@ function FlashCard({card, catColor}) {
 
 function FlashcardsView() {
   const { flashcardCategories } = useContent();
-  const { lsPrefix } = useSubjectConfig();
+  const { lsPrefix, subject } = useSubjectConfig();
   const [activeCat,setActiveCat]=useState(()=>loadLS(`${lsPrefix}fc_cat`, flashcardCategories[0]?.id));
   const [cardIdx,setCardIdx]=useState(0);
   const currentCat=flashcardCategories.find(c=>c.id===activeCat) || flashcardCategories[0];
@@ -459,24 +459,34 @@ function FlashcardsView() {
   const currentCard=currentCat.cards[Math.min(cardIdx, currentCat.cards.length - 1)];
   return (
     <div style={{maxWidth:680,margin:"0 auto",padding:"0 0 40px"}}>
-      {/* Category filters */}
-      <div className="flex gap-2 mb-6 flex-wrap">
-        {flashcardCategories.map(cat=>(
-          <Button
-            key={cat.id}
-            size="sm"
-            onPress={()=>{ setActiveCat(cat.id); saveLS(`${lsPrefix}fc_cat`, cat.id); setCardIdx(0); }}
-            className="rounded-full text-xs"
-            style={{
-              backgroundColor: activeCat===cat.id ? cat.color : "var(--bg-input)",
-              color: activeCat===cat.id ? "#fff" : "var(--text-secondary)",
-              border: `1px solid ${activeCat===cat.id ? cat.color : "var(--border)"}`,
-            }}
-          >
-            {cat.label}
-          </Button>
-        ))}
-      </div>
+      {/* Category filters — ComboBox for history, pills for others */}
+      {subject === "history" ? (
+        <div className="mb-6">
+          <FlashcardComboBox
+            flashcardCategories={flashcardCategories}
+            activeCat={activeCat}
+            onSelect={(id) => { setActiveCat(id); saveLS(`${lsPrefix}fc_cat`, id); setCardIdx(0); }}
+          />
+        </div>
+      ) : (
+        <div className="flex gap-2 mb-6 flex-wrap">
+          {flashcardCategories.map(cat=>(
+            <Button
+              key={cat.id}
+              size="sm"
+              onPress={()=>{ setActiveCat(cat.id); saveLS(`${lsPrefix}fc_cat`, cat.id); setCardIdx(0); }}
+              className="rounded-full text-xs"
+              style={{
+                backgroundColor: activeCat===cat.id ? cat.color : "var(--bg-input)",
+                color: activeCat===cat.id ? "#fff" : "var(--text-secondary)",
+                border: `1px solid ${activeCat===cat.id ? cat.color : "var(--border)"}`,
+              }}
+            >
+              {cat.label}
+            </Button>
+          ))}
+        </div>
+      )}
 
       {/* Progress */}
       <div className="flex items-center justify-between mb-4">
@@ -612,8 +622,129 @@ function MCQItem({q, displayNum}) {
   );
 }
 
+// ─────────────────────────────────────────────────────────────────────────────
+// CATEGORY COMBOBOX — grouped by unit (history only)
+// ─────────────────────────────────────────────────────────────────────────────
+const HISTORY_UNIT_LABELS = {
+  "P1-CI":   "Paper 1 · Conflict & Intervention",
+  "P1-RP":   "Paper 1 · Rights & Protest",
+  "P1-MGW":  "Paper 1 · Move to Global War",
+  "P2-WAR":  "Paper 2 · 20th Century Wars",
+  "P2-AUTH": "Paper 2 · Authoritarian States",
+  "P2-COLD": "Paper 2 · The Cold War",
+  "P2-DEMO": "Paper 2 · Democratic States",
+  "P2-INDP": "Paper 2 · Independence Movements",
+};
+const HISTORY_UNIT_ORDER = Object.keys(HISTORY_UNIT_LABELS);
+
+function CategoryComboBox({ questions, filterCat, setFilterCat }) {
+  // Build unit → categories mapping from actual question data
+  const sections = useMemo(() => {
+    const unitCats = {};
+    for (const q of questions) {
+      if (!q.unit || !q.cat) continue;
+      if (!unitCats[q.unit]) unitCats[q.unit] = new Set();
+      unitCats[q.unit].add(q.cat);
+    }
+    return HISTORY_UNIT_ORDER
+      .filter(u => unitCats[u]?.size)
+      .map(u => ({
+        unit: u,
+        label: HISTORY_UNIT_LABELS[u] || u,
+        cats: [...unitCats[u]].sort(),
+      }));
+  }, [questions]);
+
+  // Build a flat label lookup for display
+  const selectedLabel = filterCat === "All" ? "All Topics" : filterCat;
+
+  return (
+    <ComboBox
+      className="w-full max-w-md"
+      selectedKey={filterCat}
+      onSelectionChange={(key) => setFilterCat(key ?? "All")}
+      aria-label="Filter by topic"
+      menuTrigger="focus"
+    >
+      <ComboBox.InputGroup>
+        <Input placeholder="Search topics…" />
+        <ComboBox.Trigger />
+      </ComboBox.InputGroup>
+      <ComboBox.Popover className="w-[var(--trigger-width)]" style={{ minWidth: 360 }}>
+        <ListBox>
+          <ListBox.Item id="All" textValue="All Topics">
+            All Topics
+            <ListBox.ItemIndicator />
+          </ListBox.Item>
+          {sections.map((sec, si) => (
+            <ListBox.Section key={sec.unit}>
+              <Header>{sec.label}</Header>
+              {sec.cats.map(cat => (
+                <ListBox.Item key={cat} id={cat} textValue={cat}>
+                  {cat}
+                  <ListBox.ItemIndicator />
+                </ListBox.Item>
+              ))}
+            </ListBox.Section>
+          ))}
+        </ListBox>
+      </ComboBox.Popover>
+    </ComboBox>
+  );
+}
+
+function FlashcardComboBox({ flashcardCategories, activeCat, onSelect }) {
+  // Group flashcard topics by unit
+  const sections = useMemo(() => {
+    const unitCats = {};
+    for (const cat of flashcardCategories) {
+      const u = cat.unit || "Other";
+      if (!unitCats[u]) unitCats[u] = [];
+      unitCats[u].push(cat);
+    }
+    return HISTORY_UNIT_ORDER
+      .filter(u => unitCats[u]?.length)
+      .map(u => ({
+        unit: u,
+        label: HISTORY_UNIT_LABELS[u] || u,
+        cats: unitCats[u],
+      }));
+  }, [flashcardCategories]);
+
+  return (
+    <ComboBox
+      className="w-full max-w-md"
+      selectedKey={activeCat}
+      onSelectionChange={(key) => { if (key) onSelect(key); }}
+      aria-label="Select flashcard topic"
+      menuTrigger="focus"
+    >
+      <ComboBox.InputGroup>
+        <Input placeholder="Search topics…" />
+        <ComboBox.Trigger />
+      </ComboBox.InputGroup>
+      <ComboBox.Popover className="w-[var(--trigger-width)]" style={{ minWidth: 360 }}>
+        <ListBox>
+          {sections.map((sec) => (
+            <ListBox.Section key={sec.unit}>
+              <Header>{sec.label}</Header>
+              {sec.cats.map(cat => (
+                <ListBox.Item key={cat.id} id={cat.id} textValue={cat.label}>
+                  {cat.label}
+                  <ListBox.ItemIndicator />
+                </ListBox.Item>
+              ))}
+            </ListBox.Section>
+          ))}
+        </ListBox>
+      </ComboBox.Popover>
+    </ComboBox>
+  );
+}
+
 function PracticeView() {
   const { mcqQuestions, allCats, catColors } = useContent();
+  const { subject } = useSubjectConfig();
   const [filterCat,setFilterCat]=useState("All");
 
   const catMatchFn = (qCat, fCat) => {
@@ -626,29 +757,35 @@ function PracticeView() {
 
   return (
     <div style={{maxWidth:1060,margin:"0 auto",padding:"0 0 40px"}}>
-      {/* Category filter */}
-      <div className="flex gap-2 mb-6 flex-wrap">
-        {allCats.map(cat => {
-          const c = catColors[cat] || "var(--accent)";
-          const active = filterCat === cat;
-          return (
-            <Button
-              key={cat}
-              size="sm"
-              className="rounded-full"
-              onPress={()=>setFilterCat(cat)}
-              style={{
-                backgroundColor: active ? c : "var(--bg-input)",
-                color: active ? "#fff" : "var(--text-secondary)",
-                border: `1px solid ${active ? c : "var(--border)"}`,
-                boxShadow: "none",
-              }}
-            >
-              {cat}
-            </Button>
-          );
-        })}
-      </div>
+      {/* Category filter — ComboBox for history, pills for others */}
+      {subject === "history" ? (
+        <div className="mb-6">
+          <CategoryComboBox questions={mcqQuestions} filterCat={filterCat} setFilterCat={setFilterCat} />
+        </div>
+      ) : (
+        <div className="flex gap-2 mb-6 flex-wrap">
+          {allCats.map(cat => {
+            const c = catColors[cat] || "var(--accent)";
+            const active = filterCat === cat;
+            return (
+              <Button
+                key={cat}
+                size="sm"
+                className="rounded-full"
+                onPress={()=>setFilterCat(cat)}
+                style={{
+                  backgroundColor: active ? c : "var(--bg-input)",
+                  color: active ? "#fff" : "var(--text-secondary)",
+                  border: `1px solid ${active ? c : "var(--border)"}`,
+                  boxShadow: "none",
+                }}
+              >
+                {cat}
+              </Button>
+            );
+          })}
+        </div>
+      )}
 
       {/* Summary */}
       <span className="block text-xs text-[var(--text-muted)] mb-6">
@@ -815,7 +952,7 @@ function WrittenPracticeItem({q, displayNum}) {
 
 function WrittenPracticeView() {
   const { writtenQuestions, written10MarkQuestions, catColors } = useContent();
-  const { show10Marker, showSpecimen, basePath } = useSubjectConfig();
+  const { show10Marker, showSpecimen, basePath, subject } = useSubjectConfig();
   const [mode, setMode] = useState("short"); // "short" or "10mark"
   const [filterCat, setFilterCat] = useState("All");
 
@@ -897,7 +1034,12 @@ function WrittenPracticeView() {
       </div>
 
       {/* Category filter — only for short answer mode */}
-      {mode === "short" && (
+      {mode === "short" && subject === "history" && (
+        <div className="mb-6">
+          <CategoryComboBox questions={writtenQuestions} filterCat={filterCat} setFilterCat={setFilterCat} />
+        </div>
+      )}
+      {mode === "short" && subject !== "history" && (
         <div className="flex gap-2 mb-6 flex-wrap">
           {writtenCats.map(cat => {
             const c = catColors[cat] || "var(--accent)";
