@@ -387,9 +387,9 @@ export default function Sidebar({ activeSubject }) {
             style={{
               display: "flex",
               alignItems: "center",
-              gap: isCollapsed ? 0 : 10,
+              gap: isCollapsed ? 0 : 14,
               justifyContent: isCollapsed ? "center" : "flex-start",
-              padding: isCollapsed ? "12px 0" : "12px 10px",
+              padding: isCollapsed ? "14px 0" : "14px 10px",
               borderTop: "1px solid var(--bg-input)",
               marginTop: 8,
             }}
@@ -398,8 +398,8 @@ export default function Sidebar({ activeSubject }) {
               src={clerkUser.imageUrl}
               alt=""
               style={{
-                width: 28,
-                height: 28,
+                width: 32,
+                height: 32,
                 borderRadius: "50%",
                 flexShrink: 0,
                 marginLeft: isCollapsed ? 12 : 0,
