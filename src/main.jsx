@@ -118,42 +118,67 @@ if (path.startsWith('/business/')) {
   Page = NotFoundPage
 }
 
-// ─── Dynamic page titles (SEO — Google executes JS) ────────────────────────
-const PAGE_TITLES = {
-  '/': 'IB Revision — IBrev.org',
-  '/dashboard': 'Dashboard — IBrev',
-  '/admin': 'Admin — IBrev',
-  '/privacy': 'Privacy Policy — IBrev',
-  '/terms': 'Terms of Service — IBrev',
-  '/feedback': 'Feedback — IBrev',
-  '/history/checklist': 'IB History — Checklist — IBrev',
+// ─── Dynamic page metadata (SEO — Google executes JS) ───────────────────────
+const SUBJECT_META = {
+  business:          { name: 'IB Business Management', short: 'Business' },
+  history:           { name: 'IB History',             short: 'History' },
+  biology:           { name: 'IB Biology',             short: 'Biology' },
+  chemistry:         { name: 'IB Chemistry',           short: 'Chemistry' },
+  physics:           { name: 'IB Physics',             short: 'Physics' },
+  'sports-science':  { name: 'IB Sports Science',      short: 'Sports Science' },
+  economics:         { name: 'IB Economics',            short: 'Economics' },
+  ess:               { name: 'IB ESS',                 short: 'ESS' },
+  spanish:           { name: 'IB Spanish',              short: 'Spanish' },
 }
-const SUBJECT_LABELS = {
-  business: 'IB Business',
-  history: 'IB History',
-  biology: 'IB Biology',
-  chemistry: 'IB Chemistry',
-  physics: 'IB Physics',
-  'sports-science': 'IB Sports Science',
-  economics: 'IB Economics',
-  ess: 'IB ESS',
-  spanish: 'IB Spanish',
+const TAB_META = {
+  checklist:      { label: 'Checklist',     desc: 'revision checklist — track every topic' },
+  flashcards:     { label: 'Flashcards',    desc: 'flashcards — key terms and definitions' },
+  'multi-choice': { label: 'Multi-Choice',  desc: 'multiple-choice practice questions' },
+  written:        { label: 'Written',       desc: 'written practice with AI marking' },
+  specimen:       { label: 'Specimen',      desc: 'specimen paper practice' },
 }
-const TAB_LABELS = {
-  checklist: 'Checklist',
-  flashcards: 'Flashcards',
-  'multi-choice': 'Multi-Choice',
-  written: 'Written',
-  specimen: 'Specimen',
+const STATIC_META = {
+  '/':          { title: 'IB Revision — IBrev.org',    desc: 'Free IB revision tools — checklists, flashcards, multiple-choice and written practice for Business, Biology, Chemistry, Physics, Economics and more.' },
+  '/dashboard': { title: 'Dashboard — IBrev',          desc: 'Track your IB revision progress across all subjects.' },
+  '/admin':     { title: 'Admin — IBrev',              desc: null },
+  '/privacy':   { title: 'Privacy Policy — IBrev',     desc: 'IBrev privacy policy — how we handle your data.' },
+  '/terms':     { title: 'Terms of Service — IBrev',   desc: 'IBrev terms of service.' },
+  '/feedback':  { title: 'Feedback — IBrev',           desc: 'Share feedback to help improve IBrev.' },
 }
-if (PAGE_TITLES[path]) {
-  document.title = PAGE_TITLES[path]
+
+function setMeta(title, description, canonicalPath) {
+  document.title = title
+  const url = `https://ibrev.org${canonicalPath || path}`
+  // Helper to set or create a meta tag
+  const set = (attr, key, content) => {
+    if (!content) return
+    let el = document.querySelector(`meta[${attr}="${key}"]`)
+    if (!el) { el = document.createElement('meta'); el.setAttribute(attr, key); document.head.appendChild(el) }
+    el.setAttribute(attr === 'property' ? 'content' : 'content', content)
+  }
+  if (description) set('name', 'description', description)
+  set('property', 'og:title', title)
+  if (description) set('property', 'og:description', description)
+  set('property', 'og:url', url)
+  set('name', 'twitter:title', title)
+  if (description) set('name', 'twitter:description', description)
+  // Update canonical
+  const canon = document.querySelector('link[rel="canonical"]')
+  if (canon) canon.setAttribute('href', url)
+}
+
+if (STATIC_META[path]) {
+  const m = STATIC_META[path]
+  setMeta(m.title, m.desc)
 } else {
   const [, subjectSlug, tabSlug] = path.split('/')
-  const subjectName = SUBJECT_LABELS[subjectSlug]
-  const tabName = TAB_LABELS[tabSlug]
-  if (subjectName && tabName) {
-    document.title = `${subjectName} ${tabName} — IBrev`
+  const subj = SUBJECT_META[subjectSlug]
+  const tab = TAB_META[tabSlug]
+  if (subj && tab) {
+    setMeta(
+      `${subj.name} ${tab.label} — IBrev`,
+      `${subj.name} ${tab.desc}. Free IB revision on IBrev.org.`
+    )
   }
 }
 
