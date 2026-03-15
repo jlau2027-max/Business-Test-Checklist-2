@@ -169,11 +169,22 @@ function setMeta(title, description, canonicalPath) {
   set('property', 'og:locale', 'en_GB')
   // Meta description
   if (description) set('name', 'description', description)
-  // Twitter card
+  // Twitter / X card
   set('name', 'twitter:card', 'summary_large_image')
   set('name', 'twitter:title', title)
   if (description) set('name', 'twitter:description', description)
   set('name', 'twitter:image', ogImage)
+  // Slack rich preview labels (subject pages override defaults)
+  const [, slug, tab] = path.split('/')
+  const subjInfo = SUBJECT_META[slug]
+  if (subjInfo) {
+    set('name', 'twitter:label1', 'Subject')
+    set('name', 'twitter:data1', subjInfo.name)
+    set('name', 'twitter:label2', 'Tool')
+    set('name', 'twitter:data2', TAB_META[tab]?.label || 'Revision')
+  }
+  // Apple web app title
+  set('name', 'apple-mobile-web-app-title', title.replace(' — IBrev', ''))
   // Canonical
   const canon = document.querySelector('link[rel="canonical"]')
   if (canon) canon.setAttribute('href', url)
