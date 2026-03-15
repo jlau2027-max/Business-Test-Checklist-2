@@ -1,5 +1,5 @@
 import { Badge, Button } from "@heroui/react";
-import { Show, SignInButton, UserButton, useUser } from "@clerk/react";
+import { Show, SignInButton, UserButton } from "@clerk/react";
 import { useAuth } from "./AuthContext.jsx";
 
 const ROLE_BADGE_COLOR = {
@@ -40,9 +40,7 @@ export default function LoginButton() {
 }
 
 function GreetingWithAvatar({ isAdmin }) {
-  const { user: clerkUser } = useUser();
   const { role } = useAuth();
-  const greeting = clerkUser?.firstName || clerkUser?.username || "";
   const badgeColor = ROLE_BADGE_COLOR[role];
 
   return (
@@ -57,14 +55,6 @@ function GreetingWithAvatar({ isAdmin }) {
             gap: 8,
           }}
         >
-          {greeting && (
-            <span
-              className="text-[13px] font-semibold text-[var(--text-secondary)] hidden sm:inline"
-              style={{ fontFamily: "'JSans', sans-serif", whiteSpace: "nowrap" }}
-            >
-              Hello, {greeting}
-            </span>
-          )}
           {badgeColor ? (
             <Badge.Anchor>
               <UserButton

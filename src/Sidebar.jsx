@@ -2,7 +2,7 @@ import { useState, useEffect, useCallback } from "react";
 import { Button } from "@heroui/react";
 import { useUser } from "@clerk/react";
 import { useAuth } from "./AuthContext.jsx";
-import { House, Briefcase, Clock, TrendingUp, Leaf, FlaskConical, Atom, Activity, Languages, Trees, LayoutGrid, UserRound, ChevronsLeft, ChevronsRight, Menu, X } from "lucide-react";
+import { House, Briefcase, Clock, TrendingUp, Leaf, FlaskConical, Atom, Activity, Languages, Trees, LayoutGrid, ChevronsLeft, ChevronsRight, Menu, X } from "lucide-react";
 
 const EXPANDED = 240;
 const COLLAPSED = 56;
@@ -107,7 +107,6 @@ export default function Sidebar({ activeSubject }) {
         heading: "Account",
         items: [
           { label: "Dashboard", href: "/dashboard", subject: "dashboard", Icon: LayoutGrid, color: "var(--accent)" },
-          { label: "Account", href: "https://accounts.ibrev.org/user", subject: "account", Icon: UserRound, color: "var(--text-secondary)" },
         ],
       }]
     : SECTIONS;
