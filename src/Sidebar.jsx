@@ -409,7 +409,7 @@ export default function Sidebar({ activeSubject }) {
               <div style={{ minWidth: 0, overflow: "hidden" }}>
                 <div
                   style={{
-                    fontSize: 13,
+                    fontSize: 14,
                     fontWeight: 600,
                     color: "var(--text-primary)",
                     whiteSpace: "nowrap",
@@ -423,7 +423,7 @@ export default function Sidebar({ activeSubject }) {
                 {role && ROLE_LABEL[role] && (
                   <div
                     style={{
-                      fontSize: 11,
+                      fontSize: 12,
                       fontWeight: 500,
                       color: ROLE_COLOR[role],
                       lineHeight: 1.3,
