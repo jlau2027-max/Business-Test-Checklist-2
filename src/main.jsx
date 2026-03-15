@@ -126,7 +126,7 @@ const PAGE_TITLES = {
   '/privacy': 'Privacy Policy — IBrev',
   '/terms': 'Terms of Service — IBrev',
   '/feedback': 'Feedback — IBrev',
-  '/history/specimen': 'IB History — Specimen — IBrev',
+  '/history/checklist': 'IB History — Checklist — IBrev',
 }
 const SUBJECT_LABELS = {
   business: 'IB Business',

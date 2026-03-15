@@ -158,7 +158,7 @@ export default function LandingPage() {
                 textColor: "#1a1a1a",
                 links: [
                   { label: "Business", href: "/business/checklist", ariaLabel: "Business revision" },
-                  { label: "History", href: "/history/specimen", ariaLabel: "History revision" },
+                  { label: "History", href: "/history/checklist", ariaLabel: "History revision" },
                   { label: "Economics", href: "/economics/checklist", ariaLabel: "Economics revision" },
                   { label: "ESS", href: "/ess/checklist", ariaLabel: "ESS revision" },
                 ],
