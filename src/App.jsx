@@ -40,7 +40,7 @@ function QuestionPagination({ page, setPage, totalItems, label = "questions" }) 
   return (
     <Pagination size="md" className="mt-8 mb-4">
       <Pagination.Summary>
-        Showing {startItem}\u2013{endItem} of {totalItems} {label}
+        Showing {startItem}-{endItem} of {totalItems} {label}
       </Pagination.Summary>
       <Pagination.Content>
         <Pagination.Item>
@@ -777,8 +777,8 @@ function PracticeView() {
         {filtered.length === 0
           ? "No questions match this filter"
           : totalPages > 1
-            ? `Showing ${startItem}\u2013${endItem} of ${filtered.length} questions${filterCat!=="All"?` \u00b7 ${filterCat}`:""}`
-            : `Showing ${filtered.length} question${filtered.length!==1?"s":""}${filterCat!=="All"?` \u00b7 ${filterCat}`:""}`
+            ? `Showing ${startItem}-${endItem} of ${filtered.length} questions${filterCat!=="All"?` · ${filterCat}`:""}`
+            : `Showing ${filtered.length} question${filtered.length!==1?"s":""}${filterCat!=="All"?` · ${filterCat}`:""}`
         }
       </span>
 
@@ -1041,7 +1041,7 @@ function WrittenPracticeView() {
       )}
 
       <span className="block text-xs text-[var(--text-muted)] mb-6">
-        Showing {filtered.length > 0 ? `${startItem}–${endItem} of ` : ""}{filtered.length} question{filtered.length!==1?"s":""}{mode === "short" && filterCat!=="All"?` · ${filterCat}`:""}
+        Showing {filtered.length > 0 ? `${startItem}-${endItem} of ` : ""}{filtered.length} question{filtered.length!==1?"s":""}{mode === "short" && filterCat!=="All"?` · ${filterCat}`:""}
         {mode === "10mark" ? " · 10 Markers" : ""}
       </span>
 
