@@ -383,7 +383,8 @@ export default function Sidebar({ activeSubject }) {
 
         {/* User footer */}
         {user && clerkUser && (
-          <div
+          <a
+            href="https://accounts.ibrev.org/user"
             style={{
               display: "flex",
               alignItems: "center",
@@ -392,7 +393,13 @@ export default function Sidebar({ activeSubject }) {
               padding: isCollapsed ? "14px 0" : "14px 10px",
               borderTop: "1px solid var(--bg-input)",
               marginTop: 8,
+              textDecoration: "none",
+              borderRadius: 10,
+              transition: "background-color 0.15s ease",
+              cursor: "pointer",
             }}
+            onMouseEnter={e => { e.currentTarget.style.backgroundColor = "var(--bg-input)"; }}
+            onMouseLeave={e => { e.currentTarget.style.backgroundColor = "transparent"; }}
           >
             <img
               src={clerkUser.imageUrl}
@@ -434,7 +441,7 @@ export default function Sidebar({ activeSubject }) {
                 )}
               </div>
             )}
-          </div>
+          </a>
         )}
       </nav>
     </>
